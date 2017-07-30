@@ -122,3 +122,36 @@ func restHandleQuizAll(w http.ResponseWriter, r *http.Request, _ httprouter.Para
 
 	w.Write(jsonStr)
 }
+
+func restHandleQuizById(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	quizId := ps.ByName("quizId")
+	if quizId == "" {
+		// This makes no sense. restHandleQuizAll() should have been called.
+		http.Error(w, "Empty quiz ID", http.StatusInternalServerError)
+		return
+	}
+
+	// TODO: Cache this.
+	quizzes, err := loadQuizzes()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	q := quizzes[quizId]
+	if q == nil {
+		http.Error(w, "quiz not found", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json") // normal header
+	w.WriteHeader(http.StatusOK)
+
+	jsonStr, err := json.Marshal(q)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Write(jsonStr)
+}
