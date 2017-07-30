@@ -73,6 +73,25 @@ func loadQuizzes() ([]*quiz.Quiz, error) {
 	return quizzes, nil
 }
 
+// TODO: Is there instead some way to output just the top-level of the JSON,
+// and only some of the fields?
+// TODO: Avoid outputing an empty section list in the JSON.
+func buildQuizzesSimple(quizzes []*quiz.Quiz) []*quiz.Quiz {
+	// Create a slice with the same capacity.
+	result := make([]*quiz.Quiz, 0, len(quizzes))
+
+	for _, q := range quizzes {
+		var simple quiz.Quiz
+		simple.Id = q.Id
+		simple.Title = q.Title
+		simple.IsPrivate = q.IsPrivate
+
+		result = append(result, &simple)
+	}
+
+	return result
+}
+
 func restHandleQuiz(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	listOnly := false
 	queryValues := r.URL.Query()
@@ -81,16 +100,16 @@ func restHandleQuiz(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 		listOnly, _ = strconv.ParseBool(listOnlyStr)
 	}
 
-	if !listOnly {
-		http.Error(w, "?list_only=false is not yet supported.", http.StatusInternalServerError)
-		return
-	}
-
 	// TODO: Cache this.
 	quizzes, err := loadQuizzes()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
+	}
+
+	if listOnly {
+		// TODO: Cache this.
+		quizzes = buildQuizzesSimple(quizzes)
 	}
 
 	w.Header().Set("Content-Type", "application/json") // normal header
