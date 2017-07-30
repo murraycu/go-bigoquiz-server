@@ -8,9 +8,8 @@ import (
 )
 
 type Quiz struct {
-	Id        string `json:"id" xml:"id"`
-	Title     string `json:"title" xml:"title"`
-	IsPrivate bool   `json:"isPrivate" xml:"isPrivate"`
+	HasIdAndTitle
+	IsPrivate bool `json:"isPrivate" xml:"isPrivate"`
 }
 
 func LoadQuiz(absFilePath string, id string) (*Quiz, error) {
