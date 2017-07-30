@@ -123,6 +123,16 @@ func restHandleQuizAll(w http.ResponseWriter, r *http.Request, _ httprouter.Para
 	w.Write(jsonStr)
 }
 
+func getQuiz(quizId string) *quiz.Quiz {
+	// TODO: Cache this.
+	quizzes, err := loadQuizzes()
+	if err != nil {
+		return nil
+	}
+
+	return quizzes[quizId]
+}
+
 func restHandleQuizById(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	quizId := ps.ByName("quizId")
 	if quizId == "" {
@@ -131,14 +141,7 @@ func restHandleQuizById(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 		return
 	}
 
-	// TODO: Cache this.
-	quizzes, err := loadQuizzes()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	q := quizzes[quizId]
+	q := getQuiz(quizId)
 	if q == nil {
 		http.Error(w, "quiz not found", http.StatusInternalServerError)
 		return
@@ -148,6 +151,29 @@ func restHandleQuizById(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 	w.WriteHeader(http.StatusOK)
 
 	jsonStr, err := json.Marshal(q)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Write(jsonStr)
+}
+
+func restHandleQuizSectionsByQuizId(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	quizId := ps.ByName("quizId")
+	if quizId == "" {
+		// This makes no sense. restHandleQuizAll() should have been called.
+		http.Error(w, "Empty quiz ID", http.StatusInternalServerError)
+		return
+	}
+
+	q := getQuiz(quizId)
+	if q == nil {
+		http.Error(w, "quiz not found", http.StatusInternalServerError)
+		return
+	}
+
+	jsonStr, err := json.Marshal(q.Sections)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
