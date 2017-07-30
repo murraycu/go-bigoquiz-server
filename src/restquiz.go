@@ -159,6 +159,13 @@ func restHandleQuizById(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 }
 
 func restHandleQuizSectionsByQuizId(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	listOnly := false
+	queryValues := r.URL.Query()
+	if queryValues != nil {
+		listOnlyStr := queryValues.Get("list_only")
+		listOnly, _ = strconv.ParseBool(listOnlyStr)
+	}
+
 	quizId := ps.ByName("quizId")
 	if quizId == "" {
 		// This makes no sense. restHandleQuizAll() should have been called.
@@ -172,7 +179,19 @@ func restHandleQuizSectionsByQuizId(w http.ResponseWriter, r *http.Request, ps h
 		return
 	}
 
-	jsonStr, err := json.Marshal(q.Sections)
+	sections := q.Sections
+	if listOnly {
+		simpleSections := make([]quiz.Section, 0, len(sections))
+		for _, s := range sections {
+			var simple quiz.Section
+			s.CopyHasIdAndTitle(&simple.HasIdAndTitle)
+			simpleSections = append(simpleSections, simple)
+		}
+
+		sections = simpleSections
+	}
+
+	jsonStr, err := json.Marshal(sections)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
