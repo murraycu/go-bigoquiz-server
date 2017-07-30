@@ -7,7 +7,7 @@ import (
 
 func init() {
 	router := httprouter.New()
-	router.GET("/api/quiz", restHandleQuiz)
+	router.GET("/api/quiz", restHandleQuizAll)
 
 	http.Handle("/", router)
 }

@@ -45,8 +45,8 @@ func loadQuiz(id string) (*quiz.Quiz, error) {
 	return quiz.LoadQuiz(absFilePath, id)
 }
 
-func loadQuizzes() ([]*quiz.Quiz, error) {
-	quizzes := make([]*quiz.Quiz, 0)
+func loadQuizzes() (map[string]*quiz.Quiz, error) {
+	quizzes := make(map[string]*quiz.Quiz, 0)
 
 	absFilePath, err := filepath.Abs("quizzes")
 	if err != nil {
@@ -67,7 +67,7 @@ func loadQuizzes() ([]*quiz.Quiz, error) {
 			return quizzes, err
 		}
 
-		quizzes = append(quizzes, q)
+		quizzes[q.Id] = q
 	}
 
 	return quizzes, nil
@@ -75,9 +75,9 @@ func loadQuizzes() ([]*quiz.Quiz, error) {
 
 // TODO: Is there instead some way to output just the top-level of the JSON,
 // and only some of the fields?
-func buildQuizzesSimple(quizzes []*quiz.Quiz) []*quiz.Quiz {
+func buildQuizzesSimple(quizzes map[string]*quiz.Quiz) map[string]*quiz.Quiz {
 	// Create a slice with the same capacity.
-	result := make([]*quiz.Quiz, 0, len(quizzes))
+	result := make(map[string]*quiz.Quiz)
 
 	for _, q := range quizzes {
 		var simple quiz.Quiz
@@ -85,13 +85,13 @@ func buildQuizzesSimple(quizzes []*quiz.Quiz) []*quiz.Quiz {
 		simple.Title = q.Title
 		simple.IsPrivate = q.IsPrivate
 
-		result = append(result, &simple)
+		result[simple.Id] = &simple
 	}
 
 	return result
 }
 
-func restHandleQuiz(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func restHandleQuizAll(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	listOnly := false
 	queryValues := r.URL.Query()
 	if queryValues != nil {
