@@ -10,7 +10,7 @@ import (
 )
 
 func init() {
-	http.HandleFunc("/api/quiz", rest_quizzes)
+	http.HandleFunc("/api/quiz", restHandleQuizzes)
 }
 
 func filesWithExtension(dirPath string, ext string) ([]string, error) {
@@ -64,7 +64,7 @@ func loadQuizzes() ([]*quiz, error) {
 	return quizzes, nil
 }
 
-func rest_quizzes(w http.ResponseWriter, r *http.Request) {
+func restHandleQuizzes(w http.ResponseWriter, r *http.Request) {
 	quizzes, err := loadQuizzes()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
