@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"path/filepath"
+	"quiz"
 	"strconv"
 	"strings"
 )
@@ -34,8 +35,18 @@ func filesWithExtension(dirPath string, ext string) ([]string, error) {
 	return result, nil
 }
 
-func loadQuizzes() ([]*quiz, error) {
-	quizzes := make([]*quiz, 0)
+func loadQuiz(id string) (*quiz.Quiz, error) {
+	absFilePath, err := filepath.Abs("quizzes/" + id + ".xml")
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	return quiz.LoadQuiz(absFilePath, id)
+}
+
+func loadQuizzes() ([]*quiz.Quiz, error) {
+	quizzes := make([]*quiz.Quiz, 0)
 
 	absFilePath, err := filepath.Abs("quizzes")
 	if err != nil {
