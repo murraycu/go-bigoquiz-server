@@ -81,8 +81,7 @@ func buildQuizzesSimple(quizzes map[string]*quiz.Quiz) map[string]*quiz.Quiz {
 
 	for _, q := range quizzes {
 		var simple quiz.Quiz
-		simple.Id = q.Id
-		simple.Title = q.Title
+		q.CopyHasIdAndTitle(&simple.HasIdAndTitle)
 		simple.IsPrivate = q.IsPrivate
 
 		result[simple.Id] = &simple
