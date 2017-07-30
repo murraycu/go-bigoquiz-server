@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"path/filepath"
+	"strconv"
 	"strings"
 )
 
@@ -62,6 +63,18 @@ func loadQuizzes() ([]*quiz, error) {
 }
 
 func restHandleQuiz(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	listOnly := false
+	queryValues := r.URL.Query()
+	if queryValues != nil {
+		listOnlyStr := queryValues.Get("list_only")
+		listOnly, _ = strconv.ParseBool(listOnlyStr)
+	}
+
+	if !listOnly {
+		http.Error(w, "?list_only=false is not yet supported.", http.StatusInternalServerError)
+		return
+	}
+
 	// TODO: Cache this.
 	quizzes, err := loadQuizzes()
 	if err != nil {
