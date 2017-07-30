@@ -1,9 +1,13 @@
 package bigoquiz
 
 import (
+	"github.com/julienschmidt/httprouter"
 	"net/http"
 )
 
 func init() {
-	http.HandleFunc("/api/quiz", restHandleQuiz)
+	router := httprouter.New()
+	router.GET("/api/quiz", restHandleQuiz)
+
+	http.Handle("/", router)
 }

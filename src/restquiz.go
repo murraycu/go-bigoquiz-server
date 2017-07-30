@@ -3,6 +3,7 @@ package bigoquiz
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/julienschmidt/httprouter"
 	"io/ioutil"
 	"net/http"
 	"path/filepath"
@@ -60,8 +61,8 @@ func loadQuizzes() ([]*quiz, error) {
 	return quizzes, nil
 }
 
-func restHandleQuiz(w http.ResponseWriter, r *http.Request) {
-        // TODO: Cache this.
+func restHandleQuiz(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	// TODO: Cache this.
 	quizzes, err := loadQuizzes()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
