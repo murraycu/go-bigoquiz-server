@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz xmlns="http://bigoquiz.com/document" format_version="1" id="concurrency">
+    <title>Concurrency</title>
+    <link>https://en.wikipedia.org/wiki/Concurrency_(computer_science)</link>
+
+    <section id="definitions" answers_as_choices="true" and_reverse="true">
+        <title>Definitions</title>
+
+        <question id="definition-parallelism">
+            <text>Parallelism</text>
+            <link>https://en.wikipedia.org/wiki/Parallel_computing</link>
+            <answer>Tasks are executed simultaneously in parallel, on separate CPUs.</answer>
+        </question>
+
+        <question id="definition-concurrency">
+            <text>Concurrency</text>
+            <link>https://en.wikipedia.org/wiki/Concurrency_(computer_science)</link>
+            <answer>Multiple tasks may make progress, for instance, but not necessarily, in separate threads on the same CPU.</answer>
+        </question>
+
+        <question id="definition-deadlock">
+            <text>Deadlock</text>
+            <link>https://en.wikipedia.org/wiki/Deadlock</link>
+            <answer>Multiple threads waiting on each other to release their locks.</answer>
+        </question>
+
+        <question id="definition-livelock">
+            <text>Livelock</text>
+            <link>https://en.wikipedia.org/wiki/Deadlock#Livelock</link>
+            <answer>Multiple threads responding to each other but not making progress.</answer>
+        </question>
+
+        <question id="definition-starvation">
+            <text>Starvation</text>
+            <link>https://en.wikipedia.org/wiki/Starvation_(computer_science)</link>
+            <answer>A thread, or process, is perpetually denied access to a resource.</answer>
+        </question>
+
+        <question id="definition-race-condition">
+            <text>Race Condition</text>
+            <link>https://en.wikipedia.org/wiki/Race_condition</link>
+            <answer>Unintended behaviour due to unexpected ordering of events.</answer>
+        </question>
+
+        <question id="definition-priority-inversion">
+            <text>Priority Inversion</text>
+            <link>https://en.wikipedia.org/wiki/Priority_inversion</link>
+            <answer>A high priority task is unexpectedly preempted by a lower priority task.</answer>
+        </question>
+
+        <question id="definition-reentrant">
+            <text>Reentrant Function</text>
+            <link>https://en.wikipedia.org/wiki/Reentrancy_(computing)</link>
+            <answer>Can be interrupted and called again before completion, or can cause itself to be called again.</answer>
+            <note>A function can be re-entered even in single-threaded code so even thread-local static data is a problem. A function can be reentrant without being thread safe.</note>
+        </question>
+    </section>
+
+    <section id="examples" answers_as_choices="true" and_reverse="true">
+        <title>Examples</title>
+
+        <question id="example-deadlock">
+            <text>Deadlock</text>
+            <link>https://en.wikipedia.org/wiki/Deadlock</link>
+            <answer>One thread is waiting for another thread to release a resource, but that thread cannot release the resource without using another resource that is locked by the first thread.</answer>
+            <!-- See https://docs.oracle.com/javase/tutorial/essential/concurrency/deadlock.html -->
+        </question>
+
+        <question id="example-livelock">
+            <text>Livelock</text>
+            <link>https://en.wikipedia.org/wiki/Deadlock#Livelock</link>
+            <answer>2 people passing in a corridor. Each one moves to allow the other to pass. But the other moves in the same direction.</answer>
+        </question>
+
+        <question id="example-starvation">
+            <text>Starvation</text>
+            <link>https://en.wikipedia.org/wiki/Starvation_(computer_science)</link>
+            <answer>A scheduler never allows a lower-priority process to continue, always giving resources to newer higher-priority processes.</answer>
+            <note>Maybe think of this as starvation due to neglect?</note>
+        </question>
+
+        <question id="example-priority-inversion">
+            <text>Priority Inversion</text>
+            <link>https://en.wikipedia.org/wiki/Priority_inversion</link>
+            <answer>High priority task is waiting for a low priority task. But before it receives the lock, held by the low priority task, a medium priority task interrupts the low priority task, indirectly holding the lock for longer, and preventing the higher-priority task from running according to its actual priority.</answer>
+            <note>The Mars Pathfinder rover had a famous case of priority inversion. Priority inheritance is a solution for this problem - it temporarily gives the lower priority thread (holding the lock) the priority of the high priority thread (requesting the lock), allowing the low priority thread to be scheduled, so the high priority thread can continue.</note>
+            <!-- See http://www.drdobbs.com/jvm/what-is-priority-inversion-and-how-do-yo/230600008 -->
+        </question>
+    </section>
+
+    <section id="synchronization-devices" answers_as_choices="true" and_reverse="true">
+        <title>Synchronization Devices</title>
+
+        <question id="synchronization-devices-lock">
+            <text>Lock / Mutex</text>
+            <link>https://en.wikipedia.org/wiki/Lock_(computer_science)</link>
+            <answer>Enforces a limit on access to a resource shared between threads. For instance, allowing only one thread to access the resource at once.</answer>
+            <note>Mutex is an abbreviation of Mutual Exclusion</note>
+        </question>
+
+        <question id="synchronization-devices-semaphore">
+            <text>Semaphore</text>
+            <link>https://en.wikipedia.org/wiki/Semaphore_(programming)</link>
+            <answer>A variable used to limit access to a resource shared between threads. For instance, by recording how many units of the resource are available.</answer>
+        </question>
+
+        <question id="synchronization-devices-binary-semaphore">
+            <text>Binary Semaphore</text>
+            <link>https://en.wikipedia.org/wiki/Semaphore_(programming)</link>
+            <answer>Semaphore which can have only the values 0 or 1. Often used to implement locks.</answer>
+        </question>
+
+        <question id="synchronization-devices-condition-variable">
+            <text>Condition Variable / Monitor</text>
+            <link>https://en.wikipedia.org/wiki/Monitor_(synchronization)</link>
+            <answer>Allows both mutual exclusion and waiting for a condition to become true, letting a thread signal to another thread.</answer>
+        </question>
+    </section>
+
+</quiz>

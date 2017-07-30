@@ -1,0 +1,683 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz xmlns="http://bigoquiz.com/document" format_version="1" id="math" uses_mathml="true">
+    <title>Mathematics</title>
+    <!-- The mathml markup is from https://en.wikipedia.org/wiki/List_of_logarithmic_identities#Trivial_identities -->
+
+    <section id="log-identities" answers_as_choices="true">
+        <title>Logarithm Identities</title>
+        <link>https://en.wikipedia.org/wiki/List_of_logarithmic_identities</link>
+
+        <subsection id="trivial-identities">
+            <title>Trivial Identities</title>
+            <link>https://en.wikipedia.org/wiki/List_of_logarithmic_identities#Trivial_identities</link>
+            <question id="log-identities-logb1">
+                <text is_html="true">&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;
+                    &lt;semantics&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mstyle displaystyle=&quot;true&quot; scriptlevel=&quot;0&quot;&gt;
+                    &lt;msub&gt;
+                    &lt;mi&gt;log&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mi&gt;b&lt;/mi&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msub&gt;
+                    &lt;mo&gt;&#8289;&lt;!-- &#8289; --&gt;&lt;/mo&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                    &lt;mn&gt;1&lt;/mn&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                    &lt;/mstyle&gt;
+                    &lt;/mrow&gt;
+                    &lt;/semantics&gt;
+                    &lt;/math&gt;</text>
+                <answer>0</answer>
+            </question>
+            <question id="log-identities-logbb">
+                <text is_html="true">&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;
+                    &lt;semantics&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mstyle displaystyle=&quot;true&quot; scriptlevel=&quot;0&quot;&gt;
+                    &lt;msub&gt;
+                    &lt;mi&gt;log&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mi&gt;b&lt;/mi&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msub&gt;
+                    &lt;mo&gt;&#8289;&lt;!-- &#8289; --&gt;&lt;/mo&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                    &lt;mi&gt;b&lt;/mi&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                    &lt;/mstyle&gt;
+                    &lt;/mrow&gt;
+                    &lt;/semantics&gt;
+                    &lt;/math&gt;</text>
+                <answer>1</answer>
+            </question>
+        </subsection>
+
+        <subsection id="canceling-exponentials">
+            <title>Canceling Exponentials</title>
+            <link>https://en.wikipedia.org/wiki/List_of_logarithmic_identities#Trivial_identities</link>
+            <question id="log-identities-canceling-exponentials-blogbx">
+                <text is_html="true">&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;
+                    &lt;semantics&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mstyle displaystyle=&quot;true&quot; scriptlevel=&quot;0&quot;&gt;
+                    &lt;msup&gt;
+                    &lt;mi&gt;b&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;msub&gt;
+                    &lt;mi&gt;log&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mi&gt;b&lt;/mi&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msub&gt;
+                    &lt;mo&gt;&#8289;&lt;!-- &#8289; --&gt;&lt;/mo&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                    &lt;mi&gt;x&lt;/mi&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msup&gt;
+                    &lt;/mstyle&gt;
+                    &lt;/mrow&gt;
+                    &lt;/semantics&gt;
+                    &lt;/math&gt;</text>
+                <answer>x</answer>
+            </question>
+            <question id="log-identities-canceling-exponentials-logbbx">
+                <text is_html="true">&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;
+                    &lt;semantics&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mstyle displaystyle=&quot;true&quot; scriptlevel=&quot;0&quot;&gt;
+                    &lt;msub&gt;
+                    &lt;mi&gt;log&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mi&gt;b&lt;/mi&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msub&gt;
+                    &lt;mo&gt;&#8289;&lt;!-- &#8289; --&gt;&lt;/mo&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                    &lt;msup&gt;
+                    &lt;mi&gt;b&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mi&gt;x&lt;/mi&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msup&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                    &lt;/mstyle&gt;
+                    &lt;/mrow&gt;
+                    &lt;/semantics&gt;
+                    &lt;/math&gt;</text>
+                <answer>x</answer>
+            </question>
+        </subsection>
+
+
+        <subsection id="operations">
+            <title>Operations</title>
+            <link>https://en.wikipedia.org/wiki/List_of_logarithmic_identities#Using_simpler_operations</link>
+            <question id="log-operations-multiply">
+                <text is_html="true">&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;
+                    &lt;semantics&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mstyle displaystyle=&quot;true&quot; scriptlevel=&quot;0&quot;&gt;
+                    &lt;msub&gt;
+                    &lt;mi&gt;log&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mi&gt;b&lt;/mi&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msub&gt;
+                    &lt;mo&gt;&#8289;&lt;!-- &#8289; --&gt;&lt;/mo&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                    &lt;mi&gt;x&lt;/mi&gt;
+                    &lt;mi&gt;y&lt;/mi&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                    &lt;/mstyle&gt;
+                    &lt;/mrow&gt;
+                    &lt;/semantics&gt;
+                    &lt;/math&gt;</text>
+                <answer is_html="true">&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;
+                    &lt;semantics&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mstyle displaystyle=&quot;true&quot; scriptlevel=&quot;0&quot;&gt;
+                    &lt;msub&gt;
+                    &lt;mi&gt;log&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mi&gt;b&lt;/mi&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msub&gt;
+                    &lt;mo&gt;&#8289;&lt;!-- &#8289; --&gt;&lt;/mo&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                    &lt;mi&gt;x&lt;/mi&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                    &lt;mo&gt;+&lt;/mo&gt;
+                    &lt;msub&gt;
+                    &lt;mi&gt;log&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mi&gt;b&lt;/mi&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msub&gt;
+                    &lt;mo&gt;&#8289;&lt;!-- &#8289; --&gt;&lt;/mo&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                    &lt;mi&gt;y&lt;/mi&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                    &lt;/mstyle&gt;
+                    &lt;/mrow&gt;
+                    &lt;/semantics&gt;
+                    &lt;/math&gt;</answer>
+            </question>
+
+            <question id="log-operations-divide">
+                <text is_html="true">&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;
+                    &lt;semantics&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mstyle displaystyle=&quot;true&quot; scriptlevel=&quot;0&quot;&gt;
+                    &lt;msub&gt;
+                    &lt;mi&gt;log&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mi&gt;b&lt;/mi&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msub&gt;
+                    &lt;mo&gt;&#8289;&lt;!-- &#8289; --&gt;&lt;/mo&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mstyle displaystyle=&quot;false&quot; scriptlevel=&quot;0&quot;&gt;
+                    &lt;mfrac&gt;
+                    &lt;mi&gt;x&lt;/mi&gt;
+                    &lt;mi&gt;y&lt;/mi&gt;
+                    &lt;/mfrac&gt;
+                    &lt;/mstyle&gt;
+                    &lt;/mrow&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                    &lt;/mstyle&gt;
+                    &lt;/mrow&gt;
+                    &lt;/semantics&gt;
+                    &lt;/math&gt;</text>
+                <answer is_html="true">&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;
+                    &lt;semantics&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mstyle displaystyle=&quot;true&quot; scriptlevel=&quot;0&quot;&gt;
+                    &lt;msub&gt;
+                    &lt;mi&gt;log&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mi&gt;b&lt;/mi&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msub&gt;
+                    &lt;mo&gt;&#8289;&lt;!-- &#8289; --&gt;&lt;/mo&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                    &lt;mi&gt;x&lt;/mi&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                    &lt;mo&gt;−&lt;!-- − --&gt;&lt;/mo&gt;
+                    &lt;msub&gt;
+                    &lt;mi&gt;log&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mi&gt;b&lt;/mi&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msub&gt;
+                    &lt;mo&gt;&#8289;&lt;!-- &#8289; --&gt;&lt;/mo&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                    &lt;mi&gt;y&lt;/mi&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                    &lt;/mstyle&gt;
+                    &lt;/mrow&gt;
+                    &lt;/semantics&gt;
+                    &lt;/math&gt;</answer>
+            </question>
+
+            <question id="log-operations-power">
+                <text is_html="true">&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;
+                    &lt;semantics&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mstyle displaystyle=&quot;true&quot; scriptlevel=&quot;0&quot;&gt;
+                    &lt;msub&gt;
+                    &lt;mi&gt;log&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mi&gt;b&lt;/mi&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msub&gt;
+                    &lt;mo&gt;&#8289;&lt;!-- &#8289; --&gt;&lt;/mo&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                    &lt;msup&gt;
+                    &lt;mi&gt;x&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mi&gt;d&lt;/mi&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msup&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                    &lt;/mstyle&gt;
+                    &lt;/mrow&gt;
+                    &lt;/semantics&gt;
+                    &lt;/math&gt;</text>
+                <answer is_html="true">&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;
+                    &lt;semantics&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mstyle displaystyle=&quot;true&quot; scriptlevel=&quot;0&quot;&gt;
+                    &lt;mi&gt;d&lt;/mi&gt;
+                    &lt;msub&gt;
+                    &lt;mi&gt;log&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mi&gt;b&lt;/mi&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msub&gt;
+                    &lt;mo&gt;&#8289;&lt;!-- &#8289; --&gt;&lt;/mo&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                    &lt;mi&gt;x&lt;/mi&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                    &lt;/mstyle&gt;
+                    &lt;/mrow&gt;
+                    &lt;/semantics&gt;
+                    &lt;/math&gt;</answer>
+            </question>
+
+            <question id="log-operations-root">
+                <text is_html="true">&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;
+                    &lt;semantics&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mstyle displaystyle=&quot;true&quot; scriptlevel=&quot;0&quot;&gt;
+                    &lt;msub&gt;
+                    &lt;mi&gt;log&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mi&gt;b&lt;/mi&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msub&gt;
+                    &lt;mo&gt;&#8289;&lt;!-- &#8289; --&gt;&lt;/mo&gt;
+                    &lt;mrow&gt;
+                    &lt;mo&gt;(&lt;/mo&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mroot&gt;
+                    &lt;mi&gt;x&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mi&gt;y&lt;/mi&gt;
+                    &lt;/mrow&gt;
+                    &lt;/mroot&gt;
+                    &lt;/mrow&gt;
+                    &lt;mo&gt;)&lt;/mo&gt;
+                    &lt;/mrow&gt;
+                    &lt;/mstyle&gt;
+                    &lt;/mrow&gt;
+                    &lt;/semantics&gt;
+                    &lt;/math&gt;</text>
+                <answer is_html="true">&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;
+                    &lt;semantics&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mstyle displaystyle=&quot;true&quot; scriptlevel=&quot;0&quot;&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mfrac&gt;
+                    &lt;mrow&gt;
+                    &lt;msub&gt;
+                    &lt;mi&gt;log&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mi&gt;b&lt;/mi&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msub&gt;
+                    &lt;mo&gt;&#8289;&lt;!-- &#8289; --&gt;&lt;/mo&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                    &lt;mi&gt;x&lt;/mi&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                    &lt;/mrow&gt;
+                    &lt;mi&gt;y&lt;/mi&gt;
+                    &lt;/mfrac&gt;
+                    &lt;/mrow&gt;
+                    &lt;/mstyle&gt;
+                    &lt;/mrow&gt;
+                    &lt;/semantics&gt;
+                    &lt;/math&gt;</answer>
+            </question>
+
+            <question id="log-operations-log-power">
+                <text is_html="true">&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;
+                    &lt;semantics&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mstyle displaystyle=&quot;true&quot; scriptlevel=&quot;0&quot;&gt;
+                    &lt;msup&gt;
+                    &lt;mi&gt;x&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;msub&gt;
+                    &lt;mi&gt;log&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mi&gt;b&lt;/mi&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msub&gt;
+                    &lt;mo&gt;&#8289;&lt;!-- &#8289; --&gt;&lt;/mo&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                    &lt;mi&gt;y&lt;/mi&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msup&gt;
+                    &lt;/mstyle&gt;
+                    &lt;/mrow&gt;
+                    &lt;/semantics&gt;
+                    &lt;/math&gt;</text>
+                <answer is_html="true">&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;
+                    &lt;semantics&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mstyle displaystyle=&quot;true&quot; scriptlevel=&quot;0&quot;&gt;
+                    &lt;msup&gt;
+                    &lt;mi&gt;y&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;msub&gt;
+                    &lt;mi&gt;log&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mi&gt;b&lt;/mi&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msub&gt;
+                    &lt;mo&gt;&#8289;&lt;!-- &#8289; --&gt;&lt;/mo&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                    &lt;mi&gt;x&lt;/mi&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msup&gt;
+                    &lt;/mstyle&gt;
+                    &lt;/mrow&gt;
+                    &lt;/semantics&gt;
+                    &lt;/math&gt;</answer>
+            </question>
+
+            <question id="log-operations-log-change-base">
+                <link>https://en.wikipedia.org/wiki/List_of_logarithmic_identities#Changing_the_base</link>
+                <text is_html="true">&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;
+                    &lt;semantics&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mstyle displaystyle=&quot;true&quot; scriptlevel=&quot;0&quot;&gt;
+                    &lt;msub&gt;
+                    &lt;mi&gt;log&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mi&gt;b&lt;/mi&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msub&gt;
+                    &lt;mo&gt;&#8289;&lt;!-- &#8289; --&gt;&lt;/mo&gt;
+                    &lt;mi&gt;a&lt;/mi&gt;
+                    &lt;/mstyle&gt;
+                    &lt;/mrow&gt;
+                    &lt;/semantics&gt;
+                    &lt;/math&gt;</text>
+                <answer is_html="true">&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;
+                    &lt;semantics&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mstyle displaystyle=&quot;true&quot; scriptlevel=&quot;0&quot;&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mfrac&gt;
+                    &lt;mrow&gt;
+                    &lt;msub&gt;
+                    &lt;mi&gt;log&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mi&gt;d&lt;/mi&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msub&gt;
+                    &lt;mo&gt;&#8289;&lt;!-- &#8289; --&gt;&lt;/mo&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                    &lt;mi&gt;a&lt;/mi&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                    &lt;/mrow&gt;
+                    &lt;mrow&gt;
+                    &lt;msub&gt;
+                    &lt;mi&gt;log&lt;/mi&gt;
+                    &lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;
+                    &lt;mi&gt;d&lt;/mi&gt;
+                    &lt;/mrow&gt;
+                    &lt;/msub&gt;
+                    &lt;mo&gt;&#8289;&lt;!-- &#8289; --&gt;&lt;/mo&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                    &lt;mi&gt;b&lt;/mi&gt;
+                    &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                    &lt;/mrow&gt;
+                    &lt;/mfrac&gt;
+                    &lt;/mrow&gt;
+                    &lt;/mstyle&gt;
+                    &lt;/mrow&gt;
+                    &lt;/semantics&gt;
+                    &lt;/math&gt;</answer>
+            </question>
+        </subsection>
+    </section>
+
+
+    <section id="series-approximations" answers_as_choices="true">
+        <title>Series: Approximations</title>
+        <question id="series-harmonic-sum">
+            <text is_html="true">Harmonic Sum: H(n): &lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;
+                &lt;mtable displaystyle=&quot;true&quot;&gt;
+                &lt;mtr&gt;
+                &lt;mtd&gt;
+                &lt;mn&gt;1&lt;/mn&gt;
+                &lt;mo&gt;+&lt;/mo&gt;
+                &lt;mfrac&gt;
+                &lt;mn&gt;1&lt;/mn&gt;
+                &lt;mn&gt;2&lt;/mn&gt;
+                &lt;/mfrac&gt;
+                &lt;mo&gt;+&lt;/mo&gt;
+                &lt;mfrac&gt;
+                &lt;mn&gt;1&lt;/mn&gt;
+                &lt;mn&gt;3&lt;/mn&gt;
+                &lt;/mfrac&gt;
+                &lt;mo&gt;+&lt;/mo&gt;
+                &lt;mfrac&gt;
+                &lt;mn&gt;1&lt;/mn&gt;
+                &lt;mn&gt;4&lt;/mn&gt;
+                &lt;/mfrac&gt;
+                &lt;mo&gt;+&lt;/mo&gt;
+                &lt;mo&gt;&amp;#x22EF;&lt;/mo&gt;
+                &lt;mo&gt;+&lt;/mo&gt;
+                &lt;mfrac&gt;
+                &lt;mn&gt;1&lt;/mn&gt;
+                &lt;mi&gt;n&lt;/mi&gt;
+                &lt;/mfrac&gt;
+                &lt;/mtd&gt;
+                &lt;/mtr&gt;
+                &lt;/mtable&gt;
+                &lt;/math&gt;</text>
+            <link>https://en.wikipedia.org/wiki/Harmonic_number</link>
+            <answer is_html="true">&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;
+                &lt;mrow&gt;
+                &lt;mi&gt;ln&lt;/mi&gt;
+                &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                &lt;mi&gt;n&lt;/mi&gt;
+                &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                &lt;/mrow
+                &lt;/math&gt;</answer>
+        </question>
+
+        <question id="series-triangular-sum">
+            <text is_html="true">Triangular Sum: &lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;
+                &lt;mtable displaystyle=&quot;true&quot;&gt;
+                &lt;mtr&gt;
+                &lt;mtd&gt;
+                &lt;mn&gt;1&lt;/mn&gt;
+                &lt;mo&gt;+&lt;/mo&gt;
+                &lt;mn&gt;2&lt;/mn&gt;
+                &lt;mo&gt;+&lt;/mo&gt;
+                &lt;mn&gt;3&lt;/mn&gt;
+                &lt;mo&gt;+&lt;/mo&gt;
+                &lt;mn&gt;4&lt;/mn&gt;
+                &lt;mo&gt;+&lt;/mo&gt;
+                &lt;mo&gt;&amp;#x22EF;&lt;/mo&gt;
+                &lt;mo&gt;+&lt;/mo&gt;
+                &lt;mi&gt;n&lt;/mi&gt;
+                &lt;mo&gt;=&lt;/mo&gt;
+                &lt;mfrac&gt;
+                &lt;mrow&gt;
+                &lt;mo stretchy=&quot;false&quot;&gt;&lt;/mo&gt;
+                &lt;mi&gt;n&lt;/mi&gt;
+                &lt;mo&gt;&amp;#x2062;&lt;/mo&gt;
+                &lt;mrow&gt;
+                &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                &lt;mrow&gt;
+                &lt;mi&gt;n&lt;/mi&gt;
+                &lt;mo&gt;+&lt;/mo&gt;
+                &lt;mn&gt;1&lt;/mn&gt;
+                &lt;/mrow&gt;
+                &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                &lt;/mrow&gt;
+                &lt;/mrow&gt;
+                &lt;mi&gt;2&lt;/mi&gt;
+                &lt;/mfrac&gt;
+                &lt;/mtd&gt;
+                &lt;/mtr&gt;
+                &lt;/mtable&gt;
+                &lt;/math&gt;</text>
+            <link>https://en.wikipedia.org/wiki/Triangular_number</link>
+            <answer is_html="true">&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;
+                &lt;mrow&gt;
+                &lt;msup&gt;
+                &lt;mi&gt;n&lt;/mi&gt;
+                &lt;mn&gt;2&lt;/mn&gt;
+                &lt;/msup&gt;
+                &lt;/mrow
+                &lt;/math&gt;</answer>
+            <note>This is Gauss' trick.</note>
+        </question>
+
+        <!-- TODO: This is just one variation. -->
+        <question id="series-geometric-sum">
+            <text is_html="true">Geometric Sum: &lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;
+                &lt;mtable displaystyle=&quot;true&quot;&gt;
+                &lt;mtr&gt;
+                &lt;mtd&gt;
+                &lt;mn&gt;1&lt;/mn&gt;
+                &lt;mo&gt;+&lt;/mo&gt;
+                &lt;mn&gt;2&lt;/mn&gt;
+                &lt;mo&gt;+&lt;/mo&gt;
+                &lt;mn&gt;4&lt;/mn&gt;
+                &lt;mo&gt;+&lt;/mo&gt;
+                &lt;mn&gt;8&lt;/mn&gt;
+                &lt;mo&gt;+&lt;/mo&gt;
+                &lt;mo&gt;&amp;#x22EF;&lt;/mo&gt;
+                &lt;mo&gt;+&lt;/mo&gt;
+                &lt;mi&gt;n&lt;/mi&gt;
+                &lt;mo&gt;=&lt;/mo&gt;
+                &lt;mn&gt;2&lt;/mn&gt;
+                &lt;mo&gt;&amp;#x2062;&lt;/mo&gt;
+                &lt;mi&gt;n&lt;/mi&gt;
+                &lt;mo&gt;-&lt;/mo&gt;
+                &lt;mn&gt;1&lt;/mn&gt;
+                &lt;/mtd&gt;
+                &lt;/mtr&gt;
+                &lt;/mtable&gt;
+                &lt;/math&gt;</text>
+            <link>https://en.wikipedia.org/wiki/Geometric_series#Formula</link>
+            <answer is_html="true">&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;
+                &lt;mrow&gt;
+                &lt;mn&gt;2&lt;/mn&gt;
+                &lt;mo&gt;&amp;#x2062;&lt;/mo&gt;
+                &lt;mi&gt;n&lt;/mi&gt;
+                &lt;/mrow
+                &lt;/math&gt;</answer>
+            <note>These are pyramid numbers. Each square is a layer of the square-based pyramid.</note>
+        </question>
+
+        <!-- Apparently this is an explanation for comparison sorts being O(n log(n)):
+        https://en.wikipedia.org/wiki/Time_complexity#Linearithmic_time -->
+        <question id="series-stirlings-approximation">
+            <text is_html="true">Stirling's Approximation: &lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;
+                &lt;mtable displaystyle=&quot;true&quot;&gt;
+                &lt;mtr&gt;
+                &lt;mtd&gt;
+                &lt;mi&gt;lg&lt;/mi&gt;
+                &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                &lt;mi&gt;n!&lt;/mi&gt;
+                &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                &lt;mo&gt;=&lt;/mo&gt;
+                &lt;mi&gt;lg&lt;/mi&gt;
+                &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                &lt;mn&gt;1&lt;/mn&gt;
+                &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                &lt;mo&gt;+&lt;/mo&gt;
+                &lt;mi&gt;lg&lt;/mi&gt;
+                &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                &lt;mn&gt;2&lt;/mn&gt;
+                &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                &lt;mo&gt;+&lt;/mo&gt;
+                &lt;mi&gt;lg&lt;/mi&gt;
+                &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                &lt;mn&gt;3&lt;/mn&gt;
+                &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                &lt;mo&gt;+&lt;/mo&gt;
+                &lt;mi&gt;lg&lt;/mi&gt;
+                &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                &lt;mn&gt;4&lt;/mn&gt;
+                &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                &lt;mo&gt;+&lt;/mo&gt;
+                &lt;mo&gt;&amp;#x22EF;&lt;!-- &#8943; --&gt;&lt;/mo&gt;
+                &lt;mo&gt;+&lt;/mo&gt;
+                &lt;mi&gt;lg&lt;/mi&gt;
+                &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                &lt;mi&gt;n&lt;/mi&gt;
+                &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                &lt;/mtd&gt;
+                &lt;/mtr&gt;
+                &lt;/mtable&gt;
+                &lt;/math&gt;</text>
+            <link>https://en.wikipedia.org/wiki/Stirling%27s_approximation</link>
+            <answer is_html="true">&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;
+                &lt;mrow&gt;
+                &lt;mi&gt;n&lt;/mi&gt;
+                &lt;mo&gt;&amp;#x2062;&lt;/mo&gt;
+                &lt;mi&gt;lg&lt;/mi&gt;
+                &lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;
+                &lt;mi&gt;n&lt;/mi&gt;
+                &lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;
+                &lt;/mrow
+                &lt;/math&gt;</answer>
+        </question>
+    </section>
+
+    <section id="terminology" answers_as_choices="true" and_reverse="true">
+        <title>Terminology</title>
+
+        <question id="terminology-rules-of-replacement-associative">
+            <text>Associative</text>
+            <link>https://en.wikipedia.org/wiki/Associative_property</link>
+            <answer>Grouping can change. For instance, addition: (a + b) + c == a + (b + c).</answer>
+        </question>
+
+        <question id="terminology-rules-of-replacement-commutative">
+            <text>Commutative</text>
+            <link>https://en.wikipedia.org/wiki/Commutative_property</link>
+            <answer>Order can change. For instance, addition: a + b == b + a.</answer>
+        </question>
+
+        <question id="terminology-rules-of-replacement-distributive">
+            <text>Distributive</text>
+            <link>https://en.wikipedia.org/wiki/Distributive_property</link>
+            <answer>Operations can be applied to members of a group. For instance, multiplication over addition: a × (b + c)  =  a × b + a × c.</answer>
+        </question>
+
+        <question id="terminology-transitive">
+            <text>Transitive</text>
+            <link>https://en.wikipedia.org/wiki/Transitive_relation</link>
+            <answer>a related to b and b related to c implies a related to c. For instance, less than: If a &lt; b and b &lt; c, then a &lt; c.</answer>
+        </question>
+
+        <question id="terminology-reflexive">
+            <text>Reflexive</text>
+            <link>https://en.wikipedia.org/wiki/Reflexive_relation</link>
+            <answer>Related to itself. For instance, equality: a == a.</answer>
+        </question>
+
+        <question id="terminology-symmetric">
+            <text>Symmetric</text>
+            <link>https://en.wikipedia.org/wiki/Symmetric_relation</link>
+            <answer>Related in both directions. For instance, equality: if a == b then b == a.</answer>
+        </question>
+    </section>
+
+    <section id="modulo" answers_as_choices="true" and_reverse="true">
+    <title>Modulo Equivalencies</title>
+        <question id="modulo-distibutive-with-multiplication">
+            <text>xy % d</text>
+            <link>https://en.wikipedia.org/wiki/Modulo_operation#Equivalencies</link>
+            <answer>((x % d) * (y % d)) % d</answer>
+            <note>Because modulo is distributive with multiplication.</note>
+        </question>
+
+        <question id="modulo-distibutive-with-addition">
+            <text>(x + y) % d</text>
+            <link>https://en.wikipedia.org/wiki/Modulo_operation#Equivalencies</link>
+            <answer>((x % d) + (y % d)) % d</answer>
+            <note>Because modulo is distributive with addition.</note>
+        </question>
+
+    </section>
+
+    <!-- Stirling Numbers -->
+    <!-- Taylor Series -->
+</quiz>

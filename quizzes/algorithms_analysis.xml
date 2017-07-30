@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz xmlns="http://bigoquiz.com/document" format_version="1" id="algorithms_analysis">
+    <title>Algorithms Analysis</title>
+
+    <section id="master-theorem">
+        <title>Master Theorem</title>
+
+        <subsection id="master-theorem-using" answers_as_choices="true">
+            <title>Using: T(n) = a T(n / b) + f(n)</title>
+            <link>https://en.wikipedia.org/wiki/Master_theorem</link>
+            <question id="parts-less-than">
+                <text>If f(n) ∈ O(n ^ c) where c &lt; logb(a)</text>
+                <answer>Case 1: T(n) ∈ Θ(n ^ logb(a))</answer>
+            </question>
+            <question id="parts-equal">
+                <text>If f(n) ∈ Θ(n ^ c ⋅ (log(n))^k where c = logb(a)</text>
+                <answer>Case 2: T(n) ∈ Θ(n ^ c ⋅ (log(n))^(k+1))</answer>
+            </question>
+            <question id="parts-greater-than">
+                <text>If f(n) ∈ Ω(n ^ c) where c &gt; logb(a)</text>
+                <answer>Case 3: T(n) ∈ Θ(f(n))</answer>
+            </question>
+        </subsection>
+
+        <!-- See end of Erik Demaine's MIT lecture: http://videolectures.net/mit6046jf05_demaine_lec02/
+        and https://www.quora.com/What-is-an-intuitive-explanation-of-the-Master-Theorem/answer/Brian-Bi -->
+        <subsection id="master-theorem-intuition" answers_as_choices="true">
+            <title>Intuition: T(n) = a T(n / b) + f(n), c &lt;/=/&gt; logb(a)</title>
+            <link>https://en.wikipedia.org/wiki/Master_theorem</link>
+            <question id="parts-less-than">
+                <text>Case 1: T(n) ∈ Θ(n ^ logb(a))</text>
+                <answer>Cost increases geometrically. Recursive work dominates. The bottom-most level has a constant fraction of the cost.</answer>
+            </question>
+            <question id="parts-equal">
+                <text>Case 2: T(n) ∈ Θ(n ^ c ⋅ (log(n))^(k+1))</text>
+                <answer>Cost is approximately the same on each level. Total cost is number of levels times first level's cost.</answer>
+            </question>
+            <question id="parts-greater-than">
+                <text>Case 3: T(n) ∈ Θ(f(n))</text>
+                <answer>Cost decreases geometrically. Non-recursive work dominates. The top-most level has a constant fraction of the work.</answer>
+            </question>
+        </subsection>
+
+        <subsection id="master-theorem-parts" answers_as_choices="true">
+            <title>Parts: T(n) &lt;= a T(n / b) + f(n)</title>
+            <link>https://en.wikipedia.org/wiki/Master_theorem</link>
+            <question id="parts-a">
+                <text>a</text>
+                <answer>Number of recursive calls</answer>
+            </question>
+            <question id="parts-b">
+                <text>b</text>
+                <answer>Input size shrinkage factor</answer>
+            </question>
+            <question id="parts-d">
+                <text>f(n)</text>
+                <answer>Cost of non-recursive work (divide and combine)</answer>
+            </question>
+        </subsection>
+    </section>
+
+    <section id="simplified-master-theorem">
+        <title>Simplified Master Theorem</title>
+
+        <!-- This is based on Tim Roughgarden's description of the master method,
+        apparently based on the description in Sanjoy Dasgupta's "Algorithms" textbook.
+        Note that it lists the cases in a different order, with = first. -->
+        <subsection id="simplified-master-theorem-using" answers_as_choices="true">
+            <title>Using: T(n) = a T(n / b) + f(n)</title>
+            <link>https://en.wikipedia.org/wiki/Master_theorem</link>
+            <question id="simplified-parts-equal">
+                <text>a == bᵈ</text>
+                <answer>O(nᵈ log(n))</answer>
+            </question>
+            <question id="simplified-parts-less-than">
+                <text>a &lt; bᵈ</text>
+                <answer>O(nᵈ)</answer>
+            </question>
+            <question id="simplified-parts-greater-than">
+                <text>a &gt; bᵈ</text>
+                <answer>O(n ^ logb(a))</answer>
+            </question>
+        </subsection>
+
+        <subsection id="simplified-master-theorem-parts" answers_as_choices="true">
+            <title>Parts: T(n) &lt;= a T(n / b) + O(nᵈ)</title>
+            <link>https://en.wikipedia.org/wiki/Master_theorem</link>
+            <question id="simplified-parts-a">
+                <text>a</text>
+                <answer>Number of recursive calls</answer>
+            </question>
+            <question id="simplified-parts-b">
+                <text>b</text>
+                <answer>Input size shrinkage factor</answer>
+            </question>
+            <question id="simplified-parts-d">
+                <text>d</text>
+                <answer>Exponent in running time of non-recursive work (divide and combine)</answer>
+            </question>
+        </subsection>
+    </section>
+
+    <!-- TODO: I am not satisfied with these explanations. murrayc -->
+    <section id="amortized-analysis" answers_as_choices="true">
+        <title>Amortized Analysis</title>
+        <link>https://en.wikipedia.org/wiki/Amortized_analysis</link>
+        <question id="amortized-analysis-aggregate-analysis">
+            <text>Aggregate Analysis</text>
+            <link>https://en.wikipedia.org/wiki/Aggregate_analysis</link>
+            <answer>Determines an average worst case time for each operation based on the worst case time for n operations of any type.</answer>
+        </question>
+        <question id="amortized-analysis-accounting-method">
+            <text>Accounting Method</text>
+            <link>https://en.wikipedia.org/wiki/Accounting_method</link>
+            <answer>Assigns a cost for each operation that includes the cost of affected future operations. For instance, the cost of each insert would include the cost of each subsequent delete.</answer>
+        </question>
+        <question id="amortized-analysis-potential-method">
+            <text>Potential Method</text>
+            <link>https://en.wikipedia.org/wiki/Potential_method</link>
+            <answer>Chooses a potential function that associates a potential with each state of the data structure. The amortized cost of each operation is the actual cost plus the change in potential.</answer>
+        </question>
+    </section>
+
+    <section id="probabilistic-algorithms-types" answers_as_choices="true" and_reverse="true">
+        <title>Types of probabilistic algorithms</title>
+        <link>https://en.wikipedia.org/wiki/Randomized_algorithm</link>
+        <question id="probabilistic-algorithms-types-monte-carlo">
+            <text>Monte Carlo algorithms</text>
+            <link>https://en.wikipedia.org/wiki/Monte_Carlo_algorithm</link>
+            <answer>Fast but only probably correct.</answer>
+        </question>
+        <question id="probabilistic-algorithms-types-las-vegas">
+            <text>Las Vegas algorithms</text>
+            <link>https://en.wikipedia.org/wiki/Las_Vegas_algorithm</link>
+            <answer>Correct but only probably fast.</answer>
+        </question>
+        <question id="probabilistic-algorithms-types-atlantic-city">
+            <text>Atlantic City algorithms</text>
+            <link>https://en.wikipedia.org/wiki/Atlantic_City_algorithm</link>
+            <answer>Probably correct and probably fast.</answer>
+        </question>
+    </section>
+
+    <section id="probabilistic-algorithms-examples" answers_as_choices="true" and_reverse="true">
+        <title>Examples of probabilistic algorithms</title>
+        <link>https://en.wikipedia.org/wiki/Randomized_algorithm</link>
+        <question id="probabilistic-algorithms-examples-monte-carlo">
+            <text>Monte Carlo algorithms</text>
+            <link>https://en.wikipedia.org/wiki/Monte_Carlo_algorithm</link>
+            <answer>Karger's Min-Cut Algorithm, Solovay–Strassen primality test, Baillie-PSW primality test, Miller–Rabin primality test.</answer>
+        </question>
+        <question id="probabilistic-algorithms-examples-las-vegas">
+            <text>Las Vegas algorithms</text>
+            <link>https://en.wikipedia.org/wiki/Las_Vegas_algorithm</link>
+            <answer>Randomized Quicksort.</answer>
+        </question>
+        <!-- TODO?
+        <question id="probabilistic-algorithms-examples-atlantic-city">
+                <text>Atlantic City algorithms</text>
+            <link>https://en.wikipedia.org/wiki/Atlantic_City_algorithm</link>
+            <answer>Probably correct and probably fast.</answer>
+        </question>
+        -->
+    </section>
+
+    <section id="greedy-v-dp" and_reverse="true">
+        <title>Greedy versus Dynamic Programming</title>
+        <!-- Page 424 and 425 of CLRS. -->
+
+        <subsection id="greedy-v-dp-properties" answers_as_choices="true">
+            <title>Problem Properties</title>
+
+            <question id="greedy-v-dp-properties-greedy">
+                <text>Greedy Algorithms</text>
+                <link>https://en.wikipedia.org/wiki/Greedy_algorithm</link>
+                <answer>Have optimal substructure and can make locally optimal choices).</answer>
+                <note>Being able to make locally optimal choices to achieve a globally optimum solution is the Greedy Choice Property.</note>
+            </question>
+
+            <question id="greedy-v-dp-properties-dp">
+                <text>Dynamic Programming Algorithms</text>
+                <link>https://en.wikipedia.org/wiki/Dynamic_programming</link>
+                <answer>Have optimal substructure but cannot make locally optimal choices.</answer>
+            </question>
+        </subsection>
+
+        <subsection id="greedy-v-dp-subproblem-sequence" answers_as_choices="true">
+            <title>Subproblem Sequence</title>
+
+            <question id="greedy-v-dp-sequence-greedy">
+                <text>Greedy Algorithms</text>
+                <link>https://en.wikipedia.org/wiki/Greedy_algorithm</link>
+                <answer>Choose a subproblem, solve it and then choose the next subproblem to solve, for which there is usually only one choice.</answer>
+            </question>
+
+            <question id="greedy-v-dp-sequence-dp">
+                <text>Dynamic Programming Algorithms</text>
+                <link>https://en.wikipedia.org/wiki/Dynamic_programming</link>
+                <answer>Solve a subproblem by using the results of previously-computed subproblems.</answer>
+            </question>
+        </subsection>
+
+        <!-- TODO:
+        <subsection id="greedy-v-dp-proofs" answers_as_choices="true">
+            <title>Proofs</title>
+
+            <question id="greedy-v-dp-proofs-greedy">
+                <text>Greedy Algorithms</text>
+                <link>https://en.wikipedia.org/wiki/Greedy_algorithm</link>
+                <answer>Induction: An optimal solution to a subproblem, plus a choice, leads to an optimal solution to the original problem. TODO: Or an exchange argument.</answer>
+            </question>
+
+            <question id="greedy-v-dp-proofs-dp">
+                <text>Dynamic Programming Algorithms</text>
+                <link>https://en.wikipedia.org/wiki/Dynamic_programming</link>
+                <answer>TODO: Prove optimality of substructure?.</answer>
+            </question>
+        </subsection>
+        -->
+
+        <subsection id="greedy-v-dp-recalculation" answers_as_choices="true">
+            <title>Recalculation</title>
+
+            <question id="greedy-v-dp-recalculation-greedy">
+                <text>Greedy Algorithms</text>
+                <link>https://en.wikipedia.org/wiki/Greedy_algorithm</link>
+                <answer>Never reconsiders previously-calculated subproblems.</answer>
+            </question>
+
+            <question id="greedy-v-dp-recalculation-dp">
+                <text>Dynamic Programming Algorithms</text>
+                <link>https://en.wikipedia.org/wiki/Dynamic_programming</link>
+                <answer>Reuses previously-calculated subproblems.</answer>
+            </question>
+        </subsection>
+    </section>
+
+    <section id="p-np-etc" answers_as_choices="true">
+        <title>P, NP, etc</title>
+        <question id="p-no-etc-p">
+            <text>Definition: P (Polynomial)</text>
+            <answer>Problems whose solutions can be found in polynomial time.</answer>
+        </question>
+
+        <question id="p-no-etc-np">
+            <text>Definition: NP (Non-deterministic Polynomial)</text>
+            <answer>Problems whose solutions can be verified in polynomial time.</answer>
+        </question>
+
+        <question id="p-no-etc-np-hard">
+            <text>Definition: NP-hard</text>
+            <answer>Problems at least as hard as any NP problem.</answer>
+        </question>
+
+        <question id="p-no-etc-np-complete">
+            <text>Definition: NP-complete</text>
+            <answer>Problems that are NP-hard and in NP.</answer>
+        </question>
+
+        <question id="p-no-etc-np-hard-not-complete">
+            <text>Definition: NP-hard but not NP-complete</text>
+            <answer>Problems that are NP-hard but not in NP.</answer>
+        </question>
+
+        <question id="p-no-etc-exp">
+            <text>Definition: EXP (Exponential)</text>
+            <answer>Problems whose solutions can be found in exponential time.</answer>
+        </question>
+
+        <question id="p-no-etc-exp-hard">
+            <text>Definition: EXP-Hard</text>
+            <answer>Problems at least as hard as any EXP problem.</answer>
+        </question>
+
+        <question id="p-no-etc-exp-complete">
+            <text>Definition: EXP-Complete</text>
+            <answer>Problems that are EXP-hard and in EXP.</answer>
+        </question>
+
+        <question id="p-no-etc-r">
+            <text>Definition: R (Recursive)</text>
+            <answer>Problems whose solutions can be found in finite time.</answer>
+        </question>
+
+        <question id="p-no-etc-space">
+            <text>Definition: PSPACE (Polynomial Space)</text>
+            <answer>Problems whose solutions can be found with polynomial space.</answer>
+        </question>
+    </section>
+    <!-- TODO:Reductions:
+       Vertex cover and independent set are complements. -->
+
+    <!-- TODO: Greedy algorithms: Proof by contradiction.
+         TODO: Greedy algorithms: Proof by contradiction: Assume that the subproblem solution is not optimal (not part of the whole solution).
+         -->
+    <!-- TODO: Other proofs by. -->
+
+    <!-- Time complexity of recursive algorithms:
+      Factorial: O(n): Just reduces n by 1 each time, doing same amount of work each time. n * k -> O(n).
+      Fibonacci (naive): Increases work by 2 each time: O(phi ^ n).
+    -->
+
+    <!-- Space complexity of recursive algorithms: (TODO: Just the max depth?)
+     Factorial: O(n): Each call results in 1 recursive call, until they all unwind.
+     Fibonacci (naive): Increases work by 2 each time: O(phi ^ n).
+   -->
+
+    <section id="recurrence-examples" answers_as_choices="true">
+        <title>Recurrence Relation Examples</title>
+        <question id="recurrence-example-n-log-n-case-2">
+            <text>T(n) = 2 T(n/2) + O(n)</text>
+            <answer>O(n log(n))</answer>
+            <note>For instance, mergesort, or divide and conquer convex hull algorithm. Master Method case 2: a = 2, b = 2, d = 1. a = b^d</note>
+        </question>
+
+        <question id="recurrence-example-n-sq-log-n-case-2">
+            <text>T(n) = 4 T(n/2) + O(n^2)</text>
+            <answer>O(n^2 log(n))</answer>
+            <note>Master Method case 2: a = 4, b = 2, d = 2. a = b^d</note>
+        </question>
+
+        <!-- From http://cse.unl.edu/~choueiry/S06-235/files/MasterTheorem.pdf -->
+        <question id="recurrence-example-n-squared-case-1a">
+            <text>T(n) = T(n/2) + O(n^2)</text>
+            <answer>O(n^2))</answer>
+            <note>Master Method case 1: a = 1, b = 2, d = 2. a &lt; b^d</note>
+        </question>
+
+        <!-- From http://cse.unl.edu/~choueiry/S06-235/files/MasterTheorem.pdf -->
+        <question id="recurrence-example-n-squared-case-2">
+            <text>T(n) = 2 T(n/4) + O(sqrt(n))</text>
+            <answer>O(sqrt(n) log(n))</answer>
+            <note>Master Method case 2: a = 2, b = 4, d = 1/2. a = b^d</note>
+        </question>
+
+        <!-- From http://cse.unl.edu/~choueiry/S06-235/files/MasterTheorem.pdf -->
+        <question id="recurrence-example-n-to-log-case-3">
+            <text>T(n) = 3 T(n/2) + O(n)</text>
+            <answer>O(n^(log2(3)))</answer>
+            <note>Master Method case 3: a = 3, b = 2, d = 1. a &gt; b^d</note>
+        </question>
+
+        <question id="recurrence-example-n-squared-case-1b">
+            <text>T(n) = 2 T(n/2) + O(n^2)</text>
+            <answer>O(n^2))</answer>
+            <note>Master Method case 1: a = 2, b = 2, d = 2. a &lt; b^d</note>
+        </question>
+
+        <question id="recurrence-example-n-sq-to-n-cubed">
+            <text>T(n) = T(n ^ 2) + O(1)</text>
+            <answer>O(n^3)</answer>
+        </question>
+
+        <question id="recurrence-example-n-cubed-case-3">
+            <text>T(n) = 8 T(n/2) + O(n^2)</text>
+            <answer>O(n^3)</answer>
+            <note>Master Method case 3: a = 8, b = 2, d = 2. a &gt; b^d</note>
+        </question>
+
+        <question id="recurrence-example-n-cubed-case-1">
+            <text>T(n) = 4 T(n/2) + O(n^3)</text>
+            <answer>O(n^3)</answer>
+            <note>Master Method case 1: a = 4, b = 2, d = 3. a &lt; b^d</note>
+        </question>
+
+        <question id="recurrence-example-sqrt-to-log-n">
+            <text>T(n) = 2 T(sqrt(n)) + O(1)</text>
+            <answer>O(log(n))</answer>
+            <note>For instance, operations on the proto-vEB in CLRS.</note>
+        </question>
+
+        <!-- TODO?
+        <question id="recurrence-example-sqrt-to-log-log-n">
+            <text>T(n) = 2 T(upper-sqrt(n)) + O(1)</text>
+            <answer>O(log(log(n)))</answer>
+            <note>For instance, the operations in a van Emde Boas tree. See CLRS.</note>
+        </question>
+        -->
+    </section>
+
+    <section id="time-complexity-code-examples" answers_as_choices="true">
+        <title>Time Complexity: Code Examples</title>
+        <question id="time-complexity-code-example-log-n">
+            <text>for (i = 1; i &lt;= n; i = i * 2) {
+  for (int j = 0; j &lt; n; j++) {
+    ... }
+}</text>
+            <answer>O(n log(n))</answer>
+        </question>
+
+        <question id="time-complexity-code-example-n-log-n">
+            <text>for (i = 1; i &lt;= n; i = i * 2) {
+                ... }</text>
+            <answer>O(log(n))</answer>
+        </question>
+
+        <question id="time-complexity-code-example-n-via-geometric-sum">
+            <text>for (i = 1; i &lt;= n; i = i * 2) {
+  for (int j = 0; j &lt; i; j++) {
+    ... }
+  }</text>
+            <answer>O(n)</answer>
+            <note>The inner loop runs 1, 2, 4, 8, ... n times. That geometric sum is equal to 2n -1.</note>
+        </question>
+
+        <question id="time-complexity-code-example-n-sq">
+            <text>for (i = 0; i &lt; n; ++i) {
+                for (int j = 0; j &lt; n; ++j) {
+                ... }
+                }</text>
+            <answer>O(n ^ 2)</answer>
+        </question>
+
+        <question id="time-complexity-code-example-n-sq-avoid-duplicates">
+            <text>for (i = 0; i &lt; n; ++i) {
+                for (int j = i + 1; j &lt; n; ++j) {
+                ... }
+                }</text>
+            <answer>O(n ^ 2)</answer>
+        </question>
+        <note>Even when we avoid duplicates (an i,j that is the reverse of an earlier i,j), it's still O(n ^ 2).</note>
+    </section>
+
+
+
+    <!-- Recurrence relation examples:
+    T(n) = 2 T(n/2) + O(n)
+      O(n log(n)) ?
+    -->
+
+</quiz>

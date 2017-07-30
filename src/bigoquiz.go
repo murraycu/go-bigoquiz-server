@@ -3,17 +3,18 @@ package bigoquiz
 import (
 	"encoding/json"
 	"encoding/xml"
-	"path/filepath"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
-	"io/ioutil"
+	"path/filepath"
+	"strings"
 )
 
 type quiz struct {
-  Id        string `json:"id" xml:"id"`
-  Title     string `json:"title" xml:"title"`
-  IsPrivate bool   `json:"isPrivate" xml:"isPrivate"`
+	Id        string `json:"id" xml:"id"`
+	Title     string `json:"title" xml:"title"`
+	IsPrivate bool   `json:"isPrivate" xml:"isPrivate"`
 }
 
 func init() {
@@ -23,7 +24,7 @@ func init() {
 func loadQuiz(id string) (*quiz, error) {
 	var q quiz
 
-        absFilePath, err := filepath.Abs("quizzes/" + id + ".xml")
+	absFilePath, err := filepath.Abs("quizzes/" + id + ".xml")
 	if err != nil {
 		fmt.Println(err)
 		return &q, err
@@ -46,24 +47,58 @@ func loadQuiz(id string) (*quiz, error) {
 	if err != nil {
 		fmt.Println(err)
 		return &q, err
-        }
+	}
 
 	q.Id = id
 	return &q, nil
 }
 
+func filesWithExtension(dirPath string, ext string) ([]string, error) {
+	result := make([]string, 0)
+
+	files, err := ioutil.ReadDir(dirPath)
+	if err != nil {
+		fmt.Println(err)
+		return result, err
+	}
+
+	dotSuffix := "." + ext
+	suffixLen := len(dotSuffix)
+	for _, f := range files {
+
+		name := f.Name()
+		if strings.HasSuffix(name, dotSuffix) {
+			prefix := name[0 : len(name)-suffixLen]
+			result = append(result, prefix)
+		}
+	}
+
+	return result, nil
+}
+
 func loadQuizzes() ([]*quiz, error) {
 	quizzes := make([]*quiz, 0)
 
-	quizNames := []string {"algorithms", "bigo"}
-	for _, name := range quizNames {
-	  q, err := loadQuiz(name)
-	  if err != nil {
-		  fmt.Println(err)
-		  return quizzes, err
-	  }
+	absFilePath, err := filepath.Abs("quizzes")
+	if err != nil {
+		fmt.Println(err)
+		return quizzes, err
+	}
 
-	  quizzes = append(quizzes, q)
+	quizNames, err := filesWithExtension(absFilePath, "xml")
+	if err != nil {
+		fmt.Println(err)
+		return quizzes, err
+	}
+
+	for _, name := range quizNames {
+		q, err := loadQuiz(name)
+		if err != nil {
+			fmt.Println(err)
+			return quizzes, err
+		}
+
+		quizzes = append(quizzes, q)
 	}
 
 	return quizzes, nil

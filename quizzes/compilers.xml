@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz xmlns="http://bigoquiz.com/document" format_version="1" id="compilers">
+    <title>Compilers</title>
+
+    <section id="compilers-structure" answers_as_choices="true">
+        <title>Compiler Structure</title>
+        <!-- Pages 9 and 10 of Engineering a Compiler. -->
+
+        <question id="compilers-structure-front-end">
+            <text>Front End</text>
+            <link>https://en.wikipedia.org/wiki/Compiler#Front_end</link>
+            <answer>Scanner (lexical analysis. Also known as lexer, or tokenizer), Parser (syntactic analysis), Elaboration. Understands form, syntax and meaning. Receives the expression (source code). Emits IR (Intermediate Representation).</answer>
+        </question>
+
+        <question id="compilers-structure-optimizer">
+            <text>Optimizer</text>
+            <answer>Multiple optimizer steps. Receives IR (Intermediate Representation). Performs analysis and emits transformed IR.</answer>
+        </question>
+
+        <question id="compilers-structure-backend">
+            <text>Backend</text>
+            <answer>Instruction Selection, Instruction Scheduling, Register Allocation. Receives IR (Intermediate Representation) and emits code for the target machine.</answer>
+        </question>
+    </section>
+
+    <section id="compilers-scanners-regex" answers_as_choices="true" and_reverse="true">
+        <title>Scanners: Regular Expressions: Syntax</title>
+        <link>https://en.wikipedia.org/wiki/Regular_expression#Formal_definition</link>
+
+        <question id="compilers-scanners-regex-syntax-alternation">
+            <text>Alternation</text>
+            <answer>For instance, a|b</answer>
+        </question>
+
+        <question id="compilers-scanners-regex-syntax-alternation">
+            <text>Concatenation</text>
+            <answer>For instance, ab</answer>
+        </question>
+
+        <question id="compilers-scanners-regex-syntax-keene-closure">
+            <text>Keene Closure</text>
+            <answer>a*</answer>
+        </question>
+    </section>
+
+    <section id="compilers-scanners-automata">
+        <title>Scanners: Finite State Automata</title>
+        <link>https://en.wikipedia.org/wiki/Finite-state_machine</link>
+
+        <subsection id="compilers-scanners-automata-5tuple" answers_as_choices="true" and_reverse="true">
+            <title>5-Tuple</title>
+            <link>https://en.wikipedia.org/wiki/Deterministic_finite_automaton#Formal_definition</link>
+            <!-- Page 29 of Engineering a compiler -->
+
+            <question id="compilers-scanners-automata-5tuple-s">
+                <text>S</text>
+                <answer>A set of states.</answer>
+                <note>This is called Q on the wikipedia page for DFAs.</note>
+            </question>
+
+            <question id="compilers-scanners-automata-5tuple-sigma">
+                <text>Σ</text>
+                <answer>A set of input symbols (the alphabet).</answer>
+            </question>
+
+            <question id="compilers-scanners-automata-5tuple-delta">
+                <text>δ</text>
+                <answer>A transition function: δ(s, c).</answer>
+            </question>
+
+            <question id="compilers-scanners-automata-5tuple-s0">
+                <text>s₀</text>
+                <!-- TODO: can most browsers's fonts show the subscript 0? -->
+                <answer>The start state.</answer>
+                <note>This is called q₀ on the wikipedia page for DFAs.</note>
+            </question>
+
+            <question id="compilers-scanners-automata-5tuple-sa">
+                <text>sₐ</text>
+                <!-- TODO: can most browsers' fonts show the subscript a? -->
+                <answer>The set of accepting states.</answer>
+                <note>This is called F on the wikipedia page for DFAs.</note>
+            </question>
+        </subsection>
+
+        <subsection id="compilers-scanners-automata-types" answers_as_choices="true" and_reverse="true">
+            <title>Types</title>
+
+            <question id="compilers-scanners-automata-types-dfa">
+                <text>DFA (Deterministic Finite State Automata)</text>
+                <link>https://en.wikipedia.org/wiki/Deterministic_finite_automaton</link>
+                <answer>Allows transitions on the empty string ε.   Allows states that have multiple transitions on the same character.</answer>
+                <!-- Page 44 of Engineering a Compiler. -->
+            </question>
+
+            <question id="compilers-scanners-automata-types-nfa">
+                <text>NFA (Non-deterministic Finite State Automata)</text>
+                <link>https://en.wikipedia.org/wiki/Nondeterministic_finite_automaton</link>
+                <answer>Transition function is single-valued. Does not allow transitions on the empty string ε.</answer>
+                <!-- Page 44 of Engineering a Compiler. -->
+            </question>
+        </subsection>
+
+        <subsection id="compilers-scanners-automata-construction" answers_as_choices="true" and_reverse="true">
+            <title>Construction</title>
+
+            <question id="compilers-scanners-automata-construction-thompsons">
+                <text>Thompson's Construction</text>
+                <link>https://en.wikipedia.org/wiki/Thompson%27s_construction</link>
+                <answer>Constructs an NFA from a regular expression.</answer>
+                <!-- Page 45 of Engineering a Compiler. -->
+            </question>
+
+            <question id="compilers-scanners-automata-construction-subset">
+                <text>Subset Construction</text>
+                <link>https://en.wikipedia.org/wiki/Powerset_construction</link>
+                <answer>Constructs a DFA from an NFA.</answer>
+                <!-- Page 47 of Engineering a Compiler. -->
+                <code_url>https://github.com/murraycu/murrayc-compiler-experiments/blob/master/src/chapter_02/section_2_4_3_subset_construction.cc</code_url>
+            </question>
+
+            <question id="compilers-scanners-automata-construction-dfa-minimization">
+                <text>Hopcroft's Algorithm</text>
+                <link>https://en.wikipedia.org/wiki/DFA_minimization#Hopcroft.27s_algorithm</link>
+                <answer>Minimize a DFA.</answer>
+                <!-- Page 47 of Engineering a Compiler. -->
+                <code_url>https://github.com/murraycu/murrayc-compiler-experiments/blob/master/src/chapter_02/section_2_4_4_minimal_dfa_with_hopcrofts_algorithm.cc</code_url>
+            </question>
+        </subsection>
+    </section>
+
+    <section id="compilers-parsers">
+        <title>Parsers</title>
+        <!-- Code: https://github.com/murraycu/murrayc-compiler-experiments/tree/master/src/chapter_03 -->
+
+        <subsection id="compilers-parsers-grammar-terminology" answers_as_choices="true" and_reverse="true">
+            <title>Grammar: Terminology</title>
+            <!-- The text here is almost exactly based on the text in the sidebar sections on the mentioned pages
+            in Engineering a Compiler. -->
+
+            <question id="compilers-parsers-grammar-cfg">
+                <text>Context-free Grammar</text>
+                <answer>Defines a set of strings that are valid sentences.</answer>
+                <!-- Page 86 of Engineering a compiler. -->
+            </question>
+
+            <question id="compilers-parsers-grammar-sentence">
+                <text>Sentence</text>
+                <answer>A string of symbols that can be derived from the rules of a grammar.</answer>
+                <!-- Page 86 of Engineering a compiler. -->
+            </question>
+
+            <question id="compilers-parsers-grammar-production">
+                <text>Production</text>
+                <answer>A rule in a CFG (Context-free Grammar).</answer>
+                <!-- Page 86 of Engineering a compiler. -->
+            </question>
+
+            <question id="compilers-parsers-grammar-non-terminal-symbol">
+                <text>Nonterminal Symbol</text>
+                <answer>A syntactic variable used in a grammar's productions.</answer>
+                <!-- Page 86 of Engineering a compiler. -->
+            </question>
+
+            <question id="compilers-parsers-grammar-terminal-symbol">
+                <text>Terminal Symbol</text>
+                <answer>A word (actually, its syntactic category) that can appear in a sentence.</answer>
+                <note>A word consists of a lexeme and its syntactic category.</note>
+                <!-- Page 86 of Engineering a compiler. -->
+            </question>
+
+            <question id="compilers-parsers-grammar-derivation">
+                <text>Derivation</text>
+                <answer>A sequence of rewriting steps that begins with the grammar's start symbol and ends with a sentence in the language.</answer>
+                <!-- Page 87 of Engineering a compiler. -->
+            </question>
+
+            <question id="compilers-parsers-grammar-sentential-form">
+                <text>Sentential Form</text>
+                <answer>A string of symbols that occurs as one step in a valid derivation.</answer>
+                <!-- Page 87 of Engineering a compiler. -->
+            </question>
+
+            <question id="compilers-parsers-grammar-rightmost-derivation">
+                <text>Rightmost Derivation</text>
+                <answer>A derivation that rewrites, at each step, the rightmost nonterminal.</answer>
+                <!-- Page 90 of Engineering a compiler. -->
+            </question>
+
+            <question id="compilers-parsers-grammar-leftmost-derivation">
+                <text>Leftmost Derivation</text>
+                <answer>A derivation that rewrites, at each step, the leftmost nonterminal.</answer>
+                <!-- Page 90 of Engineering a compiler. -->
+            </question>
+
+            <question id="compilers-parsers-grammar-left-recursive-rule">
+                <text>Left Recursive Rule</text>
+                <answer>A rule whose first symbol on the right-hand side (expansion) is the symbol on its left-hand side (direct), or can derive that symbol (indirect).</answer>
+                <!-- Page 100 of Engineering a compiler. -->
+                <note>Top-down predictive parsers are unable to handle left-recursion, though left-recursive grammars model the left-to-right associativity of expression operators in a more natural way.</note>
+                <!-- Page 115 of Engineering a compiler. -->
+            </question>
+
+            <question id="compilers-parsers-grammar-backtrack-free-grammar">
+                <text>Backtrack-free Grammar</text>
+                <answer>A CFG for which a leftmost top-down parser can always predict the correct rule with lookahead of at most one word.</answer>
+                <note>Use the FIRST+(production) set to check if a CFG is backtrack-free.</note>
+                <!-- Page 103 of Engineering a compiler. -->
+            </question>
+
+            <question id="compilers-parsers-grammar-backtrack-left-factoring">
+                <text>Left Factoring</text>
+                <answer>The process of extracting and isolating common prefixes in a set of productions.</answer>
+                <!-- Page 108 of Engineering a compiler. -->
+            </question>
+
+            <question id="compilers-parsers-grammar-handle">
+                <text>Handle</text>
+                <answer>In an LR(1) parser, a pair A->B, k, such that B appears in the frontier with its right end at position k, so that replacing B with A (reducing B to A) is the next step in the parse.</answer>
+                <!-- TODO: Improve the "appears in the frontier with its right end at" text. -->
+                <!-- Page 116 of Engineering a compiler. -->
+            </question>
+
+            <question id="compilers-parsers-grammar-reduction">
+                <text>Reduction</text>
+                <answer>In an LR(1) parser, use an A->B production to replace B with A in the frontier of the bottom-up parse.</answer>
+                <!-- Page 116 of Engineering a compiler. -->
+            </question>
+        </subsection>
+
+        <subsection id="compilers-parsers-grammar-classes" answers_as_choices="true" and_reverse="true">
+            <title>Grammar: Classes</title>
+            <!-- Page 05 of Engineering a Compiler.
+                 The text here is almost exactly based on the text in the sidebar sections on these pages. -->
+
+            <question id="compilers-parsers-grammar-classes-afg">
+                <text>Arbitrary CFG Grammars</text>
+                <answer>Require more time to parse than restricted LR(1) or LL(1) grammars.</answer>
+            </question>
+
+            <question id="compilers-parsers-grammar-classes-lr1">
+                <text>LR(1) Grammars</text>
+                <answer>A subset of Arbitrary CFS Grammars. Can be parsed bottom-up, scanning left to right, looking at most 1 word ahead.</answer>
+            </question>
+
+            <question id="compilers-parsers-grammar-classes-ll1">
+                <text>LL(1) Grammars</text>
+                <answer>A subset of LR(1) grammars. Can be parsed top-down, scanning from left to right, looking at most 1 word ahead.</answer>
+                <note>LL(1) grammars are, by definition, backtrack-free. We can check if a grammar is backtrack-free by using the FIRST+ sets.</note>
+                <!-- The first sentence of the note text is from page 113 of Engineering a Compiler. -->
+            </question>
+
+            <question id="compilers-parsers-grammar-classes-RG">
+                <text>RG (Regular Grammars)</text>
+                <answer>A subset of LL(1) grammars. Equivalent to regular expressions. Productions are restricted to either A -> a, or A -> aB, where A and B are nonterminal symbols, and a is a terminal symbol.</answer>
+            </question>
+        </subsection>
+
+        <subsection id="compilers-parsers-grammar-sets" answers_as_choices="true" and_reverse="true">
+            <title>Grammar: Sets</title>
+
+            <question id="compilers-parsers-grammar-sets-first-symbol">
+                <text>FIRST(symbol)</text>
+                <answer>The set of terminals that can appear at the start of a sentence derived from the symbol.</answer>
+                <!-- Page 104 of Engineering a compiler -->
+                <code_url>https://github.com/murraycu/murrayc-compiler-experiments/blob/master/src/chapter_03/build_sets.h</code_url>
+            </question>
+
+            <question id="compilers-parsers-grammar-sets-first-production">
+                <text>FIRST(production: a -> b1 b2 ... bk)</text>
+                <answer>The set of terminals that can appear at the start of a sentence derived from this production. Union of FIRST(symbol) for b1 b2 ... bn, where bn is the first symbol whose FIRST(symbol) does not contain the empty symbol ε.</answer>
+                <!-- Page 105 of Engineering a compiler -->
+                <note>This lets us choose the expansion whose FIRST set contains the lookahead symbol. That is the expansion whose first symbol, or various possible recursive expansions of its first symbol, could match the lookahead symbol (based on the current word).</note>
+                <code_url>https://github.com/murraycu/murrayc-compiler-experiments/blob/master/src/chapter_03/build_sets.h</code_url>
+            </question>
+
+            <question id="compilers-parsers-grammar-sets-follow">
+                <text>FOLLOW(symbol)</text>
+                <answer>The set of words that can occur immediately after the (nonterminal) symbol in a sentence.</answer>
+                <!-- Page 106 of Engineering a compiler -->
+                <note>This lets us choose a rule even if none was found by looking at the FIRST(production) sets. It lets us see if there is a rule using the empty symbol ε that is suitable. We cannot match an ε symbol to the lookahead symbol, but maybe the lookahead symbol could appear in a sentence immediately after the focus symbol, meaning it would make sense to use the rule with the ε symbol, leaving the current word for use by the next symbol.</note>
+                <code_url>https://github.com/murraycu/murrayc-compiler-experiments/blob/master/src/chapter_03/build_sets.h</code_url>
+            </question>
+
+            <question id="compilers-parsers-grammar-sets-first-plus-production">
+                <text>FIRST+(production: a -> b1 b2 ... bk)</text>
+                <answer>FIRST(production), if that does not contain the empty symbol ε. Otherwise, the union of FIRST(production) and FOLLOW(a).</answer>
+                <!-- TODO: A description rather than a definition. -->
+                <!-- Page 107 of Engineering a compiler -->
+                <note>This lets us check whether a grammar is backtrack-free (can be used to parse sentences without backtracking). A grammar is backtrack-free if, for any nonterminal symbol with multiple production rules, the intersection of its FIRST+(production) sets must be empty (have no common symbols).</note>
+                <code_url>https://github.com/murraycu/murrayc-compiler-experiments/blob/master/src/chapter_03/build_sets.h</code_url>
+            </question>
+        </subsection>
+
+        <subsection id="compilers-parsers-types" answers_as_choices="true" and_reverse="true">
+            <title>Parser Types</title>
+
+            <question id="compilers-parsers-types-ll1">
+                <text>LL(1) Parser</text>
+                <link>https://en.wikipedia.org/wiki/LL_parser</link>
+                <answer>Top-down predictive parser. A left-to-right scanning, leftmost derivation, parser with a 1 symbol lookahead..</answer>
+                <!--    Page 107 of Engineering a compiler -->
+                <note>LL parsers need left-recursive grammars. They are unable to handle left-recursion, though left-recursive grammars can be a more natural way to model the left-to-right associativity of expression operators.</note>
+                <!-- This note text is based on the text in the section review on page 115, and on page 144, of Engineering a Compiler. -->
+                <code_url>https://github.com/murraycu/murrayc-compiler-experiments/blob/master/src/chapter_03/section_3_3_3_top_down_table_driven_ll1_parser.cc</code_url>
+            </question>
+
+            <question id="compilers-parsers-types-lr1">
+                <text>LR(1) Parser</text>
+                <link>https://en.wikipedia.org/wiki/LR_parser</link>
+                <answer>Bottom-up parser. A left-to-right scanning, rightmost derivation in reverse, parser with a 1 symbol lookahead.</answer>
+                <!-- Pages 118 and 144 of Engineering a compiler. -->
+                <note>LR(1) parsers can use either left-recursive or right-recursive grammars. They typically use tables that define a DFA, with shift and reduce actions, generated from the grammar.</note>
+                <code_url>https://github.com/murraycu/murrayc-compiler-experiments/blob/master/src/chapter_03/section_3_4_2_bottom_up_lr1_parser_with_generated_tables.ccc</code_url>
+            </question>
+        </subsection>
+    </section>
+
+    <section id="compilers-context-sensitive-analysis">
+    <title>Context Sensitive Analysis</title>
+
+        <subsection id="compilers-context-sensitive-analysis-techniques" answers_as_choices="true" and_reverse="true">
+            <title>Techniques</title>
+
+            <question id="compilers-context-sensitive-analysis-techniques-attribute-grammar">
+                <text>Attribute Grammar</text>
+                <link>https://en.wikipedia.org/wiki/Attribute_grammar</link>
+                <answer>A context-free grammar whose productions are augmented by rules that define one attribute value in terms of other attribute values.</answer>
+            </question>
+
+            <question id="compilers-context-sensitive-analysis-techniques-ad-hoc-syntax-directed">
+                <text>Ad Hoc Syntax-Directed Translation</text>
+                <link>https://en.wikipedia.org/wiki/Syntax-directed_translation</link>
+                <answer>A context-free grammar whose productions are augmented by code snippets that define one attribute value in terms of other attribute values.</answer>
+                <code_url>https://github.com/murraycu/murrayc-compiler-experiments/blob/master/src/chapter_04/section_4_4_1_ad_hoc_syntax_directed_translation_signed_binary_numbers.cc</code_url>
+                <note>This code would run, for instance, during each reduce step in a bottom-up shift-reduce parser. The code snippets can use a shared data structure such as a symbol table.</note>
+            </question>
+        </subsection>
+
+        <subsection id="compilers-context-sensitive-analysis-attributes" answers_as_choices="true" and_reverse="true">
+            <title>Attributes</title>
+
+            <question id="compilers-context-sensitive-analysis-techniques-attributes-synthesized">
+                <text>Synthesized Attribute</text>
+                <link>https://en.wikipedia.org/wiki/Attribute_grammar#Synthesized_attributes</link>
+                <answer>Defined in terms of the attributes of the node, its children, and constants.</answer>
+                <!-- Page 184 of "Engineering a compiler. -->
+            </question>
+
+            <question id="compilers-context-sensitive-analysis-techniques-attributes-inherited">
+                <text>Inherited Attribute</text>
+                <link>https://en.wikipedia.org/wiki/Attribute_grammar#Inherited_attributes</link>
+                <answer>Defined in terms of the attributes of the node, its siblings, its parent, and constants.</answer>
+                <!-- Page 184 of "Engineering a compiler. -->
+                <note>Grammars that use synthesized attributes are called S-attribute grammars.</note>
+                <!-- Page 188 of "Engineering a compiler. -->
+            </question>
+        </subsection>
+    </section>
+
+    <section id="compilers-ir">
+        <title>Intermediate Representation</title>
+        <link>https://en.wikipedia.org/wiki/Intermediate_representation</link>
+
+        <subsection id="compilers-ir-graphical" answers_as_choices="true" and_reverse="true">
+            <title>Graphical</title>
+
+            <question id="compilers-ir-graphical-ast">
+                <text>AST (Abstract Syntax Tree)</text>
+                <link>https://en.wikipedia.org/wiki/Abstract_syntax_tree</link>
+                <answer>A contraction of the parse tree that omits most nonterminal nodes.</answer>
+                <!-- Page 227 of "Engineering a compiler. -->
+            </question>
+
+            <question id="compilers-ir-graphical-dag">
+                <text>DAG (Directed Acyclic Graph)</text>
+                <answer>An AST whose nodes can share identical subtrees as children, avoiding repetition.</answer>
+                <!-- Page 229 of "Engineering a compiler. -->
+            </question>
+
+            <question id="compilers-ir-graphical-cfg">
+                <text>CFG (Control Flow Graph)</text>
+                <link>https://en.wikipedia.org/wiki/Control_flow_graph</link>
+                <answer>Has a node for every basic block and an edge for each possible control transfer between blocks.</answer>
+                <!-- Page 231 of "Engineering a compiler. -->
+                <note>A "basic block" is a sequence of branch-free code.</note>
+            </question>
+
+            <question id="compilers-ir-graphical-dependence-graph">
+                <text>Dependence Graph</text>
+                <link>https://en.wikipedia.org/wiki/Dependency_graph</link>
+                <answer>Models the flow of values in a code fragment, from definitions to uses.</answer>
+                <!-- Page 232 of "Engineering a compiler. -->
+                <node>This defines a partial order, allow the optimizer or the processor freedom to change the order of some operations.</node>
+            </question>
+
+            <question id="compilers-ir-graphical-call-graph">
+                <text>Call Graph</text>
+                <link>https://en.wikipedia.org/wiki/Dependency_graph</link>
+                <answer>Models the calling relationships among the procedures in a program.</answer>
+                <!-- Page 234 of "Engineering a compiler. -->
+            </question>
+        </subsection>
+
+        <subsection id="compilers-ir-linear" answers_as_choices="true" and_reverse="true">
+            <title>Linear</title>
+
+            <question id="compilers-ir-linear-stack-machine-code">
+                <text>Stack Machine Code</text>
+                <answer>Operations pop their operands from the stack, apply the operator, and push the results back onto the stack.</answer>
+                <link>https://en.wikipedia.org/wiki/Stack_machine</link>
+            </question>
+
+            <question id="compilers-ir-linear-three-address-code">
+                <text>Three Address Code</text>
+                <answer>Operations consist of an operator, operands, and a result.</answer>
+                <link>https://en.wikipedia.org/wiki/Three-address_code</link>
+            </question>
+        </subsection>
+
+        <!-- TODO: Mention Static Single-Assignment Form (SSA)
+         https://en.wikipedia.org/wiki/Static_single_assignment_form
+         and Φ functions. -->
+    </section>
+
+</quiz>

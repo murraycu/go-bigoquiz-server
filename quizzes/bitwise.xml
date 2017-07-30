@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz xmlns="http://bigoquiz.com/document" format_version="1" id="bitwise" answers_as_choices="true">
+    <title>Bitwise Operations</title>
+
+    <question id="bitwise-multiply-by-2">
+        <text>Multiply by 2</text>
+        <answer>x &lt;&lt; 1 (shift left)</answer>
+    </question>
+
+    <question id="bitwise-divide-by-2">
+        <text>Divide by 2</text>
+        <answer>x &gt;&gt; 1 (shift right)</answer>
+    </question>
+
+    <question id="bitwise-remove-lower-k-bits">
+        <text>Remove lower k bits</text>
+        <answer>x &gt;&gt; k</answer>
+    </question>
+
+    <question id="bitwise-get-lower-8-bits">
+        <text>Get lower 8 bits</text>
+        <answer>x &amp; 0xFF</answer>
+    </question>
+
+    <question id="bitwise-second-lowest-8-bits">
+        <text>Get second-lowest 8 bits</text>
+        <answer>(x >> 8) &amp; 0xFF</answer>
+    </question>
+
+    <question id="bitwise-unset-least-significant-set-bit">
+        <text>Unset the least significant (lowest, rightmost) set bit</text>
+        <answer>x &amp; (x - 1)</answer>
+    </question>
+
+    <question id="bitwise-set-least-significant-set-bit">
+        <text>Set the least significant (lowest, rightmost) unset bit</text>
+        <link>http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/#bithack10</link>
+        <answer> x | (x + 1)</answer>
+    </question>
+
+    <!-- TODO: Unset the highest set bit. -->
+
+    <question id="bitwise-get-least-significant-set-bit">
+        <text>Get the least significant (lowest, rightmost) set bit</text>
+        <link>http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/#bithack7</link>
+        <answer>x &amp; (-x)</answer>
+    </question>
+
+    <question id="bitwise-get-least-significant-unset-bit">
+        <text>Get the least significant (lowest, rightmost) unset bit</text>
+        <link>http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/#bithack9</link>
+        <answer>~x &amp; (x + 1)</answer>
+    </question>
+
+    <!-- TODO: Set the highest unset bit. -->
+    <!-- TODO: Set the highest bit after the highest set bit. -->
+
+    <question id="bitwise-check-nth-bit-is-set">
+        <text>Check if the nth bit is set</text>
+        <link>http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/#bithack2</link>
+        <answer>x &amp; (1 &lt;&lt; n)</answer>
+    </question>
+
+    <question id="bitwise-set-nth-bit">
+        <text>Set the nth bit</text>
+        <link>http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/#bithack3</link>
+        <answer>x | (1 &lt;&lt; n)</answer>
+    </question>
+
+    <question id="bitwise-unset-nth-bit">
+        <text>Unset the nth bit</text>
+        <link>http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/#bithack4</link>
+        <answer>x &amp; ~(1 &lt;&lt; n)</answer>
+    </question>
+
+    <question id="bitwise-toggle-nth-bit">
+        <text>Toggle the nth bit</text>
+        <link>http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/#bithack5</link>
+        <answer>x ^ (1 &lt;&lt; n)</answer>
+    </question>
+
+    <question id="bitwise-count-first-24-bits">
+        <text>Count the first 24 bits set (on a 64-bit system)</text>
+        <link>https://graphics.stanford.edu/~seander/bithacks.html#CountBitsSet64</link>
+        <answer>(x * 0x200040008001ULL &amp; 0x111111111111111ULL) % 0xFF</answer>
+        <note>Modern CPUs have a popcnt instruction, which the compiler will use if you build for a specific CPU architecture, when you use GCC's __builtin_popcount() or __builtin_popcountll() extensions.</note>
+    </question>
+
+    <!-- 16 bits divided and modulo by 4 (sqrt(16)) splits into high and low.
+         64 bits divided and modulo by 8 (sqrt(64)) splits into high and low.
+    -->
+
+    <!-- From http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/ -->
+    <question id="bitwise-check-if-even">
+        <text>Check if integer is even</text>
+        <link>http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/#bithack1</link>
+        <answer>x &amp; 1</answer>
+    </question>
+
+    <question id="bitwise-set-rightmost-bits-after-set-bit">
+        <text>Set the rightmost bits after the rightmost set bit (right propagate)</text>
+        <link>http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/#bithack8</link>
+        <answer>x | (x - 1)</answer>
+    </question>
+
+</quiz>
