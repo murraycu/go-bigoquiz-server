@@ -75,7 +75,6 @@ func loadQuizzes() ([]*quiz.Quiz, error) {
 
 // TODO: Is there instead some way to output just the top-level of the JSON,
 // and only some of the fields?
-// TODO: Avoid outputing an empty section list in the JSON.
 func buildQuizzesSimple(quizzes []*quiz.Quiz) []*quiz.Quiz {
 	// Create a slice with the same capacity.
 	result := make([]*quiz.Quiz, 0, len(quizzes))
