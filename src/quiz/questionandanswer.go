@@ -1,6 +1,6 @@
 package quiz
 
-type Question struct {
+type QuestionAndAnswer struct {
 	HasIdAndTitle
 	Text Text `json:"text,omitempty" xml:"text"`
 
