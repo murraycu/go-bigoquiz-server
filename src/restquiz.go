@@ -181,11 +181,11 @@ func restHandleQuizSectionsByQuizId(w http.ResponseWriter, r *http.Request, ps h
 
 	sections := q.Sections
 	if listOnly {
-		simpleSections := make([]quiz.Section, 0, len(sections))
+		simpleSections := make([]*quiz.Section, 0, len(sections))
 		for _, s := range sections {
 			var simple quiz.Section
 			s.CopyHasIdAndTitle(&simple.HasIdAndTitle)
-			simpleSections = append(simpleSections, simple)
+			simpleSections = append(simpleSections, &simple)
 		}
 
 		sections = simpleSections

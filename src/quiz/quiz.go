@@ -11,7 +11,7 @@ type Quiz struct {
 	HasIdAndTitle
 	IsPrivate bool `json:"isPrivate" xml:"isPrivate"`
 
-	Sections []Section `json:"sections,omitempty" xml:"section"`
+	Sections []*Section `json:"sections,omitempty" xml:"section"`
 }
 
 func LoadQuiz(absFilePath string, id string) (*Quiz, error) {
