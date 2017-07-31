@@ -199,3 +199,39 @@ func restHandleQuizSectionsByQuizId(w http.ResponseWriter, r *http.Request, ps h
 
 	w.Write(jsonStr)
 }
+
+func restHandleQuizQuestionById(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	quizId := ps.ByName("quizId")
+	if quizId == "" {
+		// This makes no sense. restHandleQuizAll() should have been called.
+		http.Error(w, "Empty quiz ID", http.StatusInternalServerError)
+		return
+	}
+
+	questionId := ps.ByName("questionId")
+	if questionId == "" {
+		// This makes no sense.
+		http.Error(w, "Empty question ID", http.StatusInternalServerError)
+		return
+	}
+
+	q := getQuiz(quizId)
+	if q == nil {
+		http.Error(w, "quiz not found", http.StatusInternalServerError)
+		return
+	}
+
+	qa := q.GetQuestionAndAnswer(questionId)
+	if qa == nil {
+		http.Error(w, "question not found", http.StatusInternalServerError)
+		return
+	}
+
+	jsonStr, err := json.Marshal(qa.Question)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Write(jsonStr)
+}
