@@ -240,7 +240,7 @@ func restHandleQuizQuestionById(w http.ResponseWriter, r *http.Request, ps httpr
 		 http.Error(w, "question not found", http.StatusInternalServerError)
         }
 
-	jsonStr, err := json.Marshal(qa)
+	jsonStr, err := json.Marshal(qa.Question)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
