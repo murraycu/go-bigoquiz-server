@@ -75,16 +75,27 @@ func loadQuizzes() (map[string]*quiz.Quiz, error) {
 
 // TODO: Is there instead some way to output just the top-level of the JSON,
 // and only some of the fields?
-func buildQuizzesSimple(quizzes map[string]*quiz.Quiz) map[string]*quiz.Quiz {
+func buildQuizzesSimple(quizzes map[string]*quiz.Quiz) []*quiz.Quiz {
 	// Create a slice with the same capacity.
-	result := make(map[string]*quiz.Quiz)
+	result := make([]*quiz.Quiz, 0, len(quizzes))
 
 	for _, q := range quizzes {
 		var simple quiz.Quiz
 		q.CopyHasIdAndTitle(&simple.HasIdAndTitle)
 		simple.IsPrivate = q.IsPrivate
 
-		result[simple.Id] = &simple
+		result = append(result, &simple)
+	}
+
+	return result
+}
+
+func buildQuizzesFull(quizzes map[string]*quiz.Quiz) []*quiz.Quiz {
+	// Create a slice with the same capacity.
+	result := make([]*quiz.Quiz, 0, len(quizzes))
+
+	for _, q := range quizzes {
+		result = append(result, q)
 	}
 
 	return result
@@ -105,15 +116,19 @@ func restHandleQuizAll(w http.ResponseWriter, r *http.Request, _ httprouter.Para
 		return
 	}
 
+	var quizArray []*quiz.Quiz = nil
 	if listOnly {
 		// TODO: Cache this.
-		quizzes = buildQuizzesSimple(quizzes)
+		quizArray = buildQuizzesSimple(quizzes)
+	} else {
+		// TODO: Cache this.
+		quizArray = buildQuizzesFull(quizzes)
 	}
 
 	w.Header().Set("Content-Type", "application/json") // normal header
 	w.WriteHeader(http.StatusOK)
 
-	jsonStr, err := json.Marshal(quizzes)
+	jsonStr, err := json.Marshal(quizArray)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
