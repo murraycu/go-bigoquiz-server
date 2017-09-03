@@ -14,6 +14,8 @@ func init() {
 	router.GET("/api/quiz/:quizId/question/:questionId", restHandleQuizQuestionById)
 	router.GET("/api/question/next", restHandleQuestionNext)
 	router.GET("/api/user", restHandleUser)
+	router.GET("/api/user-history", restHandleUserHistoryAll)
+	router.GET("/api/user-history/:quizId", restHandleUserHistoryByQuizId)
 
 	// Allow Javascript requests from some domains other than the one serving this API.
 	// The browser issue a CORS request before actually issuing the HTTP request.
