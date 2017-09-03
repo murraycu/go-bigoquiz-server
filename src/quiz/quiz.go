@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io/ioutil"
+	"math/rand"
 	"os"
 )
 
@@ -16,6 +17,9 @@ type Quiz struct {
 
 	// A map of all questions in all sections and at the top-level.
 	questionsMap map[string]*QuestionAndAnswer `json:"-" xml:"-"`
+
+	// An array of all questions in all sections and at the top-level.
+	questionsArray []*QuestionAndAnswer `json:"-" xml:"-"`
 }
 
 func LoadQuiz(absFilePath string, id string) (*Quiz, error) {
@@ -42,22 +46,28 @@ func LoadQuiz(absFilePath string, id string) (*Quiz, error) {
 
 	q.Id = id
 
-	q.buildQuestionsMap()
+	q.buildQuestionsMapAndArray()
 
 	return &q, nil
 }
 
 /** Build a map of all questions in all sections and at the top-level.
  */
-func (self *Quiz) buildQuestionsMap() {
+func (self *Quiz) buildQuestionsMapAndArray() {
 	self.questionsMap = make(map[string]*QuestionAndAnswer)
+	self.questionsArray = make([]*QuestionAndAnswer, 0, len(self.Questions))
+
 	for _, q := range self.Questions {
 		self.questionsMap[q.Id] = q
+
+		self.questionsArray = append(self.questionsArray, q);
 	}
 
 	for _, s := range self.Sections {
 		for _, q := range s.Questions {
 			self.questionsMap[q.Id] = q
+
+			self.questionsArray = append(self.questionsArray, q);
 		}
 	}
 }
@@ -68,4 +78,15 @@ func (self *Quiz) GetQuestionAndAnswer(questionId string) *QuestionAndAnswer {
 	}
 
 	return self.questionsMap[questionId]
+}
+
+func (self *Quiz) GetRandomQuestion() *Question {
+	if self.questionsMap == nil {
+		return nil
+	}
+
+	count := len(self.questionsArray)
+	i := rand.Intn(count - 1)
+	var qa *QuestionAndAnswer = self.questionsArray[i]
+	return &(qa.Question);
 }
