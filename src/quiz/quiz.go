@@ -69,6 +69,14 @@ func (self *Quiz) buildQuestionsMapAndArray() {
 
 			self.questionsArray = append(self.questionsArray, q);
 		}
+
+		for _, sub := range s.SubSections {
+		  for _, q := range sub.Questions {
+			  self.questionsMap[q.Id] = q
+
+			  self.questionsArray = append(self.questionsArray, q);
+		  }
+		}
 	}
 }
 
