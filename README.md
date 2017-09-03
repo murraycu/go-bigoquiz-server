@@ -27,7 +27,7 @@ It is not yet live at bigoquiz.com.
 
 ### Running locally
 
-    $ dev_appserver.py app.yaml
+    $ dev_appserver.py src/bigoquiz
 
 [1]: https://developers.google.com/appengine
 [2]: https://golang.org
