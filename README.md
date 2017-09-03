@@ -21,6 +21,7 @@ It is not yet live at bigoquiz.com.
     $ cd go-bigoquiz-server
     $ export GOPATH=`pwd`
     $ go get github.com/julienschmidt/httprouter
+    $ go get github.com/rs/cors
     $ go build bigoquiz
 
     $ gcloud app deploy src/bigoquiz
