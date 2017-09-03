@@ -231,53 +231,16 @@ func restHandleQuizQuestionById(w http.ResponseWriter, r *http.Request, ps httpr
 
 	q := getQuiz(quizId)
 	if q == nil {
-	         http.Error(w, "quiz not found", http.StatusNotFound)
-	         return
-	}
-
-	qa := q.GetQuestionAndAnswer(questionId)
-        if qa == nil {
-		 http.Error(w, "question not found", http.StatusInternalServerError)
-        }
-
-	jsonStr, err := json.Marshal(qa.Question)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	w.Write(jsonStr)
-}
-
-func restHandleQuestionNext(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	var quizId string
-	// var sectionId string
-	queryValues := r.URL.Query()
-	if queryValues != nil {
-		quizId = queryValues.Get("quiz-id")
-		// sectionId = queryValues.Get("section-id")
-	}
-
-	if len(quizId) == 0 {
-		// TODO: One day we might let the user answer questions from a
-		// random quiz, so they wouldn't have to specify a quiz-id.
-		http.Error(w, "No quiz-id specified", http.StatusBadRequest)
-		return
-	}
-
-	q := getQuiz(quizId)
-	if q == nil {
 		http.Error(w, "quiz not found", http.StatusNotFound)
 		return
 	}
 
-	question := q.GetRandomQuestion()
-	if question == nil {
-		http.Error(w, "question not found", http.StatusNotFound)
-		return
+	qa := q.GetQuestionAndAnswer(questionId)
+	if qa == nil {
+		http.Error(w, "question not found", http.StatusInternalServerError)
 	}
 
-	jsonStr, err := json.Marshal(question)
+	jsonStr, err := json.Marshal(qa.Question)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
