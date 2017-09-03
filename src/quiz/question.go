@@ -15,4 +15,8 @@ type Question struct {
 	// their sections and then their questions again.
 	Section    *HasIdAndTitle `json:"section,omitempty"`
 	SubSection *HasIdAndTitle `json:"subSection,omitempty"`
+
+	// These are not in the XML.
+	// But we want to show them in the JSON.
+	Choices []*Text `json:"choices,omitempty"`
 }

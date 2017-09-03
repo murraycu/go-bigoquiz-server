@@ -52,7 +52,8 @@ func LoadQuiz(absFilePath string, id string) (*Quiz, error) {
 }
 
 /** Build a map of all questions in all sections and at the top-level.
- * And also make sure that questions have their section ID and sub-section IDs.
+ * And also make sure that questions have their section ID and sub-section IDs,
+ * and that the questions have the correct choices.
  */
 func (self *Quiz) buildQuestionsMapAndArray() {
 	self.questionsMap = make(map[string]*QuestionAndAnswer)
@@ -70,9 +71,17 @@ func (self *Quiz) buildQuestionsMapAndArray() {
 		    self.addQuestionToMapAndArray(q, s, nil)
 		}
 
+		if (s.AnswersAsChoices) {
+		    setQuestionsChoicesFromAnswers(s.Questions)
+		}
+
 		for _, sub := range s.SubSections {
 		    for _, q := range sub.Questions {
 		        self.addQuestionToMapAndArray(q, s, sub)
+		    }
+
+		    if (sub.AnswersAsChoices) {
+		      setQuestionsChoicesFromAnswers(sub.Questions)
 		    }
 		}
 	}
@@ -110,6 +119,27 @@ func (self *Quiz) addQuestionToMapAndArray(qa *QuestionAndAnswer, section *Secti
 
   self.questionsMap[qa.Id] = qa
   self.questionsArray = append(self.questionsArray, qa);
+}
+
+func setQuestionsChoicesFromAnswers(questions []*QuestionAndAnswer) {
+        // Build the list of answers, avoiding duplicates:
+        answers := make([]*Text, 0, len(questions))
+	used := make(map[string]bool)
+
+	for _, q := range questions {
+		t := q.Answer.Text
+		_, ok := used[t];
+		if ok {
+		  continue;
+		}
+
+		used[t] = true;
+		answers = append(answers, &(q.Answer));
+	}
+
+	for _, q := range questions {
+	        q.Choices = answers
+	}
 }
 
 func (self *Quiz) GetQuestionAndAnswer(questionId string) *QuestionAndAnswer {
