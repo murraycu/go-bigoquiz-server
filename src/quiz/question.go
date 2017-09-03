@@ -5,6 +5,6 @@ type Question struct {
 	Text Text `json:"text,omitempty" xml:"text"`
 
 	// These are not in the XML.
-	SectionId    Text `json:"sectionId,omitempty"`
-	SubSectionId Text `json:"subSectionId,omitempty"`
+	SectionId    string `json:"sectionId,omitempty"`
+	SubSectionId string `json:"subSectionId,omitempty"`
 }

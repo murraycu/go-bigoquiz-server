@@ -52,6 +52,7 @@ func LoadQuiz(absFilePath string, id string) (*Quiz, error) {
 }
 
 /** Build a map of all questions in all sections and at the top-level.
+ * And also make sure that questions have their section ID and sub-section IDs.
  */
 func (self *Quiz) buildQuestionsMapAndArray() {
 	self.questionsMap = make(map[string]*QuestionAndAnswer)
@@ -65,19 +66,31 @@ func (self *Quiz) buildQuestionsMapAndArray() {
 
 	for _, s := range self.Sections {
 		for _, q := range s.Questions {
-			self.questionsMap[q.Id] = q
-
-			self.questionsArray = append(self.questionsArray, q);
+		    self.addQuestionToMapAndArray(q, s, nil)
 		}
 
 		for _, sub := range s.SubSections {
-		  for _, q := range sub.Questions {
-			  self.questionsMap[q.Id] = q
-
-			  self.questionsArray = append(self.questionsArray, q);
-		  }
+		    for _, q := range sub.Questions {
+		        self.addQuestionToMapAndArray(q, s, sub)
+		    }
 		}
 	}
+}
+
+/** Add to the map and array.
+ * And also make sure that questions have their section ID and sub-section IDs.
+ */
+func (self *Quiz) addQuestionToMapAndArray(q *QuestionAndAnswer, section *Section, subSection *SubSection) {
+  if (section != nil) {
+      q.SectionId = section.Id
+  }
+
+  if (subSection != nil) {
+      q.SubSectionId = subSection.Id
+  }
+
+  self.questionsMap[q.Id] = q
+  self.questionsArray = append(self.questionsArray, q);
 }
 
 func (self *Quiz) GetQuestionAndAnswer(questionId string) *QuestionAndAnswer {
