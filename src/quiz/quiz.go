@@ -58,6 +58,7 @@ func (self *Quiz) buildQuestionsMapAndArray() {
 	self.questionsMap = make(map[string]*QuestionAndAnswer)
 	self.questionsArray = make([]*QuestionAndAnswer, 0, len(self.Questions))
 
+	// Build the map and array:
 	for _, q := range self.Questions {
 		self.questionsMap[q.Id] = q
 
@@ -75,12 +76,12 @@ func (self *Quiz) buildQuestionsMapAndArray() {
 		    }
 		}
 	}
+
 }
 
-/** Add to the map and array.
- * And also make sure that questions have their section ID and sub-section IDs.
+/** Make sure that questions have their section ID, sub-section IDs, and choices.
  */
-func (self *Quiz) addQuestionToMapAndArray(qa *QuestionAndAnswer, section *Section, subSection *SubSection) {
+func (self *Quiz) setQuestionDetails(qa *QuestionAndAnswer, section *Section, subSection *SubSection) {
   if (qa == nil) {
     return;
   }
@@ -99,6 +100,13 @@ func (self *Quiz) addQuestionToMapAndArray(qa *QuestionAndAnswer, section *Secti
       q.SubSectionId = subSection.Id
       q.SubSection = &(subSection.HasIdAndTitle)
   }
+}
+
+/** Add to the map and array.
+ * And also make sure that questions have their section ID and sub-section IDs.
+ */
+func (self *Quiz) addQuestionToMapAndArray(qa *QuestionAndAnswer, section *Section, subSection *SubSection) {
+  self.setQuestionDetails(qa, section, subSection)
 
   self.questionsMap[qa.Id] = qa
   self.questionsArray = append(self.questionsArray, qa);
