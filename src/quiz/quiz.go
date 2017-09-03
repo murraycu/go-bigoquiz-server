@@ -80,17 +80,28 @@ func (self *Quiz) buildQuestionsMapAndArray() {
 /** Add to the map and array.
  * And also make sure that questions have their section ID and sub-section IDs.
  */
-func (self *Quiz) addQuestionToMapAndArray(q *QuestionAndAnswer, section *Section, subSection *SubSection) {
+func (self *Quiz) addQuestionToMapAndArray(qa *QuestionAndAnswer, section *Section, subSection *SubSection) {
+  if (qa == nil) {
+    return;
+  }
+
+  q := &(qa.Question);
+
+  // Update the section and subSection,
+  // so we can return it in the JSON,
+  // so the caller of the REST API does not need to discover these details separately.
   if (section != nil) {
       q.SectionId = section.Id
+      q.Section = &(section.HasIdAndTitle)
   }
 
   if (subSection != nil) {
       q.SubSectionId = subSection.Id
+      q.SubSection = &(subSection.HasIdAndTitle)
   }
 
-  self.questionsMap[q.Id] = q
-  self.questionsArray = append(self.questionsArray, q);
+  self.questionsMap[qa.Id] = qa
+  self.questionsArray = append(self.questionsArray, qa);
 }
 
 func (self *Quiz) GetQuestionAndAnswer(questionId string) *QuestionAndAnswer {
