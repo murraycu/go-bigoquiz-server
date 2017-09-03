@@ -15,10 +15,15 @@ It is not yet live at bigoquiz.com.
 
 ## Build / Deploy
 
+(TODO: Restructure/reconfigure the project so we don't need to specify bigoquiz and src/bigoquiz in these commands.)
+
     $ git clone git@github.com:murraycu/go-bigoquiz-server.git
     $ cd go-bigoquiz-server
     $ export GOPATH=`pwd`
     $ go get github.com/julienschmidt/httprouter
+    $ go build bigoquiz
+
+    $ gcloud app deploy src/bigoquiz
 
 ### Running locally
 
