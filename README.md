@@ -20,8 +20,8 @@ It is not yet live at bigoquiz.com.
     $ git clone git@github.com:murraycu/go-bigoquiz-server.git
     $ cd go-bigoquiz-server
     $ export GOPATH=`pwd`
-    $ go get github.com/julienschmidt/httprouter
-    $ go get github.com/rs/cors
+    $ go get all
+      (Ignoring the apparently-intended "cannot find package" messages.)
     $ go build bigoquiz
 
     $ gcloud app deploy src/bigoquiz
