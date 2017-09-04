@@ -1,6 +1,8 @@
 package user
 
 type UserStats struct {
+	UserId    string `json:"userId,omitEmpty"`
+	QuizId    string `json:"quizId,omitEmpty"`
 	SectionId string `json:"sectionId,omitEmpty"`
 
 	Answered int `json:"answered"`
