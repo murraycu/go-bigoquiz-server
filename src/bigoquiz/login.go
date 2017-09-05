@@ -1,11 +1,13 @@
 package bigoquiz
 
 import (
+	"encoding/json"
 	"github.com/julienschmidt/httprouter"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/appengine"
 	"google.golang.org/appengine/log"
+	"io"
 	"io/ioutil"
 	"net/http"
 )
@@ -59,7 +61,7 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	}
 
 	client := config.Client(c, token)
-	emailResponse, err := client.Get("https://www.googleapis.com/oauth2/v3/userinfo")
+	infoResponse, err := client.Get("https://www.googleapis.com/oauth2/v3/userinfo")
 	if err != nil {
 		log.Errorf(c, "client.Get() failed with '%s'\n", err)
 		http.Redirect(w, r, baseUrl, http.StatusTemporaryRedirect)
@@ -67,15 +69,18 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	}
 
 	// Just to show that it worked:
-	defer emailResponse.Body.Close()
-	bodyBytes, err := ioutil.ReadAll(emailResponse.Body)
+	defer infoResponse.Body.Close()
+	body, err := ioutil.ReadAll(infoResponse.Body)
 	if err != nil {
 		log.Errorf(c, "ReadAll(body) failed with '%s'\n", err)
 		http.Redirect(w, r, baseUrl, http.StatusTemporaryRedirect)
 		return
 	}
 
-	w.Write(bodyBytes)
+	var userinfo GoogleUserInfo
+	json.Unmarshal(body, &userinfo)
+
+	io.WriteString(w, userinfo.Name)
 }
 
 var (
