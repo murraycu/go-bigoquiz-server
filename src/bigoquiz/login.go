@@ -9,7 +9,6 @@ import (
 	"golang.org/x/oauth2/google"
 	"google.golang.org/appengine"
 	"google.golang.org/appengine/log"
-	"io"
 	"io/ioutil"
 	"net/http"
 )
@@ -104,12 +103,12 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	session.Values["accessToken"] = token.AccessToken
 	session.Save(r, w)
 
-	io.WriteString(w, userinfo.Name)
+	var userProfileUrl = baseUrl + "/user"
+	http.Redirect(w, r, userProfileUrl, http.StatusTemporaryRedirect)
 }
 
 func loginFailed(c context.Context, message string, err error, w http.ResponseWriter, r *http.Request) {
-	const baseUrl = "http://beta.bigoquiz.com"
-	const loginFailedUrl = baseUrl + "/login?failed=true"
+	var loginFailedUrl = baseUrl + "/login?failed=true"
 
 	log.Errorf(c, message + ":'%v'\n", err)
 	http.Redirect(w, r, loginFailedUrl, http.StatusTemporaryRedirect)
@@ -135,6 +134,8 @@ var (
 	store *sessions.CookieStore
 	defaultSessionID = "default"
 	oauthTokenSessionKey = "oauth_token"
+
+    baseUrl = "http://beta.bigoquiz.com"
 )
 
 /** Get an oauth2 Config object based on the secret .json file.
