@@ -88,7 +88,10 @@ var (
 	// and added with this exact filename, next to this .go source file.
 	credentialsFilename = "google_oauth2_credentials_secret.json"
 
-	credentialsScopeProfile = "https://www.googleapis.com/auth/userinfo.profile"
+	// See https://developers.google.com/+/web/api/rest/oauth#profile
+	credentialsScopeProfile = "profile"
+
+	// See https://developers.google.com/identity/protocols/googlescopes
 	credentialsScopeEmail   = "https://www.googleapis.com/auth/userinfo.email"
 )
 
