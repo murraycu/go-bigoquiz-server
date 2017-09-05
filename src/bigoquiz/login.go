@@ -60,6 +60,12 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 		return
 	}
 
+	if !token.Valid() {
+		log.Errorf(c, "config.Exchange() returned an invalid token.n", err)
+		http.Redirect(w, r, baseUrl, http.StatusTemporaryRedirect)
+		return
+	}
+
 	client := config.Client(c, token)
 	infoResponse, err := client.Get("https://www.googleapis.com/oauth2/v3/userinfo")
 	if err != nil {
