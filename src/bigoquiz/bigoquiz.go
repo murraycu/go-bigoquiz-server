@@ -4,12 +4,21 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/julienschmidt/httprouter"
 	"github.com/rs/cors"
+	"golang.org/x/oauth2"
 	"net/http"
+	"encoding/gob"
 )
 
 func init() {
 	store = sessions.NewCookieStore([]byte("secret")) // TODO: Make secret configurable.
 	store.Options.HttpOnly = true
+
+	// Gob encoding for gorilla/sessions
+	// Otherwise, we will see errors such as this when calling store.Save():
+	// "
+	// Could not save session:'securecookie: error - caused by: securecookie: error - caused by: gob: type not registered for interface: oauth2.Token'
+	// "
+	gob.Register(&oauth2.Token{})
 
 	router := httprouter.New()
 	router.GET("/api/quiz", restHandleQuizAll)
