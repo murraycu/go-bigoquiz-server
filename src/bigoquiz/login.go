@@ -70,15 +70,6 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 		return
 	}
 
-	session, err := store.New(r, defaultSessionID)
-	if err != nil {
-		loginFailed(c, "Could not create new session", err, w, r)
-	}
-
-	// Store the token in the cookie
-	// so we can retrieve it from subsequent requests from the browser.
-	session.Values[oauthTokenSessionKey] = token
-
 	// Just to show that it worked:
 	defer infoResponse.Body.Close()
 	body, err := ioutil.ReadAll(infoResponse.Body)
@@ -90,21 +81,22 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	var userinfo GoogleUserInfo
 	json.Unmarshal(body, &userinfo)
 
-	/*
-	session, err := store.Get(r, "sess")
-	if err != nil {
-		log.Errorf(c, "Failed to get session from store.", err)
-		http.Redirect(w, r, baseUrl, http.StatusTemporaryRedirect)
-		return
-	}
-	*/
 
-	session.Values["name"] = userinfo.Name
-	session.Values["accessToken"] = token.AccessToken
-	session.Save(r, w)
+	session, err := store.New(r, defaultSessionID)
+	if err != nil {
+		loginFailed(c, "Could not create new session", err, w, r)
+	}
+
+	// Store the token in the cookie
+	// so we can retrieve it from subsequent requests from the browser.
+	session.Values[oauthTokenSessionKey] = token
+	session.Values[nameSessionKey] = userinfo.Name
+	if err := session.Save(r, w); err != nil {
+		loginFailed(c, "Could not save session", err, w, r)
+	}
 
 	var userProfileUrl = baseUrl + "/user"
-	http.Redirect(w, r, userProfileUrl, http.StatusTemporaryRedirect)
+	http.Redirect(w, r, userProfileUrl, http.StatusFound)
 }
 
 func loginFailed(c context.Context, message string, err error, w http.ResponseWriter, r *http.Request) {
@@ -134,8 +126,10 @@ var (
 	store *sessions.CookieStore
 	defaultSessionID = "default"
 	oauthTokenSessionKey = "oauth_token"
+	nameSessionKey = "name"
 
-    baseUrl = "http://beta.bigoquiz.com"
+
+	baseUrl = "http://beta.bigoquiz.com"
 )
 
 /** Get an oauth2 Config object based on the secret .json file.
