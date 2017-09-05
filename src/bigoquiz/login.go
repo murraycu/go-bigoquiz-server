@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/gorilla/sessions"
 	"github.com/julienschmidt/httprouter"
+	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/appengine"
@@ -52,33 +53,27 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 		return
 	}
 
-	const baseUrl = "http://beta.bigoquiz.com/"
-
 	token, err := config.Exchange(c, code)
 	if err != nil {
-		log.Errorf(c, "config.Exchange() failed with '%s'\n", err)
-		http.Redirect(w, r, baseUrl, http.StatusTemporaryRedirect)
+		loginFailed(c, "config.Exchange() failed", err, w, r)
 		return
 	}
 
 	if !token.Valid() {
-		log.Errorf(c, "config.Exchange() returned an invalid token.n", err)
-		http.Redirect(w, r, baseUrl, http.StatusTemporaryRedirect)
+		loginFailed(c, "loginFailedUrl.Exchange() returned an invalid token", err, w, r)
 		return
 	}
 
 	client := config.Client(c, token)
 	infoResponse, err := client.Get("https://www.googleapis.com/oauth2/v3/userinfo")
 	if err != nil {
-		log.Errorf(c, "client.Get() failed with '%s'\n", err)
-		http.Redirect(w, r, baseUrl, http.StatusTemporaryRedirect)
+		loginFailed(c, "client.Get() failed", err, w, r)
 		return
 	}
 
 	session, err := store.New(r, defaultSessionID)
 	if err != nil {
-		log.Errorf(c, "Could not create new session: '%v'\n", err)
-		http.Redirect(w, r, baseUrl, http.StatusTemporaryRedirect)
+		loginFailed(c, "Could not create new session", err, w, r)
 	}
 
 	// Store the token in the cookie
@@ -89,8 +84,7 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	defer infoResponse.Body.Close()
 	body, err := ioutil.ReadAll(infoResponse.Body)
 	if err != nil {
-		log.Errorf(c, "ReadAll(body) failed with '%s'\n", err)
-		http.Redirect(w, r, baseUrl, http.StatusTemporaryRedirect)
+		loginFailed(c, "ReadAll(body) failed", err, w, r)
 		return
 	}
 
@@ -111,6 +105,14 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	session.Save(r, w)
 
 	io.WriteString(w, userinfo.Name)
+}
+
+func loginFailed(c context.Context, message string, err error, w http.ResponseWriter, r *http.Request) {
+	const baseUrl = "http://beta.bigoquiz.com"
+	const loginFailedUrl = baseUrl + "/login?failed=true"
+
+	log.Errorf(c, message + ":'%v'\n", err)
+	http.Redirect(w, r, loginFailedUrl, http.StatusTemporaryRedirect)
 }
 
 var (
