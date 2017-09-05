@@ -106,7 +106,7 @@ func loginFailed(c context.Context, message string, err error, w http.ResponseWr
 	http.Redirect(w, r, loginFailedUrl, http.StatusTemporaryRedirect)
 }
 
-var (
+const (
 	// Some random string, random for each request
 	// TODO: Actually be random, and somehow check it in the callback.
 	oauthStateString = "random"
@@ -122,15 +122,16 @@ var (
 	// See https://developers.google.com/identity/protocols/googlescopes
 	credentialsScopeEmail   = "https://www.googleapis.com/auth/userinfo.email"
 
-	// We store the token in a session cookie.
-	store *sessions.CookieStore
+
 	defaultSessionID = "default"
 	oauthTokenSessionKey = "oauth_token"
 	nameSessionKey = "name"
 
-
 	baseUrl = "http://beta.bigoquiz.com"
 )
+
+// We store the token in a session cookie.
+var store *sessions.CookieStore
 
 /** Get an oauth2 Config object based on the secret .json file.
  * See credentialsFilename.
