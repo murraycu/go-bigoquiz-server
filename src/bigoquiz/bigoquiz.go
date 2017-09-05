@@ -1,12 +1,16 @@
 package bigoquiz
 
 import (
+	"github.com/gorilla/sessions"
 	"github.com/julienschmidt/httprouter"
 	"github.com/rs/cors"
 	"net/http"
 )
 
 func init() {
+	store = sessions.NewCookieStore([]byte("secret")) // TODO: Make secret configurable.
+	store.Options.HttpOnly = true
+
 	router := httprouter.New()
 	router.GET("/api/quiz", restHandleQuizAll)
 	router.GET("/api/quiz/:quizId", restHandleQuizById)

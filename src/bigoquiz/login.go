@@ -2,6 +2,7 @@ package bigoquiz
 
 import (
 	"encoding/json"
+	"github.com/gorilla/sessions"
 	"github.com/julienschmidt/httprouter"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
@@ -74,6 +75,16 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 		return
 	}
 
+	session, err := store.New(r, defaultSessionID)
+	if err != nil {
+		log.Errorf(c, "Could not create new session: '%v'\n", err)
+		http.Redirect(w, r, baseUrl, http.StatusTemporaryRedirect)
+	}
+
+	// Store the token in the cookie
+	// so we can retrieve it from subsequent requests from the browser.
+	session.Values[oauthTokenSessionKey] = token
+
 	// Just to show that it worked:
 	defer infoResponse.Body.Close()
 	body, err := ioutil.ReadAll(infoResponse.Body)
@@ -85,6 +96,19 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 
 	var userinfo GoogleUserInfo
 	json.Unmarshal(body, &userinfo)
+
+	/*
+	session, err := store.Get(r, "sess")
+	if err != nil {
+		log.Errorf(c, "Failed to get session from store.", err)
+		http.Redirect(w, r, baseUrl, http.StatusTemporaryRedirect)
+		return
+	}
+	*/
+
+	session.Values["name"] = userinfo.Name
+	session.Values["accessToken"] = token.AccessToken
+	session.Save(r, w)
 
 	io.WriteString(w, userinfo.Name)
 }
@@ -104,6 +128,11 @@ var (
 
 	// See https://developers.google.com/identity/protocols/googlescopes
 	credentialsScopeEmail   = "https://www.googleapis.com/auth/userinfo.email"
+
+	// We store the token in a session cookie.
+	store *sessions.CookieStore
+	defaultSessionID = "default"
+	oauthTokenSessionKey = "oauth_token"
 )
 
 /** Get an oauth2 Config object based on the secret .json file.
