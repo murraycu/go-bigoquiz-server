@@ -5,12 +5,11 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/julienschmidt/httprouter"
 	"golang.org/x/net/context"
-	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/google"
 	"google.golang.org/appengine"
 	"google.golang.org/appengine/log"
 	"io/ioutil"
 	"net/http"
+	"config"
 )
 
 /** Get an oauth2 URL based on the secret .json file.
@@ -19,13 +18,13 @@ import (
 func generateGoogleOAuthUrl(r *http.Request) string {
 	c := appengine.NewContext(r)
 
-	config := generateGoogleOAuthConfig(r)
-	if config == nil {
+	conf := config.GenerateGoogleOAuthConfig(r)
+	if conf == nil {
 		log.Errorf(c, "Unable to generate config.")
 		return ""
 	}
 
-	return config.AuthCodeURL(oauthStateString)
+	return conf.AuthCodeURL(oauthStateString)
 }
 
 func handleGoogleLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -46,13 +45,13 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 
 	code := r.FormValue("code")
 
-	config := generateGoogleOAuthConfig(r)
-	if config == nil {
+	conf := config.GenerateGoogleOAuthConfig(r)
+	if conf == nil {
 		log.Errorf(c, "Unable to generate config.")
 		return
 	}
 
-	token, err := config.Exchange(c, code)
+	token, err := conf.Exchange(c, code)
 	if err != nil {
 		loginFailed(c, "config.Exchange() failed", err, w, r)
 		return
@@ -63,7 +62,7 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 		return
 	}
 
-	client := config.Client(c, token)
+	client := conf.Client(c, token)
 	infoResponse, err := client.Get("https://www.googleapis.com/oauth2/v3/userinfo")
 	if err != nil {
 		loginFailed(c, "client.Get() failed", err, w, r)
@@ -141,25 +140,6 @@ const (
 	// TODO: Actually be random, and somehow check it in the callback.
 	oauthStateString = "random"
 
-	// This file must be downloaded
-	// (via the "DOWNLOAD JSON" link at https://console.developers.google.com/apis/credentials/oauthclient )
-	// and added with this exact filename, next to this .go source file.
-	configCredentialsFilename = "config_google_oauth2_credentials_secret.json"
-
-	// This file contains other secrets, such as the keys for the encrypted cookie store.
-	// The file format is like so:
-	// {
-	//   "cookie-store-key": "something-secret"
-	// }
-	configFilename = "config.json"
-
-	// See https://developers.google.com/+/web/api/rest/oauth#profile
-	credentialsScopeProfile = "profile"
-
-	// See https://developers.google.com/identity/protocols/googlescopes
-	credentialsScopeEmail   = "https://www.googleapis.com/auth/userinfo.email"
-
-
 	defaultSessionID = "default"
 	oauthTokenSessionKey = "oauth_token"
 	nameSessionKey = "name"
@@ -169,42 +149,3 @@ const (
 
 // We store the token in a session cookie.
 var store *sessions.CookieStore
-
-/** Get an oauth2 Config object based on the secret .json file.
- * See configCredentialsFilename.
- */
-func generateGoogleOAuthConfig(r *http.Request) *oauth2.Config {
-	c := appengine.NewContext(r)
-
-	b, err := ioutil.ReadFile(configCredentialsFilename)
-	if err != nil {
-		log.Errorf(c, "Unable to read client secret file (%s): %v", configCredentialsFilename, err)
-	}
-
-	config, err := google.ConfigFromJSON(b, credentialsScopeProfile, credentialsScopeEmail)
-	if err != nil {
-		log.Errorf(c, "Unable to parse client secret file (%) to config: %v", configCredentialsFilename, err)
-	}
-
-	return config
-}
-
-/** Get general configuration.
- * See configFilename.
- */
-type Config struct {
-	CookieKey string
-}
-
-func generateConfig() (*Config, error) {
-	b, err := ioutil.ReadFile(configFilename)
-	if err != nil {
-		// log.Errorf("Unable to read config file (%s): %v", configFilename, err)
-		return nil, err
-	}
-
-	var result Config
-	json.Unmarshal(b, &result)
-
-	return &result, nil
-}

@@ -8,10 +8,11 @@ import (
 	"net/http"
 	"encoding/gob"
 	"log"
+	"config"
 )
 
 func init() {
-	config, err := generateConfig()
+	config, err := config.GenerateConfig()
 	if err != nil {
 		log.Println("Could not load config file: %v", err)
 		return
