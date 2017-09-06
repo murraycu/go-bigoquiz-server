@@ -146,6 +146,13 @@ const (
 	// and added with this exact filename, next to this .go source file.
 	configCredentialsFilename = "config_google_oauth2_credentials_secret.json"
 
+	// This file contains other secrets, such as the keys for the encrypted cookie store.
+	// The file format is like so:
+	// {
+	//   "cookie-store-key": "something-secret"
+	// }
+	configFilename = "config.json"
+
 	// See https://developers.google.com/+/web/api/rest/oauth#profile
 	credentialsScopeProfile = "profile"
 
@@ -180,4 +187,24 @@ func generateGoogleOAuthConfig(r *http.Request) *oauth2.Config {
 	}
 
 	return config
+}
+
+/** Get general configuration.
+ * See configFilename.
+ */
+type Config struct {
+	CookieKey string
+}
+
+func generateConfig() (*Config, error) {
+	b, err := ioutil.ReadFile(configFilename)
+	if err != nil {
+		// log.Errorf("Unable to read config file (%s): %v", configFilename, err)
+		return nil, err
+	}
+
+	var result Config
+	json.Unmarshal(b, &result)
+
+	return &result, nil
 }

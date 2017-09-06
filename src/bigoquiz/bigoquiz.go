@@ -7,10 +7,19 @@ import (
 	"golang.org/x/oauth2"
 	"net/http"
 	"encoding/gob"
+	"log"
 )
 
 func init() {
-	store = sessions.NewCookieStore([]byte("secret")) // TODO: Make secret configurable.
+	config, err := generateConfig()
+	if err != nil {
+		log.Println("Could not load config file: %v", err)
+		return
+	}
+
+	// Create the session cookie store,
+	// using the secret key from the configuration file.
+	store = sessions.NewCookieStore([]byte(config.CookieKey))
 	store.Options.HttpOnly = true
 
 	// Gob encoding for gorilla/sessions
