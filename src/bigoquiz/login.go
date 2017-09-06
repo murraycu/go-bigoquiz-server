@@ -90,7 +90,7 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	// Store the token in the cookie
 	// so we can retrieve it from subsequent requests from the browser.
 	session.Values[oauthTokenSessionKey] = token
-	session.Values[nameSessionKey] = userinfo.Name
+	session.Values[nameSessionKey] = &(userinfo.Name)
 	if err := session.Save(r, w); err != nil {
 		loginFailed(c, "Could not save session", err, w, r)
 	}
