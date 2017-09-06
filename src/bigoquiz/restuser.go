@@ -32,14 +32,25 @@ func loginInfoFromSession(r *http.Request, w http.ResponseWriter) (*user.LoginIn
 
 	var loginInfo user.LoginInfo
 
-	token, ok := session.Values[oauthTokenSessionKey].(*oauth2.Token)
+	// Get the token from the cookie:
+	tokenVal, ok := session.Values[oauthTokenSessionKey]
 	if !ok {
 		loginInfo.LoggedIn = false
 		loginInfo.ErrorMessage = "not logged in user (no oauthTokenSessionKey)"
 		return &loginInfo, nil
 	}
 
+	// Try casting it to the expected type:
+	var token *oauth2.Token;
+	token, ok = tokenVal.(*oauth2.Token)
+	if !ok {
+		loginInfo.LoggedIn = false
+		loginInfo.ErrorMessage = "not logged in user (oauthTokenSessionKey is not a Token)"
+		return &loginInfo, nil
+	}
+
 	// TODO: Get the name from the database, not from the cookie.
+	// Get the name from the cookie:
 	nameVal, ok := session.Values[nameSessionKey]
 	if !ok {
 		loginInfo.LoggedIn = false
@@ -47,6 +58,7 @@ func loginInfoFromSession(r *http.Request, w http.ResponseWriter) (*user.LoginIn
 		return &loginInfo, nil
 	}
 
+	// Try casting it to the expected type:
 	var name string
 	name, ok = nameVal.(string)
 	if !ok {
