@@ -14,7 +14,7 @@ import (
 )
 
 /** Get an oauth2 URL based on the secret .json file.
- * See credentialsFilename.
+ * See configCredentialsFilename.
  */
 func generateGoogleOAuthUrl(r *http.Request) string {
 	c := appengine.NewContext(r)
@@ -144,7 +144,7 @@ const (
 	// This file must be downloaded
 	// (via the "DOWNLOAD JSON" link at https://console.developers.google.com/apis/credentials/oauthclient )
 	// and added with this exact filename, next to this .go source file.
-	credentialsFilename = "google_oauth2_credentials_secret.json"
+	configCredentialsFilename = "config_google_oauth2_credentials_secret.json"
 
 	// See https://developers.google.com/+/web/api/rest/oauth#profile
 	credentialsScopeProfile = "profile"
@@ -164,19 +164,19 @@ const (
 var store *sessions.CookieStore
 
 /** Get an oauth2 Config object based on the secret .json file.
- * See credentialsFilename.
+ * See configCredentialsFilename.
  */
 func generateGoogleOAuthConfig(r *http.Request) *oauth2.Config {
 	c := appengine.NewContext(r)
 
-	b, err := ioutil.ReadFile(credentialsFilename)
+	b, err := ioutil.ReadFile(configCredentialsFilename)
 	if err != nil {
-		log.Errorf(c, "Unable to read client secret file (%s): %v", credentialsFilename, err)
+		log.Errorf(c, "Unable to read client secret file (%s): %v", configCredentialsFilename, err)
 	}
 
 	config, err := google.ConfigFromJSON(b, credentialsScopeProfile, credentialsScopeEmail)
 	if err != nil {
-		log.Errorf(c, "Unable to parse client secret file (%) to config: %v", credentialsFilename, err)
+		log.Errorf(c, "Unable to parse client secret file (%) to config: %v", configCredentialsFilename, err)
 	}
 
 	return config

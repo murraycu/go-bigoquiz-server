@@ -1,3 +1,3 @@
 *~
 *.pyc
-src/bigoquiz/google_oauth2_credentials_secret.json
+src/bigoquiz/config_google_oauth2_credentials_secret.json
