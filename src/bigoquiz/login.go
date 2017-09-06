@@ -31,7 +31,7 @@ func generateGoogleOAuthUrl(r *http.Request) string {
 func handleGoogleLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	// Redirect the user to the Google login page:
 	url := generateGoogleOAuthUrl(r)
-	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
+	http.Redirect(w, r, url, http.StatusFound)
 }
 
 func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
