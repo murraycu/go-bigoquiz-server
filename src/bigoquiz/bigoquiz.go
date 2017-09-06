@@ -38,7 +38,9 @@ func init() {
 	c := cors.New(cors.Options{
 		AllowedOrigins: []string{"http://beta.bigoquiz.com"},
 		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
+		AllowCredentials: true, // Note: The client needs to specify this too, or cookies won't be sent.
 	})
+
 	handler := c.Handler(router)
 	http.Handle("/", handler)
 }
