@@ -32,6 +32,7 @@ func init() {
 
 	router.GET("/login/login", handleGoogleLogin)
 	router.GET("/login/callback", handleGoogleCallback)
+	router.GET("/login/logout", handleGoogleLogout)
 
 	// Allow Javascript requests from some domains other than the one serving this API.
 	// The browser issue a CORS request before actually issuing the HTTP request.

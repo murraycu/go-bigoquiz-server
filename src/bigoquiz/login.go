@@ -99,11 +99,41 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	http.Redirect(w, r, userProfileUrl, http.StatusFound)
 }
 
+func handleGoogleLogout(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	// Wipe the cookie:
+	session, err := store.New(r, defaultSessionID)
+	if err != nil {
+		logoutError("could not get default session", err, w, r)
+		return
+	}
+
+	session.Options.MaxAge = -1 // Clear session.
+
+	if err := session.Save(r, w); err != nil {
+		logoutError("Could not save session", err, w, r)
+		return
+	}
+
+	redirectURL := r.FormValue("redirect")
+	if redirectURL == "" {
+		redirectURL = "/"
+	}
+
+	http.Redirect(w, r, redirectURL, http.StatusFound)
+}
+
 func loginFailed(c context.Context, message string, err error, w http.ResponseWriter, r *http.Request) {
 	var loginFailedUrl = baseUrl + "/login?failed=true"
 
 	log.Errorf(c, message + ":'%v'\n", err)
 	http.Redirect(w, r, loginFailedUrl, http.StatusTemporaryRedirect)
+}
+
+func logoutError(message string, err error, w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+
+	log.Errorf(c, message + ":'%v'\n", err)
+	http.Error(w, err.Error(), http.StatusInternalServerError)
 }
 
 const (
