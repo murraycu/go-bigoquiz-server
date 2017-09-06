@@ -9,9 +9,14 @@ import (
 )
 
 func restHandleUserHistoryAll(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	// TODO: Use actual authentication.
+	loginInfo, err := loginInfoFromSession(r, w)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	var info user.UserHistoryOverall
-	info.LoginInfo.Nickname = "example@example.com"
+	info.LoginInfo = *loginInfo
 
 	jsonStr, err := json.Marshal(info)
 	if err != nil {

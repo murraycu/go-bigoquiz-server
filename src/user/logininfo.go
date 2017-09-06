@@ -8,4 +8,7 @@ type LoginInfo struct {
 
 	UserId   string `json:"userId,omitempty"`
 	Nickname string `json:"nickname,omitempty"`
+
+	// This is just for debugging.
+	ErrorMessage string `json:"errorMessage,omitempty"`
 }
