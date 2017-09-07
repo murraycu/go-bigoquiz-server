@@ -193,14 +193,14 @@ func handleGoogleLogout(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 func loginFailed(c context.Context, message string, err error, w http.ResponseWriter, r *http.Request) {
 	var loginFailedUrl = config.BaseUrl + "/login?failed=true"
 
-	log.Errorf(c, message + ":'%v'\n", err)
+	log.Errorf(c, message+":'%v'\n", err)
 	http.Redirect(w, r, loginFailedUrl, http.StatusTemporaryRedirect)
 }
 
 func logoutError(message string, err error, w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 
-	log.Errorf(c, message + ":'%v'\n", err)
+	log.Errorf(c, message+":'%v'\n", err)
 	http.Error(w, err.Error(), http.StatusInternalServerError)
 }
 
