@@ -17,6 +17,8 @@ type Quiz struct {
 	Sections  []*Section           `json:"sections,omitempty" xml:"section"`
 	Questions []*QuestionAndAnswer `json:"questions,omitempty" xml:"question"`
 
+	UsesMathML bool `json:"usesMathML"`
+
 	// A map of all questions in all sections and at the top-level.
 	questionsMap map[string]*QuestionAndAnswer `json:"-" xml:"-"`
 

@@ -8,6 +8,8 @@ type Question struct {
 	SectionId    string `json:"sectionId,omitempty"`
 	SubSectionId string `json:"subSectionId,omitempty"`
 
+	QuizUsesMathML bool `json:"quizUsesMathML"`
+
 	// These are not in the XML.
 	// But we want to show them in the JSON.
 	// We don't use the Section and SubSection types here,
