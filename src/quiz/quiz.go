@@ -24,6 +24,44 @@ type Quiz struct {
 
 	// An array of all questions in all sections and at the top-level.
 	questionsArray []*QuestionAndAnswer `json:"-" xml:"-"`
+
+	// A map of all sections by section ID.
+	sectionsMap map[string]*Section `json:"-" xml:"-"`
+}
+
+func (self *Quiz) GetAnswer(questionId string) *Text {
+	if self.questionsMap == nil {
+		return nil
+	}
+
+	qa, ok := self.questionsMap[questionId]
+	if (!ok) {
+		return nil
+	}
+
+	if (qa == nil) {
+		return nil;
+	}
+
+	return &qa.Answer
+}
+
+
+func (self *Quiz) GetSection(sectionId string) *Section {
+	if self.sectionsMap == nil {
+		return nil
+	}
+
+	s, ok := self.sectionsMap[sectionId]
+	if (!ok) {
+		return nil
+	}
+
+	if (s == nil) {
+		return nil;
+	}
+
+	return s
 }
 
 func LoadQuiz(absFilePath string, id string) (*Quiz, error) {
@@ -50,18 +88,20 @@ func LoadQuiz(absFilePath string, id string) (*Quiz, error) {
 
 	q.Id = id
 
-	q.buildQuestionsMapAndArray()
+	q.buildMapsAndArray()
 
 	return &q, nil
 }
 
-/** Build a map of all questions in all sections and at the top-level.
+/** Build a map of all questions in all sections and at the top-level,
+ * and a map of sections by section ID.
  * And also make sure that questions have their section ID and sub-section IDs,
  * and that the questions have the correct choices.
  */
-func (self *Quiz) buildQuestionsMapAndArray() {
+func (self *Quiz) buildMapsAndArray() {
 	self.questionsMap = make(map[string]*QuestionAndAnswer)
 	self.questionsArray = make([]*QuestionAndAnswer, 0, len(self.Questions))
+	self.sectionsMap = make(map[string]*Section)
 
 	// Build the map and array:
 	for _, q := range self.Questions {
@@ -71,6 +111,8 @@ func (self *Quiz) buildQuestionsMapAndArray() {
 	}
 
 	for _, s := range self.Sections {
+		self.sectionsMap[s.Id] = s
+
 		for _, q := range s.Questions {
 			self.addQuestionToMapAndArray(q, s, nil)
 		}
@@ -79,7 +121,11 @@ func (self *Quiz) buildQuestionsMapAndArray() {
 			setQuestionsChoicesFromAnswers(s.Questions)
 		}
 
+		s.subSectionsMap = make(map[string]*SubSection)
+
 		for _, sub := range s.SubSections {
+			s.subSectionsMap[sub.Id] = sub
+
 			for _, q := range sub.Questions {
 				self.addQuestionToMapAndArray(q, s, sub)
 			}
