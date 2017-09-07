@@ -85,7 +85,7 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	userId, err := db.StoreGoogleLoginInUserProfile(c, userinfo, token)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return;
+		return
 	}
 
 	// Store the token in the cookie
