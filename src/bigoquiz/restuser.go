@@ -41,7 +41,7 @@ func loginInfoFromSession(r *http.Request, w http.ResponseWriter) (*user.LoginIn
 	}
 
 	// Try casting it to the expected type:
-	var token *oauth2.Token;
+	var token *oauth2.Token
 	token, ok = tokenVal.(*oauth2.Token)
 	if !ok {
 		loginInfo.LoggedIn = false
