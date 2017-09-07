@@ -42,8 +42,11 @@ func restHandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Request, ps ht
 	}
 
 	// TODO: Use actual authentication.
-	var loginInfo user.LoginInfo
-	loginInfo.Nickname = "example@example.com"
+	loginInfo, err := loginInfoFromSession(r, w)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	var mapUserStats map[string]*user.Stats = nil // TODO
 
@@ -58,7 +61,7 @@ func restHandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Request, ps ht
 	w.Write(jsonStr)
 }
 
-func buildUserHistorySections(loginInfo user.LoginInfo, quiz *quiz.Quiz, mapUserStats map[string]*user.Stats) *user.HistorySections {
+func buildUserHistorySections(loginInfo *user.LoginInfo, quiz *quiz.Quiz, mapUserStats map[string]*user.Stats) *user.HistorySections {
 	sections := quiz.Sections
 	if sections == nil {
 		return nil
@@ -68,7 +71,7 @@ func buildUserHistorySections(loginInfo user.LoginInfo, quiz *quiz.Quiz, mapUser
 	quizId := quiz.Id
 
 	var result user.HistorySections
-	result.LoginInfo = loginInfo
+	result.LoginInfo = *loginInfo
 	result.Sections = sections
 	result.QuizTitle = quiz.Title
 

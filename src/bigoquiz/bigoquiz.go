@@ -9,6 +9,7 @@ import (
 	"encoding/gob"
 	"log"
 	"config"
+	"google.golang.org/appengine/datastore"
 )
 
 func init() {
@@ -29,6 +30,7 @@ func init() {
 	// Could not save session:'securecookie: error - caused by: securecookie: error - caused by: gob: type not registered for interface: oauth2.Token'
 	// "
 	gob.Register(&oauth2.Token{})
+	gob.Register(&datastore.Key{})
 
 	router := httprouter.New()
 	router.GET("/api/quiz", restHandleQuizAll)

@@ -6,6 +6,9 @@ import (
 	"golang.org/x/oauth2"
 	"net/http"
 	"user"
+	"google.golang.org/appengine/datastore"
+	"google.golang.org/appengine"
+	"fmt"
 )
 
 func restHandleUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -45,13 +48,12 @@ func loginInfoFromSession(r *http.Request, w http.ResponseWriter) (*user.LoginIn
 	token, ok = tokenVal.(*oauth2.Token)
 	if !ok {
 		loginInfo.LoggedIn = false
-		loginInfo.ErrorMessage = "not logged in user (oauthTokenSessionKey is not a Token)"
+		loginInfo.ErrorMessage = "not logged in user (oauthTokenSessionKey is not a *Token)"
 		return &loginInfo, nil
 	}
 
-	// TODO: Get the name from the database, not from the cookie.
-	// Get the name from the cookie:
-	nameVal, ok := session.Values[nameSessionKey]
+	// Get the name from the database, via the userID from the cookie:
+	userIdVal, ok := session.Values[userIdSessionKey]
 	if !ok {
 		loginInfo.LoggedIn = false
 		loginInfo.ErrorMessage = "not logged in user (no name as value)."
@@ -59,17 +61,23 @@ func loginInfoFromSession(r *http.Request, w http.ResponseWriter) (*user.LoginIn
 	}
 
 	// Try casting it to the expected type:
-	var name string
-	name, ok = nameVal.(string)
+	var userId *datastore.Key
+	userId, ok = userIdVal.(*datastore.Key)
 	if !ok {
 		loginInfo.LoggedIn = false
-		loginInfo.ErrorMessage = "not logged in user (no name as string). nameVal is not a string."
+		loginInfo.ErrorMessage = "not logged in user (no name as *Key). userIdVal is not a *Key."
 		return &loginInfo, nil
+	}
+
+	c := appengine.NewContext(r)
+	profile, err := getUserProfileById(c, userId)
+	if err != nil {
+		return nil, fmt.Errorf("getUserProfileById() failed: %v", err)
 	}
 
 	if token.Valid() {
 		loginInfo.LoggedIn = true
-		loginInfo.Nickname = name
+		loginInfo.Nickname = profile.Name
 	} else {
 		loginInfo.LoggedIn = false
 		loginInfo.ErrorMessage = "not logged in user (invalid token)"
