@@ -15,10 +15,18 @@ type Question struct {
 	// We don't use the Section and SubSection types here,
 	// because we don't want to recurse infinitely into questions and
 	// their sections and then their questions again.
+	QuizTitle string `json:"quizTitle"`
 	Section    *HasIdAndTitle `json:"section,omitempty"`
 	SubSection *HasIdAndTitle `json:"subSection,omitempty"`
 
 	// These are not in the XML.
 	// But we want to show them in the JSON.
 	Choices []*Text `json:"choices,omitempty"`
+}
+
+// Set extra titles for convenience.
+func (self *Question) SetTitles(quizTitle string, briefSection *HasIdAndTitle, subSection *SubSection) {
+	self.QuizTitle = quizTitle
+	self.Section = briefSection
+	self.SubSection = &(subSection.HasIdAndTitle)
 }
