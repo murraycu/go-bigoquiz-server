@@ -15,7 +15,7 @@ func restHandleUserHistoryAll(w http.ResponseWriter, r *http.Request, ps httprou
 		return
 	}
 
-	var info user.UserHistoryOverall
+	var info user.HistoryOverall
 	info.LoginInfo = *loginInfo
 
 	jsonStr, err := json.Marshal(info)
@@ -45,7 +45,7 @@ func restHandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Request, ps ht
 	var loginInfo user.LoginInfo
 	loginInfo.Nickname = "example@example.com"
 
-	var mapUserStats map[string]*user.UserStats = nil // TODO
+	var mapUserStats map[string]*user.Stats = nil // TODO
 
 	info := buildUserHistorySections(loginInfo, q, mapUserStats)
 
@@ -58,7 +58,7 @@ func restHandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Request, ps ht
 	w.Write(jsonStr)
 }
 
-func buildUserHistorySections(loginInfo user.LoginInfo, quiz *quiz.Quiz, mapUserStats map[string]*user.UserStats) *user.UserHistorySections {
+func buildUserHistorySections(loginInfo user.LoginInfo, quiz *quiz.Quiz, mapUserStats map[string]*user.Stats) *user.HistorySections {
 	sections := quiz.Sections
 	if sections == nil {
 		return nil
@@ -67,7 +67,7 @@ func buildUserHistorySections(loginInfo user.LoginInfo, quiz *quiz.Quiz, mapUser
 	userId := loginInfo.UserId
 	quizId := quiz.Id
 
-	var result user.UserHistorySections
+	var result user.HistorySections
 	result.LoginInfo = loginInfo
 	result.Sections = sections
 	result.QuizTitle = quiz.Title
@@ -78,13 +78,13 @@ func buildUserHistorySections(loginInfo user.LoginInfo, quiz *quiz.Quiz, mapUser
 			continue
 		}
 
-		var userStats *user.UserStats = nil
+		var userStats *user.Stats = nil
 		if mapUserStats != nil {
 			userStats = mapUserStats[sectionId]
 		}
 
 		if userStats == nil {
-			userStats = new(user.UserStats)
+			userStats = new(user.Stats)
 			userStats.UserId = userId
 			userStats.QuizId = quizId
 			userStats.SectionId = sectionId
@@ -97,7 +97,7 @@ func buildUserHistorySections(loginInfo user.LoginInfo, quiz *quiz.Quiz, mapUser
 	return &result
 }
 
-func fillUserStatsWithTitles(userStats *user.UserStats, quiz *quiz.Quiz) {
+func fillUserStatsWithTitles(userStats *user.Stats, quiz *quiz.Quiz) {
 	sections := quiz.Sections
 	if sections == nil {
 		return

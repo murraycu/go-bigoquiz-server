@@ -1,6 +1,6 @@
 package user
 
-type UserStats struct {
+type Stats struct {
 	UserId    string `json:"userId,omitEmpty"`
 	QuizId    string `json:"quizId,omitEmpty"`
 	SectionId string `json:"sectionId,omitEmpty"`

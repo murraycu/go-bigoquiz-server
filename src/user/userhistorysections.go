@@ -4,10 +4,10 @@ import (
 	"quiz"
 )
 
-type UserHistorySections struct {
+type HistorySections struct {
 	LoginInfo LoginInfo `json:"loginInfo,omitempty"`
 	QuizTitle string    `json:"quizTitle,omitempty"`
 
 	Sections []*quiz.Section `json:"sections,omitempty"`
-	Stats    []*UserStats    `json:"stats,omitempty"`
+	Stats    []*Stats    `json:"stats,omitempty"`
 }

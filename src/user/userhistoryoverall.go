@@ -1,5 +1,5 @@
 package user
 
-type UserHistoryOverall struct {
+type HistoryOverall struct {
 	LoginInfo LoginInfo `json:"loginInfo,omitempty"`
 }
