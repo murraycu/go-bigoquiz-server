@@ -27,7 +27,7 @@ func StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, t
 		updateProfileFromGoogleUserInfo(&profile, &userInfo)
 		profile.GoogleAccessToken = *token
 
-		key = datastore.NewIncompleteKey(c, "stringId", nil)
+		key = datastore.NewIncompleteKey(c, "user.Profile", nil)
 		if key, err = datastore.Put(c, key, &profile); err != nil {
 			return nil, fmt.Errorf("datastore.Put(with incomplete key %v) failed: %v", key, err)
 		}
