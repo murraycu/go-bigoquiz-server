@@ -14,3 +14,15 @@ type Stats struct {
 	CountQuestionsAnsweredOnce int `json:"countQuestionsAnsweredOnce"`
 	CountQuestionsCorrectOnce  int `json:"countQuetionsCorrectOnce"`
 }
+
+func (self *Stats) IncrementAnswered() {
+	self.Answered += 1
+}
+
+func (self *Stats) IncrementCorrect() {
+	self.Correct += 1
+}
+
+func (self *Stats) UpdateProblemQuestion(question *quiz.Question, answerIsCorrect bool) {
+	// TODO
+}
