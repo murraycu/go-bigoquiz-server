@@ -1,7 +1,10 @@
 package user
 
+import "google.golang.org/appengine/datastore"
+
 type Stats struct {
-	UserId    string `json:"userId,omitEmpty"`
+	UserId    datastore.Key `json:"-"`
+
 	QuizId    string `json:"quizId,omitEmpty"`
 	SectionId string `json:"sectionId,omitEmpty"`
 
