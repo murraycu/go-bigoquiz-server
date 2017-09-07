@@ -14,7 +14,7 @@ import (
 func init() {
 	conf, err := config.GenerateConfig()
 	if err != nil {
-		log.Println("Could not load conf file: %v", err)
+		log.Printf("Could not load conf file: %v\n", err)
 		return
 	}
 
