@@ -41,7 +41,6 @@ func restHandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Request, ps ht
 		return
 	}
 
-	// TODO: Use actual authentication.
 	loginInfo, err := getLoginInfoFromSessionAndDb(r, w)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
