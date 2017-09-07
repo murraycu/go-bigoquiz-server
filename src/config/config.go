@@ -11,6 +11,9 @@ import (
 )
 
 const (
+	baseUrl = "http://beta.bigoquiz.com"
+	// When running angular-bigoquiz-client with ng serve: BaseUrl = "http://localhost:4200"
+
 	// This file must be downloaded
 	// (via the "DOWNLOAD JSON" link at https://console.developers.google.com/apis/credentials/oauthclient )
 	// and added with this exact filename, next to the bigoquiz.go source file.

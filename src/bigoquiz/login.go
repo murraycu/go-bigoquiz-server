@@ -106,7 +106,7 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	}
 
 	// Redirect the user back to a page to show they are logged in:
-	var userProfileUrl = baseUrl + "/user"
+	var userProfileUrl = config.BaseUrl + "/user"
 	http.Redirect(w, r, userProfileUrl, http.StatusFound)
 }
 
@@ -191,7 +191,7 @@ func handleGoogleLogout(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 }
 
 func loginFailed(c context.Context, message string, err error, w http.ResponseWriter, r *http.Request) {
-	var loginFailedUrl = baseUrl + "/login?failed=true"
+	var loginFailedUrl = config.BaseUrl + "/login?failed=true"
 
 	log.Errorf(c, message + ":'%v'\n", err)
 	http.Redirect(w, r, loginFailedUrl, http.StatusTemporaryRedirect)
@@ -212,8 +212,6 @@ const (
 	defaultSessionID     = "default"
 	oauthTokenSessionKey = "oauth_token"
 	userIdSessionKey     = "id" // A generic user ID, not a google user ID.
-
-	baseUrl = "http://beta.bigoquiz.com"
 )
 
 // We store the token in a session cookie.
