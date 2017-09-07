@@ -49,7 +49,7 @@ func init() {
 	// Allow Javascript requests from some domains other than the one serving this API.
 	// The browser issue a CORS request before actually issuing the HTTP request.
 	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"http://beta.bigoquiz.com"},
+		AllowedOrigins: []string{config.BaseUrl},
 		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
 		AllowCredentials: true, // Note: The client needs to specify this too, or cookies won't be sent.
 	})
