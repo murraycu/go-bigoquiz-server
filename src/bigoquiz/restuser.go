@@ -9,10 +9,11 @@ import (
 	"google.golang.org/appengine/datastore"
 	"google.golang.org/appengine"
 	"fmt"
+	"db"
 )
 
 func restHandleUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	loginInfo, err := loginInfoFromSession(r, w)
+	loginInfo, err := getLoginInfoFromSessionAndDb(r, w)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -27,7 +28,8 @@ func restHandleUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 	w.Write(jsonStr)
 }
 
-func loginInfoFromSession(r *http.Request, w http.ResponseWriter) (*user.LoginInfo, error) {
+
+func getLoginInfoFromSessionAndDb(r *http.Request, w http.ResponseWriter) (*user.LoginInfo, error) {
 	session, err := store.Get(r, defaultSessionID)
 	if err != nil {
 		return nil, err
@@ -70,7 +72,7 @@ func loginInfoFromSession(r *http.Request, w http.ResponseWriter) (*user.LoginIn
 	}
 
 	c := appengine.NewContext(r)
-	profile, err := getUserProfileById(c, userId)
+	profile, err := db.GetUserProfileById(c, userId)
 	if err != nil {
 		return nil, fmt.Errorf("getUserProfileById() failed: %v", err)
 	}

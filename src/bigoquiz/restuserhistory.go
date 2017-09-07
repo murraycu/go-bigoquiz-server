@@ -9,7 +9,7 @@ import (
 )
 
 func restHandleUserHistoryAll(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	loginInfo, err := loginInfoFromSession(r, w)
+	loginInfo, err := getLoginInfoFromSessionAndDb(r, w)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -42,7 +42,7 @@ func restHandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Request, ps ht
 	}
 
 	// TODO: Use actual authentication.
-	loginInfo, err := loginInfoFromSession(r, w)
+	loginInfo, err := getLoginInfoFromSessionAndDb(r, w)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

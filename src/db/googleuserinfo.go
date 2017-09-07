@@ -1,4 +1,4 @@
-package bigoquiz
+package db
 
 /** A representation of some of the JSON returned by
  * Google.
