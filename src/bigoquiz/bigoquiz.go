@@ -12,15 +12,15 @@ import (
 )
 
 func init() {
-	config, err := config.GenerateConfig()
+	conf, err := config.GenerateConfig()
 	if err != nil {
-		log.Println("Could not load config file: %v", err)
+		log.Println("Could not load conf file: %v", err)
 		return
 	}
 
 	// Create the session cookie store,
 	// using the secret key from the configuration file.
-	store = sessions.NewCookieStore([]byte(config.CookieKey))
+	store = sessions.NewCookieStore([]byte(conf.CookieKey))
 	store.Options.HttpOnly = true
 
 	// Gob encoding for gorilla/sessions
