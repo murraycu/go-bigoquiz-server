@@ -113,14 +113,6 @@ func (self *Quiz) buildMapsAndArray() {
 	for _, s := range self.Sections {
 		self.sectionsMap[s.Id] = s
 
-		for _, q := range s.Questions {
-			self.addQuestionToMapAndArray(q, s, nil)
-		}
-
-		if s.AnswersAsChoices {
-			setQuestionsChoicesFromAnswers(s.Questions)
-		}
-
 		s.subSectionsMap = make(map[string]*SubSection)
 
 		for _, sub := range s.SubSections {
@@ -130,9 +122,28 @@ func (self *Quiz) buildMapsAndArray() {
 				self.addQuestionToMapAndArray(q, s, sub)
 			}
 
-			if sub.AnswersAsChoices {
+			//Don't use subsection answers as choices if the parent section wants answers-as-choices.
+			//In that case, all questions will instead share answers from all sub-sections.
+			if sub.AnswersAsChoices && !s.AnswersAsChoices {
 				setQuestionsChoicesFromAnswers(sub.Questions)
 			}
+		}
+
+		//Add any Questions that are not in a subsection:
+		for _, q := range s.Questions {
+			self.addQuestionToMapAndArray(q, s, nil)
+		}
+
+		//Make sure that we set sub-section choices from the answers from all questions in the whole section:
+		if s.AnswersAsChoices {
+			questionsIncludingSubSections := make([]*QuestionAndAnswer, 0)
+			questionsIncludingSubSections = append(questionsIncludingSubSections, s.Questions...)
+
+			for _, sub := range s.SubSections {
+				questionsIncludingSubSections = append(questionsIncludingSubSections, sub.Questions...)
+			}
+
+			setQuestionsChoicesFromAnswers(questionsIncludingSubSections)
 		}
 	}
 
