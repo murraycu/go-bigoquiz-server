@@ -9,16 +9,16 @@ import (
 type Stats struct {
 	Key *datastore.Key `json:"-"`
 
-	UserId *datastore.Key `json:"-"`
+	UserId *datastore.Key `json:"-" datastore:"userId"`
 
-	QuizId    string `json:"quizId,omitEmpty"`
-	SectionId string `json:"sectionId,omitEmpty"`
+	QuizId    string `json:"quizId,omitEmpty" datastore:"quizId"`
+	SectionId string `json:"sectionId,omitEmpty" datastore:"sectionId"`
 
-	Answered int `json:"answered"`
-	Correct  int `json:"correct"`
+	Answered int `json:"answered" datastore:"answered"`
+	Correct  int `json:"correct" datastore:"correct"`
 
-	CountQuestionsAnsweredOnce int `json:"countQuestionsAnsweredOnce"`
-	CountQuestionsCorrectOnce  int `json:"countQuestionsCorrectOnce"`
+	CountQuestionsAnsweredOnce int `json:"countQuestionsAnsweredOnce" datastore:"countQuestionsAnsweredOnce"`
+	CountQuestionsCorrectOnce  int `json:"countQuestionsCorrectOnce" datastore:"countQuestionsCorrectOnce"`
 
 	// These are from the quiz, for convenience
 	// so they don't need to be in the database.
