@@ -109,13 +109,6 @@ func restHandleQuizAll(w http.ResponseWriter, r *http.Request, _ httprouter.Para
 		listOnly, _ = strconv.ParseBool(listOnlyStr)
 	}
 
-	// TODO: Cache this.
-	quizzes, err := loadQuizzes()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
 	var quizArray []*quiz.Quiz = nil
 	if listOnly {
 		// TODO: Cache this.
@@ -138,12 +131,6 @@ func restHandleQuizAll(w http.ResponseWriter, r *http.Request, _ httprouter.Para
 }
 
 func getQuiz(quizId string) *quiz.Quiz {
-	// TODO: Cache this.
-	quizzes, err := loadQuizzes()
-	if err != nil {
-		return nil
-	}
-
 	return quizzes[quizId]
 }
 

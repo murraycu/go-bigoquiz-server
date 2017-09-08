@@ -35,13 +35,6 @@ func restHandleUserHistoryAll(w http.ResponseWriter, r *http.Request, ps httprou
 			return
 		}
 
-		// TODO: Cache this:
-		quizzes, err := loadQuizzes()
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
 		for quizId, q := range quizzes {
 			stats, ok := mapUserStats[quizId]
 			if (!ok || stats == nil) {

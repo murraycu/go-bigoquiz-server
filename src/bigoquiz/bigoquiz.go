@@ -10,6 +10,7 @@ import (
 	"log"
 	"config"
 	"google.golang.org/appengine/datastore"
+	"quiz"
 )
 
 func init() {
@@ -31,6 +32,12 @@ func init() {
 	// "
 	gob.Register(&oauth2.Token{})
 	gob.Register(&datastore.Key{})
+
+	quizzes, err = loadQuizzes()
+	if err != nil {
+		log.Printf("Could not load quiz files: %v\n", err)
+		return
+	}
 
 	router := httprouter.New()
 	router.GET("/api/quiz", restHandleQuizAll)
@@ -59,3 +66,5 @@ func init() {
 	handler := c.Handler(router)
 	http.Handle("/", handler)
 }
+
+var quizzes map[string]*quiz.Quiz
