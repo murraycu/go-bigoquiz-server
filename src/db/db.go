@@ -55,11 +55,19 @@ func StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, t
 
 func GetUserProfileById(c context.Context, userId *datastore.Key) (*user.Profile, error) {
 	var profile user.Profile
-	if err := datastore.Get(c, userId, &profile); err != nil {
-		return nil, fmt.Errorf("datastore.Get() failed with key: %v: %v", userId, err)
+	err := datastore.Get(c, userId, &profile);
+	if err == nil {
+		return &profile, nil
 	}
 
-	return &profile, nil
+	// Ignore errors caused by old fields in the datastore that are no longer mentioned in our Go struct.
+	// TODO: The documentation does not clearly state that all matching fields will still be extracted.
+	_, ok := err.(*datastore.ErrFieldMismatch)
+	if ok {
+		return &profile, nil
+	}
+
+	return nil, fmt.Errorf("datastore.Get() failed with key: %v: %v", userId, err)
 }
 
 
