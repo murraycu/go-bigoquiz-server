@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	baseUrl = "http://beta.bigoquiz.com"
+	BaseUrl = "http://beta.bigoquiz.com"
 	// When running angular-bigoquiz-client with ng serve: BaseUrl = "http://localhost:4200"
 
 	// This file must be downloaded
