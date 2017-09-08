@@ -116,7 +116,7 @@ func restHandleUserHistorySubmitAnswer(w http.ResponseWriter, r *http.Request, p
 
 	qa := getQuestionAndAnswer(quizId, questionId)
 	if qa == nil {
-		http.Error(w, "question not found", http.StatusInternalServerError)
+		http.Error(w, "question not found", http.StatusNotFound)
 		return
 	}
 
@@ -150,7 +150,7 @@ func restHandleUserHistorySubmitDontKnowAnswer(w http.ResponseWriter, r *http.Re
 
 	qa := getQuestionAndAnswer(quizId, questionId)
 	if qa == nil {
-		http.Error(w, "question not found", http.StatusInternalServerError)
+		http.Error(w, "question not found", http.StatusNotFound)
 		return
 	}
 
