@@ -19,6 +19,13 @@ type Stats struct {
 
 	CountQuestionsAnsweredOnce int `json:"countQuestionsAnsweredOnce"`
 	CountQuestionsCorrectOnce  int `json:"countQuetionsCorrectOnce"`
+
+	// These are from the quiz, for convenience
+	// so they don't need to be in the database.
+	// TODO: Make sure they are set for per-section stats.
+	CountQuestions int `json:"countQuestionsAnsweredOnce" datastore:"-"`
+	QuizTitle    string `json:"quizTitle,omitEmpty" datastore:"-"`
+	SectionTitle string `json:"sectionTitle,omitEmpty" datastore:"-"`
 }
 
 func (self *Stats) IncrementAnswered() {
