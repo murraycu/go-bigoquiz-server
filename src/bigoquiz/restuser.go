@@ -85,6 +85,7 @@ func getLoginInfoFromSessionAndDb(r *http.Request, w http.ResponseWriter) (*user
 	if token.Valid() {
 		loginInfo.LoggedIn = true
 		loginInfo.Nickname = profile.Name
+		loginInfo.UserId = userId; // Not for the JSON, but useful to callers.
 	} else {
 		loginInfo.LoggedIn = false
 		loginInfo.ErrorMessage = "not logged in user (invalid token)"
