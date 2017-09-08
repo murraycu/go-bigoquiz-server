@@ -18,7 +18,7 @@ type Stats struct {
 	Correct  int `json:"correct"`
 
 	CountQuestionsAnsweredOnce int `json:"countQuestionsAnsweredOnce"`
-	CountQuestionsCorrectOnce  int `json:"countQuetionsCorrectOnce"`
+	CountQuestionsCorrectOnce  int `json:"countQuestionsCorrectOnce"`
 
 	// These are from the quiz, for convenience
 	// so they don't need to be in the database.
