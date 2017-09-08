@@ -56,6 +56,106 @@ func GetUserProfileById(c context.Context, userId *datastore.Key) (*user.Profile
 	return &profile, nil
 }
 
+
+// Get a map of stats by section ID, for all quizzes, from the database.
+func GetUserStats(c context.Context, userId *datastore.Key) (map[string]*user.Stats, error) {
+	// Get all the Stats from the db, for each section:
+	q := getQueryForUserStats(userId)
+	iter := q.Run(c)
+
+	if iter == nil {
+		return nil, fmt.Errorf("datastore query for Stats failed.")
+	}
+
+	// Build a map of the stats by section ID:
+	var result = make(map[string]*user.Stats)
+	var stats user.Stats
+	for {
+		_, err := iter.Next(&stats)
+		if err != nil && err != datastore.Done {
+			return nil, fmt.Errorf("iter.Next() failed: %v", err)
+		}
+
+		result[stats.SectionId] = &stats
+
+		if err == datastore.Done {
+			break
+		}
+	}
+
+	return result, nil
+}
+
+// Get a map of stats by section ID, for a specific quiz, from the database.
+func GetUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string) (map[string]*user.Stats, error) {
+	// Get all the Stats from the db, for each section:
+	q := getQueryForUserStats(userId).
+		Filter("QuizId = ", quizId)
+	iter := q.Run(c)
+
+	if iter == nil {
+		return nil, fmt.Errorf("datastore query for Stats failed.")
+	}
+
+	// Build a map of the stats by section ID:
+	var result = make(map[string]*user.Stats)
+	var stats user.Stats
+	for {
+		_, err := iter.Next(&stats)
+		if err != nil && err != datastore.Done {
+			return nil, fmt.Errorf("iter.Next() failed: %v", err)
+		}
+
+		result[stats.SectionId] = &stats
+
+		if err == datastore.Done {
+			break
+		}
+	}
+
+    return result, nil
+}
+
+
+// Get the stats for a specific section ID, from the database.
+func GetUserStatsForSection(c context.Context, userId *datastore.Key, quizId string, sectionId string) (*user.Stats, error) {
+	// Get all the Stats from the db, for each section:
+	q := getQueryForUserStats(userId).
+		Filter("SectionId =", sectionId).
+	    Limit(1)
+	iter := q.Run(c)
+
+	if iter == nil {
+		return nil, fmt.Errorf("datastore query for Stats failed.")
+	}
+
+	var stats user.Stats
+	_, err := iter.Next(&stats)
+	if err != nil && err != datastore.Done {
+		return nil, fmt.Errorf("iter.Next() failed: %v", err)
+	}
+
+	return &stats, nil
+}
+
+func StoreUserStats(c context.Context, stats *user.Stats) error {
+	if (stats.Key == nil) {
+		// It hasn't been updated yet.
+		stats.Key = datastore.NewIncompleteKey(c, "user.Stats", nil)
+	}
+
+	if _, err := datastore.Put(c, stats.Key, stats); err != nil {
+		return fmt.Errorf("StoreUserStats(): datastore.Put() failed: %v", err)
+	}
+
+	return nil;
+}
+
+func getQueryForUserStats(userId *datastore.Key) *datastore.Query {
+	return datastore.NewQuery("user.Stats").
+		Filter("Id =", userId)
+}
+
 func updateProfileFromGoogleUserInfo(profile *user.Profile, userInfo *GoogleUserInfo) {
 	profile.GoogleId = userInfo.Sub
 	profile.Name = userInfo.Name

@@ -199,6 +199,10 @@ func setQuestionsChoicesFromAnswers(questions []*QuestionAndAnswer) {
 	}
 }
 
+func (self *Quiz) GetQuestionsCount() int {
+	return len(self.questionsArray)
+}
+
 /**
  * Create a small-enough set of choices which
  * always contains the correct answer.

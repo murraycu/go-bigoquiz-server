@@ -41,6 +41,8 @@ func init() {
 	router.GET("/api/user", restHandleUser)
 	router.GET("/api/user-history", restHandleUserHistoryAll)
 	router.GET("/api/user-history/:quizId", restHandleUserHistoryByQuizId)
+	router.POST("/api/user-history/submit-answer", restHandleUserHistorySubmitAnswer)
+	router.POST("/api/user-history/submit-dont-know-answer", restHandleUserHistorySubmitDontKnowAnswer)
 
 	router.GET("/login/login", handleGoogleLogin)
 	router.GET("/login/callback", handleGoogleCallback)

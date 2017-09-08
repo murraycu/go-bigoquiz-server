@@ -28,7 +28,6 @@ func restHandleUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 	w.Write(jsonStr)
 }
 
-
 func getLoginInfoFromSessionAndDb(r *http.Request, w http.ResponseWriter) (*user.LoginInfo, error) {
 	session, err := store.Get(r, defaultSessionID)
 	if err != nil {
@@ -86,4 +85,13 @@ func getLoginInfoFromSessionAndDb(r *http.Request, w http.ResponseWriter) (*user
 	}
 
 	return &loginInfo, err
+}
+
+func getUserIdFromSessionAndDb(r *http.Request, w http.ResponseWriter) (*datastore.Key, error) {
+	loginInfo, err := getLoginInfoFromSessionAndDb(r, w)
+	if err != nil {
+		return nil, fmt.Errorf("getLoginInfoFromSessionAndDb() failed: %v", err)
+	}
+
+	return loginInfo.UserId, nil
 }

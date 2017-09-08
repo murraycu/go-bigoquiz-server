@@ -1,9 +1,15 @@
 package user
 
-import "google.golang.org/appengine/datastore"
+import (
+	"google.golang.org/appengine/datastore"
+	"quiz"
+)
 
+// Statistics for the user, either per quiz (SectionId is then empty), or per section in a quiz.
 type Stats struct {
-	UserId    datastore.Key `json:"-"`
+	Key *datastore.Key `json:"-"`
+
+	UserId *datastore.Key `json:"-"`
 
 	QuizId    string `json:"quizId,omitEmpty"`
 	SectionId string `json:"sectionId,omitEmpty"`
