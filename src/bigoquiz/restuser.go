@@ -70,6 +70,12 @@ func getLoginInfoFromSessionAndDb(r *http.Request, w http.ResponseWriter) (*user
 		return &loginInfo, nil
 	}
 
+	if userId == nil {
+		loginInfo.LoggedIn = false
+		loginInfo.ErrorMessage = "not logged in user (userId is null)."
+		return &loginInfo, nil
+	}
+
 	c := appengine.NewContext(r)
 	profile, err := db.GetUserProfileById(c, userId)
 	if err != nil {
