@@ -241,9 +241,11 @@ func reduceChoices(choices []*Text, answer *Text) []*Text {
 	return result
 }
 
+/** Get the index of an item in the array by comparig only the strings in the Text struct.
+ */
 func getIndexInArray(array []*Text, str *Text) (int, bool) {
 	for i, s := range array {
-		if s == str {
+		if s.Text == str.Text {
 			return i, true
 		}
 	}
