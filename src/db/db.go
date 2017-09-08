@@ -8,9 +8,15 @@ import (
 	"fmt"
 )
 
+const (
+	// These are like database table names.
+	DB_KIND_PROFILE = "UserProfile"
+	DB_KIND_USER_STATS = "UserStats"
+)
+
 // Get the UserProfile via the GoogleID, adding it if necessary.
 func StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, token *oauth2.Token) (*datastore.Key, error) {
-	q := datastore.NewQuery("user.Profile").
+	q := datastore.NewQuery(DB_KIND_PROFILE).
 		Filter("GoogleId =", userInfo.Sub).
 		Limit(1)
 	iter := q.Run(c)
@@ -27,7 +33,7 @@ func StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, t
 		updateProfileFromGoogleUserInfo(&profile, &userInfo)
 		profile.GoogleAccessToken = *token
 
-		key = datastore.NewIncompleteKey(c, "user.Profile", nil)
+		key = datastore.NewIncompleteKey(c, DB_KIND_PROFILE, nil)
 		if key, err = datastore.Put(c, key, &profile); err != nil {
 			return nil, fmt.Errorf("datastore.Put(with incomplete key %v) failed: %v", key, err)
 		}
@@ -141,7 +147,7 @@ func GetUserStatsForSection(c context.Context, userId *datastore.Key, quizId str
 func StoreUserStats(c context.Context, stats *user.Stats) error {
 	if (stats.Key == nil) {
 		// It hasn't been updated yet.
-		stats.Key = datastore.NewIncompleteKey(c, "user.Stats", nil)
+		stats.Key = datastore.NewIncompleteKey(c, DB_KIND_USER_STATS, nil)
 	}
 
 	if _, err := datastore.Put(c, stats.Key, stats); err != nil {
@@ -152,7 +158,7 @@ func StoreUserStats(c context.Context, stats *user.Stats) error {
 }
 
 func getQueryForUserStats(userId *datastore.Key) *datastore.Query {
-	return datastore.NewQuery("user.Stats").
+	return datastore.NewQuery(DB_KIND_USER_STATS).
 		Filter("Id =", userId)
 }
 
