@@ -82,13 +82,16 @@ func getLoginInfoFromSessionAndDb(r *http.Request, w http.ResponseWriter) (*user
 		return nil, fmt.Errorf("getUserProfileById() failed: %v", err)
 	}
 
-	if token.Valid() {
+	if profile == nil {
+		loginInfo.LoggedIn = false
+		loginInfo.ErrorMessage = "not logged in user (no profile found)"
+	} else if !token.Valid() {
+		loginInfo.LoggedIn = false
+		loginInfo.ErrorMessage = "not logged in user (invalid token)"
+	} else {
 		loginInfo.LoggedIn = true
 		loginInfo.Nickname = profile.Name
 		loginInfo.UserId = userId; // Not for the JSON, but useful to callers.
-	} else {
-		loginInfo.LoggedIn = false
-		loginInfo.ErrorMessage = "not logged in user (invalid token)"
 	}
 
 	return &loginInfo, err

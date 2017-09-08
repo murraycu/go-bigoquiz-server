@@ -60,6 +60,12 @@ func GetUserProfileById(c context.Context, userId *datastore.Key) (*user.Profile
 		return &profile, nil
 	}
 
+	// It's OK if no profile was found.
+	// The caller can just create one.
+	if err == datastore.ErrNoSuchEntity {
+		return nil, nil
+	}
+
 	// Ignore errors caused by old fields in the datastore that are no longer mentioned in our Go struct.
 	// TODO: The documentation does not clearly state that all matching fields will still be extracted.
 	_, ok := err.(*datastore.ErrFieldMismatch)
