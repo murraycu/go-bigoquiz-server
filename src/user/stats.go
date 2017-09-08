@@ -23,7 +23,7 @@ type Stats struct {
 	// These are from the quiz, for convenience
 	// so they don't need to be in the database.
 	// TODO: Make sure they are set for per-section stats.
-	CountQuestions int `json:"countQuestionsAnsweredOnce" datastore:"-"`
+	CountQuestions int `json:"countQuestions" datastore:"-"`
 	QuizTitle    string `json:"quizTitle,omitEmpty" datastore:"-"`
 	SectionTitle string `json:"sectionTitle,omitEmpty" datastore:"-"`
 }
