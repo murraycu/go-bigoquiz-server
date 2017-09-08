@@ -28,5 +28,8 @@ type Question struct {
 func (self *Question) SetTitles(quizTitle string, briefSection *HasIdAndTitle, subSection *SubSection) {
 	self.QuizTitle = quizTitle
 	self.Section = briefSection
-	self.SubSection = &(subSection.HasIdAndTitle)
+
+	if subSection != nil {
+		self.SubSection = &(subSection.HasIdAndTitle)
+	}
 }
