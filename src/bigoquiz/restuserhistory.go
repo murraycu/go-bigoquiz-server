@@ -377,7 +377,6 @@ func buildUserHistorySections(loginInfo *user.LoginInfo, quiz *quiz.Quiz, mapUse
 
 	var result user.HistorySections
 	result.LoginInfo = *loginInfo
-	result.Sections = sections
 	result.QuizTitle = quiz.Title
 
 	for _, section := range sections {
