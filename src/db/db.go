@@ -79,6 +79,11 @@ func GetUserProfileById(c context.Context, userId *datastore.Key) (*user.Profile
 
 // Get a map of stats by section ID, for all quizzes, from the database.
 func GetUserStats(c context.Context, userId *datastore.Key) (map[string]*user.Stats, error) {
+	// In case a nil value could lead to getting all users' stats:
+	if userId == nil {
+		return nil, fmt.Errorf("GetUserStatsForQuiz(): userId is nil.")
+	}
+
 	// Get all the Stats from the db, for each section:
 	q := getQueryForUserStats(userId)
 	iter := q.Run(c)
@@ -108,6 +113,16 @@ func GetUserStats(c context.Context, userId *datastore.Key) (map[string]*user.St
 
 // Get a map of stats by section ID, for a specific quiz, from the database.
 func GetUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string) (map[string]*user.Stats, error) {
+	// In case a nil value could lead to getting all users' stats:
+	if userId == nil {
+		return nil, fmt.Errorf("GetUserStatsForQuiz(): userId is nil.")
+	}
+
+	// In case an empty value could lead to getting all quizzes' stats:
+	if len(quizId) == 0 {
+		return nil, fmt.Errorf("GetUserStatsForQuiz(): quizId is nil or empty.")
+	}
+
 	// Get all the Stats from the db, for each section:
 	q := getQueryForUserStats(userId).
 		Filter("QuizId = ", quizId)
