@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<quiz xmlns="http://bigoquiz.com/document" format_version="1" id="concurrency">
+<quiz xmlns="https://bigoquiz.com/document" format_version="1" id="concurrency">
     <title>Concurrency</title>
     <link>https://en.wikipedia.org/wiki/Concurrency_(computer_science)</link>
 

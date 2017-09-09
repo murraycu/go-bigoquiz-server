@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<quiz xmlns="http://bigoquiz.com/document" format_version="1" id="bitwise" answers_as_choices="true">
+<quiz xmlns="https://bigoquiz.com/document" format_version="1" id="bitwise" answers_as_choices="true">
     <title>Bitwise Operations</title>
 
     <question id="bitwise-multiply-by-2">

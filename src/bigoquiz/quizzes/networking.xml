@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<quiz xmlns="http://bigoquiz.com/document" format_version="1" id="networking">
+<quiz xmlns="https://bigoquiz.com/document" format_version="1" id="networking">
     <title>Networking</title>
 
     <section id="networking-osi-model">

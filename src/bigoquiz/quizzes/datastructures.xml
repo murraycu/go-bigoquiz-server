@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<quiz xmlns="http://bigoquiz.com/document" format_version="1" id="datastructures">
+<quiz xmlns="https://bigoquiz.com/document" format_version="1" id="datastructures">
     <title>Data Structures</title>
     <section id="datastructures-abstract-data-types" answers_as_choices="true" and_reverse="true">
         <title>Abstract Data Types</title>

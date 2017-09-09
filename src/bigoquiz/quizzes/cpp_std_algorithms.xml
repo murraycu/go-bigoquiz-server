@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<quiz xmlns="http://bigoquiz.com/document" format_version="1" id="cpp_std_algorithms">
+<quiz xmlns="https://bigoquiz.com/document" format_version="1" id="cpp_std_algorithms">
     <title>C++ Standard Algorithms</title>
 
     <section id="non-modifying-sequence-operations" answers_as_choices="true" and_reverse="true">
