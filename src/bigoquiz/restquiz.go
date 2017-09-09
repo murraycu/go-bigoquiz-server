@@ -127,8 +127,10 @@ func restHandleQuizAll(w http.ResponseWriter, r *http.Request, _ httprouter.Para
 		return
 	}
 
-	w.Write(jsonStr)
-}
+	_, err = w.Write(jsonStr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}}
 
 func getQuiz(quizId string) *quiz.Quiz {
 	return quizzes[quizId]
@@ -157,8 +159,10 @@ func restHandleQuizById(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 		return
 	}
 
-	w.Write(jsonStr)
-}
+	_, err = w.Write(jsonStr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}}
 
 func restHandleQuizSectionsByQuizId(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	listOnly := false
@@ -199,8 +203,10 @@ func restHandleQuizSectionsByQuizId(w http.ResponseWriter, r *http.Request, ps h
 		return
 	}
 
-	w.Write(jsonStr)
-}
+	_, err = w.Write(jsonStr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}}
 
 func restHandleQuizQuestionById(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	quizId := ps.ByName("quizId")
@@ -233,5 +239,7 @@ func restHandleQuizQuestionById(w http.ResponseWriter, r *http.Request, ps httpr
 		return
 	}
 
-	w.Write(jsonStr)
-}
+	_, err = w.Write(jsonStr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}}

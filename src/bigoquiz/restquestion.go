@@ -40,5 +40,8 @@ func restHandleQuestionNext(w http.ResponseWriter, r *http.Request, ps httproute
 		return
 	}
 
-	w.Write(jsonStr)
+	_, err = w.Write(jsonStr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }

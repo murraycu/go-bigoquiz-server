@@ -79,7 +79,10 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	}
 
 	var userinfo db.GoogleUserInfo
-	json.Unmarshal(body, &userinfo)
+	err = json.Unmarshal(body, &userinfo)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 
 	// Store in the database:
 	userId, err := db.StoreGoogleLoginInUserProfile(c, userinfo, token)

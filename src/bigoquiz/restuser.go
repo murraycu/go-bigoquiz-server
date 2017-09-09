@@ -25,8 +25,10 @@ func restHandleUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 		return
 	}
 
-	w.Write(jsonStr)
-}
+	_, err = w.Write(jsonStr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}}
 
 func getLoginInfoFromSessionAndDb(r *http.Request, w http.ResponseWriter) (*user.LoginInfo, error) {
 	session, err := store.Get(r, defaultSessionID)
