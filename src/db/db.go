@@ -132,8 +132,7 @@ func GetUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string
 	}
 
 	// Get all the Stats from the db, for each section:
-	q := getQueryForUserStats(userId).
-		Filter("QuizId = ", quizId)
+	q := GetQueryForUserStatsForQuiz(userId, quizId)
 	iter := q.Run(c)
 
 	if iter == nil {
@@ -198,6 +197,51 @@ func getQueryForUserStats(userId *datastore.Key) *datastore.Query {
 	return datastore.NewQuery(DB_KIND_USER_STATS).
 		Filter("Id =", userId)
 }
+
+func GetQueryForUserStatsForQuiz(userId *datastore.Key, quizId string) *datastore.Query {
+	return getQueryForUserStats(userId).
+		Filter("QuizId = ", quizId)
+}
+
+func DeleteUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string) error {
+	// In case a nil value could lead to deleting all users' stats:
+	if userId == nil {
+		return fmt.Errorf("DeleteUserStatsForQuiz(): userId is nil.")
+	}
+
+	// In case an empty value could lead to deleting all quizzes' stats:
+	if len(quizId) == 0 {
+		return fmt.Errorf("DeleteUserStatsForQuiz(): quizId is nil or empty.")
+	}
+
+	q := GetQueryForUserStatsForQuiz(userId, quizId)
+	iter := q.Run(c)
+
+	if iter == nil {
+		return fmt.Errorf("datastore query for Stats failed.")
+	}
+
+	var stats user.Stats
+	for {
+		_, err := iter.Next(&stats)
+		if err == datastore.Done {
+			break;
+		}
+
+		if err != nil {
+			return fmt.Errorf("iter.Next() failed: %v", err)
+		}
+
+		// TODO: Batch these with datastore.DeleteMulti().
+		err = datastore.Delete(c, stats.Key)
+		if err != nil {
+			return fmt.Errorf("datastore.Delete() failed: %v", err)
+		}
+	}
+
+	return nil
+}
+
 
 func updateProfileFromGoogleUserInfo(profile *user.Profile, userInfo *GoogleUserInfo) {
 	profile.GoogleId = userInfo.Sub

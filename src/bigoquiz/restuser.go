@@ -97,6 +97,9 @@ func getLoginInfoFromSessionAndDb(r *http.Request, w http.ResponseWriter) (*user
 	return &loginInfo, err
 }
 
+/** Get the user ID.
+ * Returns a nil Key, and a nil error, if the user is not logged in.
+ */
 func getUserIdFromSessionAndDb(r *http.Request, w http.ResponseWriter) (*datastore.Key, error) {
 	loginInfo, err := getLoginInfoFromSessionAndDb(r, w)
 	if err != nil {

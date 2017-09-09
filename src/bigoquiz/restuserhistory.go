@@ -169,6 +169,54 @@ func restHandleUserHistorySubmitDontKnowAnswer(w http.ResponseWriter, r *http.Re
 }
 
 
+func restHandleUserHistoryResetSections(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	var quizId string
+
+	queryValues := r.URL.Query()
+	if queryValues != nil {
+		quizId = queryValues.Get("quiz-id")
+	}
+
+	if (len(quizId) == 0) {
+		http.Error(w, "quiz-id not specified", http.StatusBadRequest)
+		return
+	}
+
+	q := getQuiz(quizId)
+	if q == nil {
+		http.Error(w, "quiz not found", http.StatusNotFound)
+		return
+	}
+
+	userId, err := getUserIdFromSessionAndDb(r, w)
+	if err != nil {
+		http.Error(w, "logged-in check failed.", http.StatusInternalServerError)
+		return
+	}
+
+	if userId == nil {
+		loginInfo, err := getLoginInfoFromSessionAndDb(r, w)
+		if err != nil {
+			http.Error(w, "not logged in. getLoginInfoFromSessionAndDb() returned err.", http.StatusForbidden)
+			return
+		}
+
+		msg := fmt.Sprintf("not logged in. loginInfo=%v", loginInfo)
+		http.Error(w, msg, http.StatusForbidden)
+		return
+	}
+
+	c := appengine.NewContext(r)
+	err = db.DeleteUserStatsForQuiz(c, userId, quizId)
+	if err != nil {
+		http.Error(w, "deletion of stats failed", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
+
+
 type SubmissionResult struct {
 	Result bool `json:"result"`
 	CorrectAnswer quiz.Text `json:"correctAnswer,omitempty"`

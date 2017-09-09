@@ -44,12 +44,16 @@ func init() {
 	router.GET("/api/quiz/:quizId", restHandleQuizById)
 	router.GET("/api/quiz/:quizId/section", restHandleQuizSectionsByQuizId)
 	router.GET("/api/quiz/:quizId/question/:questionId", restHandleQuizQuestionById)
+
 	router.GET("/api/question/next", restHandleQuestionNext)
+
 	router.GET("/api/user", restHandleUser)
+
 	router.GET("/api/user-history", restHandleUserHistoryAll)
 	router.GET("/api/user-history/:quizId", restHandleUserHistoryByQuizId)
 	router.POST("/api/user-history/submit-answer", restHandleUserHistorySubmitAnswer)
 	router.POST("/api/user-history/submit-dont-know-answer", restHandleUserHistorySubmitDontKnowAnswer)
+	router.POST("/api/user-history/reset-sections", restHandleUserHistoryResetSections)
 
 	router.GET("/login/login", handleGoogleLogin)
 	router.GET("/login/callback", handleGoogleCallback)
