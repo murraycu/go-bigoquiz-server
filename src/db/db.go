@@ -97,15 +97,15 @@ func GetUserStats(c context.Context, userId *datastore.Key) (map[string]*user.St
 	var stats user.Stats
 	for {
 		_, err := iter.Next(&stats)
-		if err != nil && err != datastore.Done {
+		if err == datastore.Done {
+			break;
+		}
+
+		if err != nil {
 			return nil, fmt.Errorf("iter.Next() failed: %v", err)
 		}
 
 		result[stats.SectionId] = &stats
-
-		if err == datastore.Done {
-			break
-		}
 	}
 
 	return result, nil
@@ -137,18 +137,20 @@ func GetUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string
 	var stats user.Stats
 	for {
 		_, err := iter.Next(&stats)
-		if err != nil && err != datastore.Done {
+		if err == datastore.Done {
+			break
+		}
+
+		if err != nil {
 			return nil, fmt.Errorf("iter.Next() failed: %v", err)
 		}
 
 		result[stats.SectionId] = &stats
 
-		if err == datastore.Done {
-			break
-		}
+
 	}
 
-    return result, nil
+	return result, nil
 }
 
 
