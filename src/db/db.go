@@ -176,7 +176,7 @@ func GetUserStatsForSection(c context.Context, userId *datastore.Key, quizId str
 }
 
 func StoreUserStats(c context.Context, stats *user.Stats) error {
-	if (stats.Key == nil) {
+	if stats.Key == nil {
 		// It hasn't been updated yet.
 		stats.Key = datastore.NewIncompleteKey(c, DB_KIND_USER_STATS, nil)
 	}
