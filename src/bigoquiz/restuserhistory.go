@@ -245,7 +245,10 @@ func storeAnswerCorrectnessAndGetSubmissionResult(w http.ResponseWriter, r *http
 				return nil, fmt.Errorf("GetUserStatsForQuiz() failed: %v", err)
 			}
 
-			storeAnswerForSection(c, result, quizId, &qa.Question, userId, stats)
+			err := storeAnswerForSection(c, result, quizId, &qa.Question, userId, stats)
+			if err != nil {
+				return nil, fmt.Errorf("storeAnswerForSection() failed: %v", err)
+			}
 		}
 
 		return createSubmissionResultForSection(result, quizId, questionId, nextQuestionSectionId, stats)
@@ -257,7 +260,10 @@ func storeAnswerCorrectnessAndGetSubmissionResult(w http.ResponseWriter, r *http
 				return nil, fmt.Errorf("GetUserStatsForQuiz() failed: %v", err)
 			}
 
-			storeAnswer(c, result, quizId, &qa.Question, userId, stats)
+			err := storeAnswer(c, result, quizId, &qa.Question, userId, stats)
+			if err != nil {
+				return nil, fmt.Errorf("storeAnswer() failed: %v", err)
+			}
 		}
 
 		return createSubmissionResult(result, quizId, questionId, nextQuestionSectionId, stats)
@@ -363,8 +369,7 @@ func storeAnswer(c context.Context, result bool, quizId string, question *quiz.Q
 		sectionStats.SectionId = sectionId
 	}
 
-	storeAnswerForSection(c, result, quizId, question, userId, sectionStats)
-	return nil
+	return storeAnswerForSection(c, result, quizId, question, userId, sectionStats)
 }
 
 func storeAnswerForSection(c context.Context, result bool, quizId string, question *quiz.Question, userId *datastore.Key, sectionStats *user.Stats) error {
