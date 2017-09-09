@@ -69,7 +69,7 @@ func restHandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Request, ps ht
 
 	q := getQuiz(quizId)
 	if q == nil {
-		http.Error(w, "quiz not found", http.StatusInternalServerError)
+		http.Error(w, "quiz not found", http.StatusNotFound)
 		return
 	}
 
