@@ -26,8 +26,6 @@ func restHandleUserHistoryAll(w http.ResponseWriter, r *http.Request, ps httprou
 	// Note: We only show the entire user history for logged-in users,
 	// so there is no point in constructing an empty sets of stats for not-logged in users.
 	if loginInfo.UserId != nil {
-		info.LoginInfo.ErrorMessage = "debug2 message"
-
 		c := appengine.NewContext(r)
 		mapUserStats, err := db.GetUserStats(c, loginInfo.UserId)
 		if err != nil {
