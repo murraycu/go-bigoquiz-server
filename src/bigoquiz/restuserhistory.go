@@ -190,26 +190,35 @@ func storeAnswerCorrectnessAndGetSubmissionResult(w http.ResponseWriter, r *http
 	// question's section ID, to avoid allocating a map just containing one Stats.
 	c := appengine.NewContext(r)
 	if nextQuestionSectionId == sectionId {
-		stats, err := db.GetUserStatsForSection(c, userId, quizId, nextQuestionSectionId)
-		if err != nil {
-			return nil, fmt.Errorf("GetUserStatsForQuiz() failed: %v", err)
-		}
+		var stats *user.Stats
+		if userId != nil {
+			stats, err = db.GetUserStatsForSection(c, userId, quizId, nextQuestionSectionId)
+			if err != nil {
+				return nil, fmt.Errorf("GetUserStatsForQuiz() failed: %v", err)
+			}
 
-		storeAnswerForSection(c, result, quizId, &qa.Question, userId, stats)
+			storeAnswerForSection(c, result, quizId, &qa.Question, userId, stats)
+		}
 
 		return createSubmissionResultForSection(result, quizId, questionId, nextQuestionSectionId, stats)
 	} else {
-		stats, err := db.GetUserStatsForQuiz(c, userId, quizId)
-		if err != nil {
-			return nil, fmt.Errorf("GetUserStatsForQuiz() failed: %v", err)
-		}
+		var stats map[string]*user.Stats
+		if userId != nil {
+			stats, err = db.GetUserStatsForQuiz(c, userId, quizId)
+			if err != nil {
+				return nil, fmt.Errorf("GetUserStatsForQuiz() failed: %v", err)
+			}
 
-		storeAnswer(c, result, quizId, &qa.Question, userId, stats)
+			storeAnswer(c, result, quizId, &qa.Question, userId, stats)
+		}
 
 		return createSubmissionResult(result, quizId, questionId, nextQuestionSectionId, stats)
 	}
 }
 
+/**
+ * stats may be nil.
+ */
 func createSubmissionResult(result bool, quizId string, questionId string, nextQuestionSectionId string, stats map[string]*user.Stats) (*SubmissionResult, error) {
 	q := getQuiz(quizId)
 
