@@ -77,11 +77,15 @@ func GetUserProfileById(c context.Context, userId *datastore.Key) (*user.Profile
 }
 
 
-// Get a map of stats by section ID, for all quizzes, from the database.
+/** Get a map of stats by section ID, for all quizzes, from the database.
+ * userId may be nil.
+ */
 func GetUserStats(c context.Context, userId *datastore.Key) (map[string]*user.Stats, error) {
+	var result = make(map[string]*user.Stats)
+
 	// In case a nil value could lead to getting all users' stats:
 	if userId == nil {
-		return nil, fmt.Errorf("GetUserStatsForQuiz(): userId is nil.")
+		return result, nil
 	}
 
 	// Get all the Stats from the db, for each section:
@@ -93,7 +97,6 @@ func GetUserStats(c context.Context, userId *datastore.Key) (map[string]*user.St
 	}
 
 	// Build a map of the stats by section ID:
-	var result = make(map[string]*user.Stats)
 	var stats user.Stats
 	for {
 		_, err := iter.Next(&stats)
@@ -111,11 +114,16 @@ func GetUserStats(c context.Context, userId *datastore.Key) (map[string]*user.St
 	return result, nil
 }
 
-// Get a map of stats by section ID, for a specific quiz, from the database.
+/** Get a map of stats by section ID, for a specific quiz, from the database.
+ * userId may be nil.
+ * quizId may not be nil.
+ */
 func GetUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string) (map[string]*user.Stats, error) {
+	var result = make(map[string]*user.Stats)
+
 	// In case a nil value could lead to getting all users' stats:
 	if userId == nil {
-		return nil, fmt.Errorf("GetUserStatsForQuiz(): userId is nil.")
+		return result, nil
 	}
 
 	// In case an empty value could lead to getting all quizzes' stats:
@@ -133,7 +141,6 @@ func GetUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string
 	}
 
 	// Build a map of the stats by section ID:
-	var result = make(map[string]*user.Stats)
 	var stats user.Stats
 	for {
 		_, err := iter.Next(&stats)
@@ -152,7 +159,6 @@ func GetUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string
 
 	return result, nil
 }
-
 
 // Get the stats for a specific section ID, from the database.
 func GetUserStatsForSection(c context.Context, userId *datastore.Key, quizId string, sectionId string) (*user.Stats, error) {
