@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"golang.org/x/oauth2"
 	"google.golang.org/appengine/log"
+	"fmt"
 )
 
 const (
@@ -50,7 +51,10 @@ func GenerateConfig() (*Config, error) {
 	}
 
 	var result Config
-	json.Unmarshal(b, &result)
+	err = json.Unmarshal(b, &result)
+	if err != nil {
+		return nil, fmt.Errorf("json.Unmarshal failed", err)
+	}
 
 	return &result, nil
 }
