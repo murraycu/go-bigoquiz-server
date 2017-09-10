@@ -54,7 +54,10 @@ func restHandleUserHistoryAll(w http.ResponseWriter, r *http.Request, ps httprou
 		return
 	}
 
-	w.Write(jsonStr)
+	_, err = w.Write(jsonStr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 func restHandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -95,7 +98,10 @@ func restHandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Request, ps ht
 		return
 	}
 
-	w.Write(jsonStr)
+	_, err = w.Write(jsonStr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 func restHandleUserHistorySubmitAnswer(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -131,7 +137,10 @@ func restHandleUserHistorySubmitAnswer(w http.ResponseWriter, r *http.Request, p
 		return
 	}
 
-	w.Write(jsonStr)
+	_, err = w.Write(jsonStr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 func restHandleUserHistorySubmitDontKnowAnswer(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -165,7 +174,10 @@ func restHandleUserHistorySubmitDontKnowAnswer(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	w.Write(jsonStr)
+	_, err = w.Write(jsonStr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 
