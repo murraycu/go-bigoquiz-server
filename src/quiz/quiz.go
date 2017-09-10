@@ -40,7 +40,7 @@ func (self *Quiz) GetAnswer(questionId string) *Text {
 	}
 
 	if (qa == nil) {
-		return nil;
+		return nil
 	}
 
 	return &qa.Answer
@@ -58,7 +58,7 @@ func (self *Quiz) GetSection(sectionId string) *Section {
 	}
 
 	if (s == nil) {
-		return nil;
+		return nil
 	}
 
 	return s

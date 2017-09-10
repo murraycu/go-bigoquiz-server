@@ -93,7 +93,7 @@ func getLoginInfoFromSessionAndDb(r *http.Request, w http.ResponseWriter) (*user
 	} else {
 		loginInfo.LoggedIn = true
 		loginInfo.Nickname = profile.Name
-		loginInfo.UserId = userId; // Not for the JSON, but useful to callers.
+		loginInfo.UserId = userId // Not for the JSON, but useful to callers.
 	}
 
 	return &loginInfo, err

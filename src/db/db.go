@@ -55,7 +55,7 @@ func StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, t
 
 func GetUserProfileById(c context.Context, userId *datastore.Key) (*user.Profile, error) {
 	var profile user.Profile
-	err := datastore.Get(c, userId, &profile);
+	err := datastore.Get(c, userId, &profile)
 	if err == nil {
 		return &profile, nil
 	}
@@ -101,7 +101,7 @@ func GetUserStats(c context.Context, userId *datastore.Key) (map[string]*user.St
 	for {
 		_, err := iter.Next(&stats)
 		if err == datastore.Done {
-			break;
+			break
 		}
 
 		if err != nil {
@@ -190,7 +190,7 @@ func StoreUserStats(c context.Context, stats *user.Stats) error {
 		return fmt.Errorf("StoreUserStats(): datastore.Put() failed: %v", err)
 	}
 
-	return nil;
+	return nil
 }
 
 func getQueryForUserStats(userId *datastore.Key) *datastore.Query {
@@ -225,7 +225,7 @@ func DeleteUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId str
 	for {
 		_, err := iter.Next(&stats)
 		if err == datastore.Done {
-			break;
+			break
 		}
 
 		if err != nil {

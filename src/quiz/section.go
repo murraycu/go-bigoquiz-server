@@ -24,7 +24,7 @@ func (self *Section) GetSubSection(subSectionId string) *SubSection {
 	}
 
 	if (s == nil) {
-		return nil;
+		return nil
 	}
 
 	return s

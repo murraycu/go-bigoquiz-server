@@ -35,7 +35,7 @@ func restHandleUserHistoryAll(w http.ResponseWriter, r *http.Request, ps httprou
 
 		for quizId, q := range quizzes {
 			stats, ok := mapUserStats[quizId]
-			if (!ok || stats == nil) {
+			if !ok || stats == nil {
 				// Show an empty stats section,
 				// if there is none in the database yet.
 				stats = new(user.Stats)
@@ -77,7 +77,7 @@ func restHandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Request, ps ht
 		return
 	}
 
-	var mapUserStats map[string]*user.Stats;
+	var mapUserStats map[string]*user.Stats
 	if loginInfo.UserId == nil {
 		c := appengine.NewContext(r)
 		mapUserStats, err = db.GetUserStatsForQuiz(c, loginInfo.UserId, quizId)
@@ -177,7 +177,7 @@ func restHandleUserHistoryResetSections(w http.ResponseWriter, r *http.Request, 
 		quizId = queryValues.Get("quiz-id")
 	}
 
-	if (len(quizId) == 0) {
+	if len(quizId) == 0 {
 		http.Error(w, "quiz-id not specified", http.StatusBadRequest)
 		return
 	}
