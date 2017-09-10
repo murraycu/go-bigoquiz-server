@@ -348,16 +348,16 @@ func getNextQuestionFromUserStatsForSection(sectionId string, quiz *quiz.Quiz, s
 
 func storeAnswer(c context.Context, result bool, quizId string, question *quiz.Question, userId *datastore.Key, stats map[string]*user.Stats) error {
 	if userId == nil {
-		return fmt.Errorf("storeAnswer(): userId is nil.")
+		return fmt.Errorf("storeAnswer(): userId is nil")
 	}
 
 	if question == nil {
-		return fmt.Errorf("storeAnswer(): question is nil.")
+		return fmt.Errorf("storeAnswer(): question is nil")
 	}
 
 	sectionId := question.SectionId
 	if len(sectionId) == 0 {
-		return fmt.Errorf("storeAnswer(): question's section ID is empty.")
+		return fmt.Errorf("storeAnswer(): question's section ID is empty")
 	}
 
 	sectionStats, ok := stats[sectionId]
@@ -374,16 +374,16 @@ func storeAnswer(c context.Context, result bool, quizId string, question *quiz.Q
 
 func storeAnswerForSection(c context.Context, result bool, quizId string, question *quiz.Question, userId *datastore.Key, sectionStats *user.Stats) error {
 	if userId == nil {
-		return fmt.Errorf("storeAnswerForSection(): userId is nil.")
+		return fmt.Errorf("storeAnswerForSection(): userId is nil")
 	}
 
 	if question == nil {
-		return fmt.Errorf("storeAnswerForSection(): question is nil.")
+		return fmt.Errorf("storeAnswerForSection(): question is nil")
 	}
 
 	sectionId := question.SectionId
 	if len(sectionId) == 0 {
-		return fmt.Errorf("storeAnswerForSection(): question's section ID is empty.")
+		return fmt.Errorf("storeAnswerForSection(): question's section ID is empty")
 	}
 
 	if sectionStats == nil {

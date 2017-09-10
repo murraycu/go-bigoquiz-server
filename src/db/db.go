@@ -21,7 +21,7 @@ func StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, t
 		Limit(1)
 	iter := q.Run(c)
 	if iter == nil {
-		return nil, fmt.Errorf("datastore query for GoogleId failed.")
+		return nil, fmt.Errorf("datastore query for GoogleId failed")
 	}
 
 	var profile user.Profile
@@ -93,7 +93,7 @@ func GetUserStats(c context.Context, userId *datastore.Key) (map[string]*user.St
 	iter := q.Run(c)
 
 	if iter == nil {
-		return nil, fmt.Errorf("datastore query for Stats failed.")
+		return nil, fmt.Errorf("datastore query for Stats failed")
 	}
 
 	// Build a map of the stats by section ID:
@@ -128,7 +128,7 @@ func GetUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string
 
 	// In case an empty value could lead to getting all quizzes' stats:
 	if len(quizId) == 0 {
-		return nil, fmt.Errorf("GetUserStatsForQuiz(): quizId is nil or empty.")
+		return nil, fmt.Errorf("GetUserStatsForQuiz(): quizId is nil or empty")
 	}
 
 	// Get all the Stats from the db, for each section:
@@ -136,7 +136,7 @@ func GetUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string
 	iter := q.Run(c)
 
 	if iter == nil {
-		return nil, fmt.Errorf("datastore query for Stats failed.")
+		return nil, fmt.Errorf("datastore query for Stats failed")
 	}
 
 	// Build a map of the stats by section ID:
@@ -168,7 +168,7 @@ func GetUserStatsForSection(c context.Context, userId *datastore.Key, quizId str
 	iter := q.Run(c)
 
 	if iter == nil {
-		return nil, fmt.Errorf("datastore query for Stats failed.")
+		return nil, fmt.Errorf("datastore query for Stats failed")
 	}
 
 	var stats user.Stats
@@ -206,19 +206,19 @@ func GetQueryForUserStatsForQuiz(userId *datastore.Key, quizId string) *datastor
 func DeleteUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string) error {
 	// In case a nil value could lead to deleting all users' stats:
 	if userId == nil {
-		return fmt.Errorf("DeleteUserStatsForQuiz(): userId is nil.")
+		return fmt.Errorf("DeleteUserStatsForQuiz(): userId is nil")
 	}
 
 	// In case an empty value could lead to deleting all quizzes' stats:
 	if len(quizId) == 0 {
-		return fmt.Errorf("DeleteUserStatsForQuiz(): quizId is nil or empty.")
+		return fmt.Errorf("DeleteUserStatsForQuiz(): quizId is nil or empty")
 	}
 
 	q := GetQueryForUserStatsForQuiz(userId, quizId)
 	iter := q.Run(c)
 
 	if iter == nil {
-		return fmt.Errorf("datastore query for Stats failed.")
+		return fmt.Errorf("datastore query for Stats failed")
 	}
 
 	var stats user.Stats
