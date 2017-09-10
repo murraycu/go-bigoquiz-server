@@ -402,7 +402,7 @@ func storeAnswerForSection(c context.Context, result bool, quizId string, questi
 	sectionStats.UpdateProblemQuestion(question, result)
 
 	if err := db.StoreUserStats(c, sectionStats); err != nil {
-		return fmt.Errorf("db.StoreUserStat(): %v", sectionStats.Key, err)
+		return fmt.Errorf("db.StoreUserStat() for key: %v: %v", sectionStats.Key, err)
 	}
 
 	return nil
