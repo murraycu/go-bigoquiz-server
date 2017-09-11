@@ -181,12 +181,21 @@ func GetUserStatsForSection(c context.Context, userId *datastore.Key, quizId str
 }
 
 func StoreUserStats(c context.Context, stats *user.Stats) error {
-	if stats.Key == nil {
+	key := stats.Key
+	if key == nil {
 		// It hasn't been updated yet.
-		stats.Key = datastore.NewIncompleteKey(c, DB_KIND_USER_STATS, nil)
+		//
+		// Not: Don't store the key in stats.Key - that confuses the datastore API,
+		// (but without any error being returned to our code.)
+		// so we won't be able to read the entity back later.
+		// That also results in an error when trying to list the UserStats entities in dev_server.py's
+		// Datastore Viewer:
+		// "in ValidatePropertyKey 'Incomplete key found for reference property %s.' % name)
+		// BadValueError: Incomplete key found for reference property Key."
+		key = datastore.NewIncompleteKey(c, DB_KIND_USER_STATS, nil)
 	}
 
-	if _, err := datastore.Put(c, stats.Key, stats); err != nil {
+	if _, err := datastore.Put(c, key, stats); err != nil {
 		return fmt.Errorf("StoreUserStats(): datastore.Put() failed: %v", err)
 	}
 
