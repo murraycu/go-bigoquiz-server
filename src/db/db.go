@@ -204,7 +204,7 @@ func StoreUserStats(c context.Context, stats *user.Stats) error {
 
 func getQueryForUserStats(userId *datastore.Key) *datastore.Query {
 	return datastore.NewQuery(DB_KIND_USER_STATS).
-		Filter("Id =", userId)
+		Filter("UserId =", userId)
 }
 
 func GetQueryForUserStatsForQuiz(userId *datastore.Key, quizId string) *datastore.Query {
