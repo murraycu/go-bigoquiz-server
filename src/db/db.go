@@ -17,7 +17,7 @@ const (
 // Get the UserProfile via the GoogleID, adding it if necessary.
 func StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, token *oauth2.Token) (*datastore.Key, error) {
 	q := datastore.NewQuery(DB_KIND_PROFILE).
-		Filter("GoogleId =", userInfo.Sub).
+		Filter("googleId =", userInfo.Sub).
 		Limit(1)
 	iter := q.Run(c)
 	if iter == nil {
@@ -164,7 +164,7 @@ func GetUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string
 func GetUserStatsForSection(c context.Context, userId *datastore.Key, quizId string, sectionId string) (*user.Stats, error) {
 	// Get all the Stats from the db, for each section:
 	q := getQueryForUserStats(userId).
-		Filter("SectionId =", sectionId).
+		Filter("sectionId =", sectionId).
 	    Limit(1)
 	iter := q.Run(c)
 
@@ -208,12 +208,12 @@ func StoreUserStats(c context.Context, stats *user.Stats) error {
 
 func getQueryForUserStats(userId *datastore.Key) *datastore.Query {
 	return datastore.NewQuery(DB_KIND_USER_STATS).
-		Filter("UserId =", userId)
+		Filter("userId =", userId)
 }
 
 func GetQueryForUserStatsForQuiz(userId *datastore.Key, quizId string) *datastore.Query {
 	return getQueryForUserStats(userId).
-		Filter("QuizId = ", quizId)
+		Filter("quizId = ", quizId)
 }
 
 func DeleteUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string) error {
