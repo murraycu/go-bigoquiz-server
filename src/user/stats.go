@@ -28,6 +28,15 @@ type Stats struct {
 	CountQuestionsAnsweredOnce int `json:"countQuestionsAnsweredOnce" datastore:"countQuestionsAnsweredOnce"`
 	CountQuestionsCorrectOnce  int `json:"countQuestionsCorrectOnce" datastore:"countQuestionsCorrectOnce"`
 
+	// TODO: Avoid putting this in the JSON?
+
+	// Note: Go's datastore API doesn't let us use a map,
+	// though Java's does let us use a Map.
+	// (either QuestionHistories map[string]*QuestionHistory or QuestionHistories map[string]QuestionHistory )
+	// Also, Go's datastore API (at least the appengine fork of it)
+	// doesn't let us use []*QuestionHistory - only []QuestionHistory.
+	QuestionHistories []QuestionHistory
+
 	// These are from the quiz, for convenience
 	// so they don't need to be in the database.
 	// TODO: Make sure they are set for per-section stats.
@@ -67,6 +76,71 @@ func (self *Stats) IncrementCorrect() {
 	self.Correct += 1
 }
 
+func (self *Stats) getQuestionHistoryForQuestionId(questionId string) (*QuestionHistory, bool) {
+	if self.QuestionHistories == nil {
+		return nil, false
+	}
+
+	// TODO: Performance.
+	// We would ideally use a map here,
+	// but Go's datastore library does not allow that as an entity field type.
+	for _, qh := range(self.QuestionHistories) {
+		if qh.QuestionId == questionId {
+			return &qh, true
+		}
+	}
+
+	return nil, false
+}
+
 func (self *Stats) UpdateProblemQuestion(question *quiz.Question, answerIsCorrect bool) {
-	// TODO
+	questionId := question.Id
+	if len(questionId) == 0 {
+		// Log.error("updateProblemQuestion(): questionId is empty.");
+		return;
+	}
+
+	firstTimeAsked := false;
+	firstTimeCorrect := false;
+
+	questionHistory, ok := self.getQuestionHistoryForQuestionId(questionId);
+
+	//Add a new one, if necessary:
+	if !ok {
+		firstTimeAsked = true;
+		if answerIsCorrect {
+			firstTimeCorrect = true;
+		}
+
+		questionHistory = new(QuestionHistory)
+		questionHistory.QuestionId = question.Id;
+		self.QuestionHistories = append(self.QuestionHistories, *questionHistory);
+	} else if answerIsCorrect && !questionHistory.AnsweredCorrectlyOnce {
+		firstTimeCorrect = true;
+	}
+
+	//Increase the wrong-answer count:
+	questionHistory.AdjustCount(answerIsCorrect);
+
+	if firstTimeAsked {
+		self.CountQuestionsAnsweredOnce++;
+	}
+
+	if firstTimeCorrect {
+		self.CountQuestionsCorrectOnce++;
+	}
+
+	//TODO? cacheIsInvalid = true;
+}
+
+func (self *QuestionHistory) AdjustCount(result bool) {
+	if result {
+		self.AnsweredCorrectlyOnce = true;
+	}
+
+	if result {
+		self.CountAnsweredWrong -= 1;
+	} else {
+		self.CountAnsweredWrong += 1;
+	}
 }
