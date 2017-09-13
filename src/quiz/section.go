@@ -8,8 +8,9 @@ type Section struct {
 	DefaultChoices []*Text           `json:"defaultChoices,omitempty" xml:"default_choices"`
 	AnswersAsChoices bool            `json:"answersAsChoices" xml:"answers_as_choices,attr"`
 
-	// This does not appear in the JSON.
+	// These do not appear in the JSON.
 	subSectionsMap map[string]*SubSection `json:"-" xml:"-"`
+	CountQuestions int                    `json:"-" xml:"-"`
 }
 
 

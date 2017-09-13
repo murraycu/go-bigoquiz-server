@@ -115,12 +115,15 @@ func (self *Quiz) buildMapsAndArray() {
 
 		s.subSectionsMap = make(map[string]*SubSection)
 
+		var sectionCountQuestions int
 		for _, sub := range s.SubSections {
 			s.subSectionsMap[sub.Id] = sub
 
 			for _, q := range sub.Questions {
 				self.addQuestionToMapAndArray(q, s, sub)
 			}
+
+			sectionCountQuestions += len(sub.Questions)
 
 			//Don't use subsection answers as choices if the parent section wants answers-as-choices.
 			//In that case, all questions will instead share answers from all sub-sections.
@@ -134,6 +137,8 @@ func (self *Quiz) buildMapsAndArray() {
 			self.addQuestionToMapAndArray(q, s, nil)
 		}
 
+		sectionCountQuestions += len(s.Questions)
+
 		//Make sure that we set sub-section choices from the answers from all questions in the whole section:
 		if s.AnswersAsChoices {
 			questionsIncludingSubSections := make([]*QuestionAndAnswer, 0)
@@ -145,6 +150,8 @@ func (self *Quiz) buildMapsAndArray() {
 
 			setQuestionsChoicesFromAnswers(questionsIncludingSubSections)
 		}
+
+		s.CountQuestions = sectionCountQuestions
 	}
 
 }
