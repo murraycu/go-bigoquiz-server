@@ -99,7 +99,7 @@ func GetUserStats(c context.Context, userId *datastore.Key) (map[string]*user.St
 	// Build a map of the stats by section ID:
 	var stats user.Stats
 	for {
-		key, err := iter.Next(&stats)
+		_, err := iter.Next(&stats)
 		if err == datastore.Done {
 			break
 		}
@@ -108,8 +108,21 @@ func GetUserStats(c context.Context, userId *datastore.Key) (map[string]*user.St
 			return nil, fmt.Errorf("iter.Next() failed: %v", err)
 		}
 
-		stats.Key = key // See the comment on Stats.Key.
-		result[stats.SectionId] = &stats
+		quizId := stats.QuizId
+
+		existing, exists := result[quizId]
+		if !exists {
+			result[quizId] = &stats
+		} else {
+			combinedStats := existing.CreateCombinedUserStatsWithoutQuestionHistories(&stats)
+			result[stats.QuizId] = combinedStats
+		}
+
+		// This does not correspond to a user.Stats in the datastore.
+		// Instead this one is for the whole quiz, not just a section in a quiz.
+		// So we wipe the Key to make sure that we don't try to write it back sometime.
+		stats.Key = nil // See the comment on Stats.Key.
+
 	}
 
 	return result, nil

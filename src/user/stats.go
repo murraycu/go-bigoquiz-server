@@ -36,6 +36,29 @@ type Stats struct {
 	SectionTitle string `json:"sectionTitle,omitEmpty" datastore:"-"`
 }
 
+/** Add the values from userStat to this instance,
+* returning a combined UserStats,
+* ignoring the question histories,
+* without changing this instance.
+*/
+func (self *Stats) CreateCombinedUserStatsWithoutQuestionHistories(stats *Stats) *Stats {
+	if stats == nil {
+		return self
+	}
+
+	var result Stats
+	result.UserId = self.UserId
+	result.QuizId = self.QuizId
+
+	result.Answered = self.Answered + stats.Answered
+	result.Correct = self.Correct + stats.Correct
+
+	result.CountQuestionsAnsweredOnce = self.CountQuestionsAnsweredOnce + stats.CountQuestionsAnsweredOnce
+	result.CountQuestionsCorrectOnce = self.CountQuestionsCorrectOnce + stats.CountQuestionsCorrectOnce
+
+	return &result
+}
+
 func (self *Stats) IncrementAnswered() {
 	self.Answered += 1
 }
