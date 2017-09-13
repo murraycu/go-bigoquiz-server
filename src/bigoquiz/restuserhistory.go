@@ -358,6 +358,10 @@ func getNextQuestionFromUserStatsForSection(sectionId string, quiz *quiz.Quiz, s
 	return quiz.GetRandomQuestion() //TODO
 }
 
+/** Update the user.Stats for the question's quiz section, in the database,
+ * storing a new user.Stats in the database if necessary.
+ * To update an existing user.Stats in the database, via the stats parameter, its Key field must be set.
+ */
 func storeAnswer(c context.Context, result bool, quizId string, question *quiz.Question, userId *datastore.Key, stats map[string]*user.Stats) error {
 	if userId == nil {
 		return fmt.Errorf("storeAnswer(): userId is nil")
@@ -384,6 +388,10 @@ func storeAnswer(c context.Context, result bool, quizId string, question *quiz.Q
 	return storeAnswerForSection(c, result, quizId, question, userId, sectionStats)
 }
 
+/** Update the user.Stats for the section, for the quiz, in the database,
+ * storing a new user.Stats in the database if necessary.
+ * To update an existing user.Stats in the database, its Key field must be set.
+ */
 func storeAnswerForSection(c context.Context, result bool, quizId string, question *quiz.Question, userId *datastore.Key, sectionStats *user.Stats) error {
 	if userId == nil {
 		return fmt.Errorf("storeAnswerForSection(): userId is nil")
