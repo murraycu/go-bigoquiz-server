@@ -99,7 +99,7 @@ func GetUserStats(c context.Context, userId *datastore.Key) (map[string]*user.St
 	// Build a map of the stats by section ID:
 	var stats user.Stats
 	for {
-		_, err := iter.Next(&stats)
+		key, err := iter.Next(&stats)
 		if err == datastore.Done {
 			break
 		}
@@ -108,6 +108,7 @@ func GetUserStats(c context.Context, userId *datastore.Key) (map[string]*user.St
 			return nil, fmt.Errorf("iter.Next() failed: %v", err)
 		}
 
+		stats.Key = key // See the comment on Stats.Key.
 		result[stats.SectionId] = &stats
 	}
 
@@ -195,9 +196,12 @@ func StoreUserStats(c context.Context, stats *user.Stats) error {
 		key = datastore.NewIncompleteKey(c, DB_KIND_USER_STATS, nil)
 	}
 
-	if _, err := datastore.Put(c, key, stats); err != nil {
+	var err error
+	if key, err = datastore.Put(c, key, stats); err != nil {
 		return fmt.Errorf("StoreUserStats(): datastore.Put() failed: %v", err)
 	}
+
+	stats.Key = key // See the comment on Stats.Key.
 
 	return nil
 }
