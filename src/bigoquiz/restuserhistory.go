@@ -81,7 +81,7 @@ func restHandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Request, ps ht
 	}
 
 	var mapUserStats map[string]*user.Stats
-	if loginInfo.UserId == nil {
+	if loginInfo.UserId != nil {
 		c := appengine.NewContext(r)
 		mapUserStats, err = db.GetUserStatsForQuiz(c, loginInfo.UserId, quizId)
 		if err != nil {
