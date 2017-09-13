@@ -156,7 +156,7 @@ func GetUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string
 	// Build a map of the stats by section ID:
 	var stats user.Stats
 	for {
-		key, err := iter.Next(&stats)
+		_, err := iter.Next(&stats)
 		if err == datastore.Done {
 			break
 		}
@@ -165,7 +165,6 @@ func GetUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string
 			return nil, fmt.Errorf("iter.Next() failed: %v", err)
 		}
 
-		stats.Key = key // See the comment on user.Stats.Key
 		result[stats.SectionId] = &stats
 	}
 
@@ -208,12 +207,9 @@ func StoreUserStats(c context.Context, stats *user.Stats) error {
 		key = datastore.NewIncompleteKey(c, DB_KIND_USER_STATS, nil)
 	}
 
-	var err error
-	if key, err = datastore.Put(c, key, stats); err != nil {
+	if _, err := datastore.Put(c, key, stats); err != nil {
 		return fmt.Errorf("StoreUserStats(): datastore.Put() failed: %v", err)
 	}
-
-	stats.Key = key // See the comment on Stats.Key.
 
 	return nil
 }
