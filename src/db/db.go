@@ -77,7 +77,7 @@ func GetUserProfileById(c context.Context, userId *datastore.Key) (*user.Profile
 }
 
 
-/** Get a map of stats by section ID, for all quizzes, from the database.
+/** Get a map of stats by quiz ID, for all quizzes, from the database.
  * userId may be nil.
  */
 func GetUserStats(c context.Context, userId *datastore.Key) (map[string]*user.Stats, error) {
@@ -176,7 +176,7 @@ func GetUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string
 // Get the stats for a specific section ID, from the database.
 func GetUserStatsForSection(c context.Context, userId *datastore.Key, quizId string, sectionId string) (*user.Stats, error) {
 	// Get all the Stats from the db, for each section:
-	q := getQueryForUserStats(userId).
+	q := GetQueryForUserStatsForQuiz(userId, quizId).
 		Filter("sectionId =", sectionId).
 	    Limit(1)
 	iter := q.Run(c)
