@@ -476,11 +476,11 @@ func buildUserHistorySections(loginInfo *user.LoginInfo, quiz *quiz.Quiz, mapUse
 			userStats.UserId = userId
 			userStats.QuizId = quizId
 			userStats.SectionId = sectionId
-
-			userStats.QuizTitle = quiz.Title
-			userStats.SectionTitle = section.Title
-			// TODO: userStats.CountQuestions = section.GetQuestionsCount()
 		}
+
+		userStats.QuizTitle = quiz.Title
+		userStats.SectionTitle = section.Title
+		// TODO: userStats.CountQuestions = section.GetQuestionsCount()
 
 		fillUserStatsWithTitles(userStats, quiz)
 		result.Stats = append(result.Stats, userStats)
