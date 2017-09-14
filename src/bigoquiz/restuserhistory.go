@@ -351,11 +351,11 @@ func setQuestionExtras(question *quiz.Question, q *quiz.Quiz) {
 }
 
 func getNextQuestionFromUserStats(sectionId string, quiz *quiz.Quiz, stats map[string]*user.Stats) *quiz.Question {
-	return quiz.GetRandomQuestion() //TODO
+	return quiz.GetRandomQuestion("")
 }
 
 func getNextQuestionFromUserStatsForSection(sectionId string, quiz *quiz.Quiz, stats *user.Stats) *quiz.Question {
-	return quiz.GetRandomQuestion() //TODO
+	return quiz.GetRandomQuestion(sectionId)
 }
 
 /** Update the user.Stats for the question's quiz section, in the database,

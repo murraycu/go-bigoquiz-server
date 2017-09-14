@@ -11,6 +11,9 @@ type Section struct {
 	// These do not appear in the JSON.
 	subSectionsMap map[string]*SubSection `json:"-" xml:"-"`
 	CountQuestions int                    `json:"-" xml:"-"`
+
+	// An array of all questions in all sub-sections and in this section directly.
+	QuestionsArray []*QuestionAndAnswer `json:"-" xml:"-"`
 }
 
 

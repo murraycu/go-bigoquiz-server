@@ -8,11 +8,12 @@ import (
 
 func restHandleQuestionNext(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	var quizId string
+	var sectionId string
 	// var sectionId string
 	queryValues := r.URL.Query()
 	if queryValues != nil {
 		quizId = queryValues.Get("quiz-id")
-		// TODO: sectionId = queryValues.Get("section-id")
+		sectionId = queryValues.Get("section-id")
 	}
 
 	if len(quizId) == 0 {
@@ -28,7 +29,7 @@ func restHandleQuestionNext(w http.ResponseWriter, r *http.Request, ps httproute
 		return
 	}
 
-	question := q.GetRandomQuestion()
+	question := q.GetRandomQuestion(sectionId)
 	if question == nil {
 		http.Error(w, "question not found", http.StatusNotFound)
 		return

@@ -124,6 +124,7 @@ func (self *Quiz) buildMapsAndArray() {
 			}
 
 			sectionCountQuestions += len(sub.Questions)
+			s.QuestionsArray = append(s.QuestionsArray, sub.Questions...)
 
 			//Don't use subsection answers as choices if the parent section wants answers-as-choices.
 			//In that case, all questions will instead share answers from all sub-sections.
@@ -152,6 +153,7 @@ func (self *Quiz) buildMapsAndArray() {
 		}
 
 		s.CountQuestions = sectionCountQuestions
+		s.QuestionsArray = append(s.QuestionsArray, s.Questions...)
 	}
 
 }
@@ -276,13 +278,30 @@ func (self *Quiz) GetQuestionAndAnswer(questionId string) *QuestionAndAnswer {
 	return self.questionsMap[questionId]
 }
 
-func (self *Quiz) GetRandomQuestion() *Question {
+func getRandomQuestionFromSlice(questions []*QuestionAndAnswer) *Question {
+	count := len(questions)
+	if (count == 0) {
+		return nil
+	}
+
+	i := rand.Intn(count - 1)
+	var qa *QuestionAndAnswer = questions[i]
+	return &(qa.Question)
+}
+
+func (self *Quiz) GetRandomQuestion(sectionId string) *Question {
 	if self.questionsMap == nil {
 		return nil
 	}
 
-	count := len(self.questionsArray)
-	i := rand.Intn(count - 1)
-	var qa *QuestionAndAnswer = self.questionsArray[i]
-	return &(qa.Question)
+	if len(sectionId) == 0 {
+		return getRandomQuestionFromSlice(self.questionsArray)
+	} else {
+		section, ok := self.sectionsMap[sectionId];
+		if (!ok) {
+			return nil
+		}
+
+		return getRandomQuestionFromSlice(section.QuestionsArray)
+	}
 }
