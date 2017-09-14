@@ -10,6 +10,7 @@ import (
 	"quiz"
 	"strconv"
 	"strings"
+	"sort"
 )
 
 func filesWithExtension(dirPath string, ext string) ([]string, error) {
@@ -73,6 +74,20 @@ func loadQuizzes() (map[string]*quiz.Quiz, error) {
 	return quizzes, nil
 }
 
+// See https://gobyexample.com/sorting-by-functions
+type QuizListByTitle []*quiz.Quiz
+func (s QuizListByTitle) Len() int{
+	return len(s)
+}
+
+func (s QuizListByTitle) Swap(i, j int) {
+	s[i], s[j] = s[j], s[i]
+}
+
+func (s QuizListByTitle) Less(i, j int) bool {
+	return s[i].Title < s[j].Title
+}
+
 // TODO: Is there instead some way to output just the top-level of the JSON,
 // and only some of the fields?
 func buildQuizzesSimple(quizzes map[string]*quiz.Quiz) []*quiz.Quiz {
@@ -87,6 +102,8 @@ func buildQuizzesSimple(quizzes map[string]*quiz.Quiz) []*quiz.Quiz {
 		result = append(result, &simple)
 	}
 
+	sort.Sort(QuizListByTitle(result))
+
 	return result
 }
 
@@ -97,6 +114,8 @@ func buildQuizzesFull(quizzes map[string]*quiz.Quiz) []*quiz.Quiz {
 	for _, q := range quizzes {
 		result = append(result, q)
 	}
+
+	sort.Sort(QuizListByTitle(result))
 
 	return result
 }
