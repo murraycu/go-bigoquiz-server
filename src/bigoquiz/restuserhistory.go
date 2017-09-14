@@ -11,7 +11,24 @@ import (
 	"google.golang.org/appengine/datastore"
 	"db"
 	"google.golang.org/appengine"
+	"sort"
 )
+
+
+// See https://gobyexample.com/sorting-by-functions
+type StatsListByTitle []*user.Stats
+
+func (s StatsListByTitle) Len() int{
+	return len(s)
+}
+
+func (s StatsListByTitle) Swap(i, j int) {
+	s[i], s[j] = s[j], s[i]
+}
+
+func (s StatsListByTitle) Less(i, j int) bool {
+	return s[i].QuizTitle < s[j].QuizTitle
+}
 
 func restHandleUserHistoryAll(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	loginInfo, err := getLoginInfoFromSessionAndDb(r, w)
@@ -47,6 +64,10 @@ func restHandleUserHistoryAll(w http.ResponseWriter, r *http.Request, ps httprou
 			info.SetQuizStats(q.Id, stats)
 		}
 	}
+
+	// Sort them alphabetically by quiz title,
+	// a a convenience to the client.
+	sort.Sort(StatsListByTitle(info.Stats))
 
 	jsonStr, err := json.Marshal(info)
 	if err != nil {
