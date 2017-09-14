@@ -33,11 +33,7 @@ func init() {
 	gob.Register(&oauth2.Token{})
 	gob.Register(&datastore.Key{})
 
-	quizzes, err = loadQuizzes()
-	if err != nil {
-		log.Printf("Could not load quiz files: %v\n", err)
-		return
-	}
+	loadQuizzesAndCaches()
 
 	router := httprouter.New()
 	router.GET("/api/quiz", restHandleQuizAll)
@@ -72,3 +68,17 @@ func init() {
 }
 
 var quizzes map[string]*quiz.Quiz
+var quizzesListSimple []*quiz.Quiz
+var quizzesListFull []*quiz.Quiz
+
+func loadQuizzesAndCaches() {
+	var err error
+	quizzes, err = loadQuizzes()
+	if err != nil {
+		log.Printf("Could not load quiz files: %v\n", err)
+		return
+	}
+
+	quizzesListSimple = buildQuizzesSimple(quizzes)
+	quizzesListFull = buildQuizzesFull(quizzes)
+}

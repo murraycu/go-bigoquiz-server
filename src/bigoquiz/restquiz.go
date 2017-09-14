@@ -130,11 +130,9 @@ func restHandleQuizAll(w http.ResponseWriter, r *http.Request, _ httprouter.Para
 
 	var quizArray []*quiz.Quiz = nil
 	if listOnly {
-		// TODO: Cache this.
-		quizArray = buildQuizzesSimple(quizzes)
+		quizArray = quizzesListSimple
 	} else {
-		// TODO: Cache this.
-		quizArray = buildQuizzesFull(quizzes)
+		quizArray = quizzesListFull
 	}
 
 	w.Header().Set("Content-Type", "application/json") // normal header
