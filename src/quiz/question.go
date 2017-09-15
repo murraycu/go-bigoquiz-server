@@ -24,7 +24,8 @@ type Question struct {
 	Choices []*Text `json:"choices,omitempty"`
 }
 
-// Set extra titles for convenience.
+/** Set extra titles for convenience.
+ */
 func (self *Question) SetTitles(quizTitle string, briefSection *HasIdAndTitle, subSection *SubSection) {
 	self.QuizTitle = quizTitle
 	self.Section = briefSection
@@ -32,4 +33,28 @@ func (self *Question) SetTitles(quizTitle string, briefSection *HasIdAndTitle, s
 	if subSection != nil {
 		self.SubSection = &(subSection.HasIdAndTitle)
 	}
+}
+
+/** Set extra details for the question,
+ * such as quiz and section titles,
+ * so the client doesn't need to look these up separately.
+ */
+func (self *Question) SetQuestionExtras(q *Quiz) {
+	var briefSection *HasIdAndTitle
+	var subSection *SubSection
+
+	section := q.GetSection(self.SectionId)
+	if section != nil {
+		// Create a simpler version of the Section information:
+		briefSection = new(HasIdAndTitle)
+		briefSection.Id = section.Id
+		briefSection.Title = section.Title
+		briefSection.Link = section.Link
+
+		subSection = section.GetSubSection(self.SubSectionId)
+	}
+
+	self.SetTitles(q.Title, briefSection, subSection)
+
+	self.QuizUsesMathML = q.UsesMathML
 }

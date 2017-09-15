@@ -341,34 +341,11 @@ func generateSubmissionResult(result bool, quiz *quiz.Quiz, correctAnswer *quiz.
 	}
 
 	if nextQuestion != nil {
-		setQuestionExtras(nextQuestion, quiz)
+		nextQuestion.SetQuestionExtras(quiz)
 		submissionResult.NextQuestion = *nextQuestion
 	}
 
 	return &submissionResult, nil
-}
-
-// Set extra details for the question,
-// such as quiz and section titles,
-// so the client doesn't need to look these up separately.
-func setQuestionExtras(question *quiz.Question, q *quiz.Quiz) {
-	var briefSection *quiz.HasIdAndTitle
-	var subSection *quiz.SubSection
-
-	section := q.GetSection(question.SectionId)
-	if section != nil {
-		// Create a simpler version of the Section information:
-		briefSection = new(quiz.HasIdAndTitle)
-		briefSection.Id = section.Id
-		briefSection.Title = section.Title
-		briefSection.Link = section.Link
-
-		subSection = section.GetSubSection(question.SubSectionId)
-	}
-
-	question.SetTitles(q.Title, briefSection, subSection)
-
-	question.QuizUsesMathML = q.UsesMathML
 }
 
 func getNextQuestionFromUserStats(sectionId string, quiz *quiz.Quiz, stats map[string]*user.Stats) *quiz.Question {
