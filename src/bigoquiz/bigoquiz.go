@@ -24,6 +24,7 @@ func init() {
 	// using the secret key from the configuration file.
 	store = sessions.NewCookieStore([]byte(conf.CookieKey))
 	store.Options.HttpOnly = true
+	store.Options.Secure = true // Only send via HTTPS connections, not HTTP.
 
 	// Gob encoding for gorilla/sessions
 	// Otherwise, we will see errors such as this when calling store.Save():
