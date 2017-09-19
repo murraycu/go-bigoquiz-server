@@ -188,7 +188,7 @@ func restHandleQuizSectionsByQuizId(w http.ResponseWriter, r *http.Request, ps h
 	listOnly := false
 	queryValues := r.URL.Query()
 	if queryValues != nil {
-		listOnlyStr := queryValues.Get("list_only")
+		listOnlyStr := queryValues.Get("list-only")
 		listOnly, _ = strconv.ParseBool(listOnlyStr)
 	}
 
