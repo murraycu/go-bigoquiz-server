@@ -99,6 +99,8 @@ func LoadQuiz(absFilePath string, id string) (*Quiz, error) {
  * and that the questions have the correct choices.
  */
 func (self *Quiz) process() {
+	self.addReverseSections()
+
 	self.questionsMap = make(map[string]*QuestionAndAnswer)
 	self.questionsArray = make([]*QuestionAndAnswer, 0, len(self.Questions))
 	self.sectionsMap = make(map[string]*Section)
@@ -156,6 +158,19 @@ func (self *Quiz) process() {
 		s.QuestionsArray = append(s.QuestionsArray, s.Questions...)
 	}
 
+}
+
+/** Optionally generate reverse sections.
+ */
+func (self *Quiz) addReverseSections() {
+	reverseSections := make([]*Section, 0, 0)
+	for _, s := range self.Sections {
+		if s.AndReverse {
+			reverseSections = append(reverseSections, s.createReverse())
+		}
+	}
+
+	self.Sections = append(self.Sections, reverseSections...)
 }
 
 /** Make sure that questions have their section ID, sub-section IDs, and choices.
