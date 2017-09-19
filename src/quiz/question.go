@@ -1,7 +1,11 @@
 package quiz
 
 type Question struct {
-	HasIdAndTitle
+	Id    string `json:"id" xml:"id,attr"`
+
+	// A URL.
+	Link string `json:"link,omitempty" xml:"link"`
+
 	Text Text `json:"text,omitempty" xml:"text"`
 
 	// These are not in the XML.
