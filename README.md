@@ -28,6 +28,17 @@ It is not yet live at bigoquiz.com.
 
 ### Running locally
 
+    Change the configuration by applying the patch:
+    $ patch -p1 < ./0001-debugging-Use-localhost.patch
+      (Don't git push this)
+
+    Use an appropriate oauth2 config file:
+    (These cannot be added to the git repository.)
+    $ cp src/bigoquiz/config_google_oauth2_credentials_secret.json src/bigoquiz/config_google_oauth2_credentials_secret.json.backup
+    $ cp src/bigoquiz/config_google_oauth2_credentials_secret.json.local src/bigoquiz/config_google_oauth2_credentials_secret.json
+
+
+    Then start the local server:
     $ dev_appserver.py src/bigoquiz
 
 [1]: https://developers.google.com/appengine
