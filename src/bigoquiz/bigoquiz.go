@@ -13,6 +13,16 @@ import (
 	"quiz"
 )
 
+const PATH_PARAM_QUIZ_ID = "quizId"
+const PATH_PARAM_QUESTION_ID = "questionId"
+
+const QUERY_PARAM_QUIZ_ID = "quiz-id"
+const QUERY_PARAM_SECTION_ID = "section-id"
+const QUERY_PARAM_QUESTION_ID = "question-id"
+const QUERY_PARAM_LIST_ONLY = "list-only"
+const QUERY_PARAM_ANSWER = "answer"
+const QUERY_PARAM_NEXT_QUESTION_SECTION_ID = "next-question-section-id"
+
 func init() {
 	conf, err := config.GenerateConfig()
 	if err != nil {
@@ -38,16 +48,16 @@ func init() {
 
 	router := httprouter.New()
 	router.GET("/api/quiz", restHandleQuizAll)
-	router.GET("/api/quiz/:quizId", restHandleQuizById)
-	router.GET("/api/quiz/:quizId/section", restHandleQuizSectionsByQuizId)
-	router.GET("/api/quiz/:quizId/question/:questionId", restHandleQuizQuestionById)
+	router.GET("/api/quiz/:" + PATH_PARAM_QUIZ_ID, restHandleQuizById)
+	router.GET("/api/quiz/:" + PATH_PARAM_QUIZ_ID + "/section", restHandleQuizSectionsByQuizId)
+	router.GET("/api/quiz/:" + PATH_PARAM_QUIZ_ID + "/question/:" + PATH_PARAM_QUESTION_ID, restHandleQuizQuestionById)
 
 	router.GET("/api/question/next", restHandleQuestionNext)
 
 	router.GET("/api/user", restHandleUser)
 
 	router.GET("/api/user-history", restHandleUserHistoryAll)
-	router.GET("/api/user-history/:quizId", restHandleUserHistoryByQuizId)
+	router.GET("/api/user-history/:" + PATH_PARAM_QUIZ_ID, restHandleUserHistoryByQuizId)
 	router.POST("/api/user-history/submit-answer", restHandleUserHistorySubmitAnswer)
 	router.POST("/api/user-history/submit-dont-know-answer", restHandleUserHistorySubmitDontKnowAnswer)
 	router.POST("/api/user-history/reset-sections", restHandleUserHistoryResetSections)

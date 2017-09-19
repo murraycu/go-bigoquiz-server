@@ -12,8 +12,8 @@ func restHandleQuestionNext(w http.ResponseWriter, r *http.Request, ps httproute
 	// var sectionId string
 	queryValues := r.URL.Query()
 	if queryValues != nil {
-		quizId = queryValues.Get("quiz-id")
-		sectionId = queryValues.Get("section-id")
+		quizId = queryValues.Get(QUERY_PARAM_QUIZ_ID)
+		sectionId = queryValues.Get(QUERY_PARAM_SECTION_ID)
 	}
 
 	if len(quizId) == 0 {

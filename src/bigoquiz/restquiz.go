@@ -125,7 +125,7 @@ func restHandleQuizAll(w http.ResponseWriter, r *http.Request, _ httprouter.Para
 	listOnly := false
 	queryValues := r.URL.Query()
 	if queryValues != nil {
-		listOnlyStr := queryValues.Get("list-only")
+		listOnlyStr := queryValues.Get(QUERY_PARAM_LIST_ONLY)
 		listOnly, _ = strconv.ParseBool(listOnlyStr)
 	}
 
@@ -156,7 +156,7 @@ func getQuiz(quizId string) *quiz.Quiz {
 }
 
 func restHandleQuizById(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	quizId := ps.ByName("quizId")
+	quizId := ps.ByName(PATH_PARAM_QUIZ_ID)
 	if quizId == "" {
 		// This makes no sense. restHandleQuizAll() should have been called.
 		http.Error(w, "Empty quiz ID", http.StatusInternalServerError)
@@ -188,11 +188,11 @@ func restHandleQuizSectionsByQuizId(w http.ResponseWriter, r *http.Request, ps h
 	listOnly := false
 	queryValues := r.URL.Query()
 	if queryValues != nil {
-		listOnlyStr := queryValues.Get("list-only")
+		listOnlyStr := queryValues.Get(QUERY_PARAM_LIST_ONLY)
 		listOnly, _ = strconv.ParseBool(listOnlyStr)
 	}
 
-	quizId := ps.ByName("quizId")
+	quizId := ps.ByName(PATH_PARAM_QUIZ_ID)
 	if quizId == "" {
 		// This makes no sense. restHandleQuizAll() should have been called.
 		http.Error(w, "Empty quiz ID", http.StatusInternalServerError)
@@ -230,14 +230,14 @@ func restHandleQuizSectionsByQuizId(w http.ResponseWriter, r *http.Request, ps h
 }
 
 func restHandleQuizQuestionById(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	quizId := ps.ByName("quizId")
+	quizId := ps.ByName(PATH_PARAM_QUIZ_ID)
 	if quizId == "" {
 		// This makes no sense. restHandleQuizAll() should have been called.
 		http.Error(w, "Empty quiz ID", http.StatusInternalServerError)
 		return
 	}
 
-	questionId := ps.ByName("questionId")
+	questionId := ps.ByName(PATH_PARAM_QUESTION_ID)
 	if questionId == "" {
 		// This makes no sense.
 		http.Error(w, "Empty question ID", http.StatusInternalServerError)

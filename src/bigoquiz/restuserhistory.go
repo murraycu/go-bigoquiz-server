@@ -81,7 +81,7 @@ func restHandleUserHistoryAll(w http.ResponseWriter, r *http.Request, ps httprou
 }
 
 func restHandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	quizId := ps.ByName("quizId")
+	quizId := ps.ByName(PATH_PARAM_QUIZ_ID)
 	if quizId == "" {
 		// This makes no sense. restHandleQuizAll() should have been called.
 		http.Error(w, "Empty quiz ID", http.StatusInternalServerError)
@@ -132,10 +132,10 @@ func restHandleUserHistorySubmitAnswer(w http.ResponseWriter, r *http.Request, p
 
 	queryValues := r.URL.Query()
 	if queryValues != nil {
-		quizId = queryValues.Get("quiz-id")
-		questionId = queryValues.Get("question-id")
-		answer = queryValues.Get("answer")
-		nextQuestionSectionId = queryValues.Get("next-question-section-id")
+		quizId = queryValues.Get(QUERY_PARAM_QUIZ_ID)
+		questionId = queryValues.Get(QUERY_PARAM_QUESTION_ID)
+		answer = queryValues.Get(QUERY_PARAM_ANSWER)
+		nextQuestionSectionId = queryValues.Get(QUERY_PARAM_NEXT_QUESTION_SECTION_ID)
 	}
 
 	qa := getQuestionAndAnswer(quizId, questionId)
@@ -170,9 +170,9 @@ func restHandleUserHistorySubmitDontKnowAnswer(w http.ResponseWriter, r *http.Re
 
 	queryValues := r.URL.Query()
 	if queryValues != nil {
-		quizId = queryValues.Get("quiz-id")
-		questionId = queryValues.Get("question-id")
-		nextQuestionSectionId = queryValues.Get("next-question-section-id")
+		quizId = queryValues.Get(QUERY_PARAM_QUIZ_ID)
+		questionId = queryValues.Get(QUERY_PARAM_QUESTION_ID)
+		nextQuestionSectionId = queryValues.Get(QUERY_PARAM_NEXT_QUESTION_SECTION_ID)
 	}
 
 	qa := getQuestionAndAnswer(quizId, questionId)
@@ -205,7 +205,7 @@ func restHandleUserHistoryResetSections(w http.ResponseWriter, r *http.Request, 
 
 	queryValues := r.URL.Query()
 	if queryValues != nil {
-		quizId = queryValues.Get("quiz-id")
+		quizId = queryValues.Get(QUERY_PARAM_QUIZ_ID)
 	}
 
 	if len(quizId) == 0 {
