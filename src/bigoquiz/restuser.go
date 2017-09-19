@@ -1,15 +1,15 @@
 package bigoquiz
 
 import (
+	"db"
 	"encoding/json"
+	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"golang.org/x/oauth2"
+	"google.golang.org/appengine"
+	"google.golang.org/appengine/datastore"
 	"net/http"
 	"user"
-	"google.golang.org/appengine/datastore"
-	"google.golang.org/appengine"
-	"fmt"
-	"db"
 )
 
 func restHandleUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {

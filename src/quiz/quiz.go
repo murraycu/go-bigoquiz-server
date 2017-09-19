@@ -35,17 +35,16 @@ func (self *Quiz) GetAnswer(questionId string) *Text {
 	}
 
 	qa, ok := self.questionsMap[questionId]
-	if (!ok) {
+	if !ok {
 		return nil
 	}
 
-	if (qa == nil) {
+	if qa == nil {
 		return nil
 	}
 
 	return &qa.Answer
 }
-
 
 func (self *Quiz) GetSection(sectionId string) *Section {
 	if self.sectionsMap == nil {
@@ -53,11 +52,11 @@ func (self *Quiz) GetSection(sectionId string) *Section {
 	}
 
 	s, ok := self.sectionsMap[sectionId]
-	if (!ok) {
+	if !ok {
 		return nil
 	}
 
-	if (s == nil) {
+	if s == nil {
 		return nil
 	}
 
@@ -281,7 +280,7 @@ func (self *Quiz) GetQuestionAndAnswer(questionId string) *QuestionAndAnswer {
 
 func getRandomQuestionFromSlice(questions []*QuestionAndAnswer) *Question {
 	count := len(questions)
-	if (count == 0) {
+	if count == 0 {
 		return nil
 	}
 
@@ -298,8 +297,8 @@ func (self *Quiz) GetRandomQuestion(sectionId string) *Question {
 	if len(sectionId) == 0 {
 		return getRandomQuestionFromSlice(self.questionsArray)
 	} else {
-		section, ok := self.sectionsMap[sectionId];
-		if (!ok) {
+		section, ok := self.sectionsMap[sectionId]
+		if !ok {
 			return nil
 		}
 

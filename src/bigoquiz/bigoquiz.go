@@ -1,15 +1,15 @@
 package bigoquiz
 
 import (
+	"config"
+	"encoding/gob"
 	"github.com/gorilla/sessions"
 	"github.com/julienschmidt/httprouter"
 	"github.com/rs/cors"
 	"golang.org/x/oauth2"
-	"net/http"
-	"encoding/gob"
-	"log"
-	"config"
 	"google.golang.org/appengine/datastore"
+	"log"
+	"net/http"
 	"quiz"
 )
 
@@ -59,8 +59,8 @@ func init() {
 	// Allow Javascript requests from some domains other than the one serving this API.
 	// The browser issue a CORS request before actually issuing the HTTP request.
 	c := cors.New(cors.Options{
-		AllowedOrigins: []string{config.BaseUrl},
-		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
+		AllowedOrigins:   []string{config.BaseUrl},
+		AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
 		AllowCredentials: true, // Note: The client needs to specify this too, or cookies won't be sent.
 	})
 

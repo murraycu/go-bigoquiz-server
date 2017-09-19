@@ -15,7 +15,7 @@ type Question struct {
 	// We don't use the Section and SubSection types here,
 	// because we don't want to recurse infinitely into questions and
 	// their sections and then their questions again.
-	QuizTitle string `json:"quizTitle"`
+	QuizTitle  string         `json:"quizTitle"`
 	Section    *HasIdAndTitle `json:"section,omitempty"`
 	SubSection *HasIdAndTitle `json:"subSection,omitempty"`
 

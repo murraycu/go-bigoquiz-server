@@ -40,16 +40,16 @@ type Stats struct {
 	// These are from the quiz, for convenience
 	// so they don't need to be in the database.
 	// TODO: Make sure they are set for per-section stats.
-	CountQuestions int `json:"countQuestions" datastore:"-"`
-	QuizTitle    string `json:"quizTitle,omitEmpty" datastore:"-"`
-	SectionTitle string `json:"sectionTitle,omitEmpty" datastore:"-"`
+	CountQuestions int    `json:"countQuestions" datastore:"-"`
+	QuizTitle      string `json:"quizTitle,omitEmpty" datastore:"-"`
+	SectionTitle   string `json:"sectionTitle,omitEmpty" datastore:"-"`
 }
 
 /** Add the values from userStat to this instance,
 * returning a combined UserStats,
 * ignoring the question histories,
 * without changing this instance.
-*/
+ */
 func (self *Stats) CreateCombinedUserStatsWithoutQuestionHistories(stats *Stats) *Stats {
 	if stats == nil {
 		return self
@@ -84,7 +84,7 @@ func (self *Stats) getQuestionHistoryForQuestionId(questionId string) (*Question
 	// TODO: Performance.
 	// We would ideally use a map here,
 	// but Go's datastore library does not allow that as an entity field type.
-	for _, qh := range(self.QuestionHistories) {
+	for _, qh := range self.QuestionHistories {
 		if qh.QuestionId == questionId {
 			return &qh, true
 		}
@@ -97,37 +97,37 @@ func (self *Stats) UpdateProblemQuestion(question *quiz.Question, answerIsCorrec
 	questionId := question.Id
 	if len(questionId) == 0 {
 		// Log.error("updateProblemQuestion(): questionId is empty.");
-		return;
+		return
 	}
 
-	firstTimeAsked := false;
-	firstTimeCorrect := false;
+	firstTimeAsked := false
+	firstTimeCorrect := false
 
-	questionHistory, ok := self.getQuestionHistoryForQuestionId(questionId);
+	questionHistory, ok := self.getQuestionHistoryForQuestionId(questionId)
 
 	//Add a new one, if necessary:
 	if !ok {
-		firstTimeAsked = true;
+		firstTimeAsked = true
 		if answerIsCorrect {
-			firstTimeCorrect = true;
+			firstTimeCorrect = true
 		}
 
 		questionHistory = new(QuestionHistory)
-		questionHistory.QuestionId = question.Id;
-		self.QuestionHistories = append(self.QuestionHistories, *questionHistory);
+		questionHistory.QuestionId = question.Id
+		self.QuestionHistories = append(self.QuestionHistories, *questionHistory)
 	} else if answerIsCorrect && !questionHistory.AnsweredCorrectlyOnce {
-		firstTimeCorrect = true;
+		firstTimeCorrect = true
 	}
 
 	//Increase the wrong-answer count:
-	questionHistory.AdjustCount(answerIsCorrect);
+	questionHistory.AdjustCount(answerIsCorrect)
 
 	if firstTimeAsked {
-		self.CountQuestionsAnsweredOnce++;
+		self.CountQuestionsAnsweredOnce++
 	}
 
 	if firstTimeCorrect {
-		self.CountQuestionsCorrectOnce++;
+		self.CountQuestionsCorrectOnce++
 	}
 
 	//TODO? cacheIsInvalid = true;
@@ -135,12 +135,12 @@ func (self *Stats) UpdateProblemQuestion(question *quiz.Question, answerIsCorrec
 
 func (self *QuestionHistory) AdjustCount(result bool) {
 	if result {
-		self.AnsweredCorrectlyOnce = true;
+		self.AnsweredCorrectlyOnce = true
 	}
 
 	if result {
-		self.CountAnsweredWrong -= 1;
+		self.CountAnsweredWrong -= 1
 	} else {
-		self.CountAnsweredWrong += 1;
+		self.CountAnsweredWrong += 1
 	}
 }

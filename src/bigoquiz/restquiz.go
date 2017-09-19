@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"path/filepath"
 	"quiz"
+	"sort"
 	"strconv"
 	"strings"
-	"sort"
 )
 
 func filesWithExtension(dirPath string, ext string) ([]string, error) {
@@ -76,7 +76,8 @@ func loadQuizzes() (map[string]*quiz.Quiz, error) {
 
 // See https://gobyexample.com/sorting-by-functions
 type QuizListByTitle []*quiz.Quiz
-func (s QuizListByTitle) Len() int{
+
+func (s QuizListByTitle) Len() int {
 	return len(s)
 }
 

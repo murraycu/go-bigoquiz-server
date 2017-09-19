@@ -1,24 +1,23 @@
 package bigoquiz
 
 import (
+	"db"
 	"encoding/json"
+	"fmt"
 	"github.com/julienschmidt/httprouter"
+	"golang.org/x/net/context"
+	"google.golang.org/appengine"
+	"google.golang.org/appengine/datastore"
 	"net/http"
 	"quiz"
-	"user"
-	"fmt"
-	"golang.org/x/net/context"
-	"google.golang.org/appengine/datastore"
-	"db"
-	"google.golang.org/appengine"
 	"sort"
+	"user"
 )
-
 
 // See https://gobyexample.com/sorting-by-functions
 type StatsListByTitle []*user.Stats
 
-func (s StatsListByTitle) Len() int{
+func (s StatsListByTitle) Len() int {
 	return len(s)
 }
 
@@ -201,7 +200,6 @@ func restHandleUserHistorySubmitDontKnowAnswer(w http.ResponseWriter, r *http.Re
 	}
 }
 
-
 func restHandleUserHistoryResetSections(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	var quizId string
 
@@ -249,11 +247,10 @@ func restHandleUserHistoryResetSections(w http.ResponseWriter, r *http.Request, 
 	w.WriteHeader(http.StatusOK)
 }
 
-
 type SubmissionResult struct {
-	Result bool `json:"result"`
-	CorrectAnswer quiz.Text `json:"correctAnswer,omitempty"`
-	NextQuestion quiz.Question `json:"nextQuestion,omitempty"`
+	Result        bool          `json:"result"`
+	CorrectAnswer quiz.Text     `json:"correctAnswer,omitempty"`
+	NextQuestion  quiz.Question `json:"nextQuestion,omitempty"`
 }
 
 func storeAnswerCorrectnessAndGetSubmissionResult(w http.ResponseWriter, r *http.Request, quizId string, questionId string, nextQuestionSectionId string, qa *quiz.QuestionAndAnswer, result bool) (*SubmissionResult, error) {

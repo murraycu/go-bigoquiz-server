@@ -1,14 +1,14 @@
 package config
 
 import (
-	"io/ioutil"
 	"encoding/json"
+	"fmt"
+	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/appengine"
-	"net/http"
-	"golang.org/x/oauth2"
 	"google.golang.org/appengine/log"
-	"fmt"
+	"io/ioutil"
+	"net/http"
 )
 
 const (
@@ -32,8 +32,7 @@ const (
 	credentialsScopeProfile = "profile"
 
 	// See https://developers.google.com/identity/protocols/googlescopes
-	credentialsScopeEmail   = "https://www.googleapis.com/auth/userinfo.email"
-
+	credentialsScopeEmail = "https://www.googleapis.com/auth/userinfo.email"
 )
 
 /** Get general configuration.
@@ -58,7 +57,6 @@ func GenerateConfig() (*Config, error) {
 
 	return &result, nil
 }
-
 
 /** Get an oauth2 Config object based on the secret .json file.
  * See configCredentialsFilename.

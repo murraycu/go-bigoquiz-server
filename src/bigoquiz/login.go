@@ -1,6 +1,8 @@
 package bigoquiz
 
 import (
+	"config"
+	"db"
 	"encoding/json"
 	"github.com/gorilla/sessions"
 	"github.com/julienschmidt/httprouter"
@@ -9,8 +11,6 @@ import (
 	"google.golang.org/appengine/log"
 	"io/ioutil"
 	"net/http"
-	"config"
-	"db"
 )
 
 /** Get an oauth2 URL based on the secret .json file.

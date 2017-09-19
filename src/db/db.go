@@ -1,16 +1,16 @@
 package db
 
 import (
+	"fmt"
 	"golang.org/x/net/context"
+	"golang.org/x/oauth2"
 	"google.golang.org/appengine/datastore"
 	"user"
-	"golang.org/x/oauth2"
-	"fmt"
 )
 
 const (
 	// These are like database table names.
-	DB_KIND_PROFILE = "UserProfile"
+	DB_KIND_PROFILE    = "UserProfile"
 	DB_KIND_USER_STATS = "UserStats"
 )
 
@@ -75,7 +75,6 @@ func GetUserProfileById(c context.Context, userId *datastore.Key) (*user.Profile
 
 	return nil, fmt.Errorf("datastore.Get() failed with key: %v: %v", userId, err)
 }
-
 
 /** Get a map of stats by quiz ID, for all quizzes, from the database.
  * userId may be nil.
@@ -177,7 +176,7 @@ func GetUserStatsForSection(c context.Context, userId *datastore.Key, quizId str
 	// Get all the Stats from the db, for each section:
 	q := GetQueryForUserStatsForQuiz(userId, quizId).
 		Filter("sectionId =", sectionId).
-	    Limit(1)
+		Limit(1)
 	iter := q.Run(c)
 
 	if iter == nil {
@@ -266,7 +265,6 @@ func DeleteUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId str
 
 	return nil
 }
-
 
 func updateProfileFromGoogleUserInfo(profile *user.Profile, userInfo *GoogleUserInfo) {
 	profile.GoogleId = userInfo.Sub

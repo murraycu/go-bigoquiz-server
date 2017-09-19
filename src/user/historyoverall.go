@@ -4,7 +4,7 @@ type HistoryOverall struct {
 	LoginInfo *LoginInfo `json:"loginInfo,omitempty"`
 
 	// Stats per quiz
-	Stats    []*Stats    `json:"stats,omitempty"`
+	Stats []*Stats `json:"stats,omitempty"`
 }
 
 func (self *HistoryOverall) SetQuizStats(quizId string, stats *Stats) {
