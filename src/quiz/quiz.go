@@ -88,17 +88,18 @@ func LoadQuiz(absFilePath string, id string) (*Quiz, error) {
 
 	q.Id = id
 
-	q.buildMapsAndArray()
+	q.process()
 
 	return &q, nil
 }
 
-/** Build a map of all questions in all sections and at the top-level,
+/** Various processing of the quiz after the simple unmarshalling from the XML.
+ * For instance, build a map of all questions in all sections and at the top-level,
  * and a map of sections by section ID.
  * And also make sure that questions have their section ID and sub-section IDs,
  * and that the questions have the correct choices.
  */
-func (self *Quiz) buildMapsAndArray() {
+func (self *Quiz) process() {
 	self.questionsMap = make(map[string]*QuestionAndAnswer)
 	self.questionsArray = make([]*QuestionAndAnswer, 0, len(self.Questions))
 	self.sectionsMap = make(map[string]*Section)
