@@ -547,15 +547,21 @@ func buildUserHistorySections(loginInfo *user.LoginInfo, quiz *quiz.Quiz, mapUse
 	return &result
 }
 
-func fillUserStatsWithTitles(userStats *user.Stats, quiz *quiz.Quiz) {
-	sections := quiz.Sections
-	if sections == nil {
-		return
-	}
-
-	// sectionId := userStats.SectionId
-
+func fillUserStatsWithTitles(userStats *user.Stats, qz *quiz.Quiz) {
 	// Set the titles.
 	// We don't store these in the datastore because we can get them easily from the Quiz.
-	// TODO: for loop over all getTopProblemQuestionHistories() as in gwt-bigoquiz.
+
+	// TODO: Only send the top problem question histories in the JSON,
+	// instead of all of them?
+	for i, _ := range userStats.QuestionHistories {
+		qh := &(userStats.QuestionHistories[i])
+
+		q := qz.GetQuestionAndAnswer(qh.QuestionId)
+		if q == nil {
+			continue
+		}
+
+		qh.QuestionTitle = &(q.Text)
+		qh.SubSectionTitle = q.SubSection.Title
+	}
 }
