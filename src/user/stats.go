@@ -118,10 +118,10 @@ func (self *Stats) UpdateProblemQuestion(question *quiz.Question, answerIsCorrec
 	firstTimeAsked := false
 	firstTimeCorrect := false
 
-	questionHistory, ok := self.getQuestionHistoryForQuestionId(questionId)
+	questionHistory, exists := self.getQuestionHistoryForQuestionId(questionId)
 
 	//Add a new one, if necessary:
-	if !ok {
+	if !exists {
 		firstTimeAsked = true
 		if answerIsCorrect {
 			firstTimeCorrect = true
@@ -129,7 +129,6 @@ func (self *Stats) UpdateProblemQuestion(question *quiz.Question, answerIsCorrec
 
 		questionHistory = new(QuestionHistory)
 		questionHistory.QuestionId = question.Id
-		self.QuestionHistories = append(self.QuestionHistories, *questionHistory)
 	} else if answerIsCorrect && !questionHistory.AnsweredCorrectlyOnce {
 		firstTimeCorrect = true
 	}
@@ -145,6 +144,9 @@ func (self *Stats) UpdateProblemQuestion(question *quiz.Question, answerIsCorrec
 		self.CountQuestionsCorrectOnce++
 	}
 
+	if !exists {
+		self.QuestionHistories = append(self.QuestionHistories, *questionHistory)
+	}
 	//TODO? cacheIsInvalid = true;
 }
 
