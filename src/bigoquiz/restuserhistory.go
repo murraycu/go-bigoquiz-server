@@ -345,12 +345,63 @@ func generateSubmissionResult(result bool, quiz *quiz.Quiz, correctAnswer *quiz.
 	return &submissionResult, nil
 }
 
-func getNextQuestionFromUserStats(sectionId string, quiz *quiz.Quiz, stats map[string]*user.Stats) *quiz.Question {
-	return quiz.GetRandomQuestion("")
+func getNextQuestionFromUserStats(sectionId string, q *quiz.Quiz, stats map[string]*user.Stats) *quiz.Question {
+	const MAX_TRIES int = 10
+	var tries int
+	var question *quiz.Question
+	var questionBestSoFar *quiz.Question
+	var questionBestCountAnsweredWrong int
+
+	for tries < MAX_TRIES {
+		tries += 1
+
+		question = q.GetRandomQuestion(sectionId)
+		if question == nil {
+			continue
+		}
+
+		if questionBestSoFar == nil {
+			questionBestSoFar = question
+		}
+
+		if stats == nil {
+			//Assume this means the user has never answered any question in any section.
+			return question
+		}
+
+		userStats, ok := stats[question.SectionId]
+		if !ok || userStats == nil {
+			//Assume this means the user has never answered any question in the section.
+			return question
+		}
+
+		questionId := question.Id
+
+		//Prioritize questions that have never been asked.
+		if !userStats.GetQuestionWasAnswered(questionId) {
+			return question
+		}
+
+		//Otherwise, try a few times to get a question that
+		//we have got wrong many times:
+		//We could just get the most-wrong answer directly,
+		//but we want some randomness.
+		countAnsweredWrong := userStats.GetQuestionCountAnsweredWrong(questionId)
+		if countAnsweredWrong > questionBestCountAnsweredWrong {
+			questionBestSoFar = question
+			questionBestCountAnsweredWrong = countAnsweredWrong
+		}
+	}
+
+	return questionBestSoFar
 }
 
 func getNextQuestionFromUserStatsForSection(sectionId string, quiz *quiz.Quiz, stats *user.Stats) *quiz.Question {
-	return quiz.GetRandomQuestion(sectionId)
+	//TODO: Avoid this temporary map:
+	m := make(map[string]*user.Stats)
+	m[stats.SectionId] = stats
+
+	return getNextQuestionFromUserStats(sectionId, quiz, m)
 }
 
 /** Update the user.Stats for the question's quiz section, in the database,

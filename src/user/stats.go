@@ -45,6 +45,20 @@ type Stats struct {
 	SectionTitle   string `json:"sectionTitle,omitEmpty" datastore:"-"`
 }
 
+func (self *Stats) GetQuestionCountAnsweredWrong(questionId string) int {
+	qh, ok := self.getQuestionHistoryForQuestionId(questionId)
+	if !ok {
+		return 0
+	}
+
+	return qh.CountAnsweredWrong
+}
+
+func (self *Stats) GetQuestionWasAnswered(questionId string) bool {
+	_, found := self.getQuestionHistoryForQuestionId(questionId)
+	return found
+}
+
 /** Add the values from userStat to this instance,
 * returning a combined UserStats,
 * ignoring the question histories,

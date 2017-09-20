@@ -1,9 +1,12 @@
 package bigoquiz
 
 import (
+	"db"
 	"encoding/json"
 	"github.com/julienschmidt/httprouter"
+	"google.golang.org/appengine"
 	"net/http"
+	"quiz"
 )
 
 func restHandleQuestionNext(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -29,7 +32,41 @@ func restHandleQuestionNext(w http.ResponseWriter, r *http.Request, ps httproute
 		return
 	}
 
-	question := q.GetRandomQuestion(sectionId)
+	userId, err := getUserIdFromSessionAndDb(r, w)
+	if err != nil {
+		http.Error(w, "logged-in check failed.", http.StatusInternalServerError)
+		return
+	}
+
+	var question *quiz.Question
+	if userId == nil {
+		//The user is not logged in,
+		//so just return a random question:
+		question = q.GetRandomQuestion(sectionId)
+	} else {
+		c := appengine.NewContext(r)
+
+		if len(sectionId) == 0 {
+			mapUserStats, err := db.GetUserStatsForQuiz(c, userId, quizId)
+			if err != nil {
+				http.Error(w, "failed getting stats for user", http.StatusInternalServerError)
+				return
+			}
+
+			question = getNextQuestionFromUserStats("", q, mapUserStats)
+		} else {
+			//This special case is a bit copy-and-pasty of the general case with the
+			//map, but it seems more efficient to avoid an unnecessary Map.
+			userStats, err := db.GetUserStatsForSection(c, userId, sectionId, quizId)
+			if err != nil {
+				http.Error(w, "failed getting stats for user for section", http.StatusInternalServerError)
+				return
+			}
+
+			question = getNextQuestionFromUserStatsForSection(sectionId, q, userStats)
+		}
+	}
+
 	if question == nil {
 		http.Error(w, "question not found", http.StatusNotFound)
 		return
