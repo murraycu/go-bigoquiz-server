@@ -241,6 +241,7 @@ func restHandleQuizQuestionById(w http.ResponseWriter, r *http.Request, ps httpr
 	if questionId == "" {
 		// This makes no sense.
 		http.Error(w, "Empty question ID", http.StatusInternalServerError)
+		return
 	}
 
 	q := getQuiz(quizId)
@@ -252,6 +253,7 @@ func restHandleQuizQuestionById(w http.ResponseWriter, r *http.Request, ps httpr
 	qa := q.GetQuestionAndAnswer(questionId)
 	if qa == nil {
 		http.Error(w, "question not found", http.StatusInternalServerError)
+		return
 	}
 
 	qa.Question.SetQuestionExtras(q)
