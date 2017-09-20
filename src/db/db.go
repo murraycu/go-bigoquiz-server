@@ -184,7 +184,7 @@ func GetUserStatsForSection(c context.Context, userId *datastore.Key, quizId str
 	}
 
 	var stats user.Stats
-	_, err := iter.Next(&stats)
+	key, err := iter.Next(&stats)
 	if err != nil {
 		if err == datastore.Done {
 			// It was not found.
@@ -194,6 +194,7 @@ func GetUserStatsForSection(c context.Context, userId *datastore.Key, quizId str
 		}
 	}
 
+	stats.Key = key // See the comment on user.Stats.Key
 	return &stats, nil
 }
 
