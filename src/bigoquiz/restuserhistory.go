@@ -514,7 +514,14 @@ func buildUserHistorySections(loginInfo *user.LoginInfo, quiz *quiz.Quiz, mapUse
 
 		var userStats *user.Stats = nil
 		if mapUserStats != nil {
-			userStats = mapUserStats[sectionId]
+			var ok bool
+			userStats, ok = mapUserStats[sectionId]
+
+			// A sanity check:
+			if ok && userStats != nil && userStats.SectionId != sectionId {
+				// This does not happen, but let's be sure.
+				userStats = nil
+			}
 		}
 
 		if userStats == nil {
