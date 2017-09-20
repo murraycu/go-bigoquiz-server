@@ -540,14 +540,14 @@ func buildUserHistorySections(loginInfo *user.LoginInfo, quiz *quiz.Quiz, mapUse
 		userStats.SectionTitle = section.Title
 		userStats.CountQuestions = section.CountQuestions
 
-		fillUserStatsWithTitles(userStats, quiz)
+		fillUserStatsWithExtras(userStats, quiz)
 		result.Stats = append(result.Stats, userStats)
 	}
 
 	return &result
 }
 
-func fillUserStatsWithTitles(userStats *user.Stats, qz *quiz.Quiz) {
+func fillUserStatsWithExtras(userStats *user.Stats, qz *quiz.Quiz) {
 	// Set the titles.
 	// We don't store these in the datastore because we can get them easily from the Quiz.
 
@@ -561,7 +561,10 @@ func fillUserStatsWithTitles(userStats *user.Stats, qz *quiz.Quiz) {
 			continue
 		}
 
+		// Extras that are useful to the client via JSON
+		// but not stored in the database.
 		qh.QuestionTitle = &(q.Text)
+		qh.SectionId = q.SectionId
 		qh.SubSectionTitle = q.SubSection.Title
 	}
 }
