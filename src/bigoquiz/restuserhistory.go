@@ -396,10 +396,15 @@ func getNextQuestionFromUserStats(sectionId string, q *quiz.Quiz, stats map[stri
 	return questionBestSoFar
 }
 
+/** stats may be nil
+ */
 func getNextQuestionFromUserStatsForSection(sectionId string, quiz *quiz.Quiz, stats *user.Stats) *quiz.Question {
 	//TODO: Avoid this temporary map:
 	m := make(map[string]*user.Stats)
-	m[stats.SectionId] = stats
+
+	if stats != nil {
+		m[stats.SectionId] = stats
+	}
 
 	return getNextQuestionFromUserStats(sectionId, quiz, m)
 }

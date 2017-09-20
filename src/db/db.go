@@ -185,8 +185,13 @@ func GetUserStatsForSection(c context.Context, userId *datastore.Key, quizId str
 
 	var stats user.Stats
 	_, err := iter.Next(&stats)
-	if err != nil && err != datastore.Done {
-		return nil, fmt.Errorf("iter.Next() failed: %v", err)
+	if err != nil {
+		if err == datastore.Done {
+			// It was not found.
+			return nil, nil
+		} else {
+			return nil, fmt.Errorf("iter.Next() failed: %v", err)
+		}
 	}
 
 	return &stats, nil
