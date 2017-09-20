@@ -199,6 +199,14 @@ func GetUserStatsForSection(c context.Context, userId *datastore.Key, quizId str
 }
 
 func StoreUserStats(c context.Context, stats *user.Stats) error {
+	if len(stats.QuizId) == 0 {
+		return fmt.Errorf("StoreUserStats(): QuizId is empty")
+	}
+
+	if len(stats.SectionId) == 0 {
+		return fmt.Errorf("StoreUserStats(): SectionId is empty")
+	}
+
 	key := stats.Key
 	if key == nil {
 		// It hasn't been updated yet.
