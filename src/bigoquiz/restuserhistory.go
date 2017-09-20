@@ -565,6 +565,11 @@ func fillUserStatsWithExtras(userStats *user.Stats, qz *quiz.Quiz) {
 		// but not stored in the database.
 		qh.QuestionTitle = &(q.Text)
 		qh.SectionId = q.SectionId
-		qh.SubSectionTitle = q.SubSection.Title
+
+		if q.SubSection != nil {
+			qh.SubSectionTitle = q.SubSection.Title
+		} else {
+			qh.SubSectionTitle = ""
+		}
 	}
 }
