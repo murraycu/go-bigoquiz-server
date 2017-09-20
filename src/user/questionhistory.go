@@ -1,11 +1,11 @@
 package user
 
 type QuestionHistory struct {
-	QuestionId string
+	QuestionId string `json:"questionId,omitempty" datastore:"questionId"`
 
-	AnsweredCorrectlyOnce bool
+	AnsweredCorrectlyOnce bool `json:"answeredCorrectlyOnce" datastore:"answeredCorrectlyOnce"`
 
 	//Decrements once for each time the user answers it correctly.
 	//Increments once for each time the user answers it wrongly.
-	CountAnsweredWrong int
+	CountAnsweredWrong int `json:"countAnsweredWrong" datastore:"countAnsweredWrong"`
 }

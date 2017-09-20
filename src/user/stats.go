@@ -36,7 +36,7 @@ type Stats struct {
 	// (either QuestionHistories map[string]*QuestionHistory or QuestionHistories map[string]QuestionHistory )
 	// Also, Go's datastore API (at least the appengine fork of it)
 	// doesn't let us use []*QuestionHistory - only []QuestionHistory.
-	QuestionHistories []QuestionHistory
+	QuestionHistories []QuestionHistory `json:"questionHistories,omitEmpty" datastore:"questionHistories"`
 
 	// These are from the quiz, for convenience
 	// so they don't need to be in the database.
