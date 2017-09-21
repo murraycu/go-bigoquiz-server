@@ -104,6 +104,13 @@ func GetUserStats(c context.Context, userId *datastore.Key) (map[string]*user.St
 		}
 
 		if err != nil {
+			if _, ok := err.(*datastore.ErrFieldMismatch); ok {
+				// Ignore these errors during development,
+				// TODO: Remove this for production,
+				// because it then gives us a Stats instance in an unpredictable state.
+				continue
+			}
+
 			return nil, fmt.Errorf("iter.Next() failed: %v", err)
 		}
 
@@ -161,6 +168,13 @@ func GetUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string
 		}
 
 		if err != nil {
+			if _, ok := err.(*datastore.ErrFieldMismatch); ok {
+				// Ignore these errors during development,
+				// TODO: Remove this for production,
+				// because it then gives us a Stats instance in an unpredictable state.
+				continue
+			}
+
 			return nil, fmt.Errorf("iter.Next() failed: %v", err)
 		}
 
@@ -190,7 +204,13 @@ func GetUserStatsForSection(c context.Context, userId *datastore.Key, quizId str
 			// It was not found.
 			return nil, nil
 		} else {
-			return nil, fmt.Errorf("iter.Next() failed: %v", err)
+			if _, ok := err.(*datastore.ErrFieldMismatch); ok {
+				// Ignore these errors during development,
+				// TODO: Remove this for production,
+				// because it then gives us a Stats instance in an unpredictable state.
+			} else {
+				return nil, fmt.Errorf("iter.Next() failed: %v", err)
+			}
 		}
 	}
 
@@ -267,6 +287,13 @@ func DeleteUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId str
 		}
 
 		if err != nil {
+			if _, ok := err.(*datastore.ErrFieldMismatch); ok {
+				// Ignore these errors during development,
+				// TODO: Remove this for production,
+				// because it then gives us a Stats instance in an unpredictable state.
+				continue
+			}
+
 			return fmt.Errorf("iter.Next() failed: %v", err)
 		}
 
