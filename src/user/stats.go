@@ -99,9 +99,10 @@ func (self *Stats) getQuestionHistoryForQuestionId(questionId string) (*Question
 	// TODO: Performance.
 	// We would ideally use a map here,
 	// but Go's datastore library does not allow that as an entity field type.
-	for _, qh := range self.QuestionHistories {
+	for i, _ := range self.QuestionHistories {
+		qh := &self.QuestionHistories[i]
 		if qh.QuestionId == questionId {
-			return &qh, true
+			return qh, true
 		}
 	}
 
