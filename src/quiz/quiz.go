@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"math/rand"
 	"os"
+	"time"
 )
 
 const maxChoicesFromAnswers = 6
@@ -278,9 +279,10 @@ func getIndexInArray(array []*Text, str *Text) (int, bool) {
 }
 
 func shuffle(array []*Text) {
+	r := rand.New(rand.NewSource(time.Now().Unix()))
 
 	for i := len(array) - 1; i > 0; i-- {
-		j := rand.Intn(i + 1)
+		j := r.Intn(i + 1)
 		array[i], array[j] = array[j], array[i]
 	}
 }
