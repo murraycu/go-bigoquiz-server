@@ -250,17 +250,17 @@ func reduceChoices(choices []*Text, answer *Text) []*Text {
 	copy(result, choices)
 	shuffle(result)
 
-	answerIndex, ok := getIndexInArray(choices, answer)
+	answerIndex, ok := getIndexInArray(result, answer)
 	if !ok {
 		return nil
 	}
 
 	if answerIndex >= maxChoicesFromAnswers {
-		result = choices[0 : maxChoicesFromAnswers-1]
+		result = result[0 : maxChoicesFromAnswers-1]
 		result = append(result, answer)
 		shuffle(result)
 	} else {
-		result = choices[0:maxChoicesFromAnswers]
+		result = result[0:maxChoicesFromAnswers]
 	}
 
 	return result
