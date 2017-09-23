@@ -88,6 +88,20 @@ func LoadQuiz(absFilePath string, id string) (*Quiz, error) {
 
 	q.Id = id
 
+	// Deal with quizzes that have no sections, with just quizzes at the top-level:
+	if len(q.Sections) == 0 {
+		// Add a virtual section, so we have somewhere to put the questions.
+		// This lets a quiz have just questions with no sections.
+		// The generated section will have the same id and title as the quiz itself.
+		var section Section
+		section.Id = q.Id
+		section.Title = q.Title
+		section.Questions = q.Questions
+		q.Questions = nil
+
+		q.Sections = append(q.Sections, &section)
+	}
+
 	q.process()
 
 	return &q, nil
