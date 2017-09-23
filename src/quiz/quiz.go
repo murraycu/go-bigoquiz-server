@@ -13,7 +13,8 @@ const maxChoicesFromAnswers = 6
 
 type Quiz struct {
 	HasIdAndTitle
-	IsPrivate bool `json:"isPrivate" xml:"is_private,attr"`
+	IsPrivate        bool `json:"isPrivate" xml:"is_private,attr"`
+	AnswersAsChoices bool `json:"answersAsChoices" xml:"answers_as_choices,attr"`
 
 	Sections  []*Section           `json:"sections,omitempty" xml:"section"`
 	Questions []*QuestionAndAnswer `json:"questions,omitempty" xml:"question"`
@@ -97,6 +98,7 @@ func LoadQuiz(absFilePath string, id string) (*Quiz, error) {
 		section.Id = q.Id
 		section.Title = q.Title
 		section.Questions = q.Questions
+		section.AnswersAsChoices = q.AnswersAsChoices
 		q.Questions = nil
 
 		q.Sections = append(q.Sections, &section)
