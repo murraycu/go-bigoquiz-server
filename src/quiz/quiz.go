@@ -13,7 +13,7 @@ const maxChoicesFromAnswers = 6
 
 type Quiz struct {
 	HasIdAndTitle
-	IsPrivate bool `json:"isPrivate" xml:"isPrivate"`
+	IsPrivate bool `json:"isPrivate" xml:"is_private,attr"`
 
 	Sections  []*Section           `json:"sections,omitempty" xml:"section"`
 	Questions []*QuestionAndAnswer `json:"questions,omitempty" xml:"question"`
