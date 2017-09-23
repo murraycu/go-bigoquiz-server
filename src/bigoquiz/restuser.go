@@ -34,7 +34,7 @@ func restHandleUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 func getLoginInfoFromSessionAndDb(r *http.Request, w http.ResponseWriter) (*user.LoginInfo, error) {
 	session, err := store.Get(r, defaultSessionID)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("getLoginInfoFromSessionAndDb(): store.Get() failed: %v", err)
 	}
 
 	var loginInfo user.LoginInfo

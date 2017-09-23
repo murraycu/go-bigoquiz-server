@@ -39,7 +39,7 @@ func StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, t
 		}
 	} else if err != nil {
 		// An unexpected error.
-		return nil, err
+		return nil, fmt.Errorf("datastore.Put() failed: %v", err)
 	} else {
 		// Update the Profile:
 		updateProfileFromGoogleUserInfo(&profile, &userInfo)

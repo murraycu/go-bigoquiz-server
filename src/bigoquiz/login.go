@@ -81,13 +81,16 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	var userinfo db.GoogleUserInfo
 	err = json.Unmarshal(body, &userinfo)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Errorf(c, "Unmarshaling of JSON from oauth2 callback failed:'%v'\n", err)
+		http.Error(w, "Unmarshaling of JSON from oauth2 callback failed: "+err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	// Store in the database:
 	userId, err := db.StoreGoogleLoginInUserProfile(c, userinfo, token)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Errorf(c, "StoreGoogleLoginInUserProfile() failed:'%v'\n", err)
+		http.Error(w, "StoreGoogleLoginInUserProfile() failed: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
 
@@ -96,6 +99,7 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	session, err := store.New(r, defaultSessionID)
 	if err != nil {
 		loginFailed(c, "Could not create new session", err, w, r)
+		return
 	}
 
 	session.Values[oauthTokenSessionKey] = token
@@ -103,6 +107,7 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 
 	if err := session.Save(r, w); err != nil {
 		loginFailed(c, "Could not save session", err, w, r)
+		return
 	}
 
 	// Redirect the user back to a page to show they are logged in:
