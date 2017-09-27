@@ -32,7 +32,7 @@
             <answer>For instance, a|b</answer>
         </question>
 
-        <question id="compilers-scanners-regex-syntax-alternation">
+        <question id="compilers-scanners-regex-syntax-concatenation">
             <text>Concatenation</text>
             <answer>For instance, ab</answer>
         </question>
