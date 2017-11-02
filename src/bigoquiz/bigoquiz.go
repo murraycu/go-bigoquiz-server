@@ -20,7 +20,6 @@ const QUERY_PARAM_QUIZ_ID = "quiz-id"
 const QUERY_PARAM_SECTION_ID = "section-id"
 const QUERY_PARAM_QUESTION_ID = "question-id"
 const QUERY_PARAM_LIST_ONLY = "list-only"
-const QUERY_PARAM_ANSWER = "answer"
 const QUERY_PARAM_NEXT_QUESTION_SECTION_ID = "next-question-section-id"
 
 func init() {

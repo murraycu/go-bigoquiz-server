@@ -8,6 +8,7 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/appengine"
 	"google.golang.org/appengine/datastore"
+	"io/ioutil"
 	"net/http"
 	"quiz"
 	"sort"
@@ -124,17 +125,19 @@ func restHandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Request, ps ht
 	}
 }
 
+type Submission struct {
+	Answer string `json:"answer"`
+}
+
 func restHandleUserHistorySubmitAnswer(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	var quizId string
 	var questionId string
-	var answer string
 	var nextQuestionSectionId string
 
 	queryValues := r.URL.Query()
 	if queryValues != nil {
 		quizId = queryValues.Get(QUERY_PARAM_QUIZ_ID)
 		questionId = queryValues.Get(QUERY_PARAM_QUESTION_ID)
-		answer = queryValues.Get(QUERY_PARAM_ANSWER)
 		nextQuestionSectionId = queryValues.Get(QUERY_PARAM_NEXT_QUESTION_SECTION_ID)
 	}
 
@@ -144,7 +147,20 @@ func restHandleUserHistorySubmitAnswer(w http.ResponseWriter, r *http.Request, p
 		return
 	}
 
-	result := answerIsCorrect(answer, &qa.Answer)
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, "Could not parse body.", http.StatusInternalServerError)
+		return
+	}
+
+	var submission Submission
+	err = json.Unmarshal(body, &submission)
+	if err != nil {
+		http.Error(w, "Could not parse JSON.", http.StatusInternalServerError)
+		return
+	}
+
+	result := answerIsCorrect(submission.Answer, &qa.Answer)
 	submissionResult, err := storeAnswerCorrectnessAndGetSubmissionResult(w, r, quizId, questionId, nextQuestionSectionId, qa, result)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
