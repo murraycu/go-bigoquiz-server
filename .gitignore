@@ -2,3 +2,4 @@
 *.pyc
 config_oauth2
 config.json
+vendor
