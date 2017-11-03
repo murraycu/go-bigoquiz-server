@@ -1,12 +1,12 @@
 package bigoquiz
 
 import (
-	"config"
-	"db"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/sessions"
 	"github.com/julienschmidt/httprouter"
+	"github.com/murraycu/go-bigoquiz-server/config"
+	"github.com/murraycu/go-bigoquiz-server/db"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"google.golang.org/appengine"

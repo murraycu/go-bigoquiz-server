@@ -1,18 +1,18 @@
 package bigoquiz
 
 import (
-	"db"
 	"encoding/json"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
+	"github.com/murraycu/go-bigoquiz-server/db"
+	"github.com/murraycu/go-bigoquiz-server/quiz"
+	"github.com/murraycu/go-bigoquiz-server/user"
 	"golang.org/x/net/context"
 	"google.golang.org/appengine"
 	"google.golang.org/appengine/datastore"
 	"io/ioutil"
 	"net/http"
-	"quiz"
 	"sort"
-	"user"
 )
 
 // See https://gobyexample.com/sorting-by-functions

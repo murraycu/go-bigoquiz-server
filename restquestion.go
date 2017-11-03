@@ -1,12 +1,12 @@
 package bigoquiz
 
 import (
-	"db"
 	"encoding/json"
 	"github.com/julienschmidt/httprouter"
+	"github.com/murraycu/go-bigoquiz-server/db"
+	"github.com/murraycu/go-bigoquiz-server/quiz"
 	"google.golang.org/appengine"
 	"net/http"
-	"quiz"
 )
 
 func restHandleQuestionNext(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
