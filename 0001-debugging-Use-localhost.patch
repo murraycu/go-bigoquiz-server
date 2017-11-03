@@ -1,18 +1,18 @@
-From 5df7142bde6d5dc3fabd306c6529d3799a38120b Mon Sep 17 00:00:00 2001
+From 6acad335daf43ad739afabbe7164dd2b743131bd Mon Sep 17 00:00:00 2001
 From: Murray Cumming <murrayc@murrayc.com>
-Date: Tue, 19 Sep 2017 10:44:31 +0200
-Subject: [PATCH] debugging: Use localhost.
+Date: Fri, 3 Nov 2017 22:45:40 +0100
+Subject: [PATCH] debugging: Use localhost
 
 ---
- src/bigoquiz/bigoquiz.go | 2 +-
- src/config/config.go     | 5 +++--
+ bigoquiz.go      | 2 +-
+ config/config.go | 5 +++--
  2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/src/bigoquiz/bigoquiz.go b/src/bigoquiz/bigoquiz.go
-index 96ae1bf..226c390 100644
---- a/src/bigoquiz/bigoquiz.go
-+++ b/src/bigoquiz/bigoquiz.go
-@@ -24,7 +24,7 @@ func init() {
+diff --git a/bigoquiz.go b/bigoquiz.go
+index ba4cac6..13c21fb 100644
+--- a/bigoquiz.go
++++ b/bigoquiz.go
+@@ -33,7 +33,7 @@ func init() {
  	// using the secret key from the configuration file.
  	store = sessions.NewCookieStore([]byte(conf.CookieKey))
  	store.Options.HttpOnly = true
@@ -21,10 +21,10 @@ index 96ae1bf..226c390 100644
  
  	// Gob encoding for gorilla/sessions
  	// Otherwise, we will see errors such as this when calling store.Save():
-diff --git a/src/config/config.go b/src/config/config.go
+diff --git a/config/config.go b/config/config.go
 index b1dd159..766e67b 100644
---- a/src/config/config.go
-+++ b/src/config/config.go
+--- a/config/config.go
++++ b/config/config.go
 @@ -12,8 +12,9 @@ import (
  )
  
@@ -38,5 +38,5 @@ index b1dd159..766e67b 100644
  	// This file must be downloaded
  	// (via the "DOWNLOAD JSON" link at https://console.developers.google.com/apis/credentials/oauthclient )
 -- 
-2.11.0
+2.14.1
 
