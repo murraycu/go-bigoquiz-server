@@ -569,7 +569,7 @@ func fillUserStatsWithExtras(userStats *user.Stats, qz *quiz.Quiz) {
 
 	// TODO: Only send the top problem question histories in the JSON,
 	// instead of all of them?
-	for i, _ := range userStats.QuestionHistories {
+	for i := range userStats.QuestionHistories {
 		qh := &(userStats.QuestionHistories[i])
 
 		q := qz.GetQuestionAndAnswer(qh.QuestionId)
