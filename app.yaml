@@ -6,3 +6,17 @@ handlers:
 - url: /.*
   script: _go_app
   secure: always
+
+# Stop gcloud from uploading not required files for deployment
+skip_files:
+- ^app\.yaml
+- ^README\..*
+- \.gitignore
+- ^\.git$
+- ^karma\.config\.js
+- ^(.*/)?.patch$
+- ^(.*/)?#.*#$
+- ^(.*/)?.*~$
+- ^(.*/)?.*\.py[co]$
+- ^(.*/)?.*/RCS/.*$
+- ^(.*/)?\..*$
