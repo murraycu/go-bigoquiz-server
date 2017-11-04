@@ -61,9 +61,9 @@ func init() {
 	router.POST("/api/user-history/submit-dont-know-answer", restHandleUserHistorySubmitDontKnowAnswer)
 	router.POST("/api/user-history/reset-sections", restHandleUserHistoryResetSections)
 
-	router.GET("/login/login", handleGoogleLogin)
-	router.GET("/login/callback", handleGoogleCallback)
-	router.GET("/login/logout", handleGoogleLogout)
+	router.GET("/login/login-google", handleGoogleLogin)
+	router.GET("/login/callback-google", handleGoogleCallback)
+	router.GET("/login/logout", handleLogout)
 
 	// Allow Javascript requests from some domains other than the one serving this API.
 	// The browser issue a CORS request before actually issuing the HTTP request.

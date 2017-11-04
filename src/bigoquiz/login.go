@@ -115,7 +115,7 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	http.Redirect(w, r, userProfileUrl, http.StatusFound)
 }
 
-func handleGoogleLogout(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func handleLogout(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	// Wipe the cookie:
 	session, err := store.New(r, defaultSessionID)
 	if err != nil {
