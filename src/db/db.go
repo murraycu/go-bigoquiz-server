@@ -14,6 +14,44 @@ const (
 	DB_KIND_USER_STATS = "UserStats"
 )
 
+func StoreGitHubLoginInUserProfile(c context.Context, userInfo GitHubUserInfo, token *oauth2.Token) (*datastore.Key, error) {
+	q := datastore.NewQuery(DB_KIND_PROFILE).
+		Filter("githubId =", userInfo.Id).
+		Limit(1)
+	iter := q.Run(c)
+	if iter == nil {
+		return nil, fmt.Errorf("datastore query for githubId failed")
+	}
+
+	var profile user.Profile
+	var key *datastore.Key
+	var err error
+	key, err = iter.Next(&profile)
+	if err == datastore.Done {
+		// It is not in the datastore yet, so we add it.
+		updateProfileFromGitHubUserInfo(&profile, &userInfo)
+		profile.GoogleAccessToken = *token
+
+		key = datastore.NewIncompleteKey(c, DB_KIND_PROFILE, nil)
+		if key, err = datastore.Put(c, key, &profile); err != nil {
+			return nil, fmt.Errorf("datastore.Put(with incomplete key %v) failed: %v", key, err)
+		}
+	} else if err != nil {
+		// An unexpected error.
+		return nil, fmt.Errorf("datastore.Put() failed: %v", err)
+	} else {
+		// Update the Profile:
+		updateProfileFromGitHubUserInfo(&profile, &userInfo)
+		profile.GoogleAccessToken = *token
+
+		if key, err = datastore.Put(c, key, &profile); err != nil {
+			return nil, fmt.Errorf("datastore.Put(with key %v) failed: %v", key, err)
+		}
+	}
+
+	return key, nil
+}
+
 // Get the UserProfile via the GoogleID, adding it if necessary.
 func StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, token *oauth2.Token) (*datastore.Key, error) {
 	q := datastore.NewQuery(DB_KIND_PROFILE).
@@ -21,7 +59,7 @@ func StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, t
 		Limit(1)
 	iter := q.Run(c)
 	if iter == nil {
-		return nil, fmt.Errorf("datastore query for GoogleId failed")
+		return nil, fmt.Errorf("datastore query for googleId failed")
 	}
 
 	var profile user.Profile
@@ -314,4 +352,9 @@ func updateProfileFromGoogleUserInfo(profile *user.Profile, userInfo *GoogleUser
 	if userInfo.EmailVerified {
 		profile.Email = userInfo.Email
 	}
+}
+
+func updateProfileFromGitHubUserInfo(profile *user.Profile, userInfo *GitHubUserInfo) {
+	profile.GitHubId = userInfo.Id
+	profile.Name = userInfo.Name
 }

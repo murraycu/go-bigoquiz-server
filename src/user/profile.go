@@ -7,7 +7,10 @@ type Profile struct {
 	Email string `datastore:"email"`
 
 	// Google's "sub" ID. See https://developers.google.com/identity/protocols/OpenIDConnect#obtainuserinfo
-	GoogleId string `datastore:"googleId"`
-
+	GoogleId          string       `datastore:"googleId"`
 	GoogleAccessToken oauth2.Token `datastore:"googleAccessToken"`
+
+	// GitHub's ID. See https://developer.github.com/v3/users/#get-a-single-user
+	GitHubId          int          `datastore:"githubId"`
+	GitHubAccessToken oauth2.Token `datastore:"githubAccessToken"`
 }

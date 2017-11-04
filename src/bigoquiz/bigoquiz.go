@@ -63,6 +63,8 @@ func init() {
 
 	router.GET("/login/login-google", handleGoogleLogin)
 	router.GET("/login/callback-google", handleGoogleCallback)
+	router.GET("/login/login-github", handleGitHubLogin)
+	router.GET("/login/callback-github", handleGitHubCallback)
 	router.GET("/login/logout", handleLogout)
 
 	// Allow Javascript requests from some domains other than the one serving this API.

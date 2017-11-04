@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/julienschmidt/httprouter"
 	"golang.org/x/net/context"
+	"golang.org/x/oauth2"
 	"google.golang.org/appengine"
 	"google.golang.org/appengine/log"
 	"io/ioutil"
@@ -14,7 +15,7 @@ import (
 )
 
 /** Get an oauth2 URL based on the secret .json file.
- * See configCredentialsFilename.
+ * See googleConfigCredentialsFilename.
  */
 func generateGoogleOAuthUrl(r *http.Request) string {
 	c := appengine.NewContext(r)
@@ -136,6 +137,108 @@ func handleLogout(w http.ResponseWriter, r *http.Request, ps httprouter.Params) 
 	}
 
 	http.Redirect(w, r, redirectURL, http.StatusFound)
+}
+
+/** Get an oauth2 URL based on the secret .json file.
+ * See githubConfigCredentialsFilename.
+ */
+func generateGitHubOAuthUrl(r *http.Request) string {
+	c := appengine.NewContext(r)
+
+	conf := config.GenerateGitHubOAuthConfig(r)
+	if conf == nil {
+		log.Errorf(c, "Unable to generate config.")
+		return ""
+	}
+
+	return conf.AuthCodeURL(oauthStateString, oauth2.AccessTypeOnline)
+}
+
+func handleGitHubLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	// Redirect the user to the GitHub login page:
+	url := generateGitHubOAuthUrl(r)
+	http.Redirect(w, r, url, http.StatusFound)
+}
+
+func handleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	c := appengine.NewContext(r)
+
+	state := r.FormValue("state")
+	if state != oauthStateString {
+		log.Errorf(c, "invalid oauth state, expected '%s', got '%s'\n", oauthStateString, state)
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return
+	}
+
+	code := r.FormValue("code")
+
+	conf := config.GenerateGitHubOAuthConfig(r)
+	if conf == nil {
+		log.Errorf(c, "Unable to generate config.")
+		return
+	}
+
+	token, err := conf.Exchange(c, code)
+	if err != nil {
+		loginFailed(c, "config.Exchange() failed", err, w, r)
+		return
+	}
+
+	if !token.Valid() {
+		loginFailed(c, "loginFailedUrl.Exchange() returned an invalid token", err, w, r)
+		return
+	}
+
+	client := conf.Client(c, token)
+	infoResponse, err := client.Get("https://api.github.com/user")
+	if err != nil {
+		loginFailed(c, "client.Get() failed", err, w, r)
+		return
+	}
+
+	// Just to show that it worked:
+	defer infoResponse.Body.Close()
+	body, err := ioutil.ReadAll(infoResponse.Body)
+	if err != nil {
+		loginFailed(c, "ReadAll(body) failed", err, w, r)
+		return
+	}
+
+	var userinfo db.GitHubUserInfo
+	err = json.Unmarshal(body, &userinfo)
+	if err != nil {
+		log.Errorf(c, "Unmarshaling of JSON from oauth2 callback failed:'%v'\n", err)
+		http.Error(w, "Unmarshaling of JSON from oauth2 callback failed: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Store in the database:
+	userId, err := db.StoreGitHubLoginInUserProfile(c, userinfo, token)
+	if err != nil {
+		log.Errorf(c, "StoreGitHubLoginInUserProfile() failed:'%v'\n", err)
+		http.Error(w, "StoreGitHubLoginInUserProfile() failed: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Store the token in the cookie
+	// so we can retrieve it from subsequent requests from the browser.
+	session, err := store.New(r, defaultSessionID)
+	if err != nil {
+		loginFailed(c, "Could not create new session", err, w, r)
+		return
+	}
+
+	session.Values[oauthTokenSessionKey] = token
+	session.Values[userIdSessionKey] = userId
+
+	if err := session.Save(r, w); err != nil {
+		loginFailed(c, "Could not save session", err, w, r)
+		return
+	}
+
+	// Redirect the user back to a page to show they are logged in:
+	var userProfileUrl = config.BaseUrl + "/user"
+	http.Redirect(w, r, userProfileUrl, http.StatusFound)
 }
 
 func loginFailed(c context.Context, message string, err error, w http.ResponseWriter, r *http.Request) {
