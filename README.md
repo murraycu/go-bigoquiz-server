@@ -24,6 +24,7 @@ It is not yet live at bigoquiz.com.
       (Ignoring the apparently-intended "cannot find package" messages.)
     $ go build bigoquiz
 
+    ./config_use_prod.sh
     $ gcloud app deploy src/bigoquiz
 
 ### Running locally
@@ -34,12 +35,7 @@ It is not yet live at bigoquiz.com.
 
     Use an appropriate oauth2 config file:
     (These cannot be added to the git repository.)
-    $ cp src/bigoquiz/config_google_oauth2_credentials_secret.json src/bigoquiz/config_google_oauth2_credentials_secret.json.backup
-    $ cp src/bigoquiz/config_google_oauth2_credentials_secret.json.local src/bigoquiz/config_google_oauth2_credentials_secret.json
-    $ cp src/bigoquiz/config_github_oauth2_credentials_secret.json src/bigoquiz/config_github_oauth2_credentials_secret.json.backup
-    $ cp src/bigoquiz/config_github_oauth2_credentials_secret.json.local src/bigoquiz/config_github_oauth2_credentials_secret.json
-    $ cp src/bigoquiz/config_facebook_oauth2_credentials_secret.json src/bigoquiz/config_facebook_oauth2_credentials_secret.json.backup
-    $ cp src/bigoquiz/config_facebook_oauth2_credentials_secret.json.local src/bigoquiz/config_facebook_oauth2_credentials_secret.json
+    ./config_use_local.sh
 
     Then start the local server:
     $ dev_appserver.py src/bigoquiz
