@@ -16,9 +16,11 @@ type LoginInfo struct {
 
 	Nickname string `json:"nickname,omitempty"`
 
-	// Whether the user account is linked to these oauth2 accounts:
-	GoogleLinked bool `json:"googleLinked"`
-	GithubLinked bool `json:"githubLinked"`
+	// If the user account is linked to these oauth2 accounts:
+	GoogleLinked     bool   `json:"googleLinked"`
+	GoogleProfileUrl string `json:"googleProfileUrl"`
+	GitHubLinked     bool   `json:"gitHubLinked"`
+	GitHubProfileUrl string `json:"gitHubProfileUrl"`
 
 	// This is just for debugging.
 	ErrorMessage string `json:"errorMessage,omitempty"`

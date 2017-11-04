@@ -352,10 +352,12 @@ func updateProfileFromGoogleUserInfo(profile *user.Profile, userInfo *GoogleUser
 	}
 
 	profile.GoogleAccessToken = *token
+	profile.GoogleProfileUrl = userInfo.ProfileUrl
 }
 
 func updateProfileFromGitHubUserInfo(profile *user.Profile, userInfo *GitHubUserInfo, token *oauth2.Token) {
 	profile.GitHubId = userInfo.Id
 	profile.Name = userInfo.Name
 	profile.GitHubAccessToken = *token
+	profile.GitHubProfileUrl = userInfo.ProfileUrl
 }

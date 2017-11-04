@@ -8,6 +8,7 @@ type GitHubUserInfo struct {
 	// The unique ID of the Github user.
 	Id int `json:"id"`
 
-	Name  string `json:"name"`
-	Email string `json:"email"`
+	Name       string `json:"name"`
+	Email      string `json:"email"`
+	ProfileUrl string `json:"html_url"`
 }
