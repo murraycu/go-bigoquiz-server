@@ -4,11 +4,13 @@ import (
 	"config"
 	"db"
 	"encoding/json"
+	"fmt"
 	"github.com/gorilla/sessions"
 	"github.com/julienschmidt/httprouter"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"google.golang.org/appengine"
+	"google.golang.org/appengine/datastore"
 	"google.golang.org/appengine/log"
 	"io/ioutil"
 	"net/http"
@@ -53,34 +55,14 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 		return
 	}
 
-	token, err := conf.Exchange(c, code)
-	if err != nil {
-		loginFailed(c, "config.Exchange() failed", err, w, r)
-		return
-	}
-
-	if !token.Valid() {
-		loginFailed(c, "loginFailedUrl.Exchange() returned an invalid token", err, w, r)
-		return
-	}
-
-	client := conf.Client(c, token)
-	infoResponse, err := client.Get("https://www.googleapis.com/oauth2/v3/userinfo")
-	if err != nil {
-		loginFailed(c, "client.Get() failed", err, w, r)
-		return
-	}
-
-	// Just to show that it worked:
-	defer infoResponse.Body.Close()
-	body, err := ioutil.ReadAll(infoResponse.Body)
-	if err != nil {
-		loginFailed(c, "ReadAll(body) failed", err, w, r)
+	token, body, ok := exchangeAndGetUserBody(w, r, conf, code, "https://www.googleapis.com/oauth2/v3/userinfo", c)
+	if !ok {
+		// exchangeAndGetUserBody() aldready called loginFailed().
 		return
 	}
 
 	var userinfo db.GoogleUserInfo
-	err = json.Unmarshal(body, &userinfo)
+	err := json.Unmarshal(body, &userinfo)
 	if err != nil {
 		log.Errorf(c, "Unmarshaling of JSON from oauth2 callback failed:'%v'\n", err)
 		http.Error(w, "Unmarshaling of JSON from oauth2 callback failed: "+err.Error(), http.StatusInternalServerError)
@@ -95,6 +77,40 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 		return
 	}
 
+	storeCookieAndRedirect(r, w, c, userId, token)
+}
+
+func exchangeAndGetUserBody(w http.ResponseWriter, r *http.Request, conf *oauth2.Config, code string, url string, c context.Context) (*oauth2.Token, []byte, bool) {
+	token, err := conf.Exchange(c, code)
+	if err != nil {
+		loginFailed(c, "config.Exchange() failed", err, w, r)
+		return nil, nil, false
+	}
+
+	if !token.Valid() {
+		loginFailed(c, "loginFailedUrl.Exchange() returned an invalid token", err, w, r)
+		return nil, nil, false
+	}
+
+	client := conf.Client(c, token)
+	infoResponse, err := client.Get(url)
+	if err != nil {
+		loginFailed(c, "client.Get() failed", err, w, r)
+		return nil, nil, false
+	}
+
+	defer infoResponse.Body.Close()
+	body, err := ioutil.ReadAll(infoResponse.Body)
+	if err != nil {
+		loginFailed(c, "ReadAll(body) failed", err, w, r)
+		return nil, nil, false
+	}
+
+	return token, body, true
+}
+
+// Called after user info has been successful stored in the database.
+func storeCookieAndRedirect(r *http.Request, w http.ResponseWriter, c context.Context, userId *datastore.Key, token *oauth2.Token) {
 	// Store the token in the cookie
 	// so we can retrieve it from subsequent requests from the browser.
 	session, err := store.New(r, defaultSessionID)
@@ -178,37 +194,19 @@ func handleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 		return
 	}
 
-	token, err := conf.Exchange(c, code)
-	if err != nil {
-		loginFailed(c, "config.Exchange() failed", err, w, r)
-		return
-	}
-
-	if !token.Valid() {
-		loginFailed(c, "loginFailedUrl.Exchange() returned an invalid token", err, w, r)
-		return
-	}
-
-	client := conf.Client(c, token)
-	infoResponse, err := client.Get("https://api.github.com/user")
-	if err != nil {
-		loginFailed(c, "client.Get() failed", err, w, r)
-		return
-	}
-
-	// Just to show that it worked:
-	defer infoResponse.Body.Close()
-	body, err := ioutil.ReadAll(infoResponse.Body)
-	if err != nil {
-		loginFailed(c, "ReadAll(body) failed", err, w, r)
+	token, body, ok := exchangeAndGetUserBody(w, r, conf, code, "https://api.github.com/user", c)
+	if !ok {
+		// exchangeAndGetUserBody() already called loginFailed().
 		return
 	}
 
 	var userinfo db.GitHubUserInfo
-	err = json.Unmarshal(body, &userinfo)
+	err := json.Unmarshal(body, &userinfo)
 	if err != nil {
 		log.Errorf(c, "Unmarshaling of JSON from oauth2 callback failed:'%v'\n", err)
-		http.Error(w, "Unmarshaling of JSON from oauth2 callback failed: "+err.Error(), http.StatusInternalServerError)
+
+		msg := fmt.Sprintf("Unmarshaling of JSON from oauth2 callback failed: %s\nfor:\n%v", err.Error(), string(body))
+		http.Error(w, msg, http.StatusInternalServerError)
 		return
 	}
 
@@ -220,25 +218,7 @@ func handleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 		return
 	}
 
-	// Store the token in the cookie
-	// so we can retrieve it from subsequent requests from the browser.
-	session, err := store.New(r, defaultSessionID)
-	if err != nil {
-		loginFailed(c, "Could not create new session", err, w, r)
-		return
-	}
-
-	session.Values[oauthTokenSessionKey] = token
-	session.Values[userIdSessionKey] = userId
-
-	if err := session.Save(r, w); err != nil {
-		loginFailed(c, "Could not save session", err, w, r)
-		return
-	}
-
-	// Redirect the user back to a page to show they are logged in:
-	var userProfileUrl = config.BaseUrl + "/user"
-	http.Redirect(w, r, userProfileUrl, http.StatusFound)
+	storeCookieAndRedirect(r, w, c, userId, token)
 }
 
 func loginFailed(c context.Context, message string, err error, w http.ResponseWriter, r *http.Request) {
