@@ -29,8 +29,7 @@ func StoreGitHubLoginInUserProfile(c context.Context, userInfo GitHubUserInfo, t
 	key, err = iter.Next(&profile)
 	if err == datastore.Done {
 		// It is not in the datastore yet, so we add it.
-		updateProfileFromGitHubUserInfo(&profile, &userInfo)
-		profile.GoogleAccessToken = *token
+		updateProfileFromGitHubUserInfo(&profile, &userInfo, token)
 
 		key = datastore.NewIncompleteKey(c, DB_KIND_PROFILE, nil)
 		if key, err = datastore.Put(c, key, &profile); err != nil {
@@ -41,8 +40,7 @@ func StoreGitHubLoginInUserProfile(c context.Context, userInfo GitHubUserInfo, t
 		return nil, fmt.Errorf("datastore.Put() failed: %v", err)
 	} else {
 		// Update the Profile:
-		updateProfileFromGitHubUserInfo(&profile, &userInfo)
-		profile.GoogleAccessToken = *token
+		updateProfileFromGitHubUserInfo(&profile, &userInfo, token)
 
 		if key, err = datastore.Put(c, key, &profile); err != nil {
 			return nil, fmt.Errorf("datastore.Put(with key %v) failed: %v", key, err)
@@ -52,6 +50,8 @@ func StoreGitHubLoginInUserProfile(c context.Context, userInfo GitHubUserInfo, t
 	return key, nil
 }
 
+// TODO: Make this function generic, parameterizing on GoogleUserInfo/GithubUserInfo,
+// if Go ever has generics.
 // Get the UserProfile via the GoogleID, adding it if necessary.
 func StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, token *oauth2.Token) (*datastore.Key, error) {
 	q := datastore.NewQuery(DB_KIND_PROFILE).
@@ -68,8 +68,7 @@ func StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, t
 	key, err = iter.Next(&profile)
 	if err == datastore.Done {
 		// It is not in the datastore yet, so we add it.
-		updateProfileFromGoogleUserInfo(&profile, &userInfo)
-		profile.GoogleAccessToken = *token
+		updateProfileFromGoogleUserInfo(&profile, &userInfo, token)
 
 		key = datastore.NewIncompleteKey(c, DB_KIND_PROFILE, nil)
 		if key, err = datastore.Put(c, key, &profile); err != nil {
@@ -80,8 +79,7 @@ func StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, t
 		return nil, fmt.Errorf("datastore.Put() failed: %v", err)
 	} else {
 		// Update the Profile:
-		updateProfileFromGoogleUserInfo(&profile, &userInfo)
-		profile.GoogleAccessToken = *token
+		updateProfileFromGoogleUserInfo(&profile, &userInfo, token)
 
 		if key, err = datastore.Put(c, key, &profile); err != nil {
 			return nil, fmt.Errorf("datastore.Put(with key %v) failed: %v", key, err)
@@ -345,16 +343,19 @@ func DeleteUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId str
 	return nil
 }
 
-func updateProfileFromGoogleUserInfo(profile *user.Profile, userInfo *GoogleUserInfo) {
+func updateProfileFromGoogleUserInfo(profile *user.Profile, userInfo *GoogleUserInfo, token *oauth2.Token) {
 	profile.GoogleId = userInfo.Sub
 	profile.Name = userInfo.Name
 
 	if userInfo.EmailVerified {
 		profile.Email = userInfo.Email
 	}
+
+	profile.GoogleAccessToken = *token
 }
 
-func updateProfileFromGitHubUserInfo(profile *user.Profile, userInfo *GitHubUserInfo) {
+func updateProfileFromGitHubUserInfo(profile *user.Profile, userInfo *GitHubUserInfo, token *oauth2.Token) {
 	profile.GitHubId = userInfo.Id
 	profile.Name = userInfo.Name
+	profile.GitHubAccessToken = *token
 }
