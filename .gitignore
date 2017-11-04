@@ -1,9 +1,4 @@
 *~
 *.pyc
-src/bigoquiz/config_google_oauth2_credentials_secret.json
-src/bigoquiz/config_google_oauth2_credentials_secret.json.backup
-src/bigoquiz/config_google_oauth2_credentials_secret.json.local
-src/bigoquiz/config_github_oauth2_credentials_secret.json
-src/bigoquiz/config_github_oauth2_credentials_secret.json.backup
-src/bigoquiz/config_github_oauth2_credentials_secret.json.local
+src/bigoquiz/config_oauth2
 src/bigoquiz/config.json

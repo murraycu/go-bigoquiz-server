@@ -1,8 +1,8 @@
 # Use the .prod versions of the config files.
 # (These cannot be added to the git repository.)
 
-prefix="./src/bigoquiz/config_"
-suffix="_oauth2_credentials_secret.json"
+prefix="./src/bigoquiz/config_oauth2/"
+suffix="_credentials_secret.json"
 end=".prod"
 
 function copy_file() {

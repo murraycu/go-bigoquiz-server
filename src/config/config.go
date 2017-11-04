@@ -9,6 +9,7 @@ import (
 	"google.golang.org/appengine/log"
 	"io/ioutil"
 	"net/http"
+	"path/filepath"
 )
 
 const (
@@ -26,7 +27,7 @@ const (
 	// This file must be downloaded
 	// (via the "DOWNLOAD JSON" link at https://console.developers.google.com/apis/credentials/oauthclient )
 	// and added with this exact filename, next to the bigoquiz.go source file.
-	googleConfigCredentialsFilename = "config_google_oauth2_credentials_secret.json"
+	googleConfigCredentialsFilename = "google_credentials_secret.json"
 
 	// See https://developers.google.com/+/web/api/rest/oauth#profile
 	googleCredentialsScopeProfile = "profile"
@@ -36,7 +37,7 @@ const (
 
 	// This has the same format, and location, as googleConfigCredentialsFilename,
 	// but is maintained manually instead of being downloaded.
-	githubConfigCredentialsFilename = "config_github_oauth2_credentials_secret.json"
+	githubConfigCredentialsFilename = "github_credentials_secret.json"
 
 	// See https://developer.github.com/apps/building-integrations/setting-up-and-registering-oauth-apps/about-scopes-for-oauth-apps/
 	githubCredentialsScopeUser  = "read:user"
@@ -44,7 +45,7 @@ const (
 
 	// This has the same format, and location, as googleConfigCredentialsFilename,
 	// but is maintained manually instead of being downloaded.
-	facebookConfigCredentialsFilename = "config_facebook_oauth2_credentials_secret.json"
+	facebookConfigCredentialsFilename = "facebook_credentials_secret.json"
 
 	// See https://developers.facebook.com/docs/facebook-login/permissions
 	facebookCredentialsScopePublicProfile = "public_profile"
@@ -81,7 +82,8 @@ func GenerateConfig() (*Config, error) {
 func generateOAuthConfig(r *http.Request, credentialsFilename string, scope ...string) *oauth2.Config {
 	c := appengine.NewContext(r)
 
-	b, err := ioutil.ReadFile(credentialsFilename)
+	path := filepath.Join("config_oauth2", credentialsFilename)
+	b, err := ioutil.ReadFile(path)
 	if err != nil {
 		log.Errorf(c, "Unable to read client secret file (%s): %v", credentialsFilename, err)
 		return nil
