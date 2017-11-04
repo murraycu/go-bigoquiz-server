@@ -50,6 +50,42 @@ func StoreGitHubLoginInUserProfile(c context.Context, userInfo GitHubUserInfo, t
 	return key, nil
 }
 
+func StoreFacebookLoginInUserProfile(c context.Context, userInfo FacebookUserInfo, token *oauth2.Token) (*datastore.Key, error) {
+	q := datastore.NewQuery(DB_KIND_PROFILE).
+		Filter("facebookId =", userInfo.Id).
+		Limit(1)
+	iter := q.Run(c)
+	if iter == nil {
+		return nil, fmt.Errorf("datastore query for facebookId failed")
+	}
+
+	var profile user.Profile
+	var key *datastore.Key
+	var err error
+	key, err = iter.Next(&profile)
+	if err == datastore.Done {
+		// It is not in the datastore yet, so we add it.
+		updateProfileFromFacebookUserInfo(&profile, &userInfo, token)
+
+		key = datastore.NewIncompleteKey(c, DB_KIND_PROFILE, nil)
+		if key, err = datastore.Put(c, key, &profile); err != nil {
+			return nil, fmt.Errorf("datastore.Put(with incomplete key %v) failed: %v", key, err)
+		}
+	} else if err != nil {
+		// An unexpected error.
+		return nil, fmt.Errorf("datastore.Put() failed: %v", err)
+	} else {
+		// Update the Profile:
+		updateProfileFromFacebookUserInfo(&profile, &userInfo, token)
+
+		if key, err = datastore.Put(c, key, &profile); err != nil {
+			return nil, fmt.Errorf("datastore.Put(with key %v) failed: %v", key, err)
+		}
+	}
+
+	return key, nil
+}
+
 // TODO: Make this function generic, parameterizing on GoogleUserInfo/GithubUserInfo,
 // if Go ever has generics.
 // Get the UserProfile via the GoogleID, adding it if necessary.
@@ -358,6 +394,15 @@ func updateProfileFromGoogleUserInfo(profile *user.Profile, userInfo *GoogleUser
 func updateProfileFromGitHubUserInfo(profile *user.Profile, userInfo *GitHubUserInfo, token *oauth2.Token) {
 	profile.GitHubId = userInfo.Id
 	profile.Name = userInfo.Name
+	// TODO: Get a verified email address, to compare with the other account?
 	profile.GitHubAccessToken = *token
 	profile.GitHubProfileUrl = userInfo.ProfileUrl
+}
+
+func updateProfileFromFacebookUserInfo(profile *user.Profile, userInfo *FacebookUserInfo, token *oauth2.Token) {
+	profile.FacebookId = userInfo.Id
+	profile.Name = userInfo.Name
+	// TODO: Get a verified email address, to compare with the other account?
+	profile.FacebookAccessToken = *token
+	profile.FacebookProfileUrl = userInfo.ProfileUrl
 }

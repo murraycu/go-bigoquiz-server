@@ -100,6 +100,8 @@ func getLoginInfoFromSessionAndDb(r *http.Request, w http.ResponseWriter) (*user
 		loginInfo.GoogleProfileUrl = profile.GoogleProfileUrl
 		loginInfo.GitHubLinked = profile.GitHubId != 0
 		loginInfo.GitHubProfileUrl = profile.GitHubProfileUrl
+		loginInfo.FacebookLinked = profile.FacebookId != ""
+		loginInfo.FacebookProfileUrl = profile.FacebookProfileUrl
 	}
 
 	return &loginInfo, err

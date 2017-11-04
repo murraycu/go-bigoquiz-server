@@ -38,6 +38,8 @@ It is not yet live at bigoquiz.com.
     $ cp src/bigoquiz/config_google_oauth2_credentials_secret.json.local src/bigoquiz/config_google_oauth2_credentials_secret.json
     $ cp src/bigoquiz/config_github_oauth2_credentials_secret.json src/bigoquiz/config_github_oauth2_credentials_secret.json.backup
     $ cp src/bigoquiz/config_github_oauth2_credentials_secret.json.local src/bigoquiz/config_github_oauth2_credentials_secret.json
+    $ cp src/bigoquiz/config_facebook_oauth2_credentials_secret.json src/bigoquiz/config_facebook_oauth2_credentials_secret.json.backup
+    $ cp src/bigoquiz/config_facebook_oauth2_credentials_secret.json.local src/bigoquiz/config_facebook_oauth2_credentials_secret.json
 
     Then start the local server:
     $ dev_appserver.py src/bigoquiz

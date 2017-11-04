@@ -15,4 +15,9 @@ type Profile struct {
 	GitHubId          int          `datastore:"gitHubId"`
 	GitHubAccessToken oauth2.Token `datastore:"gitHubAccessToken"`
 	GitHubProfileUrl  string       `datastore:"gitHubProfileUrl"`
+
+	// Facebook's ID. See TODO
+	FacebookId          string       `datastore:"facebookId"`
+	FacebookAccessToken oauth2.Token `datastore:"facebookAccessToken"`
+	FacebookProfileUrl  string       `datastore:"facebookProfileUrl"`
 }

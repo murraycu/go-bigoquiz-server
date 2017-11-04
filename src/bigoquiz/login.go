@@ -221,6 +221,72 @@ func handleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	storeCookieAndRedirect(r, w, c, userId, token)
 }
 
+/** Get an oauth2 URL based on the secret .json file.
+ * See githubConfigCredentialsFilename.
+ */
+func generateFacebookOAuthUrl(r *http.Request) string {
+	c := appengine.NewContext(r)
+
+	conf := config.GenerateFacebookOAuthConfig(r)
+	if conf == nil {
+		log.Errorf(c, "Unable to generate config.")
+		return ""
+	}
+
+	return conf.AuthCodeURL(oauthStateString, oauth2.AccessTypeOnline)
+}
+
+func handleFacebookLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	// Redirect the user to the GitHub login page:
+	url := generateFacebookOAuthUrl(r)
+	http.Redirect(w, r, url, http.StatusFound)
+}
+
+func handleFacebookCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	c := appengine.NewContext(r)
+
+	state := r.FormValue("state")
+	if state != oauthStateString {
+		log.Errorf(c, "invalid oauth state, expected '%s', got '%s'\n", oauthStateString, state)
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return
+	}
+
+	code := r.FormValue("code")
+
+	conf := config.GenerateFacebookOAuthConfig(r)
+	if conf == nil {
+		log.Errorf(c, "Unable to generate config.")
+		return
+	}
+
+	token, body, ok := exchangeAndGetUserBody(w, r, conf, code, "https://graph.facebook.com/me?fields=link,name,email", c)
+	if !ok {
+		// exchangeAndGetUserBody() already called loginFailed().
+		return
+	}
+
+	var userinfo db.FacebookUserInfo
+	err := json.Unmarshal(body, &userinfo)
+	if err != nil {
+		log.Errorf(c, "Unmarshaling of JSON from oauth2 callback failed:'%v'\n", err)
+
+		msg := fmt.Sprintf("Unmarshaling of JSON from oauth2 callback failed: %s\nfor:\n%v", err.Error(), string(body))
+		http.Error(w, msg, http.StatusInternalServerError)
+		return
+	}
+
+	// Store in the database:
+	userId, err := db.StoreFacebookLoginInUserProfile(c, userinfo, token)
+	if err != nil {
+		log.Errorf(c, "StoreGitHubLoginInUserProfile() failed:'%v'\n", err)
+		http.Error(w, "StoreGitHubLoginInUserProfile() failed: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	storeCookieAndRedirect(r, w, c, userId, token)
+}
+
 func loginFailed(c context.Context, message string, err error, w http.ResponseWriter, r *http.Request) {
 	var loginFailedUrl = config.BaseUrl + "/login?failed=true"
 

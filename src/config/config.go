@@ -41,6 +41,14 @@ const (
 	// See https://developer.github.com/apps/building-integrations/setting-up-and-registering-oauth-apps/about-scopes-for-oauth-apps/
 	githubCredentialsScopeUser  = "read:user"
 	githubCredentialsScopeEmail = "user:email"
+
+	// This has the same format, and location, as googleConfigCredentialsFilename,
+	// but is maintained manually instead of being downloaded.
+	facebookConfigCredentialsFilename = "config_facebook_oauth2_credentials_secret.json"
+
+	// See https://developers.facebook.com/docs/facebook-login/permissions
+	facebookCredentialsScopePublicProfile = "public_profile"
+	facebookCredentialsScopeEmail         = "email"
 )
 
 /** Get general configuration.
@@ -95,9 +103,16 @@ func GenerateGoogleOAuthConfig(r *http.Request) *oauth2.Config {
 	return generateOAuthConfig(r, googleConfigCredentialsFilename, googleCredentialsScopeProfile, googleCredentialsScopeEmail)
 }
 
-/** Get an oauth2 Config object based on the secret .json file.	
+/** Get an oauth2 Config object based on the secret .json file.
  * See githubConfigCredentialsFilename.
  */
 func GenerateGitHubOAuthConfig(r *http.Request) *oauth2.Config {
 	return generateOAuthConfig(r, githubConfigCredentialsFilename, githubCredentialsScopeUser, githubCredentialsScopeEmail)
+}
+
+/** Get an oauth2 Config object based on the secret .json file.
+ * See githubConfigCredentialsFilename.
+ */
+func GenerateFacebookOAuthConfig(r *http.Request) *oauth2.Config {
+	return generateOAuthConfig(r, facebookConfigCredentialsFilename, facebookCredentialsScopePublicProfile, facebookCredentialsScopeEmail)
 }
