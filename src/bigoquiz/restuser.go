@@ -95,6 +95,9 @@ func getLoginInfoFromSessionAndDb(r *http.Request, w http.ResponseWriter) (*user
 		loginInfo.LoggedIn = true
 		loginInfo.Nickname = profile.Name
 		loginInfo.UserId = userId // Not for the JSON, but useful to callers.
+
+		loginInfo.GoogleLinked = profile.GoogleId != ""
+		loginInfo.GithubLinked = profile.GitHubId != 0
 	}
 
 	return &loginInfo, err
