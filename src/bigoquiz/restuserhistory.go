@@ -31,7 +31,7 @@ func (s StatsListByTitle) Less(i, j int) bool {
 }
 
 func restHandleUserHistoryAll(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	loginInfo, err := getLoginInfoFromSessionAndDb(r, w)
+	loginInfo, err := getLoginInfoFromSessionAndDb(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -95,7 +95,7 @@ func restHandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Request, ps ht
 		return
 	}
 
-	loginInfo, err := getLoginInfoFromSessionAndDb(r, w)
+	loginInfo, err := getLoginInfoFromSessionAndDb(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -242,7 +242,7 @@ func restHandleUserHistoryResetSections(w http.ResponseWriter, r *http.Request, 
 	}
 
 	if userId == nil {
-		loginInfo, err := getLoginInfoFromSessionAndDb(r, w)
+		loginInfo, err := getLoginInfoFromSessionAndDb(r)
 		if err != nil {
 			http.Error(w, "not logged in. getLoginInfoFromSessionAndDb() returned err.", http.StatusForbidden)
 			return

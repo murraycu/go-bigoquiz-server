@@ -13,7 +13,7 @@ import (
 )
 
 func restHandleUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	loginInfo, err := getLoginInfoFromSessionAndDb(r, w)
+	loginInfo, err := getLoginInfoFromSessionAndDb(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -31,7 +31,7 @@ func restHandleUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 	}
 }
 
-func getLoginInfoFromSessionAndDb(r *http.Request, w http.ResponseWriter) (*user.LoginInfo, error) {
+func getLoginInfoFromSessionAndDb(r *http.Request) (*user.LoginInfo, error) {
 	session, err := store.Get(r, defaultSessionID)
 	if err != nil {
 		return nil, fmt.Errorf("getLoginInfoFromSessionAndDb(): store.Get() failed: %v", err)
@@ -111,7 +111,7 @@ func getLoginInfoFromSessionAndDb(r *http.Request, w http.ResponseWriter) (*user
  * Returns a nil Key, and a nil error, if the user is not logged in.
  */
 func getUserIdFromSessionAndDb(r *http.Request, w http.ResponseWriter) (*datastore.Key, error) {
-	loginInfo, err := getLoginInfoFromSessionAndDb(r, w)
+	loginInfo, err := getLoginInfoFromSessionAndDb(r)
 	if err != nil {
 		return nil, fmt.Errorf("getLoginInfoFromSessionAndDb() failed: %v", err)
 	}
