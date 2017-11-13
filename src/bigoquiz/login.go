@@ -57,7 +57,7 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 
 	token, body, ok := exchangeAndGetUserBody(w, r, conf, code, "https://www.googleapis.com/oauth2/v3/userinfo", c)
 	if !ok {
-		// exchangeAndGetUserBody() aldready called loginFailed().
+		// exchangeAndGetUserBody() already called loginFailed().
 		return
 	}
 
