@@ -31,58 +31,58 @@ func restHandleUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 	}
 }
 
-func getLoginInfoFromSessionAndDb(r *http.Request) (*user.LoginInfo, error) {
+func getProfileFromSessionAndDb(r *http.Request) (*user.Profile, *datastore.Key, *oauth2.Token, error) {
 	session, err := store.Get(r, defaultSessionID)
 	if err != nil {
-		return nil, fmt.Errorf("getLoginInfoFromSessionAndDb(): store.Get() failed: %v", err)
+		return nil, nil, nil, fmt.Errorf("getLoginInfoFromSessionAndDb(): store.Get() failed: %v", err)
 	}
-
-	var loginInfo user.LoginInfo
 
 	// Get the token from the cookie:
 	tokenVal, ok := session.Values[oauthTokenSessionKey]
 	if !ok {
-		loginInfo.LoggedIn = false
-		loginInfo.ErrorMessage = "not logged in user (no oauthTokenSessionKey)"
-		return &loginInfo, nil
+		return nil, nil, nil, fmt.Errorf("No oauthTokenSessionKey.")
 	}
 
 	// Try casting it to the expected type:
 	var token *oauth2.Token
 	token, ok = tokenVal.(*oauth2.Token)
 	if !ok {
-		loginInfo.LoggedIn = false
-		loginInfo.ErrorMessage = "not logged in user (oauthTokenSessionKey is not a *Token)"
-		return &loginInfo, nil
+		return nil, nil, nil, fmt.Errorf("oauthTokenSessionKey is not a *Token.")
 	}
 
 	// Get the name from the database, via the userID from the cookie:
 	userIdVal, ok := session.Values[userIdSessionKey]
 	if !ok {
-		loginInfo.LoggedIn = false
-		loginInfo.ErrorMessage = "not logged in user (no name as value)."
-		return &loginInfo, nil
+		return nil, nil, nil, fmt.Errorf("No name as value).")
 	}
 
 	// Try casting it to the expected type:
 	var userId *datastore.Key
 	userId, ok = userIdVal.(*datastore.Key)
 	if !ok {
-		loginInfo.LoggedIn = false
-		loginInfo.ErrorMessage = "not logged in user (no name as *Key). userIdVal is not a *Key."
-		return &loginInfo, nil
+		return nil, nil, nil, fmt.Errorf("No name as *Key. userIdVal is not a *Key.")
 	}
 
 	if userId == nil {
-		loginInfo.LoggedIn = false
-		loginInfo.ErrorMessage = "not logged in user (userId is null)."
-		return &loginInfo, nil
+		return nil, nil, nil, fmt.Errorf("userId is null).")
 	}
 
 	c := appengine.NewContext(r)
 	profile, err := db.GetUserProfileById(c, userId)
 	if err != nil {
-		return nil, fmt.Errorf("getUserProfileById() failed: %v", err)
+		return nil, nil, nil, fmt.Errorf("getUserProfileById() failed: %v", err)
+	}
+
+	return profile, userId, token, nil
+}
+
+func getLoginInfoFromSessionAndDb(r *http.Request) (*user.LoginInfo, error) {
+	var loginInfo user.LoginInfo
+
+	profile, userId, token, err := getProfileFromSessionAndDb(r)
+	if err != nil {
+		loginInfo.LoggedIn = false
+		loginInfo.ErrorMessage = fmt.Sprintf("not logged in (%v)", err)
 	}
 
 	updateLoginInfoFromProfile(&loginInfo, profile, token, userId)
