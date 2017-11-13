@@ -85,6 +85,12 @@ func getLoginInfoFromSessionAndDb(r *http.Request) (*user.LoginInfo, error) {
 		return nil, fmt.Errorf("getUserProfileById() failed: %v", err)
 	}
 
+	updateLoginInfoFromProfile(&loginInfo, profile, token, userId)
+
+	return &loginInfo, err
+}
+
+func updateLoginInfoFromProfile(loginInfo *user.LoginInfo, profile *user.Profile, token *oauth2.Token, userId *datastore.Key) {
 	if profile == nil {
 		loginInfo.LoggedIn = false
 		loginInfo.ErrorMessage = "not logged in user (no profile found)"
@@ -103,8 +109,6 @@ func getLoginInfoFromSessionAndDb(r *http.Request) (*user.LoginInfo, error) {
 		loginInfo.FacebookLinked = profile.FacebookId != ""
 		loginInfo.FacebookProfileUrl = profile.FacebookProfileUrl
 	}
-
-	return &loginInfo, err
 }
 
 /** Get the user ID.
