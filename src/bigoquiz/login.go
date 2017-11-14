@@ -37,17 +37,24 @@ func handleGoogleLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 	http.Redirect(w, r, url, http.StatusFound)
 }
 
+func checkStateAndGetCode(r *http.Request) (string, error) {
+	state := r.FormValue("state")
+	if state != oauthStateString {
+		return "", fmt.Errorf("invalid oauth state, expected '%s', got '%s'\n", oauthStateString, state)
+	}
+
+	return r.FormValue("code"), nil
+}
+
 func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	c := appengine.NewContext(r)
 
-	state := r.FormValue("state")
-	if state != oauthStateString {
-		log.Errorf(c, "invalid oauth state, expected '%s', got '%s'\n", oauthStateString, state)
+	code, err := checkStateAndGetCode(r)
+	if err != nil {
+		log.Errorf(c, "checkStateAndGetCode() failed", err)
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
-
-	code := r.FormValue("code")
 
 	conf := config.GenerateGoogleOAuthConfig(r)
 	if conf == nil {
@@ -62,7 +69,7 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	}
 
 	var userinfo db.GoogleUserInfo
-	err := json.Unmarshal(body, &userinfo)
+	err = json.Unmarshal(body, &userinfo)
 	if err != nil {
 		log.Errorf(c, "Unmarshaling of JSON from oauth2 callback failed:'%v'\n", err)
 		http.Error(w, "Unmarshaling of JSON from oauth2 callback failed: "+err.Error(), http.StatusInternalServerError)
@@ -188,14 +195,12 @@ func handleGitHubLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 func handleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	c := appengine.NewContext(r)
 
-	state := r.FormValue("state")
-	if state != oauthStateString {
-		log.Errorf(c, "invalid oauth state, expected '%s', got '%s'\n", oauthStateString, state)
+	code, err := checkStateAndGetCode(r)
+	if err != nil {
+		log.Errorf(c, "checkStateAndGetCode() failed", err)
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
-
-	code := r.FormValue("code")
 
 	conf := config.GenerateGitHubOAuthConfig(r)
 	if conf == nil {
@@ -210,7 +215,7 @@ func handleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	}
 
 	var userinfo db.GitHubUserInfo
-	err := json.Unmarshal(body, &userinfo)
+	err = json.Unmarshal(body, &userinfo)
 	if err != nil {
 		log.Errorf(c, "Unmarshaling of JSON from oauth2 callback failed:'%v'\n", err)
 
@@ -262,14 +267,12 @@ func handleFacebookLogin(w http.ResponseWriter, r *http.Request, ps httprouter.P
 func handleFacebookCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	c := appengine.NewContext(r)
 
-	state := r.FormValue("state")
-	if state != oauthStateString {
-		log.Errorf(c, "invalid oauth state, expected '%s', got '%s'\n", oauthStateString, state)
+	code, err := checkStateAndGetCode(r)
+	if err != nil {
+		log.Errorf(c, "checkStateAndGetCode() failed", err)
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
-
-	code := r.FormValue("code")
 
 	conf := config.GenerateFacebookOAuthConfig(r)
 	if conf == nil {
@@ -284,7 +287,7 @@ func handleFacebookCallback(w http.ResponseWriter, r *http.Request, ps httproute
 	}
 
 	var userinfo db.FacebookUserInfo
-	err := json.Unmarshal(body, &userinfo)
+	err = json.Unmarshal(body, &userinfo)
 	if err != nil {
 		log.Errorf(c, "Unmarshaling of JSON from oauth2 callback failed:'%v'\n", err)
 
