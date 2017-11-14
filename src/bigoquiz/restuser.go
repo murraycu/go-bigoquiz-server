@@ -31,46 +31,63 @@ func restHandleUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 	}
 }
 
-func getProfileFromSessionAndDb(r *http.Request) (*user.Profile, *datastore.Key, *oauth2.Token, error) {
+func getProfileFromSession(r *http.Request) (*datastore.Key, *oauth2.Token, error) {
 	session, err := store.Get(r, defaultSessionID)
 	if err != nil {
-		return nil, nil, nil, fmt.Errorf("getLoginInfoFromSessionAndDb(): store.Get() failed: %v", err)
+		return nil, nil, fmt.Errorf("getLoginInfoFromSessionAndDb(): store.Get() failed: %v", err)
 	}
 
 	// Get the token from the cookie:
 	tokenVal, ok := session.Values[oauthTokenSessionKey]
 	if !ok {
-		return nil, nil, nil, fmt.Errorf("No oauthTokenSessionKey.")
+		// Not an error.
+		// It's just not in the cookie.
+		return nil, nil, nil
 	}
 
 	// Try casting it to the expected type:
 	var token *oauth2.Token
 	token, ok = tokenVal.(*oauth2.Token)
 	if !ok {
-		return nil, nil, nil, fmt.Errorf("oauthTokenSessionKey is not a *Token.")
+		return nil, nil, fmt.Errorf("oauthTokenSessionKey is not a *Token.")
 	}
 
 	// Get the name from the database, via the userID from the cookie:
 	userIdVal, ok := session.Values[userIdSessionKey]
 	if !ok {
-		return nil, nil, nil, fmt.Errorf("No name as value).")
+		return nil, nil, fmt.Errorf("No name as value).")
 	}
 
 	// Try casting it to the expected type:
 	var userId *datastore.Key
 	userId, ok = userIdVal.(*datastore.Key)
 	if !ok {
-		return nil, nil, nil, fmt.Errorf("No name as *Key. userIdVal is not a *Key.")
+		return nil, nil, fmt.Errorf("No name as *Key. userIdVal is not a *Key.")
 	}
 
 	if userId == nil {
-		return nil, nil, nil, fmt.Errorf("userId is null).")
+		return nil, nil, fmt.Errorf("userId is null).")
+	}
+
+	return userId, token, nil
+}
+
+func getProfileFromSessionAndDb(r *http.Request) (*user.Profile, *datastore.Key, *oauth2.Token, error) {
+	userId, token, err := getProfileFromSession(r)
+	if err != nil {
+		return nil, nil, nil, fmt.Errorf("getProfileFromSession() failed: %v", err)
+	}
+
+	if userId == nil {
+		// Not an error.
+		// It's just not in the session cookie.
+		return nil, nil, nil, nil
 	}
 
 	c := appengine.NewContext(r)
 	profile, err := db.GetUserProfileById(c, userId)
 	if err != nil {
-		return nil, nil, nil, fmt.Errorf("getUserProfileById() failed: %v", err)
+		return nil, nil, nil, fmt.Errorf("GetUserProfileById() failed: %v", err)
 	}
 
 	return profile, userId, token, nil
