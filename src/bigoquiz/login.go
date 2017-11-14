@@ -307,8 +307,8 @@ func handleFacebookCallback(w http.ResponseWriter, r *http.Request, ps httproute
 	// Store in the database:
 	userId, err = db.StoreFacebookLoginInUserProfile(c, userinfo, userId, token)
 	if err != nil {
-		log.Errorf(c, "StoreGitHubLoginInUserProfile() failed:'%v'\n", err)
-		http.Error(w, "StoreGitHubLoginInUserProfile() failed: "+err.Error(), http.StatusInternalServerError)
+		log.Errorf(c, "StoreFacebookLoginInUserProfile() failed:'%v'\n", err)
+		http.Error(w, "StoreFacebookLoginInUserProfile() failed: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
 
