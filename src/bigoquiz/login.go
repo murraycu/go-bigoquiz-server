@@ -219,8 +219,16 @@ func handleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 		return
 	}
 
+	// Get the existing logged-in user's userId, if any, from the cookie, if any:
+	userId, _, err := getProfileFromSession(r)
+	if err != nil {
+		log.Errorf(c, "getProfileFromSession() failed:'%v'\n", err)
+		http.Error(w, "getProfileFromSession() failed: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	// Store in the database:
-	userId, err := db.StoreGitHubLoginInUserProfile(c, userinfo, token)
+	userId, err = db.StoreGitHubLoginInUserProfile(c, userinfo, userId, token)
 	if err != nil {
 		log.Errorf(c, "StoreGitHubLoginInUserProfile() failed:'%v'\n", err)
 		http.Error(w, "StoreGitHubLoginInUserProfile() failed: "+err.Error(), http.StatusInternalServerError)

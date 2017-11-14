@@ -14,40 +14,70 @@ const (
 	DB_KIND_USER_STATS = "UserStats"
 )
 
-func StoreGitHubLoginInUserProfile(c context.Context, userInfo GitHubUserInfo, token *oauth2.Token) (*datastore.Key, error) {
-	q := datastore.NewQuery(DB_KIND_PROFILE).
-		Filter("githubId =", userInfo.Id).
-		Limit(1)
+func getProfileFromDbQuery(c context.Context, q *datastore.Query) (*datastore.Key, *user.Profile, error) {
 	iter := q.Run(c)
 	if iter == nil {
-		return nil, fmt.Errorf("datastore query for githubId failed")
+		return nil, nil, fmt.Errorf("datastore query for googleId failed")
 	}
 
 	var profile user.Profile
-	var key *datastore.Key
-	var err error
-	key, err = iter.Next(&profile)
+	userId, err := iter.Next(&profile)
 	if err == datastore.Done {
-		// It is not in the datastore yet, so we add it.
-		updateProfileFromGitHubUserInfo(&profile, &userInfo, token)
-
-		key = datastore.NewIncompleteKey(c, DB_KIND_PROFILE, nil)
-		if key, err = datastore.Put(c, key, &profile); err != nil {
-			return nil, fmt.Errorf("datastore.Put(with incomplete key %v) failed: %v", key, err)
-		}
+		// This is not an error.
+		return nil, nil, nil
 	} else if err != nil {
 		// An unexpected error.
-		return nil, fmt.Errorf("datastore.Put() failed: %v", err)
-	} else {
-		// Update the Profile:
-		updateProfileFromGitHubUserInfo(&profile, &userInfo, token)
+		return nil, nil, fmt.Errorf("datastore iter.Next() failed: %v", err)
+	}
 
-		if key, err = datastore.Put(c, key, &profile); err != nil {
-			return nil, fmt.Errorf("datastore.Put(with key %v) failed: %v", key, err)
+	return userId, &profile, nil
+}
+
+func getProfileFromDbByGitHubID(c context.Context, id int) (*datastore.Key, *user.Profile, error) {
+	q := datastore.NewQuery(DB_KIND_PROFILE).
+		Filter("githubId =", id).
+		Limit(1)
+	return getProfileFromDbQuery(c, q)
+}
+
+func StoreGitHubLoginInUserProfile(c context.Context, userInfo GitHubUserInfo, userId *datastore.Key, token *oauth2.Token) (*datastore.Key, error) {
+	userIdFound, profile, err := getProfileFromDbByGitHubID(c, userInfo.Id)
+	if err != nil {
+		// An unexpected error.
+		return nil, fmt.Errorf("getProfileFromDbByGitHubID() failed: %v", err)
+	}
+
+	if userIdFound != nil {
+		// Use the found user ID,
+		// ignoring any user id from the caller.
+		userId = userIdFound
+	} else if userId != nil {
+		// Try getting it via the supplied userID instead:
+		profile, err = getProfileFromDbByUserID(c, userId)
+		if err != nil {
+			return nil, fmt.Errorf("getProfileFromDbByUserID() failed")
 		}
 	}
 
-	return key, nil
+	if profile == nil {
+		// It is not in the datastore yet, so we add it.
+		profile = new(user.Profile)
+		updateProfileFromGitHubUserInfo(profile, &userInfo, token)
+
+		userId = datastore.NewIncompleteKey(c, DB_KIND_PROFILE, nil)
+		if userId, err = datastore.Put(c, userId, profile); err != nil {
+			return nil, fmt.Errorf("datastore.Put(with incomplete key %v) failed: %v", userId, err)
+		}
+	} else {
+		// Update the Profile:
+		updateProfileFromGitHubUserInfo(profile, &userInfo, token)
+
+		if userId, err = datastore.Put(c, userId, profile); err != nil {
+			return nil, fmt.Errorf("datastore.Put(with key %v) failed: %v", userId, err)
+		}
+	}
+
+	return userId, nil
 }
 
 func StoreFacebookLoginInUserProfile(c context.Context, userInfo FacebookUserInfo, token *oauth2.Token) (*datastore.Key, error) {
@@ -90,22 +120,7 @@ func getProfileFromDbByGoogleID(c context.Context, sub string) (*datastore.Key, 
 	q := datastore.NewQuery(DB_KIND_PROFILE).
 		Filter("googleId =", sub).
 		Limit(1)
-	iter := q.Run(c)
-	if iter == nil {
-		return nil, nil, fmt.Errorf("datastore query for googleId failed")
-	}
-
-	var profile user.Profile
-	userId, err := iter.Next(&profile)
-	if err == datastore.Done {
-		// This is not an error.
-		return nil, nil, nil
-	} else if err != nil {
-		// An unexpected error.
-		return nil, nil, fmt.Errorf("datastore iter.Next() failed: %v", err)
-	}
-
-	return userId, &profile, nil
+	return getProfileFromDbQuery(c, q)
 }
 
 func getProfileFromDbByUserID(c context.Context, userId *datastore.Key) (*user.Profile, error) {
