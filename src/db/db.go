@@ -61,59 +61,69 @@ func StoreGitHubLoginInUserProfile(c context.Context, userInfo GitHubUserInfo, u
 
 	if profile == nil {
 		// It is not in the datastore yet, so we add it.
-		profile = new(user.Profile)
 		updateProfileFromGitHubUserInfo(profile, &userInfo, token)
 
 		userId = datastore.NewIncompleteKey(c, DB_KIND_PROFILE, nil)
 		if userId, err = datastore.Put(c, userId, profile); err != nil {
-			return nil, fmt.Errorf("datastore.Put(with incomplete key %v) failed: %v", userId, err)
+			return nil, fmt.Errorf("datastore.Put(with incomplete userId %v) failed: %v", userId, err)
 		}
-	} else {
+	} else if userId != nil {
 		// Update the Profile:
 		updateProfileFromGitHubUserInfo(profile, &userInfo, token)
 
 		if userId, err = datastore.Put(c, userId, profile); err != nil {
-			return nil, fmt.Errorf("datastore.Put(with key %v) failed: %v", userId, err)
+			return nil, fmt.Errorf("datastore.Put(with userId %v) failed: %v", userId, err)
 		}
 	}
 
 	return userId, nil
 }
 
-func StoreFacebookLoginInUserProfile(c context.Context, userInfo FacebookUserInfo, token *oauth2.Token) (*datastore.Key, error) {
+func getProfileFromDbByFacebookID(c context.Context, id string) (*datastore.Key, *user.Profile, error) {
 	q := datastore.NewQuery(DB_KIND_PROFILE).
-		Filter("facebookId =", userInfo.Id).
+		Filter("facebookId =", id).
 		Limit(1)
-	iter := q.Run(c)
-	if iter == nil {
-		return nil, fmt.Errorf("datastore query for facebookId failed")
-	}
+	return getProfileFromDbQuery(c, q)
+}
 
-	var profile user.Profile
-	var key *datastore.Key
-	var err error
-	key, err = iter.Next(&profile)
-	if err == datastore.Done {
-		// It is not in the datastore yet, so we add it.
-		updateProfileFromFacebookUserInfo(&profile, &userInfo, token)
-
-		key = datastore.NewIncompleteKey(c, DB_KIND_PROFILE, nil)
-		if key, err = datastore.Put(c, key, &profile); err != nil {
-			return nil, fmt.Errorf("datastore.Put(with incomplete key %v) failed: %v", key, err)
-		}
-	} else if err != nil {
+func StoreFacebookLoginInUserProfile(c context.Context, userInfo FacebookUserInfo, userId *datastore.Key, token *oauth2.Token) (*datastore.Key, error) {
+	userIdFound, profile, err := getProfileFromDbByFacebookID(c, userInfo.Id)
+	if err != nil {
 		// An unexpected error.
-		return nil, fmt.Errorf("datastore.Put() failed: %v", err)
-	} else {
-		// Update the Profile:
-		updateProfileFromFacebookUserInfo(&profile, &userInfo, token)
+		return nil, fmt.Errorf("getProfileFromDbByFacebookID() failed: %v", err)
+	}
 
-		if key, err = datastore.Put(c, key, &profile); err != nil {
-			return nil, fmt.Errorf("datastore.Put(with key %v) failed: %v", key, err)
+	if userIdFound != nil {
+		// Use the found user ID,
+		// ignoring any user id from the caller.
+		userId = userIdFound
+	} else if userId != nil {
+		// Try getting it via the supplied userID instead:
+		profile, err = getProfileFromDbByUserID(c, userId)
+		if err != nil {
+			return nil, fmt.Errorf("getProfileFromDbByUserID() failed")
 		}
 	}
 
-	return key, nil
+	if profile == nil {
+		// It is not in the datastore yet, so we add it.
+		profile = new(user.Profile)
+		updateProfileFromFacebookUserInfo(profile, &userInfo, token)
+
+		userId = datastore.NewIncompleteKey(c, DB_KIND_PROFILE, nil)
+		if userId, err = datastore.Put(c, userId, profile); err != nil {
+			return nil, fmt.Errorf("datastore.Put(with incomplete userId %v) failed: %v", userId, err)
+		}
+	} else if userId != nil {
+		// Update the Profile:
+		updateProfileFromFacebookUserInfo(profile, &userInfo, token)
+
+		if userId, err = datastore.Put(c, userId, profile); err != nil {
+			return nil, fmt.Errorf("datastore.Put(with userId %v) failed: %v", userId, err)
+		}
+	}
+
+	return userId, nil
 }
 
 func getProfileFromDbByGoogleID(c context.Context, sub string) (*datastore.Key, *user.Profile, error) {
