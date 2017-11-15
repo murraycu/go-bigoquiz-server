@@ -69,8 +69,17 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 		return
 	}
 
-	// Store in the database:
-	userId, err := db.StoreGoogleLoginInUserProfile(c, userinfo, token)
+	// Get the existing logged-in user's userId, if any, from the cookie, if any:
+	userId, _, err := getProfileFromSession(r)
+	if err != nil {
+		log.Errorf(c, "getProfileFromSession() failed:'%v'\n", err)
+		http.Error(w, "getProfileFromSession() failed: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Store in the database,
+	// either creating a new user or updating an existing user.
+	userId, err = db.StoreGoogleLoginInUserProfile(c, userinfo, userId, token)
 	if err != nil {
 		log.Errorf(c, "StoreGoogleLoginInUserProfile() failed:'%v'\n", err)
 		http.Error(w, "StoreGoogleLoginInUserProfile() failed: "+err.Error(), http.StatusInternalServerError)

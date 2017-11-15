@@ -86,43 +86,80 @@ func StoreFacebookLoginInUserProfile(c context.Context, userInfo FacebookUserInf
 	return key, nil
 }
 
-// TODO: Make this function generic, parameterizing on GoogleUserInfo/GithubUserInfo,
-// if Go ever has generics.
-// Get the UserProfile via the GoogleID, adding it if necessary.
-func StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, token *oauth2.Token) (*datastore.Key, error) {
+func getProfileFromDbByGoogleID(c context.Context, sub string) (*datastore.Key, *user.Profile, error) {
 	q := datastore.NewQuery(DB_KIND_PROFILE).
-		Filter("googleId =", userInfo.Sub).
+		Filter("googleId =", sub).
 		Limit(1)
 	iter := q.Run(c)
 	if iter == nil {
-		return nil, fmt.Errorf("datastore query for googleId failed")
+		return nil, nil, fmt.Errorf("datastore query for googleId failed")
 	}
 
 	var profile user.Profile
-	var key *datastore.Key
-	var err error
-	key, err = iter.Next(&profile)
+	userId, err := iter.Next(&profile)
 	if err == datastore.Done {
-		// It is not in the datastore yet, so we add it.
-		updateProfileFromGoogleUserInfo(&profile, &userInfo, token)
-
-		key = datastore.NewIncompleteKey(c, DB_KIND_PROFILE, nil)
-		if key, err = datastore.Put(c, key, &profile); err != nil {
-			return nil, fmt.Errorf("datastore.Put(with incomplete key %v) failed: %v", key, err)
-		}
+		// This is not an error.
+		return nil, nil, nil
 	} else if err != nil {
 		// An unexpected error.
-		return nil, fmt.Errorf("datastore.Put() failed: %v", err)
-	} else {
-		// Update the Profile:
-		updateProfileFromGoogleUserInfo(&profile, &userInfo, token)
+		return nil, nil, fmt.Errorf("datastore iter.Next() failed: %v", err)
+	}
 
-		if key, err = datastore.Put(c, key, &profile); err != nil {
-			return nil, fmt.Errorf("datastore.Put(with key %v) failed: %v", key, err)
+	return userId, &profile, nil
+}
+
+func getProfileFromDbByUserID(c context.Context, userId *datastore.Key) (*user.Profile, error) {
+	var profile user.Profile
+	err := datastore.Get(c, userId, &profile)
+	if err != nil {
+		// This is not an error.
+		return nil, nil
+	}
+
+	return &profile, nil
+}
+
+// TODO: Make this function generic, parameterizing on GoogleUserInfo/GithubUserInfo,
+// if Go ever has generics.
+// Get the UserProfile via the GoogleID, adding it if necessary.
+func StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, userId *datastore.Key, token *oauth2.Token) (*datastore.Key, error) {
+	userIdFound, profile, err := getProfileFromDbByGoogleID(c, userInfo.Sub)
+	if err != nil {
+		// An unexpected error.
+		return nil, fmt.Errorf("getProfileFromDbByGoogleID() failed: %v", err)
+	}
+
+	if userIdFound != nil {
+		// Use the found user ID,
+		// ignoring any user id from the caller.
+		userId = userIdFound
+	} else if userId != nil {
+		// Try getting it via the supplied userID instead:
+		profile, err = getProfileFromDbByUserID(c, userId)
+		if err != nil {
+			return nil, fmt.Errorf("getProfileFromDbByUserID() failed")
 		}
 	}
 
-	return key, nil
+	if profile == nil {
+		// It is not in the datastore yet, so we add it.
+		profile = new(user.Profile)
+		updateProfileFromGoogleUserInfo(profile, &userInfo, token)
+
+		userId = datastore.NewIncompleteKey(c, DB_KIND_PROFILE, nil)
+		if userId, err = datastore.Put(c, userId, profile); err != nil {
+			return nil, fmt.Errorf("datastore.Put(with incomplete userId %v) failed: %v", userId, err)
+		}
+	} else if userId != nil {
+		// Update the Profile:
+		updateProfileFromGoogleUserInfo(profile, &userInfo, token)
+
+		if userId, err = datastore.Put(c, userId, profile); err != nil {
+			return nil, fmt.Errorf("datastore.Put(with userId %v) failed: %v", userId, err)
+		}
+	}
+
+	return userId, nil
 }
 
 func GetUserProfileById(c context.Context, userId *datastore.Key) (*user.Profile, error) {
