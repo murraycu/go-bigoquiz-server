@@ -51,7 +51,8 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 
 	code, err := checkStateAndGetCode(r)
 	if err != nil {
-		loginCallbackFailedErr("checkStateAndGetCode() failed", err, w, r)
+		log.Errorf(c, "checkStateAndGetCode() failed", err)
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 
