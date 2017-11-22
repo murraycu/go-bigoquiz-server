@@ -51,14 +51,13 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 
 	code, err := checkStateAndGetCode(r)
 	if err != nil {
-		log.Errorf(c, "checkStateAndGetCode() failed", err)
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		loginCallbackFailedErr("checkStateAndGetCode() failed", err, w, r)
 		return
 	}
 
 	conf := config.GenerateGoogleOAuthConfig(r)
 	if conf == nil {
-		log.Errorf(c, "Unable to generate config.")
+		loginCallbackFailed("Unable to generate config.", w, r)
 		return
 	}
 
@@ -71,16 +70,14 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	var userinfo db.GoogleUserInfo
 	err = json.Unmarshal(body, &userinfo)
 	if err != nil {
-		log.Errorf(c, "Unmarshaling of JSON from oauth2 callback failed:'%v'\n", err)
-		http.Error(w, "Unmarshaling of JSON from oauth2 callback failed: "+err.Error(), http.StatusInternalServerError)
+		loginCallbackFailedErr("Unmarshaling of JSON from oauth2 callback failed", err, w, r)
 		return
 	}
 
 	// Get the existing logged-in user's userId, if any, from the cookie, if any:
 	userId, _, err := getProfileFromSession(r)
 	if err != nil {
-		log.Errorf(c, "getProfileFromSession() failed:'%v'\n", err)
-		http.Error(w, "getProfileFromSession() failed: "+err.Error(), http.StatusInternalServerError)
+		loginCallbackFailedErr("getProfileFromSession() failed", err, w, r)
 		return
 	}
 
@@ -88,8 +85,7 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	// either creating a new user or updating an existing user.
 	userId, err = db.StoreGoogleLoginInUserProfile(c, userinfo, userId, token)
 	if err != nil {
-		log.Errorf(c, "StoreGoogleLoginInUserProfile() failed:'%v'\n", err)
-		http.Error(w, "StoreGoogleLoginInUserProfile() failed: "+err.Error(), http.StatusInternalServerError)
+		loginCallbackFailedErr("StoreGoogleLoginInUserProfile() failed", err, w, r)
 		return
 	}
 
@@ -204,7 +200,7 @@ func handleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 
 	conf := config.GenerateGitHubOAuthConfig(r)
 	if conf == nil {
-		log.Errorf(c, "Unable to generate config.")
+		loginCallbackFailed("Unable to generate config", w, r)
 		return
 	}
 
@@ -217,26 +213,21 @@ func handleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	var userinfo db.GitHubUserInfo
 	err = json.Unmarshal(body, &userinfo)
 	if err != nil {
-		log.Errorf(c, "Unmarshaling of JSON from oauth2 callback failed:'%v'\n", err)
-
-		msg := fmt.Sprintf("Unmarshaling of JSON from oauth2 callback failed: %s\nfor:\n%v", err.Error(), string(body))
-		http.Error(w, msg, http.StatusInternalServerError)
+		loginCallbackFailedErr("Unmarshaling of JSON from oauth2 callback failed", err, w, r)
 		return
 	}
 
 	// Get the existing logged-in user's userId, if any, from the cookie, if any:
 	userId, _, err := getProfileFromSession(r)
 	if err != nil {
-		log.Errorf(c, "getProfileFromSession() failed:'%v'\n", err)
-		http.Error(w, "getProfileFromSession() failed: "+err.Error(), http.StatusInternalServerError)
+		loginCallbackFailedErr("getProfileFromSession() failed", err, w, r)
 		return
 	}
 
 	// Store in the database:
 	userId, err = db.StoreGitHubLoginInUserProfile(c, userinfo, userId, token)
 	if err != nil {
-		log.Errorf(c, "StoreGitHubLoginInUserProfile() failed:'%v'\n", err)
-		http.Error(w, "StoreGitHubLoginInUserProfile() failed: "+err.Error(), http.StatusInternalServerError)
+		loginCallbackFailedErr("StoreGitHubLoginInUserProfile() failed", err, w, r)
 		return
 	}
 
@@ -276,7 +267,7 @@ func handleFacebookCallback(w http.ResponseWriter, r *http.Request, ps httproute
 
 	conf := config.GenerateFacebookOAuthConfig(r)
 	if conf == nil {
-		log.Errorf(c, "Unable to generate config.")
+		loginCallbackFailed("Unable to generate config", w, r)
 		return
 	}
 
@@ -289,26 +280,21 @@ func handleFacebookCallback(w http.ResponseWriter, r *http.Request, ps httproute
 	var userinfo db.FacebookUserInfo
 	err = json.Unmarshal(body, &userinfo)
 	if err != nil {
-		log.Errorf(c, "Unmarshaling of JSON from oauth2 callback failed:'%v'\n", err)
-
-		msg := fmt.Sprintf("Unmarshaling of JSON from oauth2 callback failed: %s\nfor:\n%v", err.Error(), string(body))
-		http.Error(w, msg, http.StatusInternalServerError)
+		loginCallbackFailedErr("Unmarshaling of JSON from oauth2 callback failed", err, w, r)
 		return
 	}
 
 	// Get the existing logged-in user's userId, if any, from the cookie, if any:
 	userId, _, err := getProfileFromSession(r)
 	if err != nil {
-		log.Errorf(c, "getProfileFromSession() failed:'%v'\n", err)
-		http.Error(w, "getProfileFromSession() failed: "+err.Error(), http.StatusInternalServerError)
+		loginCallbackFailedErr("getProfileFromSession() failed.", err, w, r)
 		return
 	}
 
 	// Store in the database:
 	userId, err = db.StoreFacebookLoginInUserProfile(c, userinfo, userId, token)
 	if err != nil {
-		log.Errorf(c, "StoreFacebookLoginInUserProfile() failed:'%v'\n", err)
-		http.Error(w, "StoreFacebookLoginInUserProfile() failed: "+err.Error(), http.StatusInternalServerError)
+		loginCallbackFailedErr("StoreFacebookLoginInUserProfile() failed.", err, w, r)
 		return
 	}
 
@@ -320,6 +306,20 @@ func loginFailed(c context.Context, message string, err error, w http.ResponseWr
 
 	log.Errorf(c, message+":'%v'\n", err)
 	http.Redirect(w, r, loginFailedUrl, http.StatusTemporaryRedirect)
+}
+
+func loginCallbackFailedErr(message string, err error, w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+
+	log.Errorf(c, message+":'%v'\n", err)
+	http.Redirect(w, r, "/", http.StatusInternalServerError)
+}
+
+func loginCallbackFailed(message string, w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+
+	log.Errorf(c, message)
+	http.Redirect(w, r, "/", http.StatusInternalServerError)
 }
 
 func logoutError(message string, err error, w http.ResponseWriter, r *http.Request) {
