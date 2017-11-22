@@ -49,27 +49,20 @@ func checkStateAndGetCode(r *http.Request) (string, error) {
 func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	c := appengine.NewContext(r)
 
-	code, err := checkStateAndGetCode(r)
-	if err != nil {
-		log.Errorf(c, "checkStateAndGetCode() failed", err)
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
-		return
-	}
-
 	conf := config.GenerateGoogleOAuthConfig(r)
 	if conf == nil {
 		loginCallbackFailed("Unable to generate config.", w, r)
 		return
 	}
 
-	token, body, ok := exchangeAndGetUserBody(w, r, conf, code, "https://www.googleapis.com/oauth2/v3/userinfo", c)
+	token, body, ok := checkStateAndGetBody(w, r, conf, "https://www.googleapis.com/oauth2/v3/userinfo", c)
 	if !ok {
-		// exchangeAndGetUserBody() already called loginFailed().
+		// checkStateAndGetBody() already called loginFailed().
 		return
 	}
 
 	var userinfo db.GoogleUserInfo
-	err = json.Unmarshal(body, &userinfo)
+	err := json.Unmarshal(body, &userinfo)
 	if err != nil {
 		loginCallbackFailedErr("Unmarshaling of JSON from oauth2 callback failed", err, w, r)
 		return
@@ -91,6 +84,17 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	}
 
 	storeCookieAndRedirect(r, w, c, userId, token)
+}
+
+func checkStateAndGetBody(w http.ResponseWriter, r *http.Request, conf *oauth2.Config, url string, c context.Context) (*oauth2.Token, []byte, bool) {
+	code, err := checkStateAndGetCode(r)
+	if err != nil {
+		log.Errorf(c, "checkStateAndGetCode() failed", err)
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return nil, nil, false
+	}
+
+	return exchangeAndGetUserBody(w, r, conf, code, url, c)
 }
 
 func exchangeAndGetUserBody(w http.ResponseWriter, r *http.Request, conf *oauth2.Config, code string, url string, c context.Context) (*oauth2.Token, []byte, bool) {
@@ -192,27 +196,20 @@ func handleGitHubLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 func handleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	c := appengine.NewContext(r)
 
-	code, err := checkStateAndGetCode(r)
-	if err != nil {
-		log.Errorf(c, "checkStateAndGetCode() failed", err)
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
-		return
-	}
-
 	conf := config.GenerateGitHubOAuthConfig(r)
 	if conf == nil {
 		loginCallbackFailed("Unable to generate config", w, r)
 		return
 	}
 
-	token, body, ok := exchangeAndGetUserBody(w, r, conf, code, "https://api.github.com/user", c)
+	token, body, ok := checkStateAndGetBody(w, r, conf, "https://api.github.com/user", c)
 	if !ok {
-		// exchangeAndGetUserBody() already called loginFailed().
+		// checkStateAndGetBody() already called loginFailed().
 		return
 	}
 
 	var userinfo db.GitHubUserInfo
-	err = json.Unmarshal(body, &userinfo)
+	err := json.Unmarshal(body, &userinfo)
 	if err != nil {
 		loginCallbackFailedErr("Unmarshaling of JSON from oauth2 callback failed", err, w, r)
 		return
@@ -259,27 +256,20 @@ func handleFacebookLogin(w http.ResponseWriter, r *http.Request, ps httprouter.P
 func handleFacebookCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	c := appengine.NewContext(r)
 
-	code, err := checkStateAndGetCode(r)
-	if err != nil {
-		log.Errorf(c, "checkStateAndGetCode() failed", err)
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
-		return
-	}
-
 	conf := config.GenerateFacebookOAuthConfig(r)
 	if conf == nil {
 		loginCallbackFailed("Unable to generate config", w, r)
 		return
 	}
 
-	token, body, ok := exchangeAndGetUserBody(w, r, conf, code, "https://graph.facebook.com/me?fields=link,name,email", c)
+	token, body, ok := checkStateAndGetBody(w, r, conf, "https://graph.facebook.com/me?fields=link,name,email", c)
 	if !ok {
-		// exchangeAndGetUserBody() already called loginFailed().
+		// checkStateAndGetBody() already called loginFailed().
 		return
 	}
 
 	var userinfo db.FacebookUserInfo
-	err = json.Unmarshal(body, &userinfo)
+	err := json.Unmarshal(body, &userinfo)
 	if err != nil {
 		loginCallbackFailedErr("Unmarshaling of JSON from oauth2 callback failed", err, w, r)
 		return
