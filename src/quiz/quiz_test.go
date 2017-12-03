@@ -14,7 +14,7 @@ func TestLoadQuizWithBadFilepath(t *testing.T) {
 
 	q, err := LoadQuiz(absFilePath, id)
 	if err == nil {
-		t.Error("LoadQuiz() did not faile with an error.")
+		t.Error("LoadQuiz() did not fail with an error.")
 	}
 
 	if q != nil {
