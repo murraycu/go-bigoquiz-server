@@ -22,17 +22,20 @@ func TestLoadQuizWithBadFilepath(t *testing.T) {
 	}
 }
 
-func TestLoadQuiz(t *testing.T) {
-	id := "bigo"
-	absFilePath, err := filepath.Abs("../bigoquiz/quizzes/" + id + ".xml")
+func loadQuiz(t *testing.T, quizId string) *Quiz {
+	absFilePath, err := filepath.Abs("../bigoquiz/quizzes/" + quizId + ".xml")
 	if err != nil {
 		t.Error("Could not find file.", err)
 	}
-
-	q, err := LoadQuiz(absFilePath, id)
+	q, err := LoadQuiz(absFilePath, quizId)
 	if err != nil {
 		t.Error("LoadQuiz() failed.", err)
 	}
+	return q
+}
+
+func TestLoadQuiz(t *testing.T) {
+	q := loadQuiz(t, "bigo")
 
 	if q.Sections == nil {
 		t.Error("The quiz has no sections.")
@@ -93,5 +96,66 @@ func TestLoadQuiz(t *testing.T) {
 
 	if len(qa.Question.Choices) == 0 {
 		t.Error("The question does not have any choices")
+	}
+}
+
+func TestLoadQuizWithReverseSection(t *testing.T) {
+	q := loadQuiz(t, "datastructures")
+
+	if q.Sections == nil {
+		t.Error("The quiz has no sections.")
+	}
+
+	const SECTION_ID = "reverse-datastructures-hash-tables"
+	section := q.GetSection(SECTION_ID)
+	if section == nil {
+		t.Error("The quiz does not have the expected reverse section.")
+	}
+
+	if section.Id != SECTION_ID {
+		t.Error("The reverse section does not have the expected ID.")
+	}
+
+	if section.Title != "Reverse: Hash Tables" {
+		t.Error("The reverse section does not have the expected title.")
+	}
+
+	if section.Link != "https://en.wikipedia.org/wiki/Hash_table" {
+		t.Error("The reverse section does not have the expected link.")
+	}
+
+	const QUESTION_ID = "reverse-datastructures-hash-tables-open-addressing-strategy-probe-sequence"
+	qa := q.GetQuestionAndAnswer(QUESTION_ID)
+	if qa == nil {
+		t.Error("The quiz does not have the expected reverse question.")
+	}
+
+	if qa.Question.Id != QUESTION_ID {
+		t.Error("The reverse question does not have the expected ID.")
+	}
+
+	if qa.Question.SectionId != SECTION_ID {
+		t.Error("The reverse question does not have the expected SectionId.")
+	}
+
+	if qa.Question.Section.Id != SECTION_ID {
+		t.Error("The reverse question does not have the expected section ID.")
+	}
+
+	if qa.Question.Section.Title != "Reverse: Hash Tables" {
+		t.Error("The reverse question does not have the expected section ID.")
+	}
+
+	const SUB_SECTION_ID = "datastructures-hash-tables-open-addressing-strategies"
+	if qa.Question.SubSectionId != SUB_SECTION_ID {
+		t.Error("The question does not have the expected subSectionId.")
+	}
+
+	if qa.Question.SubSection.Id != SUB_SECTION_ID {
+		t.Error("The question does not have the expected sub-section ID.")
+	}
+
+	if qa.Question.SubSection.Title != "Open addressing strategies" {
+		t.Error("The question does not have the expected sub-section title.")
 	}
 }
