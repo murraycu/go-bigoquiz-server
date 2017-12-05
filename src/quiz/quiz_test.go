@@ -94,6 +94,18 @@ func TestLoadQuiz(t *testing.T) {
 		t.Error("The question does not have the expected sub-section Title.")
 	}
 
+	if qa.Question.Text.Text != "Search (Worst)" {
+		t.Error("The question does not have the expected text.")
+	}
+
+	if qa.Question.Text.IsHtml {
+		t.Error("The question does not have the expected isHtml value.")
+	}
+
+	if qa.Answer.Text != "O(log(n))" {
+		t.Error("The question does not have the expected answer text.")
+	}
+
 	if len(qa.Question.Choices) == 0 {
 		t.Error("The question does not have any choices")
 	}
@@ -157,5 +169,17 @@ func TestLoadQuizWithReverseSection(t *testing.T) {
 
 	if qa.Question.SubSection.Title != "Open addressing strategies" {
 		t.Error("The question does not have the expected sub-section title.")
+	}
+
+	if qa.Question.Text.Text != "The buckets are examined, starting with the hashed-to slot and proceeding in some probe sequence, until an unoccupied slot is found." {
+		t.Error("The question does not have the expected text.", qa.Question.Text.Text)
+	}
+
+	if qa.Question.Text.IsHtml {
+		t.Error("The question does not have the expected isHtml value.")
+	}
+
+	if qa.Answer.Text != "Probe sequence" {
+		t.Error("The question does not have the expected answer text.", qa.Answer.Text)
 	}
 }
