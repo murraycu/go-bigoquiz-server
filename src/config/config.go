@@ -69,7 +69,7 @@ func GenerateConfig() (*Config, error) {
 	var result Config
 	err = json.Unmarshal(b, &result)
 	if err != nil {
-		return nil, fmt.Errorf("json.Unmarshal failed", err)
+		return nil, fmt.Errorf("json.Unmarshal failed: %v", err)
 	}
 
 	return &result, nil
@@ -91,7 +91,7 @@ func generateOAuthConfig(r *http.Request, credentialsFilename string, scope ...s
 
 	config, err := google.ConfigFromJSON(b, scope...)
 	if err != nil {
-		log.Errorf(c, "Unable to parse client secret file (%) to config: %v", credentialsFilename, err)
+		log.Errorf(c, "Unable to parse client secret file (%s) to config: %v", credentialsFilename, err)
 		return nil
 	}
 

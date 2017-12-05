@@ -89,7 +89,7 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 func checkStateAndGetBody(w http.ResponseWriter, r *http.Request, conf *oauth2.Config, url string, c context.Context) (*oauth2.Token, []byte, bool) {
 	code, err := checkStateAndGetCode(r)
 	if err != nil {
-		log.Errorf(c, "checkStateAndGetCode() failed", err)
+		log.Errorf(c, "checkStateAndGetCode() failed: %v", err)
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return nil, nil, false
 	}
