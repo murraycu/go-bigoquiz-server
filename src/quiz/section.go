@@ -50,6 +50,7 @@ func (self *Section) createReverse() *Section {
 		reverseSub.Id = sub.Id
 		reverseSub.Title = sub.Title
 		reverseSub.Link = sub.Link
+		reverseSub.AnswersAsChoices = sub.AnswersAsChoices
 
 		for _, q := range sub.Questions {
 			reverseSub.Questions = append(reverseSub.Questions, q.createReverse())

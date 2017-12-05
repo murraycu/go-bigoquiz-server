@@ -182,4 +182,8 @@ func TestLoadQuizWithReverseSection(t *testing.T) {
 	if qa.Answer.Text != "Probe sequence" {
 		t.Error("The question does not have the expected answer text.", qa.Answer.Text)
 	}
+
+	if len(qa.Question.Choices) == 0 {
+		t.Error("The question does not have any choices")
+	}
 }
