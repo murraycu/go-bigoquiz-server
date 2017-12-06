@@ -49,24 +49,24 @@ func getProfileFromSession(r *http.Request) (*datastore.Key, *oauth2.Token, erro
 	var token *oauth2.Token
 	token, ok = tokenVal.(*oauth2.Token)
 	if !ok {
-		return nil, nil, fmt.Errorf("oauthTokenSessionKey is not a *Token.")
+		return nil, nil, fmt.Errorf("oauthTokenSessionKey is not a *Token")
 	}
 
 	// Get the name from the database, via the userID from the cookie:
 	userIdVal, ok := session.Values[userIdSessionKey]
 	if !ok {
-		return nil, nil, fmt.Errorf("No name as value).")
+		return nil, nil, fmt.Errorf("No name as value")
 	}
 
 	// Try casting it to the expected type:
 	var userId *datastore.Key
 	userId, ok = userIdVal.(*datastore.Key)
 	if !ok {
-		return nil, nil, fmt.Errorf("No name as *Key. userIdVal is not a *Key.")
+		return nil, nil, fmt.Errorf("No name as *Key. userIdVal is not a *Key")
 	}
 
 	if userId == nil {
-		return nil, nil, fmt.Errorf("userId is null).")
+		return nil, nil, fmt.Errorf("userId is null")
 	}
 
 	return userId, token, nil
