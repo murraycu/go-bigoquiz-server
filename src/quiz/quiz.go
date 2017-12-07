@@ -318,7 +318,7 @@ func getRandomQuestionFromSlice(questions []*QuestionAndAnswer) *Question {
 	}
 
 	i := rand.Intn(count - 1)
-	var qa *QuestionAndAnswer = questions[i]
+	qa := questions[i]
 	return &(qa.Question)
 }
 
