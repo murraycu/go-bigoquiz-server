@@ -28,7 +28,7 @@ func generateGoogleOAuthUrl(r *http.Request) string {
 		return ""
 	}
 
-	return conf.AuthCodeURL(oauthStateString)
+	return conf.AuthCodeURL(generateState())
 }
 
 func handleGoogleLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -37,10 +37,18 @@ func handleGoogleLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 	http.Redirect(w, r, url, http.StatusFound)
 }
 
+func generateState() string {
+	return oauthStateString
+}
+
+func stateIsValid(state string) bool {
+	return state == oauthStateString
+}
+
 func checkStateAndGetCode(r *http.Request) (string, error) {
 	state := r.FormValue("state")
-	if state != oauthStateString {
-		return "", fmt.Errorf("invalid oauth state, expected '%s', got '%s'\n", oauthStateString, state)
+	if !stateIsValid(state) {
+		return "", fmt.Errorf("invalid oauth state: '%s'\n", state)
 	}
 
 	return r.FormValue("code"), nil
@@ -184,7 +192,7 @@ func generateGitHubOAuthUrl(r *http.Request) string {
 		return ""
 	}
 
-	return conf.AuthCodeURL(oauthStateString, oauth2.AccessTypeOnline)
+	return conf.AuthCodeURL(generateState(), oauth2.AccessTypeOnline)
 }
 
 func handleGitHubLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -244,7 +252,7 @@ func generateFacebookOAuthUrl(r *http.Request) string {
 		return ""
 	}
 
-	return conf.AuthCodeURL(oauthStateString, oauth2.AccessTypeOnline)
+	return conf.AuthCodeURL(generateState(), oauth2.AccessTypeOnline)
 }
 
 func handleFacebookLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
