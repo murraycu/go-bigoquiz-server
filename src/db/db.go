@@ -286,7 +286,7 @@ func GetUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string
 	}
 
 	// Get all the Stats from the db, for each section:
-	q := GetQueryForUserStatsForQuiz(userId, quizId)
+	q := getQueryForUserStatsForQuiz(userId, quizId)
 	iter := q.Run(c)
 
 	if iter == nil {
@@ -322,7 +322,7 @@ func GetUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string
 // Get the stats for a specific section ID, from the database.
 func GetUserStatsForSection(c context.Context, userId *datastore.Key, quizId string, sectionId string) (*user.Stats, error) {
 	// Get all the Stats from the db, for each section:
-	q := GetQueryForUserStatsForQuiz(userId, quizId).
+	q := getQueryForUserStatsForQuiz(userId, quizId).
 		Filter("sectionId =", sectionId).
 		Limit(1)
 	iter := q.Run(c)
@@ -390,7 +390,7 @@ func getQueryForUserStats(userId *datastore.Key) *datastore.Query {
 		Filter("userId =", userId)
 }
 
-func GetQueryForUserStatsForQuiz(userId *datastore.Key, quizId string) *datastore.Query {
+func getQueryForUserStatsForQuiz(userId *datastore.Key, quizId string) *datastore.Query {
 	return getQueryForUserStats(userId).
 		Filter("quizId = ", quizId)
 }
@@ -406,7 +406,7 @@ func DeleteUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId str
 		return fmt.Errorf("DeleteUserStatsForQuiz(): quizId is nil or empty")
 	}
 
-	q := GetQueryForUserStatsForQuiz(userId, quizId)
+	q := getQueryForUserStatsForQuiz(userId, quizId)
 	iter := q.Run(c)
 
 	if iter == nil {
