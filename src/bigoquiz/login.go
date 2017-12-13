@@ -14,6 +14,8 @@ import (
 	"google.golang.org/appengine/log"
 	"io/ioutil"
 	"net/http"
+	"strconv"
+	"math/rand"
 )
 
 /** Get an oauth2 URL based on the secret .json file.
@@ -28,7 +30,7 @@ func generateGoogleOAuthUrl(r *http.Request) string {
 		return ""
 	}
 
-	return conf.AuthCodeURL(generateState())
+	return conf.AuthCodeURL(generateState(c))
 }
 
 func handleGoogleLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -37,17 +39,24 @@ func handleGoogleLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 	http.Redirect(w, r, url, http.StatusFound)
 }
 
-func generateState() string {
-	return oauthStateString
+func generateState(c context.Context) string {
+	state := rand.Int63()
+	db.StoreOAuthState(c, state)
+	return strconv.FormatInt(state, 10)
 }
 
-func stateIsValid(state string) bool {
-	return state == oauthStateString
+func stateIsValid(c context.Context, state string) bool {
+	stateNum, err :=  strconv.ParseInt(state, 10, 64)
+	if err != nil {
+		return false
+	}
+
+	return db.CheckOAuthState(c, stateNum)
 }
 
-func checkStateAndGetCode(r *http.Request) (string, error) {
+func checkStateAndGetCode(c context.Context, r *http.Request) (string, error) {
 	state := r.FormValue("state")
-	if !stateIsValid(state) {
+	if !stateIsValid(c, state) {
 		return "", fmt.Errorf("invalid oauth state: '%s'\n", state)
 	}
 
@@ -95,7 +104,7 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 }
 
 func checkStateAndGetBody(w http.ResponseWriter, r *http.Request, conf *oauth2.Config, url string, c context.Context) (*oauth2.Token, []byte, bool) {
-	code, err := checkStateAndGetCode(r)
+	code, err := checkStateAndGetCode(c, r)
 	if err != nil {
 		log.Errorf(c, "checkStateAndGetCode() failed: %v", err)
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
@@ -192,7 +201,7 @@ func generateGitHubOAuthUrl(r *http.Request) string {
 		return ""
 	}
 
-	return conf.AuthCodeURL(generateState(), oauth2.AccessTypeOnline)
+	return conf.AuthCodeURL(generateState(c), oauth2.AccessTypeOnline)
 }
 
 func handleGitHubLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -252,7 +261,7 @@ func generateFacebookOAuthUrl(r *http.Request) string {
 		return ""
 	}
 
-	return conf.AuthCodeURL(generateState(), oauth2.AccessTypeOnline)
+	return conf.AuthCodeURL(generateState(c), oauth2.AccessTypeOnline)
 }
 
 func handleFacebookLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -329,10 +338,6 @@ func logoutError(message string, err error, w http.ResponseWriter, r *http.Reque
 }
 
 const (
-	// Some random string, random for each request
-	// TODO: Actually be random, and somehow check it in the callback.
-	oauthStateString = "random"
-
 	defaultSessionID     = "default"
 	oauthTokenSessionKey = "oauth_token"
 	userIdSessionKey     = "id" // A generic user ID, not a google user ID.

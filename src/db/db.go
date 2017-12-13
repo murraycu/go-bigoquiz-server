@@ -12,6 +12,7 @@ const (
 	// These are like database table names.
 	DB_KIND_PROFILE    = "UserProfile"
 	DB_KIND_USER_STATS = "UserStats"
+	DB_KIND_OAUTH_STATE = "OAuthState"
 )
 
 func getProfileFromDbQuery(c context.Context, q *datastore.Query) (*datastore.Key, *user.Profile, error) {
