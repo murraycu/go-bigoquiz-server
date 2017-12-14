@@ -900,7 +900,7 @@
         </question>
     </section>
 
-    <section id="graph-bfs-or-dfs" answers_as_choices="true" and_reverse="true">
+    <section id="graph-bfs-or-dfs" answers_as_choices="true">
         <title>Breadth First Search (BFS) or Depth First Search (DFS)</title>
         <question id="bfs-or-dfs-shortest-path">
             <text>Single Source Shortest Path (unweighted)</text>
