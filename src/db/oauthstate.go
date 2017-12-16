@@ -13,8 +13,12 @@ type OAuthState struct {
 	timestamp time.Time
 }
 
+func stateKey(c context.Context, state int64) *datastore.Key {
+	return datastore.NewKey(c, DB_KIND_OAUTH_STATE, "", state, nil)
+}
+
 func StoreOAuthState(c context.Context, state int64) error {
-	key := datastore.NewKey(c, DB_KIND_OAUTH_STATE, "", state, nil)
+	key := stateKey(c, state)
 
 	var stateObj OAuthState;
 
@@ -32,9 +36,8 @@ func StoreOAuthState(c context.Context, state int64) error {
 	return err
 }
 
-
 func CheckOAuthState(c context.Context, state int64) bool {
-	key := datastore.NewKey(c, DB_KIND_OAUTH_STATE, "", state, nil)
+	key := stateKey(c, state)
 
 	var stateObj OAuthState
 	err := datastore.Get(c, key, &stateObj)
