@@ -50,3 +50,8 @@ func CheckOAuthState(c context.Context, state int64) bool {
 
 	return err == nil
 }
+
+func RemoveOAuthState(c context.Context, state int64) error {
+	key := stateKey(c, state)
+	return datastore.Delete(c, key)
+}

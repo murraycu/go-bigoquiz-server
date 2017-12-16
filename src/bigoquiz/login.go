@@ -54,11 +54,24 @@ func stateIsValid(c context.Context, state string) bool {
 	return db.CheckOAuthState(c, stateNum)
 }
 
+func removeState(c context.Context, state string) error {
+	stateNum, err :=  strconv.ParseInt(state, 10, 64)
+	if err != nil {
+		return err
+	}
+
+	return db.RemoveOAuthState(c, stateNum)
+}
+
 func checkStateAndGetCode(c context.Context, r *http.Request) (string, error) {
 	state := r.FormValue("state")
 	if !stateIsValid(c, state) {
 		return "", fmt.Errorf("invalid oauth state: '%s'\n", state)
 	}
+
+	// The state will not be used again,
+	// so remove it from the datastore.
+	removeState(c, state)
 
 	return r.FormValue("code"), nil
 }
