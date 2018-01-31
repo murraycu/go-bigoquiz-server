@@ -1,4 +1,4 @@
-service: betaapi
+service: api
 runtime: go
 api_version: go1.8
 
