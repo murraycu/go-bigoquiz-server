@@ -282,7 +282,7 @@
 
         <question id="networking-protocols-tcp-or-udp-dns">
             <text>DNS</text>
-            <answer>UDP</answer>
+            <answer>TCP or UDP</answer>
             <link>https://en.wikipedia.org/wiki/Domain_Name_System</link>
         </question>
 
