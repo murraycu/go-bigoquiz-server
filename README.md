@@ -16,9 +16,20 @@ It is not yet live at bigoquiz.com.
 ## Build / Deploy
 
 (TODO: Restructure/reconfigure the project so we don't need to specify bigoquiz and src/bigoquiz in these commands.)
+Unfortunately, this project only builds when it is in a parent src/github.com/murraycu/ directory.
+That is incredibly annoying, but hopefully one day the dep tool will not require it:
+https://github.com/golang/dep/issues/911#issuecomment-318516931
 
+For instance, first place the sources at a suitable path:
+
+    $ mkdir -p ~/bigoquiz-build/github.com/murraycu/src
+    $ cd ~/bigoquiz-build/github.com/murraycu/src
     $ git clone git@github.com:murraycu/go-bigoquiz-server.git
+
+Then build the project:
+
     $ cd go-bigoquiz-server
+    $ export GOPATH=~/bigoquiz-build/github.com/murraycu
     $ dep ensure
     $ go build
 
