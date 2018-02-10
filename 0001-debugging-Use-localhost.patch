@@ -29,9 +29,9 @@ index b1dd159..766e67b 100644
  )
  
  const (
--	BaseUrl = "https://beta.bigoquiz.com"
+-	BaseUrl = "https://bigoquiz.com"
 -	// When running angular-bigoquiz-client with ng serve: BaseUrl = "http://localhost:4200"
-+	// BaseUrl = "https://beta.bigoquiz.com"
++	// BaseUrl = "https://bigoquiz.com"
 +	// When running angular-bigoquiz-client with ng serve:
 +	BaseUrl = "http://localhost:4200"
  

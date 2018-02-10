@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	BaseUrl = "https://beta.bigoquiz.com"
+	BaseUrl = "https://bigoquiz.com"
 	// When running angular-bigoquiz-client with ng serve: BaseUrl = "http://localhost:4200"
 
 	// This file contains other secrets, such as the keys for the encrypted cookie store.
