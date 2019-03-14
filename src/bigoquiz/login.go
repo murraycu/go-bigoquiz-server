@@ -30,7 +30,13 @@ func generateGoogleOAuthUrl(r *http.Request) string {
 		return ""
 	}
 
-	return conf.AuthCodeURL(generateState(c))
+	state, err := generateState(c)
+	if err != nil {
+		log.Errorf(c, "Unable to generate state.")
+		return ""
+	}
+
+	return conf.AuthCodeURL(state)
 }
 
 func handleGoogleLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -39,10 +45,14 @@ func handleGoogleLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 	http.Redirect(w, r, url, http.StatusFound)
 }
 
-func generateState(c context.Context) string {
+func generateState(c context.Context) (string, error) {
 	state := rand.Int63()
-	db.StoreOAuthState(c, state)
-	return strconv.FormatInt(state, 10)
+	err := db.StoreOAuthState(c, state)
+	if err != nil {
+		return "", fmt.Errorf("StoreOAuthState() failed: %v", err)
+	}
+
+	return strconv.FormatInt(state, 10), nil
 }
 
 func stateIsValid(c context.Context, state string) bool {
@@ -214,7 +224,13 @@ func generateGitHubOAuthUrl(r *http.Request) string {
 		return ""
 	}
 
-	return conf.AuthCodeURL(generateState(c), oauth2.AccessTypeOnline)
+	state, err := generateState(c)
+	if err != nil {
+		log.Errorf(c, "Unable to generate state.")
+		return ""
+	}
+
+	return conf.AuthCodeURL(state, oauth2.AccessTypeOnline)
 }
 
 func handleGitHubLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -274,7 +290,13 @@ func generateFacebookOAuthUrl(r *http.Request) string {
 		return ""
 	}
 
-	return conf.AuthCodeURL(generateState(c), oauth2.AccessTypeOnline)
+	state, err := generateState(c)
+	if err != nil {
+		log.Errorf(c, "Unable to generate state.")
+		return ""
+	}
+
+	return conf.AuthCodeURL(state, oauth2.AccessTypeOnline)
 }
 
 func handleFacebookLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {

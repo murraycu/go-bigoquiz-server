@@ -1,6 +1,7 @@
 package db
 
 import (
+	"fmt"
 	"golang.org/x/net/context"
 	"google.golang.org/appengine/datastore"
 	"time"
@@ -26,12 +27,9 @@ func StoreOAuthState(c context.Context, state int64) error {
 	stateObj.timestamp = time.Now().UTC()
 
 	_, err := datastore.Put(c, key, &stateObj)
-
-	/*
 	if err != nil {
-		log.Errorf(c, "datastore.Put() failed: %v", err)
+		return fmt.Errorf("datastore.Put() failed: %v", err)
 	}
-	*/
 
 	return err
 }
