@@ -156,6 +156,7 @@
                 <text>Cartesian Tree</text>
                 <link>https://en.wikipedia.org/wiki/Cartesian_tree</link>
                 <answer>A heap-ordered tree whose in-order traversal recreates the original sequence.</answer>
+                <note>A cartesian tree is a min-heap, so the LCA (Lowest Common Ancestor) of 2 nodes in the cartesian tree is the RMQ (Range Minimum Query) of the original sequence.</note>
             </question>
 
             <question id="datastructures-description-trie">
