@@ -189,7 +189,7 @@
             <question id="datastructures-description-van-emde-boas-tree">
                 <text>Van Emde Boas Tree</text>
                 <link>https://en.wikipedia.org/wiki/Van_Emde_Boas_tree</link>
-                <answer>Associative array allowing fast O(lg lg N) successor/predecessor, and O(1) max/min, on keys of limited range N. by using a hierarchy of of clusters, each with a min and max.</answer>
+                <answer>Associative array allowing fast O(lg lg N) successor/predecessor, and O(1) max/min, on keys of limited range N. by using a hierarchy of clusters, each with a min and max.</answer>
             </question>
 
             <!-- See "How does Binary Indexed Tree work?" here: http://www.geeksforgeeks.org/binary-indexed-tree-or-fenwick-tree-2/
@@ -440,7 +440,7 @@
             <question id="datastructures-implementation-van-emde-boas-tree">
                 <text>Van Emde Boas Tree</text>
                 <link>https://en.wikipedia.org/wiki/Van_Emde_Boas_tree</link>
-                <answer>A hierarchy of of clusters that summarize less sparse clusters, each with a min and max.</answer>
+                <answer>A hierarchy of clusters that summarize less sparse clusters, each with a min and max.</answer>
             </question>
 
             <question id="datastructures-implementation-binary-indexed-tree">
@@ -726,7 +726,7 @@ Or alternatively, a (balanced) binary tree with intervals in each node, using th
             <question id="datastructures-uses-van-emde-boas-tree">
                 <text>Van Emde Boas Tree</text>
                 <link>https://en.wikipedia.org/wiki/Van_Emde_Boas_tree</link>
-                <answer>Associative array allowing fast O(lg lg N) successor/predecessor, and O(1) max/min, on keys of limited range N. by using a hierarchy of of clusters, each with a min and max.</answer>
+                <answer>Associative array allowing fast O(lg lg N) successor/predecessor, and O(1) max/min, on keys of limited range N. by using a hierarchy of clusters, each with a min and max.</answer>
             </question>
             -->
 
