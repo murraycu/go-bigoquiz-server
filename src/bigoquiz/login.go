@@ -67,7 +67,7 @@ func stateIsValid(c context.Context, state string) bool {
 func removeState(c context.Context, state string) error {
 	stateNum, err :=  strconv.ParseInt(state, 10, 64)
 	if err != nil {
-		return err
+		return fmt.Errorf("strconv.ParseInt() failed: %v", err)
 	}
 
 	return db.RemoveOAuthState(c, stateNum)
@@ -81,7 +81,10 @@ func checkStateAndGetCode(c context.Context, r *http.Request) (string, error) {
 
 	// The state will not be used again,
 	// so remove it from the datastore.
-	removeState(c, state)
+	err := removeState(c, state)
+	if err != nil {
+		return "", fmt.Errorf("removeState() failed: %v", err)
+	}
 
 	return r.FormValue("code"), nil
 }
