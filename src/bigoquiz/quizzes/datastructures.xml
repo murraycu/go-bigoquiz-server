@@ -411,7 +411,7 @@
             <question id="datastructures-implementation-cartesian-tree">
                 <text>Cartesian Tree</text>
                 <link>https://en.wikipedia.org/wiki/Cartesian_tree#Efficient_construction</link>
-                <answer>Construct the tree in (amortized) O(n) time by adding each node to the previous node, walking up the tree and splitting an edge if necessary, making children into left nodes.</answer>
+                <answer>Construct the tree in (amortized) O(n) time by adding each node to the previous node, walking up the tree and splitting an edge if necessary, making children into left nodes.  Alternatively, use a stack: Pop previous nodes with lesser values to make the oldest lesser node a left child. And chain later nodes with decreasing values, as right children.</answer>
             </question>
 
             <question id="datastructures-implementation-trie">
