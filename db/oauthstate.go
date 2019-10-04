@@ -40,26 +40,22 @@ func StoreOAuthState(c context.Context, state int64) error {
 	return err
 }
 
-func CheckOAuthState(c context.Context, state int64) bool {
+func CheckOAuthState(c context.Context, state int64) error {
 	key := stateKey(c, state)
 
 	client, err := dataStoreClient(c)
 	if err != nil {
-		return false
-		// TODO: return fmt.Errorf("datastoreClient() failed: %v", err)
+		return fmt.Errorf("datastoreClient() failed: %v", err)
 	}
 	defer client.Close()
 
 	var stateObj OAuthState
 	err = client.Get(c, key, &stateObj)
+	if err != nil {
+		return fmt.Errorf("datastore Get() failed: %v", err)
+	}
 
-	/*
-		if err != nil {
-			log.Errorf(c, "datastore.Get() failed: %v", err)
-		}
-	*/
-
-	return err == nil
+	return nil
 }
 
 func RemoveOAuthState(c context.Context, state int64) error {
