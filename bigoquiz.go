@@ -1,8 +1,9 @@
-package bigoquiz
+package main
 
 import (
 	"cloud.google.com/go/datastore"
 	"encoding/gob"
+	"fmt"
 	"github.com/gorilla/sessions"
 	"github.com/julienschmidt/httprouter"
 	"github.com/murraycu/go-bigoquiz-server/config"
@@ -11,6 +12,7 @@ import (
 	"golang.org/x/oauth2"
 	"log"
 	"net/http"
+	"os"
 )
 
 const PATH_PARAM_QUIZ_ID = "quizId"
@@ -22,7 +24,7 @@ const QUERY_PARAM_QUESTION_ID = "question-id"
 const QUERY_PARAM_LIST_ONLY = "list-only"
 const QUERY_PARAM_NEXT_QUESTION_SECTION_ID = "next-question-section-id"
 
-func init() {
+func main() {
 	conf, err := config.GenerateConfig()
 	if err != nil {
 		log.Printf("Could not load conf file: %v\n", err)
@@ -78,7 +80,15 @@ func init() {
 	})
 
 	handler := c.Handler(router)
-	http.Handle("/", handler)
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+		log.Printf("Defaulting to port %s", port)
+	}
+
+	log.Printf("Listening on port %s", port)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), handler))
 }
 
 var quizzes map[string]*quiz.Quiz

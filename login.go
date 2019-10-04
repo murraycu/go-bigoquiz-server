@@ -1,4 +1,4 @@
-package bigoquiz
+package main
 
 import (
 	"cloud.google.com/go/datastore"
