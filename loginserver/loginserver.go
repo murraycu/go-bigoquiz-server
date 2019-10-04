@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"github.com/murraycu/go-bigoquiz-server/config"
-	"github.com/murraycu/go-bigoquiz-server/db"
+	"github.com/murraycu/go-bigoquiz-server/repositories/db"
 	"github.com/murraycu/go-bigoquiz-server/usersessionstore"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"

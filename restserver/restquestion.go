@@ -3,8 +3,8 @@ package restserver
 import (
 	"encoding/json"
 	"github.com/julienschmidt/httprouter"
-	"github.com/murraycu/go-bigoquiz-server/db"
 	"github.com/murraycu/go-bigoquiz-server/quiz"
+	"github.com/murraycu/go-bigoquiz-server/repositories/db"
 	"net/http"
 )
 

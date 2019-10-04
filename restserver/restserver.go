@@ -2,8 +2,8 @@ package restserver
 
 import (
 	"fmt"
-	"github.com/murraycu/go-bigoquiz-server/db"
 	"github.com/murraycu/go-bigoquiz-server/quiz"
+	"github.com/murraycu/go-bigoquiz-server/repositories/db"
 	"github.com/murraycu/go-bigoquiz-server/usersessionstore"
 )
 
