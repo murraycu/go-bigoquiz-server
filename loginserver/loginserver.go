@@ -1,13 +1,13 @@
-package main
+package loginserver
 
 import (
 	"cloud.google.com/go/datastore"
 	"encoding/json"
 	"fmt"
-	"github.com/gorilla/sessions"
 	"github.com/julienschmidt/httprouter"
 	"github.com/murraycu/go-bigoquiz-server/config"
 	"github.com/murraycu/go-bigoquiz-server/db"
+	"github.com/murraycu/go-bigoquiz-server/usersessionstore"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"io/ioutil"
@@ -16,6 +16,27 @@ import (
 	"net/http"
 	"strconv"
 )
+
+type LoginServer struct {
+	UserDataClient *db.UserDataRepository
+
+	// Session cookie store.
+	UserSessionStore *usersessionstore.UserSessionStore
+}
+
+func NewLoginServer(userSessionStore *usersessionstore.UserSessionStore) (*LoginServer, error) {
+	result := &LoginServer{}
+
+	var err error
+	result.UserDataClient, err = db.NewUserDataRepository()
+	if err != nil {
+		return nil, fmt.Errorf("NewUserDataRepository() failed: %v", err)
+	}
+
+	result.UserSessionStore = userSessionStore
+
+	return result, nil
+}
 
 /** Get an oauth2 URL based on the secret .json file.
  * See googleConfigCredentialsFilename.
@@ -38,7 +59,7 @@ func generateGoogleOAuthUrl(r *http.Request) string {
 	return conf.AuthCodeURL(state)
 }
 
-func handleGoogleLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (s *LoginServer) HandleGoogleLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	// Redirect the user to the Google login page:
 	url := generateGoogleOAuthUrl(r)
 	http.Redirect(w, r, url, http.StatusFound)
@@ -109,7 +130,7 @@ func checkStateAndGetCode(c context.Context, r *http.Request) (string, error) {
 	return r.FormValue("code"), nil
 }
 
-func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (s *LoginServer) HandleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	c := r.Context()
 
 	conf, err := config.GenerateGoogleOAuthConfig()
@@ -132,7 +153,7 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	}
 
 	// Get the existing logged-in user's userId, if any, from the cookie, if any:
-	userId, _, err := getProfileFromSession(r)
+	userId, _, err := s.UserSessionStore.GetProfileFromSession(r)
 	if err != nil {
 		loginCallbackFailedErr("getProfileFromSession() failed", err, w, r)
 		return
@@ -153,7 +174,7 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 		return
 	}
 
-	storeCookieAndRedirect(r, w, c, userId, token)
+	s.storeCookieAndRedirect(r, w, c, userId, token)
 }
 
 func checkStateAndGetBody(w http.ResponseWriter, r *http.Request, conf *oauth2.Config, url string, c context.Context) (*oauth2.Token, []byte, bool) {
@@ -170,26 +191,26 @@ func checkStateAndGetBody(w http.ResponseWriter, r *http.Request, conf *oauth2.C
 func exchangeAndGetUserBody(w http.ResponseWriter, r *http.Request, conf *oauth2.Config, code string, url string, c context.Context) (*oauth2.Token, []byte, bool) {
 	token, err := conf.Exchange(c, code)
 	if err != nil {
-		loginFailed(c, "config.Exchange() failed", err, w, r)
+		loginFailed("config.Exchange() failed", err, w, r)
 		return nil, nil, false
 	}
 
 	if !token.Valid() {
-		loginFailed(c, "loginFailedUrl.Exchange() returned an invalid token", err, w, r)
+		loginFailed("loginFailedUrl.Exchange() returned an invalid token", err, w, r)
 		return nil, nil, false
 	}
 
 	client := conf.Client(c, token)
 	infoResponse, err := client.Get(url)
 	if err != nil {
-		loginFailed(c, "client.Get() failed", err, w, r)
+		loginFailed("client.Get() failed", err, w, r)
 		return nil, nil, false
 	}
 
 	defer infoResponse.Body.Close()
 	body, err := ioutil.ReadAll(infoResponse.Body)
 	if err != nil {
-		loginFailed(c, "ReadAll(body) failed", err, w, r)
+		loginFailed("ReadAll(body) failed", err, w, r)
 		return nil, nil, false
 	}
 
@@ -197,20 +218,20 @@ func exchangeAndGetUserBody(w http.ResponseWriter, r *http.Request, conf *oauth2
 }
 
 // Called after user info has been successful stored in the database.
-func storeCookieAndRedirect(r *http.Request, w http.ResponseWriter, c context.Context, userId *datastore.Key, token *oauth2.Token) {
+func (s *LoginServer) storeCookieAndRedirect(r *http.Request, w http.ResponseWriter, c context.Context, userId *datastore.Key, token *oauth2.Token) {
 	// Store the token in the cookie
 	// so we can retrieve it from subsequent requests from the browser.
-	session, err := store.New(r, defaultSessionID)
+	session, err := s.UserSessionStore.Store.New(r, usersessionstore.DefaultSessionID)
 	if err != nil {
-		loginFailed(c, "Could not create new session", err, w, r)
+		loginFailed("Could not create new session", err, w, r)
 		return
 	}
 
-	session.Values[oauthTokenSessionKey] = token
-	session.Values[userIdSessionKey] = userId
+	session.Values[usersessionstore.OAuthTokenSessionKey] = token
+	session.Values[usersessionstore.UserIdSessionKey] = userId
 
 	if err := session.Save(r, w); err != nil {
-		loginFailed(c, "Could not save session", err, w, r)
+		loginFailed("Could not save session", err, w, r)
 		return
 	}
 
@@ -219,18 +240,18 @@ func storeCookieAndRedirect(r *http.Request, w http.ResponseWriter, c context.Co
 	http.Redirect(w, r, userProfileUrl, http.StatusFound)
 }
 
-func handleLogout(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (s *LoginServer) HandleLogout(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	// Wipe the cookie:
-	session, err := store.New(r, defaultSessionID)
+	session, err := s.UserSessionStore.Store.New(r, usersessionstore.DefaultSessionID)
 	if err != nil {
-		logoutError("could not get default session", err, w, r)
+		logoutError("could not get default session", err, w)
 		return
 	}
 
 	session.Options.MaxAge = -1 // Clear session.
 
 	if err := session.Save(r, w); err != nil {
-		logoutError("Could not save session", err, w, r)
+		logoutError("Could not save session", err, w)
 		return
 	}
 
@@ -263,13 +284,13 @@ func generateGitHubOAuthUrl(r *http.Request) string {
 	return conf.AuthCodeURL(state, oauth2.AccessTypeOnline)
 }
 
-func handleGitHubLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (s *LoginServer) HandleGitHubLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	// Redirect the user to the GitHub login page:
 	url := generateGitHubOAuthUrl(r)
 	http.Redirect(w, r, url, http.StatusFound)
 }
 
-func handleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (s *LoginServer) HandleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	c := r.Context()
 
 	conf, err := config.GenerateGitHubOAuthConfig()
@@ -292,7 +313,7 @@ func handleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	}
 
 	// Get the existing logged-in user's userId, if any, from the cookie, if any:
-	userId, _, err := getProfileFromSession(r)
+	userId, _, err := s.UserSessionStore.GetProfileFromSession(r)
 	if err != nil {
 		loginCallbackFailedErr("getProfileFromSession() failed", err, w, r)
 		return
@@ -311,7 +332,7 @@ func handleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 		return
 	}
 
-	storeCookieAndRedirect(r, w, c, userId, token)
+	s.storeCookieAndRedirect(r, w, c, userId, token)
 }
 
 /** Get an oauth2 URL based on the secret .json file.
@@ -335,13 +356,13 @@ func generateFacebookOAuthUrl(r *http.Request) string {
 	return conf.AuthCodeURL(state, oauth2.AccessTypeOnline)
 }
 
-func handleFacebookLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (s *LoginServer) HandleFacebookLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	// Redirect the user to the GitHub login page:
 	url := generateFacebookOAuthUrl(r)
 	http.Redirect(w, r, url, http.StatusFound)
 }
 
-func handleFacebookCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (s *LoginServer) HandleFacebookCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	c := r.Context()
 
 	conf, err := config.GenerateFacebookOAuthConfig()
@@ -364,7 +385,7 @@ func handleFacebookCallback(w http.ResponseWriter, r *http.Request, ps httproute
 	}
 
 	// Get the existing logged-in user's userId, if any, from the cookie, if any:
-	userId, _, err := getProfileFromSession(r)
+	userId, _, err := s.UserSessionStore.GetProfileFromSession(r)
 	if err != nil {
 		loginCallbackFailedErr("getProfileFromSession() failed.", err, w, r)
 		return
@@ -384,10 +405,10 @@ func handleFacebookCallback(w http.ResponseWriter, r *http.Request, ps httproute
 		return
 	}
 
-	storeCookieAndRedirect(r, w, c, userId, token)
+	s.storeCookieAndRedirect(r, w, c, userId, token)
 }
 
-func loginFailed(c context.Context, message string, err error, w http.ResponseWriter, r *http.Request) {
+func loginFailed(message string, err error, w http.ResponseWriter, r *http.Request) {
 	var loginFailedUrl = config.BaseUrl + "/login?failed=true"
 
 	log.Printf(message+":'%v'\n", err)
@@ -404,16 +425,7 @@ func loginCallbackFailed(message string, w http.ResponseWriter, r *http.Request)
 	http.Redirect(w, r, "/", http.StatusInternalServerError)
 }
 
-func logoutError(message string, err error, w http.ResponseWriter, r *http.Request) {
+func logoutError(message string, err error, w http.ResponseWriter) {
 	log.Printf(message+":'%v'\n", err)
 	http.Error(w, err.Error(), http.StatusInternalServerError)
 }
-
-const (
-	defaultSessionID     = "default"
-	oauthTokenSessionKey = "oauth_token"
-	userIdSessionKey     = "id" // A generic user ID, not a google user ID.
-)
-
-// We store the token in a session cookie.
-var store *sessions.CookieStore

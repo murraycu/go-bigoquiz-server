@@ -1,4 +1,4 @@
-package main
+package restserver
 
 import (
 	"encoding/json"
@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func restHandleQuestionNext(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (s *RestServer) HandleQuestionNext(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	var quizId string
 	var sectionId string
 	// var sectionId string
@@ -25,13 +25,13 @@ func restHandleQuestionNext(w http.ResponseWriter, r *http.Request, ps httproute
 		return
 	}
 
-	q := getQuiz(quizId)
+	q := s.getQuiz(quizId)
 	if q == nil {
 		http.Error(w, "quiz not found", http.StatusNotFound)
 		return
 	}
 
-	userId, err := getUserIdFromSessionAndDb(r, w)
+	userId, err := s.getUserIdFromSessionAndDb(r, w)
 	if err != nil {
 		http.Error(w, "logged-in check failed.", http.StatusInternalServerError)
 		return
@@ -58,7 +58,7 @@ func restHandleQuestionNext(w http.ResponseWriter, r *http.Request, ps httproute
 				return
 			}
 
-			question = getNextQuestionFromUserStats("", q, mapUserStats)
+			question = s.getNextQuestionFromUserStats("", q, mapUserStats)
 		} else {
 			//This special case is a bit copy-and-pasty of the general case with the
 			//map, but it seems more efficient to avoid an unnecessary Map.
@@ -68,7 +68,7 @@ func restHandleQuestionNext(w http.ResponseWriter, r *http.Request, ps httproute
 				return
 			}
 
-			question = getNextQuestionFromUserStatsForSection(sectionId, q, userStats)
+			question = s.getNextQuestionFromUserStatsForSection(sectionId, q, userStats)
 		}
 	}
 

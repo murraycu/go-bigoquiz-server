@@ -1,4 +1,4 @@
-package main
+package restserver
 
 import (
 	"cloud.google.com/go/datastore"
@@ -29,8 +29,8 @@ func (s StatsListByTitle) Less(i, j int) bool {
 	return s[i].QuizTitle < s[j].QuizTitle
 }
 
-func restHandleUserHistoryAll(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	loginInfo, err := getLoginInfoFromSessionAndDb(r)
+func (s *RestServer) HandleUserHistoryAll(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	loginInfo, err := s.getLoginInfoFromSessionAndDb(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -44,19 +44,13 @@ func restHandleUserHistoryAll(w http.ResponseWriter, r *http.Request, ps httprou
 	if loginInfo.UserId != nil {
 		c := r.Context()
 
-		dbClient, err := db.NewUserDataRepository()
+		mapUserStats, err := s.UserDataClient.GetUserStats(c, loginInfo.UserId)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		mapUserStats, err := dbClient.GetUserStats(c, loginInfo.UserId)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		for quizId, q := range quizzes {
+		for quizId, q := range s.Quizzes {
 			stats, ok := mapUserStats[quizId]
 			if !ok || stats == nil {
 				// Show an empty stats section,
@@ -87,7 +81,7 @@ func restHandleUserHistoryAll(w http.ResponseWriter, r *http.Request, ps httprou
 	}
 }
 
-func restHandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (s *RestServer) HandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	quizId := ps.ByName(PATH_PARAM_QUIZ_ID)
 	if quizId == "" {
 		// This makes no sense. restHandleQuizAll() should have been called.
@@ -95,13 +89,13 @@ func restHandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Request, ps ht
 		return
 	}
 
-	q := getQuiz(quizId)
+	q := s.getQuiz(quizId)
 	if q == nil {
 		http.Error(w, "quiz not found", http.StatusNotFound)
 		return
 	}
 
-	loginInfo, err := getLoginInfoFromSessionAndDb(r)
+	loginInfo, err := s.getLoginInfoFromSessionAndDb(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -124,7 +118,7 @@ func restHandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Request, ps ht
 		}
 	}
 
-	info := buildUserHistorySections(loginInfo, q, mapUserStats)
+	info := s.buildUserHistorySections(loginInfo, q, mapUserStats)
 
 	jsonStr, err := json.Marshal(info)
 	if err != nil {
@@ -142,7 +136,7 @@ type Submission struct {
 	Answer string `json:"answer"`
 }
 
-func restHandleUserHistorySubmitAnswer(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (s *RestServer) HandleUserHistorySubmitAnswer(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	var quizId string
 	var questionId string
 	var nextQuestionSectionId string
@@ -154,7 +148,7 @@ func restHandleUserHistorySubmitAnswer(w http.ResponseWriter, r *http.Request, p
 		nextQuestionSectionId = queryValues.Get(QUERY_PARAM_NEXT_QUESTION_SECTION_ID)
 	}
 
-	qa := getQuestionAndAnswer(quizId, questionId)
+	qa := s.getQuestionAndAnswer(quizId, questionId)
 	if qa == nil {
 		http.Error(w, "question not found", http.StatusNotFound)
 		return
@@ -174,7 +168,7 @@ func restHandleUserHistorySubmitAnswer(w http.ResponseWriter, r *http.Request, p
 	}
 
 	result := answerIsCorrect(submission.Answer, &qa.Answer)
-	submissionResult, err := storeAnswerCorrectnessAndGetSubmissionResult(w, r, quizId, questionId, nextQuestionSectionId, qa, result)
+	submissionResult, err := s.storeAnswerCorrectnessAndGetSubmissionResult(w, r, quizId, questionId, nextQuestionSectionId, qa, result)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -192,7 +186,7 @@ func restHandleUserHistorySubmitAnswer(w http.ResponseWriter, r *http.Request, p
 	}
 }
 
-func restHandleUserHistorySubmitDontKnowAnswer(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (s *RestServer) HandleUserHistorySubmitDontKnowAnswer(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	var quizId string
 	var questionId string
 	var nextQuestionSectionId string
@@ -204,14 +198,14 @@ func restHandleUserHistorySubmitDontKnowAnswer(w http.ResponseWriter, r *http.Re
 		nextQuestionSectionId = queryValues.Get(QUERY_PARAM_NEXT_QUESTION_SECTION_ID)
 	}
 
-	qa := getQuestionAndAnswer(quizId, questionId)
+	qa := s.getQuestionAndAnswer(quizId, questionId)
 	if qa == nil {
 		http.Error(w, "question not found", http.StatusNotFound)
 		return
 	}
 
 	//Store this like a don't know answer:
-	submissionResult, err := storeAnswerCorrectnessAndGetSubmissionResult(w, r, quizId, questionId, nextQuestionSectionId, qa, false)
+	submissionResult, err := s.storeAnswerCorrectnessAndGetSubmissionResult(w, r, quizId, questionId, nextQuestionSectionId, qa, false)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -229,7 +223,7 @@ func restHandleUserHistorySubmitDontKnowAnswer(w http.ResponseWriter, r *http.Re
 	}
 }
 
-func restHandleUserHistoryResetSections(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (s *RestServer) HandleUserHistoryResetSections(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	var quizId string
 
 	queryValues := r.URL.Query()
@@ -242,20 +236,20 @@ func restHandleUserHistoryResetSections(w http.ResponseWriter, r *http.Request, 
 		return
 	}
 
-	q := getQuiz(quizId)
+	q := s.getQuiz(quizId)
 	if q == nil {
 		http.Error(w, "quiz not found", http.StatusNotFound)
 		return
 	}
 
-	userId, err := getUserIdFromSessionAndDb(r, w)
+	userId, err := s.getUserIdFromSessionAndDb(r, w)
 	if err != nil {
 		http.Error(w, "logged-in check failed.", http.StatusInternalServerError)
 		return
 	}
 
 	if userId == nil {
-		loginInfo, err := getLoginInfoFromSessionAndDb(r)
+		loginInfo, err := s.getLoginInfoFromSessionAndDb(r)
 		if err != nil {
 			http.Error(w, "not logged in. getLoginInfoFromSessionAndDb() returned err.", http.StatusForbidden)
 			return
@@ -289,18 +283,13 @@ type SubmissionResult struct {
 	NextQuestion  quiz.Question `json:"nextQuestion,omitempty"`
 }
 
-func storeAnswerCorrectnessAndGetSubmissionResult(w http.ResponseWriter, r *http.Request, quizId string, questionId string, nextQuestionSectionId string, qa *quiz.QuestionAndAnswer, result bool) (*SubmissionResult, error) {
-	userId, err := getUserIdFromSessionAndDb(r, w)
+func (s *RestServer) storeAnswerCorrectnessAndGetSubmissionResult(w http.ResponseWriter, r *http.Request, quizId string, questionId string, nextQuestionSectionId string, qa *quiz.QuestionAndAnswer, result bool) (*SubmissionResult, error) {
+	userId, err := s.getUserIdFromSessionAndDb(r, w)
 	if err != nil {
 		return nil, fmt.Errorf("getUserIdFromSessionAndDb() failed: %v", err)
 	}
 
 	sectionId := qa.Question.SectionId
-
-	dbClient, err := db.NewUserDataRepository()
-	if err != nil {
-		return nil, fmt.Errorf("NewUserDataRepository() failed: %v", err)
-	}
 
 	// Get the Stats (or a map of them), and use it for both storing the answer and getting the next question,
 	// to avoid getting the UserStats twice from the datastore.
@@ -311,41 +300,41 @@ func storeAnswerCorrectnessAndGetSubmissionResult(w http.ResponseWriter, r *http
 	if nextQuestionSectionId == sectionId {
 		var stats *user.Stats
 		if userId != nil {
-			stats, err = dbClient.GetUserStatsForSection(c, userId, quizId, nextQuestionSectionId)
+			stats, err = s.UserDataClient.GetUserStatsForSection(c, userId, quizId, nextQuestionSectionId)
 			if err != nil {
 				return nil, fmt.Errorf("GetUserStatsForQuiz() failed: %v", err)
 			}
 
-			err := storeAnswerForSection(c, result, quizId, &qa.Question, userId, stats)
+			err := s.storeAnswerForSection(c, result, quizId, &qa.Question, userId, stats)
 			if err != nil {
 				return nil, fmt.Errorf("storeAnswerForSection() failed: %v", err)
 			}
 		}
 
-		return createSubmissionResultForSection(result, quizId, questionId, nextQuestionSectionId, stats)
+		return s.createSubmissionResultForSection(result, quizId, questionId, nextQuestionSectionId, stats)
 	} else {
 		var stats map[string]*user.Stats
 		if userId != nil {
-			stats, err = dbClient.GetUserStatsForQuiz(c, userId, quizId)
+			stats, err = s.UserDataClient.GetUserStatsForQuiz(c, userId, quizId)
 			if err != nil {
 				return nil, fmt.Errorf("GetUserStatsForQuiz() failed: %v", err)
 			}
 
-			err := storeAnswer(c, result, quizId, &qa.Question, userId, stats)
+			err := s.storeAnswer(c, result, quizId, &qa.Question, userId, stats)
 			if err != nil {
 				return nil, fmt.Errorf("storeAnswer() failed: %v", err)
 			}
 		}
 
-		return createSubmissionResult(result, quizId, questionId, nextQuestionSectionId, stats)
+		return s.createSubmissionResult(result, quizId, questionId, nextQuestionSectionId, stats)
 	}
 }
 
 /**
  * stats may be nil.
  */
-func createSubmissionResult(result bool, quizId string, questionId string, nextQuestionSectionId string, stats map[string]*user.Stats) (*SubmissionResult, error) {
-	q := getQuiz(quizId)
+func (s *RestServer) createSubmissionResult(result bool, quizId string, questionId string, nextQuestionSectionId string, stats map[string]*user.Stats) (*SubmissionResult, error) {
+	q := s.getQuiz(quizId)
 
 	//We only provide the correct answer if the supplied answer was wrong:
 	var correctAnswer *quiz.Text
@@ -353,12 +342,12 @@ func createSubmissionResult(result bool, quizId string, questionId string, nextQ
 		correctAnswer = q.GetAnswer(questionId)
 	}
 
-	nextQuestion := getNextQuestionFromUserStats(nextQuestionSectionId, q, stats)
-	return generateSubmissionResult(result, q, correctAnswer, nextQuestion)
+	nextQuestion := s.getNextQuestionFromUserStats(nextQuestionSectionId, q, stats)
+	return s.generateSubmissionResult(result, q, correctAnswer, nextQuestion)
 }
 
-func createSubmissionResultForSection(result bool, quizId string, questionId string, nextQuestionSectionId string, stats *user.Stats) (*SubmissionResult, error) {
-	q := getQuiz(quizId)
+func (s *RestServer) createSubmissionResultForSection(result bool, quizId string, questionId string, nextQuestionSectionId string, stats *user.Stats) (*SubmissionResult, error) {
+	q := s.getQuiz(quizId)
 
 	//We only provide the correct answer if the supplied answer was wrong:
 	var correctAnswer *quiz.Text
@@ -366,11 +355,11 @@ func createSubmissionResultForSection(result bool, quizId string, questionId str
 		correctAnswer = q.GetAnswer(questionId)
 	}
 
-	nextQuestion := getNextQuestionFromUserStatsForSection(nextQuestionSectionId, q, stats)
-	return generateSubmissionResult(result, q, correctAnswer, nextQuestion)
+	nextQuestion := s.getNextQuestionFromUserStatsForSection(nextQuestionSectionId, q, stats)
+	return s.generateSubmissionResult(result, q, correctAnswer, nextQuestion)
 }
 
-func generateSubmissionResult(result bool, quiz *quiz.Quiz, correctAnswer *quiz.Text, nextQuestion *quiz.Question) (*SubmissionResult, error) {
+func (s *RestServer) generateSubmissionResult(result bool, quiz *quiz.Quiz, correctAnswer *quiz.Text, nextQuestion *quiz.Question) (*SubmissionResult, error) {
 	var submissionResult SubmissionResult
 	submissionResult.Result = result
 
@@ -386,7 +375,7 @@ func generateSubmissionResult(result bool, quiz *quiz.Quiz, correctAnswer *quiz.
 	return &submissionResult, nil
 }
 
-func getNextQuestionFromUserStats(sectionId string, q *quiz.Quiz, stats map[string]*user.Stats) *quiz.Question {
+func (s *RestServer) getNextQuestionFromUserStats(sectionId string, q *quiz.Quiz, stats map[string]*user.Stats) *quiz.Question {
 	const MAX_TRIES int = 10
 	var tries int
 	var question *quiz.Question
@@ -439,7 +428,7 @@ func getNextQuestionFromUserStats(sectionId string, q *quiz.Quiz, stats map[stri
 
 /** stats may be nil
  */
-func getNextQuestionFromUserStatsForSection(sectionId string, quiz *quiz.Quiz, stats *user.Stats) *quiz.Question {
+func (s *RestServer) getNextQuestionFromUserStatsForSection(sectionId string, quiz *quiz.Quiz, stats *user.Stats) *quiz.Question {
 	//TODO: Avoid this temporary map:
 	m := make(map[string]*user.Stats)
 
@@ -447,14 +436,14 @@ func getNextQuestionFromUserStatsForSection(sectionId string, quiz *quiz.Quiz, s
 		m[stats.SectionId] = stats
 	}
 
-	return getNextQuestionFromUserStats(sectionId, quiz, m)
+	return s.getNextQuestionFromUserStats(sectionId, quiz, m)
 }
 
 /** Update the user.Stats for the question's quiz section, in the database,
  * storing a new user.Stats in the database if necessary.
  * To update an existing user.Stats in the database, via the stats parameter, its Key field must be set.
  */
-func storeAnswer(c context.Context, result bool, quizId string, question *quiz.Question, userId *datastore.Key, stats map[string]*user.Stats) error {
+func (s *RestServer) storeAnswer(c context.Context, result bool, quizId string, question *quiz.Question, userId *datastore.Key, stats map[string]*user.Stats) error {
 	if userId == nil {
 		return fmt.Errorf("storeAnswer(): userId is nil")
 	}
@@ -477,14 +466,14 @@ func storeAnswer(c context.Context, result bool, quizId string, question *quiz.Q
 		sectionStats.SectionId = sectionId
 	}
 
-	return storeAnswerForSection(c, result, quizId, question, userId, sectionStats)
+	return s.storeAnswerForSection(c, result, quizId, question, userId, sectionStats)
 }
 
 /** Update the user.Stats for the section, for the quiz, in the database,
  * storing a new user.Stats in the database if necessary.
  * To update an existing user.Stats in the database, its Key field must be set.
  */
-func storeAnswerForSection(c context.Context, result bool, quizId string, question *quiz.Question, userId *datastore.Key, sectionStats *user.Stats) error {
+func (s *RestServer) storeAnswerForSection(c context.Context, result bool, quizId string, question *quiz.Question, userId *datastore.Key, sectionStats *user.Stats) error {
 	if userId == nil {
 		return fmt.Errorf("storeAnswerForSection(): userId is nil")
 	}
@@ -533,9 +522,9 @@ func answerIsCorrect(answer string, correctAnswer *quiz.Text) bool {
 	return correctAnswer.Text == answer
 }
 
-func getQuestionAndAnswer(quizId string, questionId string) *quiz.QuestionAndAnswer {
+func (s *RestServer) getQuestionAndAnswer(quizId string, questionId string) *quiz.QuestionAndAnswer {
 
-	q := getQuiz(quizId)
+	q := s.getQuiz(quizId)
 	if q == nil {
 		return nil
 	}
@@ -543,7 +532,7 @@ func getQuestionAndAnswer(quizId string, questionId string) *quiz.QuestionAndAns
 	return q.GetQuestionAndAnswer(questionId)
 }
 
-func buildUserHistorySections(loginInfo *user.LoginInfo, quiz *quiz.Quiz, mapUserStats map[string]*user.Stats) *user.HistorySections {
+func (s *RestServer) buildUserHistorySections(loginInfo *user.LoginInfo, quiz *quiz.Quiz, mapUserStats map[string]*user.Stats) *user.HistorySections {
 	sections := quiz.Sections
 	if sections == nil {
 		return nil
@@ -586,14 +575,14 @@ func buildUserHistorySections(loginInfo *user.LoginInfo, quiz *quiz.Quiz, mapUse
 		userStats.SectionTitle = section.Title
 		userStats.CountQuestions = section.CountQuestions
 
-		fillUserStatsWithExtras(userStats, quiz)
+		s.fillUserStatsWithExtras(userStats, quiz)
 		result.Stats = append(result.Stats, userStats)
 	}
 
 	return &result
 }
 
-func fillUserStatsWithExtras(userStats *user.Stats, qz *quiz.Quiz) {
+func (s *RestServer) fillUserStatsWithExtras(userStats *user.Stats, qz *quiz.Quiz) {
 	// Set the titles.
 	// We don't store these in the datastore because we can get them easily from the Quiz.
 

@@ -1,4 +1,4 @@
-package main
+package restserver
 
 import (
 	"encoding/json"
@@ -6,6 +6,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"github.com/murraycu/go-bigoquiz-server/quiz"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"path/filepath"
 	"sort"
@@ -121,7 +122,7 @@ func buildQuizzesFull(quizzes map[string]*quiz.Quiz) []*quiz.Quiz {
 	return result
 }
 
-func restHandleQuizAll(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func (s *RestServer) HandleQuizAll(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	listOnly := false
 	queryValues := r.URL.Query()
 	if queryValues != nil {
@@ -131,9 +132,9 @@ func restHandleQuizAll(w http.ResponseWriter, r *http.Request, _ httprouter.Para
 
 	var quizArray []*quiz.Quiz = nil
 	if listOnly {
-		quizArray = quizzesListSimple
+		quizArray = s.QuizzesListSimple
 	} else {
-		quizArray = quizzesListFull
+		quizArray = s.QuizzesListFull
 	}
 
 	w.Header().Set("Content-Type", "application/json") // normal header
@@ -151,11 +152,11 @@ func restHandleQuizAll(w http.ResponseWriter, r *http.Request, _ httprouter.Para
 	}
 }
 
-func getQuiz(quizId string) *quiz.Quiz {
-	return quizzes[quizId]
+func (s *RestServer) getQuiz(quizId string) *quiz.Quiz {
+	return s.Quizzes[quizId]
 }
 
-func restHandleQuizById(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (s *RestServer) HandleQuizById(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	quizId := ps.ByName(PATH_PARAM_QUIZ_ID)
 	if quizId == "" {
 		// This makes no sense. restHandleQuizAll() should have been called.
@@ -163,7 +164,7 @@ func restHandleQuizById(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 		return
 	}
 
-	q := getQuiz(quizId)
+	q := s.getQuiz(quizId)
 	if q == nil {
 		http.Error(w, "quiz not found", http.StatusInternalServerError)
 		return
@@ -184,7 +185,7 @@ func restHandleQuizById(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 	}
 }
 
-func restHandleQuizSectionsByQuizId(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (s *RestServer) HandleQuizSectionsByQuizId(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	listOnly := false
 	queryValues := r.URL.Query()
 	if queryValues != nil {
@@ -199,7 +200,7 @@ func restHandleQuizSectionsByQuizId(w http.ResponseWriter, r *http.Request, ps h
 		return
 	}
 
-	q := getQuiz(quizId)
+	q := s.getQuiz(quizId)
 	if q == nil {
 		http.Error(w, "quiz not found", http.StatusInternalServerError)
 		return
@@ -229,7 +230,7 @@ func restHandleQuizSectionsByQuizId(w http.ResponseWriter, r *http.Request, ps h
 	}
 }
 
-func restHandleQuizQuestionById(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (s *RestServer) HandleQuizQuestionById(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	quizId := ps.ByName(PATH_PARAM_QUIZ_ID)
 	if quizId == "" {
 		// This makes no sense. restHandleQuizAll() should have been called.
@@ -244,7 +245,7 @@ func restHandleQuizQuestionById(w http.ResponseWriter, r *http.Request, ps httpr
 		return
 	}
 
-	q := getQuiz(quizId)
+	q := s.getQuiz(quizId)
 	if q == nil {
 		http.Error(w, "quiz not found", http.StatusNotFound)
 		return
@@ -268,4 +269,16 @@ func restHandleQuizQuestionById(w http.ResponseWriter, r *http.Request, ps httpr
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+}
+
+func (s *RestServer) LoadQuizzesAndCaches() {
+	var err error
+	s.Quizzes, err = loadQuizzes()
+	if err != nil {
+		log.Printf("Could not load quiz files: %v\n", err)
+		return
+	}
+
+	s.QuizzesListSimple = buildQuizzesSimple(s.Quizzes)
+	s.QuizzesListFull = buildQuizzesFull(s.Quizzes)
 }
