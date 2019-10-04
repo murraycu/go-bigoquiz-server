@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
-	"github.com/murraycu/go-bigoquiz-server/db"
+	"github.com/murraycu/go-bigoquiz-server/repositories/db"
 	"github.com/murraycu/go-bigoquiz-server/user"
 	"golang.org/x/oauth2"
 	"net/http"
