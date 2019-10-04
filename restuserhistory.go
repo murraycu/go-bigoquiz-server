@@ -1,6 +1,7 @@
 package bigoquiz
 
 import (
+	"cloud.google.com/go/datastore"
 	"encoding/json"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
@@ -8,8 +9,6 @@ import (
 	"github.com/murraycu/go-bigoquiz-server/quiz"
 	"github.com/murraycu/go-bigoquiz-server/user"
 	"golang.org/x/net/context"
-	"google.golang.org/appengine"
-	"google.golang.org/appengine/datastore"
 	"io/ioutil"
 	"net/http"
 	"sort"
@@ -43,7 +42,7 @@ func restHandleUserHistoryAll(w http.ResponseWriter, r *http.Request, ps httprou
 	// Note: We only show the entire user history for logged-in users,
 	// so there is no point in constructing an empty sets of stats for not-logged in users.
 	if loginInfo.UserId != nil {
-		c := appengine.NewContext(r)
+		c := r.Context()
 		mapUserStats, err := db.GetUserStats(c, loginInfo.UserId)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -103,7 +102,7 @@ func restHandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Request, ps ht
 
 	var mapUserStats map[string]*user.Stats
 	if loginInfo.UserId != nil {
-		c := appengine.NewContext(r)
+		c := r.Context()
 		mapUserStats, err = db.GetUserStatsForQuiz(c, loginInfo.UserId, quizId)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -253,7 +252,7 @@ func restHandleUserHistoryResetSections(w http.ResponseWriter, r *http.Request, 
 		return
 	}
 
-	c := appengine.NewContext(r)
+	c := r.Context()
 	err = db.DeleteUserStatsForQuiz(c, userId, quizId)
 	if err != nil {
 		http.Error(w, "deletion of stats failed", http.StatusInternalServerError)
@@ -282,7 +281,7 @@ func storeAnswerCorrectnessAndGetSubmissionResult(w http.ResponseWriter, r *http
 	//
 	// Call different methods depending on whether nextQuestionSectionId is specified and is the same as the
 	// question's section ID, to avoid allocating a map just containing one Stats.
-	c := appengine.NewContext(r)
+	c := r.Context()
 	if nextQuestionSectionId == sectionId {
 		var stats *user.Stats
 		if userId != nil {

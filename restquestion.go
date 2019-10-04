@@ -5,7 +5,6 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"github.com/murraycu/go-bigoquiz-server/db"
 	"github.com/murraycu/go-bigoquiz-server/quiz"
-	"google.golang.org/appengine"
 	"net/http"
 )
 
@@ -44,7 +43,7 @@ func restHandleQuestionNext(w http.ResponseWriter, r *http.Request, ps httproute
 		//so just return a random question:
 		question = q.GetRandomQuestion(sectionId)
 	} else {
-		c := appengine.NewContext(r)
+		c := r.Context()
 
 		if len(sectionId) == 0 {
 			mapUserStats, err := db.GetUserStatsForQuiz(c, userId, quizId)

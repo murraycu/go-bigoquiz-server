@@ -5,10 +5,7 @@ import (
 	"fmt"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
-	"google.golang.org/appengine"
-	"google.golang.org/appengine/log"
 	"io/ioutil"
-	"net/http"
 	"path/filepath"
 )
 
@@ -85,42 +82,38 @@ func GenerateConfig() (*Config, error) {
  * in the Google format expected by google.ConfigFromJSON(),
  * though this is also for non-Google credentials.
  */
-func generateOAuthConfig(r *http.Request, credentialsFilename string, scope ...string) *oauth2.Config {
-	c := appengine.NewContext(r)
-
+func generateOAuthConfig(credentialsFilename string, scope ...string) (*oauth2.Config, error) {
 	path := filepath.Join("config_oauth2", credentialsFilename)
 	b, err := ioutil.ReadFile(path)
 	if err != nil {
-		log.Errorf(c, "Unable to read client secret file (%s): %v", credentialsFilename, err)
-		return nil
+		return nil, fmt.Errorf("unable to read client secret file (%s): %v", credentialsFilename, err)
 	}
 
 	config, err := google.ConfigFromJSON(b, scope...)
 	if err != nil {
-		log.Errorf(c, "Unable to parse client secret file (%s) to config: %v", credentialsFilename, err)
-		return nil
+		return nil, fmt.Errorf("unable to parse client secret file (%s) to config: %v", credentialsFilename, err)
 	}
 
-	return config
+	return config, nil
 }
 
 /** Get an oauth2 Config object based on the secret .json file.
  * See googleConfigCredentialsFilename.
  */
-func GenerateGoogleOAuthConfig(r *http.Request) *oauth2.Config {
-	return generateOAuthConfig(r, googleConfigCredentialsFilename, googleCredentialsScopeProfile, googleCredentialsScopeEmail)
+func GenerateGoogleOAuthConfig() (*oauth2.Config, error) {
+	return generateOAuthConfig(googleConfigCredentialsFilename, googleCredentialsScopeProfile, googleCredentialsScopeEmail)
 }
 
 /** Get an oauth2 Config object based on the secret .json file.
  * See githubConfigCredentialsFilename.
  */
-func GenerateGitHubOAuthConfig(r *http.Request) *oauth2.Config {
-	return generateOAuthConfig(r, githubConfigCredentialsFilename, githubCredentialsScopeUser, githubCredentialsScopeEmail)
+func GenerateGitHubOAuthConfig() (*oauth2.Config, error) {
+	return generateOAuthConfig(githubConfigCredentialsFilename, githubCredentialsScopeUser, githubCredentialsScopeEmail)
 }
 
 /** Get an oauth2 Config object based on the secret .json file.
  * See githubConfigCredentialsFilename.
  */
-func GenerateFacebookOAuthConfig(r *http.Request) *oauth2.Config {
-	return generateOAuthConfig(r, facebookConfigCredentialsFilename, facebookCredentialsScopePublicProfile, facebookCredentialsScopeEmail)
+func GenerateFacebookOAuthConfig() (*oauth2.Config, error) {
+	return generateOAuthConfig(facebookConfigCredentialsFilename, facebookCredentialsScopePublicProfile, facebookCredentialsScopeEmail)
 }

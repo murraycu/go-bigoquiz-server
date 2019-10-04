@@ -1,6 +1,7 @@
 package bigoquiz
 
 import (
+	"cloud.google.com/go/datastore"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/sessions"
@@ -9,10 +10,8 @@ import (
 	"github.com/murraycu/go-bigoquiz-server/db"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
-	"google.golang.org/appengine"
-	"google.golang.org/appengine/datastore"
-	"google.golang.org/appengine/log"
 	"io/ioutil"
+	"log"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -22,17 +21,17 @@ import (
  * See googleConfigCredentialsFilename.
  */
 func generateGoogleOAuthUrl(r *http.Request) string {
-	c := appengine.NewContext(r)
+	c := r.Context()
 
-	conf := config.GenerateGoogleOAuthConfig(r)
-	if conf == nil {
-		log.Errorf(c, "Unable to generate config.")
+	conf, err := config.GenerateGoogleOAuthConfig()
+	if err != nil {
+		log.Fatalf("Unable to generate config: %v", err)
 		return ""
 	}
 
 	state, err := generateState(c)
 	if err != nil {
-		log.Errorf(c, "Unable to generate state.")
+		log.Printf("Unable to generate state: %v", err)
 		return ""
 	}
 
@@ -90,10 +89,10 @@ func checkStateAndGetCode(c context.Context, r *http.Request) (string, error) {
 }
 
 func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	c := appengine.NewContext(r)
+	c := r.Context()
 
-	conf := config.GenerateGoogleOAuthConfig(r)
-	if conf == nil {
+	conf, err := config.GenerateGoogleOAuthConfig()
+	if err != nil {
 		loginCallbackFailed("Unable to generate config.", w, r)
 		return
 	}
@@ -105,7 +104,7 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	}
 
 	var userinfo db.GoogleUserInfo
-	err := json.Unmarshal(body, &userinfo)
+	err = json.Unmarshal(body, &userinfo)
 	if err != nil {
 		loginCallbackFailedErr("Unmarshaling of JSON from oauth2 callback failed", err, w, r)
 		return
@@ -132,7 +131,7 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 func checkStateAndGetBody(w http.ResponseWriter, r *http.Request, conf *oauth2.Config, url string, c context.Context) (*oauth2.Token, []byte, bool) {
 	code, err := checkStateAndGetCode(c, r)
 	if err != nil {
-		log.Errorf(c, "checkStateAndGetCode() failed: %v", err)
+		log.Printf("checkStateAndGetCode() failed: %v", err)
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return nil, nil, false
 	}
@@ -219,17 +218,17 @@ func handleLogout(w http.ResponseWriter, r *http.Request, ps httprouter.Params) 
  * See githubConfigCredentialsFilename.
  */
 func generateGitHubOAuthUrl(r *http.Request) string {
-	c := appengine.NewContext(r)
+	c := r.Context()
 
-	conf := config.GenerateGitHubOAuthConfig(r)
-	if conf == nil {
-		log.Errorf(c, "Unable to generate config.")
+	conf, err := config.GenerateGitHubOAuthConfig()
+	if err != nil {
+		log.Printf("Unable to generate config: %v", err)
 		return ""
 	}
 
 	state, err := generateState(c)
 	if err != nil {
-		log.Errorf(c, "Unable to generate state.")
+		log.Printf("Unable to generate state.")
 		return ""
 	}
 
@@ -243,10 +242,10 @@ func handleGitHubLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 }
 
 func handleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	c := appengine.NewContext(r)
+	c := r.Context()
 
-	conf := config.GenerateGitHubOAuthConfig(r)
-	if conf == nil {
+	conf, err := config.GenerateGitHubOAuthConfig()
+	if err != nil {
 		loginCallbackFailed("Unable to generate config", w, r)
 		return
 	}
@@ -258,7 +257,7 @@ func handleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	}
 
 	var userinfo db.GitHubUserInfo
-	err := json.Unmarshal(body, &userinfo)
+	err = json.Unmarshal(body, &userinfo)
 	if err != nil {
 		loginCallbackFailedErr("Unmarshaling of JSON from oauth2 callback failed", err, w, r)
 		return
@@ -285,17 +284,17 @@ func handleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
  * See githubConfigCredentialsFilename.
  */
 func generateFacebookOAuthUrl(r *http.Request) string {
-	c := appengine.NewContext(r)
+	c := r.Context()
 
-	conf := config.GenerateFacebookOAuthConfig(r)
-	if conf == nil {
-		log.Errorf(c, "Unable to generate config.")
+	conf, err := config.GenerateFacebookOAuthConfig()
+	if err != nil {
+		log.Printf("Unable to generate config: %v", err)
 		return ""
 	}
 
 	state, err := generateState(c)
 	if err != nil {
-		log.Errorf(c, "Unable to generate state.")
+		log.Printf("Unable to generate state.")
 		return ""
 	}
 
@@ -309,10 +308,10 @@ func handleFacebookLogin(w http.ResponseWriter, r *http.Request, ps httprouter.P
 }
 
 func handleFacebookCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	c := appengine.NewContext(r)
+	c := r.Context()
 
-	conf := config.GenerateFacebookOAuthConfig(r)
-	if conf == nil {
+	conf, err := config.GenerateFacebookOAuthConfig()
+	if err != nil {
 		loginCallbackFailed("Unable to generate config", w, r)
 		return
 	}
@@ -324,7 +323,7 @@ func handleFacebookCallback(w http.ResponseWriter, r *http.Request, ps httproute
 	}
 
 	var userinfo db.FacebookUserInfo
-	err := json.Unmarshal(body, &userinfo)
+	err = json.Unmarshal(body, &userinfo)
 	if err != nil {
 		loginCallbackFailedErr("Unmarshaling of JSON from oauth2 callback failed", err, w, r)
 		return
@@ -350,28 +349,22 @@ func handleFacebookCallback(w http.ResponseWriter, r *http.Request, ps httproute
 func loginFailed(c context.Context, message string, err error, w http.ResponseWriter, r *http.Request) {
 	var loginFailedUrl = config.BaseUrl + "/login?failed=true"
 
-	log.Errorf(c, message+":'%v'\n", err)
+	log.Printf(message+":'%v'\n", err)
 	http.Redirect(w, r, loginFailedUrl, http.StatusTemporaryRedirect)
 }
 
 func loginCallbackFailedErr(message string, err error, w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
-
-	log.Errorf(c, message+":'%v'\n", err)
+	log.Printf(message+":'%v'\n", err)
 	http.Redirect(w, r, "/", http.StatusInternalServerError)
 }
 
 func loginCallbackFailed(message string, w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
-
-	log.Errorf(c, message)
+	log.Printf(message)
 	http.Redirect(w, r, "/", http.StatusInternalServerError)
 }
 
 func logoutError(message string, err error, w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
-
-	log.Errorf(c, message+":'%v'\n", err)
+	log.Printf(message+":'%v'\n", err)
 	http.Error(w, err.Error(), http.StatusInternalServerError)
 }
 

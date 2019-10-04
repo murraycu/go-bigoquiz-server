@@ -1,11 +1,12 @@
 package db
 
 import (
+	"cloud.google.com/go/datastore"
 	"fmt"
 	"github.com/murraycu/go-bigoquiz-server/user"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
-	"google.golang.org/appengine/datastore"
+	"google.golang.org/api/iterator"
 )
 
 const (
@@ -15,15 +16,25 @@ const (
 	DB_KIND_OAUTH_STATE = "OAuthState"
 )
 
+func dataStoreClient(c context.Context) (*datastore.Client, error) {
+	return datastore.NewClient(c, "bigoquiz")
+}
+
 func getProfileFromDbQuery(c context.Context, q *datastore.Query) (*datastore.Key, *user.Profile, error) {
-	iter := q.Run(c)
+	client, err := dataStoreClient(c)
+	if err != nil {
+		return nil, nil, fmt.Errorf("datastoreClient() failed: %v", err)
+	}
+	defer client.Close()
+
+	iter := client.Run(c, q)
 	if iter == nil {
 		return nil, nil, fmt.Errorf("datastore query for googleId failed")
 	}
 
 	var profile user.Profile
 	userId, err := iter.Next(&profile)
-	if err == datastore.Done {
+	if err == iterator.Done {
 		// This is not an error.
 		return nil, nil, nil
 	} else if err != nil {
@@ -60,20 +71,26 @@ func StoreGitHubLoginInUserProfile(c context.Context, userInfo GitHubUserInfo, u
 		}
 	}
 
+	client, err := dataStoreClient(c)
+	if err != nil {
+		return nil, fmt.Errorf("datastoreClient() failed: %v", err)
+	}
+	defer client.Close()
+
 	if profile == nil {
 		// It is not in the datastore yet, so we add it.
 		updateProfileFromGitHubUserInfo(profile, &userInfo, token)
 
-		userId = datastore.NewIncompleteKey(c, DB_KIND_PROFILE, nil)
-		if userId, err = datastore.Put(c, userId, profile); err != nil {
-			return nil, fmt.Errorf("datastore.Put(with incomplete userId %v) failed: %v", userId, err)
+		userId = datastore.IncompleteKey(DB_KIND_PROFILE, nil)
+		if userId, err = client.Put(c, userId, profile); err != nil {
+			return nil, fmt.Errorf("datastore Put(with incomplete userId %v) failed: %v", userId, err)
 		}
 	} else if userId != nil {
 		// Update the Profile:
 		updateProfileFromGitHubUserInfo(profile, &userInfo, token)
 
-		if userId, err = datastore.Put(c, userId, profile); err != nil {
-			return nil, fmt.Errorf("datastore.Put(with userId %v) failed: %v", userId, err)
+		if userId, err = client.Put(c, userId, profile); err != nil {
+			return nil, fmt.Errorf("datastore Put(with userId %v) failed: %v", userId, err)
 		}
 	}
 
@@ -106,21 +123,27 @@ func StoreFacebookLoginInUserProfile(c context.Context, userInfo FacebookUserInf
 		}
 	}
 
+	client, err := dataStoreClient(c)
+	if err != nil {
+		return nil, fmt.Errorf("datastoreClient() failed: %v", err)
+	}
+	defer client.Close()
+
 	if profile == nil {
 		// It is not in the datastore yet, so we add it.
 		profile = new(user.Profile)
 		updateProfileFromFacebookUserInfo(profile, &userInfo, token)
 
-		userId = datastore.NewIncompleteKey(c, DB_KIND_PROFILE, nil)
-		if userId, err = datastore.Put(c, userId, profile); err != nil {
-			return nil, fmt.Errorf("datastore.Put(with incomplete userId %v) failed: %v", userId, err)
+		userId = datastore.IncompleteKey(DB_KIND_PROFILE, nil)
+		if userId, err = client.Put(c, userId, profile); err != nil {
+			return nil, fmt.Errorf("datastore Put(with incomplete userId %v) failed: %v", userId, err)
 		}
 	} else if userId != nil {
 		// Update the Profile:
 		updateProfileFromFacebookUserInfo(profile, &userInfo, token)
 
-		if userId, err = datastore.Put(c, userId, profile); err != nil {
-			return nil, fmt.Errorf("datastore.Put(with userId %v) failed: %v", userId, err)
+		if userId, err = client.Put(c, userId, profile); err != nil {
+			return nil, fmt.Errorf("datastore Put(with userId %v) failed: %v", userId, err)
 		}
 	}
 
@@ -135,8 +158,14 @@ func getProfileFromDbByGoogleID(c context.Context, sub string) (*datastore.Key, 
 }
 
 func getProfileFromDbByUserID(c context.Context, userId *datastore.Key) (*user.Profile, error) {
+	client, err := dataStoreClient(c)
+	if err != nil {
+		return nil, fmt.Errorf("datastoreClient() failed: %v", err)
+	}
+	defer client.Close()
+
 	var profile user.Profile
-	err := datastore.Get(c, userId, &profile)
+	err = client.Get(c, userId, &profile)
 	if err != nil {
 		// This is not an error.
 		return nil, nil
@@ -167,21 +196,27 @@ func StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, u
 		}
 	}
 
+	client, err := dataStoreClient(c)
+	if err != nil {
+		return nil, fmt.Errorf("datastoreClient() failed: %v", err)
+	}
+	defer client.Close()
+
 	if profile == nil {
 		// It is not in the datastore yet, so we add it.
 		profile = new(user.Profile)
 		updateProfileFromGoogleUserInfo(profile, &userInfo, token)
 
-		userId = datastore.NewIncompleteKey(c, DB_KIND_PROFILE, nil)
-		if userId, err = datastore.Put(c, userId, profile); err != nil {
-			return nil, fmt.Errorf("datastore.Put(with incomplete userId %v) failed: %v", userId, err)
+		userId = datastore.IncompleteKey(DB_KIND_PROFILE, nil)
+		if userId, err = client.Put(c, userId, profile); err != nil {
+			return nil, fmt.Errorf("datastore. ut(with incomplete userId %v) failed: %v", userId, err)
 		}
 	} else if userId != nil {
 		// Update the Profile:
 		updateProfileFromGoogleUserInfo(profile, &userInfo, token)
 
-		if userId, err = datastore.Put(c, userId, profile); err != nil {
-			return nil, fmt.Errorf("datastore.Put(with userId %v) failed: %v", userId, err)
+		if userId, err = client.Put(c, userId, profile); err != nil {
+			return nil, fmt.Errorf("datastore Put(with userId %v) failed: %v", userId, err)
 		}
 	}
 
@@ -189,8 +224,14 @@ func StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, u
 }
 
 func GetUserProfileById(c context.Context, userId *datastore.Key) (*user.Profile, error) {
+	client, err := dataStoreClient(c)
+	if err != nil {
+		return nil, fmt.Errorf("datastoreClient() failed: %v", err)
+	}
+	defer client.Close()
+
 	var profile user.Profile
-	err := datastore.Get(c, userId, &profile)
+	err = client.Get(c, userId, &profile)
 	if err == nil {
 		return &profile, nil
 	}
@@ -222,9 +263,16 @@ func GetUserStats(c context.Context, userId *datastore.Key) (map[string]*user.St
 		return result, nil
 	}
 
+	client, err := dataStoreClient(c)
+	if err != nil {
+		return nil, fmt.Errorf("datastoreClient() failed: %v", err)
+	}
+	defer client.Close()
+
 	// Get all the Stats from the db, for each section:
 	q := getQueryForUserStats(userId)
-	iter := q.Run(c)
+
+	iter := client.Run(c, q)
 
 	if iter == nil {
 		return nil, fmt.Errorf("datastore query for Stats failed")
@@ -234,7 +282,7 @@ func GetUserStats(c context.Context, userId *datastore.Key) (map[string]*user.St
 	var stats user.Stats
 	for {
 		_, err := iter.Next(&stats)
-		if err == datastore.Done {
+		if err == iterator.Done {
 			break
 		}
 
@@ -286,9 +334,16 @@ func GetUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string
 		return nil, fmt.Errorf("GetUserStatsForQuiz(): quizId is nil or empty")
 	}
 
+	client, err := dataStoreClient(c)
+	if err != nil {
+		return nil, fmt.Errorf("datastoreClient() failed: %v", err)
+	}
+	defer client.Close()
+
 	// Get all the Stats from the db, for each section:
 	q := getQueryForUserStatsForQuiz(userId, quizId)
-	iter := q.Run(c)
+
+	iter := client.Run(c, q)
 
 	if iter == nil {
 		return nil, fmt.Errorf("datastore query for Stats failed")
@@ -298,7 +353,7 @@ func GetUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string
 	for {
 		var stats user.Stats
 		key, err := iter.Next(&stats)
-		if err == datastore.Done {
+		if err == iterator.Done {
 			break
 		}
 
@@ -326,7 +381,14 @@ func GetUserStatsForSection(c context.Context, userId *datastore.Key, quizId str
 	q := getQueryForUserStatsForQuiz(userId, quizId).
 		Filter("sectionId =", sectionId).
 		Limit(1)
-	iter := q.Run(c)
+
+	client, err := dataStoreClient(c)
+	if err != nil {
+		return nil, fmt.Errorf("datastoreClient() failed: %v", err)
+	}
+	defer client.Close()
+
+	iter := client.Run(c, q)
 
 	if iter == nil {
 		return nil, fmt.Errorf("datastore query for Stats failed")
@@ -335,7 +397,7 @@ func GetUserStatsForSection(c context.Context, userId *datastore.Key, quizId str
 	var stats user.Stats
 	key, err := iter.Next(&stats)
 	if err != nil {
-		if err == datastore.Done {
+		if err == iterator.Done {
 			// It was not found.
 			return nil, nil
 		} else {
@@ -373,12 +435,17 @@ func StoreUserStats(c context.Context, stats *user.Stats) error {
 		// Datastore Viewer:
 		// "in ValidatePropertyKey 'Incomplete key found for reference property %s.' % name)
 		// BadValueError: Incomplete key found for reference property Key."
-		key = datastore.NewIncompleteKey(c, DB_KIND_USER_STATS, nil)
+		key = datastore.IncompleteKey(DB_KIND_USER_STATS, nil)
 	}
 
-	var err error
-	if key, err = datastore.Put(c, key, stats); err != nil {
-		return fmt.Errorf("StoreUserStats(): datastore.Put() failed: %v", err)
+	client, err := dataStoreClient(c)
+	if err != nil {
+		return fmt.Errorf("datastoreClient() failed: %v", err)
+	}
+	defer client.Close()
+
+	if key, err = client.Put(c, key, stats); err != nil {
+		return fmt.Errorf("StoreUserStats(): datastore Put() failed: %v", err)
 	}
 
 	stats.Key = key // See the comment on Stats.Key.
@@ -407,8 +474,14 @@ func DeleteUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId str
 		return fmt.Errorf("DeleteUserStatsForQuiz(): quizId is nil or empty")
 	}
 
+	client, err := dataStoreClient(c)
+	if err != nil {
+		return fmt.Errorf("datastoreClient() failed: %v", err)
+	}
+	defer client.Close()
+
 	q := getQueryForUserStatsForQuiz(userId, quizId)
-	iter := q.Run(c)
+	iter := client.Run(c, q)
 
 	if iter == nil {
 		return fmt.Errorf("datastore query for Stats failed")
@@ -417,7 +490,7 @@ func DeleteUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId str
 	var stats user.Stats
 	for {
 		_, err := iter.Next(&stats)
-		if err == datastore.Done {
+		if err == iterator.Done {
 			break
 		}
 
@@ -433,9 +506,9 @@ func DeleteUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId str
 		}
 
 		// TODO: Batch these with datastore.DeleteMulti().
-		err = datastore.Delete(c, stats.Key)
+		err = client.Delete(c, stats.Key)
 		if err != nil {
-			return fmt.Errorf("datastore.Delete() failed: %v", err)
+			return fmt.Errorf("datastore Delete() failed: %v", err)
 		}
 	}
 
