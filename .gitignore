@@ -1,4 +1,5 @@
 *~
 *.pyc
-src/bigoquiz/config_oauth2
-src/bigoquiz/config.json
+config_oauth2
+config.json
+go-bigoquiz-server

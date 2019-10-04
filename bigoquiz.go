@@ -1,16 +1,16 @@
 package bigoquiz
 
 import (
-	"config"
 	"encoding/gob"
 	"github.com/gorilla/sessions"
 	"github.com/julienschmidt/httprouter"
+	"github.com/murraycu/go-bigoquiz-server/config"
+	"github.com/murraycu/go-bigoquiz-server/quiz"
 	"github.com/rs/cors"
 	"golang.org/x/oauth2"
 	"google.golang.org/appengine/datastore"
 	"log"
 	"net/http"
-	"quiz"
 )
 
 const PATH_PARAM_QUIZ_ID = "quizId"

@@ -1,6 +1,6 @@
 package user
 
-import "quiz"
+import "github.com/murraycu/go-bigoquiz-server/quiz"
 
 type QuestionHistory struct {
 	QuestionId string `json:"questionId,omitempty" datastore:"questionId"`

@@ -7,7 +7,7 @@ import (
 
 func TestLoadQuizWithBadFilepath(t *testing.T) {
 	id := "doesnotexist"
-	absFilePath, err := filepath.Abs("../bigoquiz/quizzes/" + id + ".xml")
+	absFilePath, err := filepath.Abs("../quizzes/" + id + ".xml")
 	if err != nil {
 		t.Error("Could not find file.", err)
 	}
@@ -23,7 +23,7 @@ func TestLoadQuizWithBadFilepath(t *testing.T) {
 }
 
 func loadQuiz(t *testing.T, quizId string) *Quiz {
-	absFilePath, err := filepath.Abs("../bigoquiz/quizzes/" + quizId + ".xml")
+	absFilePath, err := filepath.Abs("../quizzes/" + quizId + ".xml")
 	if err != nil {
 		t.Error("Could not find file.", err)
 	}
