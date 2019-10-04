@@ -7,6 +7,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"github.com/murraycu/go-bigoquiz-server/config"
 	"github.com/murraycu/go-bigoquiz-server/loginserver"
+	"github.com/murraycu/go-bigoquiz-server/repositories"
 	"github.com/murraycu/go-bigoquiz-server/restserver"
 	"github.com/murraycu/go-bigoquiz-server/usersessionstore"
 	"github.com/rs/cors"
@@ -37,13 +38,17 @@ func main() {
 		return
 	}
 
-	restServer, err := restserver.NewRestServer(userSessionStore)
+	quizzes, err := repositories.NewQuizzesRepository()
+	if err != nil {
+		log.Fatalf("NewQuizzesRepository failed: %v\n", err)
+		return
+	}
+
+	restServer, err := restserver.NewRestServer(quizzes, userSessionStore)
 	if err != nil {
 		log.Fatalf("NewRestServer failed: %v\n", err)
 		return
 	}
-
-	restServer.LoadQuizzesAndCaches()
 
 	loginServer, err := loginserver.NewLoginServer(userSessionStore)
 	if err != nil {

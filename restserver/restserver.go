@@ -2,7 +2,7 @@ package restserver
 
 import (
 	"fmt"
-	"github.com/murraycu/go-bigoquiz-server/quiz"
+	"github.com/murraycu/go-bigoquiz-server/repositories"
 	"github.com/murraycu/go-bigoquiz-server/repositories/db"
 	"github.com/murraycu/go-bigoquiz-server/usersessionstore"
 )
@@ -16,9 +16,7 @@ const PATH_PARAM_QUIZ_ID = "quizId"
 const PATH_PARAM_QUESTION_ID = "questionId"
 
 type RestServer struct {
-	Quizzes           map[string]*quiz.Quiz
-	QuizzesListSimple []*quiz.Quiz
-	QuizzesListFull   []*quiz.Quiz
+	Quizzes *repositories.QuizzesRepository
 
 	UserDataClient *db.UserDataRepository
 
@@ -26,7 +24,7 @@ type RestServer struct {
 	UserSessionStore *usersessionstore.UserSessionStore
 }
 
-func NewRestServer(userSessionStore *usersessionstore.UserSessionStore) (*RestServer, error) {
+func NewRestServer(quizzes *repositories.QuizzesRepository, userSessionStore *usersessionstore.UserSessionStore) (*RestServer, error) {
 	result := &RestServer{}
 
 	var err error
@@ -35,6 +33,7 @@ func NewRestServer(userSessionStore *usersessionstore.UserSessionStore) (*RestSe
 		return nil, fmt.Errorf("NewUserDataRepository() failed: %v", err)
 	}
 
+	result.Quizzes = quizzes
 	result.UserSessionStore = userSessionStore
 
 	return result, nil
