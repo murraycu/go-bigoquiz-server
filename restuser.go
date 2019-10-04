@@ -83,8 +83,13 @@ func getProfileFromSessionAndDb(r *http.Request) (*user.Profile, *datastore.Key,
 		return nil, nil, nil, nil
 	}
 
+	dbClient, err := db.NewUserDataRepository()
+	if err != nil {
+		return nil, nil, nil, fmt.Errorf("NewUserDataRepository() failed: %v", err)
+	}
+
 	c := r.Context()
-	profile, err := db.GetUserProfileById(c, userId)
+	profile, err := dbClient.GetUserProfileById(c, userId)
 	if err != nil {
 		return nil, nil, nil, fmt.Errorf("GetUserProfileById() failed: %v", err)
 	}

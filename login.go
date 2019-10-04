@@ -45,8 +45,13 @@ func handleGoogleLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 }
 
 func generateState(c context.Context) (string, error) {
+	dbClient, err := db.NewOAuthStateDataRepository()
+	if err != nil {
+		return "", fmt.Errorf("NewOAuthStateDataRepository() failed: %v", err)
+	}
+
 	state := rand.Int63()
-	err := db.StoreOAuthState(c, state)
+	err = dbClient.StoreOAuthState(c, state)
 	if err != nil {
 		return "", fmt.Errorf("StoreOAuthState() failed: %v", err)
 	}
@@ -60,7 +65,12 @@ func checkState(c context.Context, state string) error {
 		return fmt.Errorf("strconv.ParseInt() failed: %v", err)
 	}
 
-	err = db.CheckOAuthState(c, stateNum)
+	dbClient, err := db.NewOAuthStateDataRepository()
+	if err != nil {
+		return fmt.Errorf("NewUserDataRepository() failed: %v", err)
+	}
+
+	err = dbClient.CheckOAuthState(c, stateNum)
 	if err != nil {
 		return fmt.Errorf("db.CheckOAuthState() failed: %v", err)
 	}
@@ -74,7 +84,12 @@ func removeState(c context.Context, state string) error {
 		return fmt.Errorf("strconv.ParseInt() failed: %v", err)
 	}
 
-	return db.RemoveOAuthState(c, stateNum)
+	dbClient, err := db.NewOAuthStateDataRepository()
+	if err != nil {
+		return fmt.Errorf("NewUserDataRepository() failed: %v", err)
+	}
+
+	return dbClient.RemoveOAuthState(c, stateNum)
 }
 
 func checkStateAndGetCode(c context.Context, r *http.Request) (string, error) {
@@ -123,9 +138,16 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 		return
 	}
 
+	// Store in the database:
+	dbClient, err := db.NewUserDataRepository()
+	if err != nil {
+		loginCallbackFailedErr("dbClient.NewUserDataRepository() failed", err, w, r)
+		return
+	}
+
 	// Store in the database,
 	// either creating a new user or updating an existing user.
-	userId, err = db.StoreGoogleLoginInUserProfile(c, userinfo, userId, token)
+	userId, err = dbClient.StoreGoogleLoginInUserProfile(c, userinfo, userId, token)
 	if err != nil {
 		loginCallbackFailedErr("StoreGoogleLoginInUserProfile() failed", err, w, r)
 		return
@@ -277,7 +299,13 @@ func handleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.
 	}
 
 	// Store in the database:
-	userId, err = db.StoreGitHubLoginInUserProfile(c, userinfo, userId, token)
+	dbClient, err := db.NewUserDataRepository()
+	if err != nil {
+		loginCallbackFailedErr("dbClient.NewUserDataRepository() failed", err, w, r)
+		return
+	}
+
+	userId, err = dbClient.StoreGitHubLoginInUserProfile(c, userinfo, userId, token)
 	if err != nil {
 		loginCallbackFailedErr("StoreGitHubLoginInUserProfile() failed", err, w, r)
 		return
@@ -343,7 +371,14 @@ func handleFacebookCallback(w http.ResponseWriter, r *http.Request, ps httproute
 	}
 
 	// Store in the database:
-	userId, err = db.StoreFacebookLoginInUserProfile(c, userinfo, userId, token)
+	dbClient, err := db.NewUserDataRepository()
+	if err != nil {
+		loginCallbackFailedErr("dbClient.NewUserDataRepository() failed", err, w, r)
+		return
+	}
+
+	// Store in the database:
+	userId, err = dbClient.StoreFacebookLoginInUserProfile(c, userinfo, userId, token)
 	if err != nil {
 		loginCallbackFailedErr("StoreFacebookLoginInUserProfile() failed.", err, w, r)
 		return
