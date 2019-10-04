@@ -1,14 +1,13 @@
 package bigoquiz
 
 import (
+	"cloud.google.com/go/datastore"
 	"encoding/json"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"github.com/murraycu/go-bigoquiz-server/db"
 	"github.com/murraycu/go-bigoquiz-server/user"
 	"golang.org/x/oauth2"
-	"google.golang.org/appengine"
-	"google.golang.org/appengine/datastore"
 	"net/http"
 )
 
@@ -84,7 +83,7 @@ func getProfileFromSessionAndDb(r *http.Request) (*user.Profile, *datastore.Key,
 		return nil, nil, nil, nil
 	}
 
-	c := appengine.NewContext(r)
+	c := r.Context()
 	profile, err := db.GetUserProfileById(c, userId)
 	if err != nil {
 		return nil, nil, nil, fmt.Errorf("GetUserProfileById() failed: %v", err)

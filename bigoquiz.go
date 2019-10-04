@@ -1,6 +1,7 @@
 package bigoquiz
 
 import (
+	"cloud.google.com/go/datastore"
 	"encoding/gob"
 	"github.com/gorilla/sessions"
 	"github.com/julienschmidt/httprouter"
@@ -8,7 +9,6 @@ import (
 	"github.com/murraycu/go-bigoquiz-server/quiz"
 	"github.com/rs/cors"
 	"golang.org/x/oauth2"
-	"google.golang.org/appengine/datastore"
 	"log"
 	"net/http"
 )

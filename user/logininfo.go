@@ -1,6 +1,6 @@
 package user
 
-import "google.golang.org/appengine/datastore"
+import "cloud.google.com/go/datastore"
 
 type LoginInfo struct {
 	// Key *datastore.Key `json:"-"`
