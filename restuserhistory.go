@@ -43,7 +43,14 @@ func restHandleUserHistoryAll(w http.ResponseWriter, r *http.Request, ps httprou
 	// so there is no point in constructing an empty sets of stats for not-logged in users.
 	if loginInfo.UserId != nil {
 		c := r.Context()
-		mapUserStats, err := db.GetUserStats(c, loginInfo.UserId)
+
+		dbClient, err := db.NewUserDataRepository()
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		mapUserStats, err := dbClient.GetUserStats(c, loginInfo.UserId)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -103,7 +110,14 @@ func restHandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Request, ps ht
 	var mapUserStats map[string]*user.Stats
 	if loginInfo.UserId != nil {
 		c := r.Context()
-		mapUserStats, err = db.GetUserStatsForQuiz(c, loginInfo.UserId, quizId)
+
+		dbClient, err := db.NewUserDataRepository()
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		mapUserStats, err = dbClient.GetUserStatsForQuiz(c, loginInfo.UserId, quizId)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -253,7 +267,14 @@ func restHandleUserHistoryResetSections(w http.ResponseWriter, r *http.Request, 
 	}
 
 	c := r.Context()
-	err = db.DeleteUserStatsForQuiz(c, userId, quizId)
+
+	dbClient, err := db.NewUserDataRepository()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	err = dbClient.DeleteUserStatsForQuiz(c, userId, quizId)
 	if err != nil {
 		http.Error(w, "deletion of stats failed", http.StatusInternalServerError)
 		return
@@ -276,6 +297,11 @@ func storeAnswerCorrectnessAndGetSubmissionResult(w http.ResponseWriter, r *http
 
 	sectionId := qa.Question.SectionId
 
+	dbClient, err := db.NewUserDataRepository()
+	if err != nil {
+		return nil, fmt.Errorf("NewUserDataRepository() failed: %v", err)
+	}
+
 	// Get the Stats (or a map of them), and use it for both storing the answer and getting the next question,
 	// to avoid getting the UserStats twice from the datastore.
 	//
@@ -285,7 +311,7 @@ func storeAnswerCorrectnessAndGetSubmissionResult(w http.ResponseWriter, r *http
 	if nextQuestionSectionId == sectionId {
 		var stats *user.Stats
 		if userId != nil {
-			stats, err = db.GetUserStatsForSection(c, userId, quizId, nextQuestionSectionId)
+			stats, err = dbClient.GetUserStatsForSection(c, userId, quizId, nextQuestionSectionId)
 			if err != nil {
 				return nil, fmt.Errorf("GetUserStatsForQuiz() failed: %v", err)
 			}
@@ -300,7 +326,7 @@ func storeAnswerCorrectnessAndGetSubmissionResult(w http.ResponseWriter, r *http
 	} else {
 		var stats map[string]*user.Stats
 		if userId != nil {
-			stats, err = db.GetUserStatsForQuiz(c, userId, quizId)
+			stats, err = dbClient.GetUserStatsForQuiz(c, userId, quizId)
 			if err != nil {
 				return nil, fmt.Errorf("GetUserStatsForQuiz() failed: %v", err)
 			}
@@ -487,7 +513,12 @@ func storeAnswerForSection(c context.Context, result bool, quizId string, questi
 
 	sectionStats.UpdateProblemQuestion(question, result)
 
-	if err := db.StoreUserStats(c, sectionStats); err != nil {
+	dbClient, err := db.NewUserDataRepository()
+	if err != nil {
+		return fmt.Errorf("NewUserDataRepository() failed: %v", err)
+	}
+
+	if err := dbClient.StoreUserStats(c, sectionStats); err != nil {
 		return fmt.Errorf("db.StoreUserStat() for key: %v: %v", sectionStats.Key, err)
 	}
 

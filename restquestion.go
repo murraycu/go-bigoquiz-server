@@ -45,8 +45,14 @@ func restHandleQuestionNext(w http.ResponseWriter, r *http.Request, ps httproute
 	} else {
 		c := r.Context()
 
+		dbClient, err := db.NewUserDataRepository()
+		if err != nil {
+			http.Error(w, "failed getting stats for user (failed to connect to user data repository)", http.StatusInternalServerError)
+			return
+		}
+
 		if len(sectionId) == 0 {
-			mapUserStats, err := db.GetUserStatsForQuiz(c, userId, quizId)
+			mapUserStats, err := dbClient.GetUserStatsForQuiz(c, userId, quizId)
 			if err != nil {
 				http.Error(w, "failed getting stats for user", http.StatusInternalServerError)
 				return
@@ -56,7 +62,7 @@ func restHandleQuestionNext(w http.ResponseWriter, r *http.Request, ps httproute
 		} else {
 			//This special case is a bit copy-and-pasty of the general case with the
 			//map, but it seems more efficient to avoid an unnecessary Map.
-			userStats, err := db.GetUserStatsForSection(c, userId, sectionId, quizId)
+			userStats, err := dbClient.GetUserStatsForSection(c, userId, sectionId, quizId)
 			if err != nil {
 				http.Error(w, "failed getting stats for user for section", http.StatusInternalServerError)
 				return

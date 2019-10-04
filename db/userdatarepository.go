@@ -16,18 +16,29 @@ const (
 	DB_KIND_OAUTH_STATE = "OAuthState"
 )
 
-func dataStoreClient(c context.Context) (*datastore.Client, error) {
+type UserDataRepository struct {
+	Client *datastore.Client
+}
+
+func NewUserDataRepository() (*UserDataRepository, error) {
+	result := &UserDataRepository{}
+
+	c := context.Background()
+	var err error
+	result.Client, err = datastore.NewClient(c, "bigoquiz")
+	if err != nil {
+		return nil, fmt.Errorf("datastore.NewClient() failed: %v", err)
+	}
+
+	return result, nil
+}
+
+func (db *UserDataRepository) dataStoreClient(c context.Context) (*datastore.Client, error) {
 	return datastore.NewClient(c, "bigoquiz")
 }
 
-func getProfileFromDbQuery(c context.Context, q *datastore.Query) (*datastore.Key, *user.Profile, error) {
-	client, err := dataStoreClient(c)
-	if err != nil {
-		return nil, nil, fmt.Errorf("datastoreClient() failed: %v", err)
-	}
-	defer client.Close()
-
-	iter := client.Run(c, q)
+func (db *UserDataRepository) getProfileFromDbQuery(c context.Context, q *datastore.Query) (*datastore.Key, *user.Profile, error) {
+	iter := db.Client.Run(c, q)
 	if iter == nil {
 		return nil, nil, fmt.Errorf("datastore query for googleId failed")
 	}
@@ -45,15 +56,15 @@ func getProfileFromDbQuery(c context.Context, q *datastore.Query) (*datastore.Ke
 	return userId, &profile, nil
 }
 
-func getProfileFromDbByGitHubID(c context.Context, id int) (*datastore.Key, *user.Profile, error) {
+func (db *UserDataRepository) getProfileFromDbByGitHubID(c context.Context, id int) (*datastore.Key, *user.Profile, error) {
 	q := datastore.NewQuery(DB_KIND_PROFILE).
 		Filter("githubId =", id).
 		Limit(1)
-	return getProfileFromDbQuery(c, q)
+	return db.getProfileFromDbQuery(c, q)
 }
 
-func StoreGitHubLoginInUserProfile(c context.Context, userInfo GitHubUserInfo, userId *datastore.Key, token *oauth2.Token) (*datastore.Key, error) {
-	userIdFound, profile, err := getProfileFromDbByGitHubID(c, userInfo.Id)
+func (db *UserDataRepository) StoreGitHubLoginInUserProfile(c context.Context, userInfo GitHubUserInfo, userId *datastore.Key, token *oauth2.Token) (*datastore.Key, error) {
+	userIdFound, profile, err := db.getProfileFromDbByGitHubID(c, userInfo.Id)
 	if err != nil {
 		// An unexpected error.
 		return nil, fmt.Errorf("getProfileFromDbByGitHubID() failed: %v", err)
@@ -65,31 +76,25 @@ func StoreGitHubLoginInUserProfile(c context.Context, userInfo GitHubUserInfo, u
 		userId = userIdFound
 	} else if userId != nil {
 		// Try getting it via the supplied userID instead:
-		profile, err = getProfileFromDbByUserID(c, userId)
+		profile, err = db.getProfileFromDbByUserID(c, userId)
 		if err != nil {
 			return nil, fmt.Errorf("getProfileFromDbByUserID() failed")
 		}
 	}
 
-	client, err := dataStoreClient(c)
-	if err != nil {
-		return nil, fmt.Errorf("datastoreClient() failed: %v", err)
-	}
-	defer client.Close()
-
 	if profile == nil {
 		// It is not in the datastore yet, so we add it.
-		updateProfileFromGitHubUserInfo(profile, &userInfo, token)
+		db.updateProfileFromGitHubUserInfo(profile, &userInfo, token)
 
 		userId = datastore.IncompleteKey(DB_KIND_PROFILE, nil)
-		if userId, err = client.Put(c, userId, profile); err != nil {
+		if userId, err = db.Client.Put(c, userId, profile); err != nil {
 			return nil, fmt.Errorf("datastore Put(with incomplete userId %v) failed: %v", userId, err)
 		}
 	} else if userId != nil {
 		// Update the Profile:
-		updateProfileFromGitHubUserInfo(profile, &userInfo, token)
+		db.updateProfileFromGitHubUserInfo(profile, &userInfo, token)
 
-		if userId, err = client.Put(c, userId, profile); err != nil {
+		if userId, err = db.Client.Put(c, userId, profile); err != nil {
 			return nil, fmt.Errorf("datastore Put(with userId %v) failed: %v", userId, err)
 		}
 	}
@@ -97,15 +102,15 @@ func StoreGitHubLoginInUserProfile(c context.Context, userInfo GitHubUserInfo, u
 	return userId, nil
 }
 
-func getProfileFromDbByFacebookID(c context.Context, id string) (*datastore.Key, *user.Profile, error) {
+func (db *UserDataRepository) getProfileFromDbByFacebookID(c context.Context, id string) (*datastore.Key, *user.Profile, error) {
 	q := datastore.NewQuery(DB_KIND_PROFILE).
 		Filter("facebookId =", id).
 		Limit(1)
-	return getProfileFromDbQuery(c, q)
+	return db.getProfileFromDbQuery(c, q)
 }
 
-func StoreFacebookLoginInUserProfile(c context.Context, userInfo FacebookUserInfo, userId *datastore.Key, token *oauth2.Token) (*datastore.Key, error) {
-	userIdFound, profile, err := getProfileFromDbByFacebookID(c, userInfo.Id)
+func (db *UserDataRepository) StoreFacebookLoginInUserProfile(c context.Context, userInfo FacebookUserInfo, userId *datastore.Key, token *oauth2.Token) (*datastore.Key, error) {
+	userIdFound, profile, err := db.getProfileFromDbByFacebookID(c, userInfo.Id)
 	if err != nil {
 		// An unexpected error.
 		return nil, fmt.Errorf("getProfileFromDbByFacebookID() failed: %v", err)
@@ -117,32 +122,26 @@ func StoreFacebookLoginInUserProfile(c context.Context, userInfo FacebookUserInf
 		userId = userIdFound
 	} else if userId != nil {
 		// Try getting it via the supplied userID instead:
-		profile, err = getProfileFromDbByUserID(c, userId)
+		profile, err = db.getProfileFromDbByUserID(c, userId)
 		if err != nil {
 			return nil, fmt.Errorf("getProfileFromDbByUserID() failed")
 		}
 	}
 
-	client, err := dataStoreClient(c)
-	if err != nil {
-		return nil, fmt.Errorf("datastoreClient() failed: %v", err)
-	}
-	defer client.Close()
-
 	if profile == nil {
 		// It is not in the datastore yet, so we add it.
 		profile = new(user.Profile)
-		updateProfileFromFacebookUserInfo(profile, &userInfo, token)
+		db.updateProfileFromFacebookUserInfo(profile, &userInfo, token)
 
 		userId = datastore.IncompleteKey(DB_KIND_PROFILE, nil)
-		if userId, err = client.Put(c, userId, profile); err != nil {
+		if userId, err = db.Client.Put(c, userId, profile); err != nil {
 			return nil, fmt.Errorf("datastore Put(with incomplete userId %v) failed: %v", userId, err)
 		}
 	} else if userId != nil {
 		// Update the Profile:
-		updateProfileFromFacebookUserInfo(profile, &userInfo, token)
+		db.updateProfileFromFacebookUserInfo(profile, &userInfo, token)
 
-		if userId, err = client.Put(c, userId, profile); err != nil {
+		if userId, err = db.Client.Put(c, userId, profile); err != nil {
 			return nil, fmt.Errorf("datastore Put(with userId %v) failed: %v", userId, err)
 		}
 	}
@@ -150,22 +149,16 @@ func StoreFacebookLoginInUserProfile(c context.Context, userInfo FacebookUserInf
 	return userId, nil
 }
 
-func getProfileFromDbByGoogleID(c context.Context, sub string) (*datastore.Key, *user.Profile, error) {
+func (db *UserDataRepository) getProfileFromDbByGoogleID(c context.Context, sub string) (*datastore.Key, *user.Profile, error) {
 	q := datastore.NewQuery(DB_KIND_PROFILE).
 		Filter("googleId =", sub).
 		Limit(1)
-	return getProfileFromDbQuery(c, q)
+	return db.getProfileFromDbQuery(c, q)
 }
 
-func getProfileFromDbByUserID(c context.Context, userId *datastore.Key) (*user.Profile, error) {
-	client, err := dataStoreClient(c)
-	if err != nil {
-		return nil, fmt.Errorf("datastoreClient() failed: %v", err)
-	}
-	defer client.Close()
-
+func (db *UserDataRepository) getProfileFromDbByUserID(c context.Context, userId *datastore.Key) (*user.Profile, error) {
 	var profile user.Profile
-	err = client.Get(c, userId, &profile)
+	err := db.Client.Get(c, userId, &profile)
 	if err != nil {
 		// This is not an error.
 		return nil, nil
@@ -177,8 +170,8 @@ func getProfileFromDbByUserID(c context.Context, userId *datastore.Key) (*user.P
 // TODO: Make this function generic, parameterizing on GoogleUserInfo/GithubUserInfo,
 // if Go ever has generics.
 // Get the UserProfile via the GoogleID, adding it if necessary.
-func StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, userId *datastore.Key, token *oauth2.Token) (*datastore.Key, error) {
-	userIdFound, profile, err := getProfileFromDbByGoogleID(c, userInfo.Sub)
+func (db *UserDataRepository) StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, userId *datastore.Key, token *oauth2.Token) (*datastore.Key, error) {
+	userIdFound, profile, err := db.getProfileFromDbByGoogleID(c, userInfo.Sub)
 	if err != nil {
 		// An unexpected error.
 		return nil, fmt.Errorf("getProfileFromDbByGoogleID() failed: %v", err)
@@ -190,32 +183,26 @@ func StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, u
 		userId = userIdFound
 	} else if userId != nil {
 		// Try getting it via the supplied userID instead:
-		profile, err = getProfileFromDbByUserID(c, userId)
+		profile, err = db.getProfileFromDbByUserID(c, userId)
 		if err != nil {
 			return nil, fmt.Errorf("getProfileFromDbByUserID() failed")
 		}
 	}
 
-	client, err := dataStoreClient(c)
-	if err != nil {
-		return nil, fmt.Errorf("datastoreClient() failed: %v", err)
-	}
-	defer client.Close()
-
 	if profile == nil {
 		// It is not in the datastore yet, so we add it.
 		profile = new(user.Profile)
-		updateProfileFromGoogleUserInfo(profile, &userInfo, token)
+		db.updateProfileFromGoogleUserInfo(profile, &userInfo, token)
 
 		userId = datastore.IncompleteKey(DB_KIND_PROFILE, nil)
-		if userId, err = client.Put(c, userId, profile); err != nil {
+		if userId, err = db.Client.Put(c, userId, profile); err != nil {
 			return nil, fmt.Errorf("datastore. ut(with incomplete userId %v) failed: %v", userId, err)
 		}
 	} else if userId != nil {
 		// Update the Profile:
-		updateProfileFromGoogleUserInfo(profile, &userInfo, token)
+		db.updateProfileFromGoogleUserInfo(profile, &userInfo, token)
 
-		if userId, err = client.Put(c, userId, profile); err != nil {
+		if userId, err = db.Client.Put(c, userId, profile); err != nil {
 			return nil, fmt.Errorf("datastore Put(with userId %v) failed: %v", userId, err)
 		}
 	}
@@ -223,15 +210,9 @@ func StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, u
 	return userId, nil
 }
 
-func GetUserProfileById(c context.Context, userId *datastore.Key) (*user.Profile, error) {
-	client, err := dataStoreClient(c)
-	if err != nil {
-		return nil, fmt.Errorf("datastoreClient() failed: %v", err)
-	}
-	defer client.Close()
-
+func (db *UserDataRepository) GetUserProfileById(c context.Context, userId *datastore.Key) (*user.Profile, error) {
 	var profile user.Profile
-	err = client.Get(c, userId, &profile)
+	err := db.Client.Get(c, userId, &profile)
 	if err == nil {
 		return &profile, nil
 	}
@@ -255,7 +236,7 @@ func GetUserProfileById(c context.Context, userId *datastore.Key) (*user.Profile
 /** Get a map of stats by quiz ID, for all quizzes, from the database.
  * userId may be nil.
  */
-func GetUserStats(c context.Context, userId *datastore.Key) (map[string]*user.Stats, error) {
+func (db *UserDataRepository) GetUserStats(c context.Context, userId *datastore.Key) (map[string]*user.Stats, error) {
 	var result = make(map[string]*user.Stats)
 
 	// In case a nil value could lead to getting all users' stats:
@@ -263,16 +244,10 @@ func GetUserStats(c context.Context, userId *datastore.Key) (map[string]*user.St
 		return result, nil
 	}
 
-	client, err := dataStoreClient(c)
-	if err != nil {
-		return nil, fmt.Errorf("datastoreClient() failed: %v", err)
-	}
-	defer client.Close()
-
 	// Get all the Stats from the db, for each section:
-	q := getQueryForUserStats(userId)
+	q := db.getQueryForUserStats(userId)
 
-	iter := client.Run(c, q)
+	iter := db.Client.Run(c, q)
 
 	if iter == nil {
 		return nil, fmt.Errorf("datastore query for Stats failed")
@@ -321,7 +296,7 @@ func GetUserStats(c context.Context, userId *datastore.Key) (map[string]*user.St
  * userId may be nil.
  * quizId may not be nil.
  */
-func GetUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string) (map[string]*user.Stats, error) {
+func (db *UserDataRepository) GetUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string) (map[string]*user.Stats, error) {
 	var result = make(map[string]*user.Stats)
 
 	// In case a nil value could lead to getting all users' stats:
@@ -334,16 +309,10 @@ func GetUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string
 		return nil, fmt.Errorf("GetUserStatsForQuiz(): quizId is nil or empty")
 	}
 
-	client, err := dataStoreClient(c)
-	if err != nil {
-		return nil, fmt.Errorf("datastoreClient() failed: %v", err)
-	}
-	defer client.Close()
-
 	// Get all the Stats from the db, for each section:
-	q := getQueryForUserStatsForQuiz(userId, quizId)
+	q := db.getQueryForUserStatsForQuiz(userId, quizId)
 
-	iter := client.Run(c, q)
+	iter := db.Client.Run(c, q)
 
 	if iter == nil {
 		return nil, fmt.Errorf("datastore query for Stats failed")
@@ -376,19 +345,13 @@ func GetUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string
 }
 
 // Get the stats for a specific section ID, from the database.
-func GetUserStatsForSection(c context.Context, userId *datastore.Key, quizId string, sectionId string) (*user.Stats, error) {
+func (db *UserDataRepository) GetUserStatsForSection(c context.Context, userId *datastore.Key, quizId string, sectionId string) (*user.Stats, error) {
 	// Get all the Stats from the db, for each section:
-	q := getQueryForUserStatsForQuiz(userId, quizId).
+	q := db.getQueryForUserStatsForQuiz(userId, quizId).
 		Filter("sectionId =", sectionId).
 		Limit(1)
 
-	client, err := dataStoreClient(c)
-	if err != nil {
-		return nil, fmt.Errorf("datastoreClient() failed: %v", err)
-	}
-	defer client.Close()
-
-	iter := client.Run(c, q)
+	iter := db.Client.Run(c, q)
 
 	if iter == nil {
 		return nil, fmt.Errorf("datastore query for Stats failed")
@@ -415,7 +378,7 @@ func GetUserStatsForSection(c context.Context, userId *datastore.Key, quizId str
 	return &stats, nil
 }
 
-func StoreUserStats(c context.Context, stats *user.Stats) error {
+func (db *UserDataRepository) StoreUserStats(c context.Context, stats *user.Stats) error {
 	if len(stats.QuizId) == 0 {
 		return fmt.Errorf("StoreUserStats(): QuizId is empty")
 	}
@@ -438,13 +401,8 @@ func StoreUserStats(c context.Context, stats *user.Stats) error {
 		key = datastore.IncompleteKey(DB_KIND_USER_STATS, nil)
 	}
 
-	client, err := dataStoreClient(c)
-	if err != nil {
-		return fmt.Errorf("datastoreClient() failed: %v", err)
-	}
-	defer client.Close()
-
-	if key, err = client.Put(c, key, stats); err != nil {
+	var err error
+	if key, err = db.Client.Put(c, key, stats); err != nil {
 		return fmt.Errorf("StoreUserStats(): datastore Put() failed: %v", err)
 	}
 
@@ -453,17 +411,17 @@ func StoreUserStats(c context.Context, stats *user.Stats) error {
 	return nil
 }
 
-func getQueryForUserStats(userId *datastore.Key) *datastore.Query {
+func (db *UserDataRepository) getQueryForUserStats(userId *datastore.Key) *datastore.Query {
 	return datastore.NewQuery(DB_KIND_USER_STATS).
 		Filter("userId =", userId)
 }
 
-func getQueryForUserStatsForQuiz(userId *datastore.Key, quizId string) *datastore.Query {
-	return getQueryForUserStats(userId).
+func (db *UserDataRepository) getQueryForUserStatsForQuiz(userId *datastore.Key, quizId string) *datastore.Query {
+	return db.getQueryForUserStats(userId).
 		Filter("quizId = ", quizId)
 }
 
-func DeleteUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string) error {
+func (db *UserDataRepository) DeleteUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string) error {
 	// In case a nil value could lead to deleting all users' stats:
 	if userId == nil {
 		return fmt.Errorf("DeleteUserStatsForQuiz(): userId is nil")
@@ -474,14 +432,8 @@ func DeleteUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId str
 		return fmt.Errorf("DeleteUserStatsForQuiz(): quizId is nil or empty")
 	}
 
-	client, err := dataStoreClient(c)
-	if err != nil {
-		return fmt.Errorf("datastoreClient() failed: %v", err)
-	}
-	defer client.Close()
-
-	q := getQueryForUserStatsForQuiz(userId, quizId)
-	iter := client.Run(c, q)
+	q := db.getQueryForUserStatsForQuiz(userId, quizId)
+	iter := db.Client.Run(c, q)
 
 	if iter == nil {
 		return fmt.Errorf("datastore query for Stats failed")
@@ -506,7 +458,7 @@ func DeleteUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId str
 		}
 
 		// TODO: Batch these with datastore.DeleteMulti().
-		err = client.Delete(c, stats.Key)
+		err = db.Client.Delete(c, stats.Key)
 		if err != nil {
 			return fmt.Errorf("datastore Delete() failed: %v", err)
 		}
@@ -515,7 +467,7 @@ func DeleteUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId str
 	return nil
 }
 
-func updateProfileFromGoogleUserInfo(profile *user.Profile, userInfo *GoogleUserInfo, token *oauth2.Token) {
+func (db *UserDataRepository) updateProfileFromGoogleUserInfo(profile *user.Profile, userInfo *GoogleUserInfo, token *oauth2.Token) {
 	profile.GoogleId = userInfo.Sub
 	profile.Name = userInfo.Name
 
@@ -527,7 +479,7 @@ func updateProfileFromGoogleUserInfo(profile *user.Profile, userInfo *GoogleUser
 	profile.GoogleProfileUrl = userInfo.ProfileUrl
 }
 
-func updateProfileFromGitHubUserInfo(profile *user.Profile, userInfo *GitHubUserInfo, token *oauth2.Token) {
+func (db *UserDataRepository) updateProfileFromGitHubUserInfo(profile *user.Profile, userInfo *GitHubUserInfo, token *oauth2.Token) {
 	profile.GitHubId = userInfo.Id
 	profile.Name = userInfo.Name
 	// TODO: Get a verified email address, to compare with the other account?
@@ -535,7 +487,7 @@ func updateProfileFromGitHubUserInfo(profile *user.Profile, userInfo *GitHubUser
 	profile.GitHubProfileUrl = userInfo.ProfileUrl
 }
 
-func updateProfileFromFacebookUserInfo(profile *user.Profile, userInfo *FacebookUserInfo, token *oauth2.Token) {
+func (db *UserDataRepository) updateProfileFromFacebookUserInfo(profile *user.Profile, userInfo *FacebookUserInfo, token *oauth2.Token) {
 	profile.FacebookId = userInfo.Id
 	profile.Name = userInfo.Name
 	// TODO: Get a verified email address, to compare with the other account?
