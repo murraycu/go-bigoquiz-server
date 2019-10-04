@@ -1,4 +1,4 @@
-# go-bigquiz-server
+# go-bigoquiz-server
 
 This is a go-based server implementation for bigoquiz.com.
 It is not yet live at bigoquiz.com.
@@ -15,17 +15,12 @@ It is not yet live at bigoquiz.com.
 
 ## Build / Deploy
 
-(TODO: Restructure/reconfigure the project so we don't need to specify bigoquiz and src/bigoquiz in these commands.)
-
     $ git clone git@github.com:murraycu/go-bigoquiz-server.git
     $ cd go-bigoquiz-server
-    $ export GOPATH=`pwd`
-    $ go get all
-      (Ignoring the apparently-intended "cannot find package" messages.)
-    $ go build bigoquiz
+    $ go build
 
     ./config_use_prod.sh
-    $ gcloud app deploy src/bigoquiz
+    $ gcloud app deploy .
 
 ### Running locally
 
@@ -38,7 +33,7 @@ It is not yet live at bigoquiz.com.
     ./config_use_local.sh
 
     Then start the local server:
-    $ dev_appserver.py src/bigoquiz
+    $ dev_appserver.py .
 
 [1]: https://developers.google.com/appengine
 [2]: https://golang.org

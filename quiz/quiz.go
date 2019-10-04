@@ -243,10 +243,10 @@ func setQuestionsChoicesFromAnswers(questions []*QuestionAndAnswer) {
 
 	for _, q := range questions {
 		if !tooManyChoices {
-			q.Question.Choices = choices
+			q.Choices = choices
 		} else {
 			reduced := reduceChoices(choices, &(q.Answer))
-			q.Question.Choices = reduced
+			q.Choices = reduced
 		}
 	}
 }

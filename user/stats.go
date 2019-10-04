@@ -1,8 +1,8 @@
 package user
 
 import (
+	"github.com/murraycu/go-bigoquiz-server/quiz"
 	"google.golang.org/appengine/datastore"
-	"quiz"
 )
 
 // Statistics for the user, either per quiz (SectionId is then empty), or per section in a quiz.

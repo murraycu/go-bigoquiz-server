@@ -4,5 +4,5 @@ api_version: go1.8
 
 handlers:
 - url: /.*
-  script: _go_app
+  script: auto
   secure: always

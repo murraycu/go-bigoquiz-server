@@ -2,10 +2,10 @@ package db
 
 import (
 	"fmt"
+	"github.com/murraycu/go-bigoquiz-server/user"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"google.golang.org/appengine/datastore"
-	"user"
 )
 
 const (
