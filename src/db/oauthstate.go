@@ -21,7 +21,7 @@ func stateKey(c context.Context, state int64) *datastore.Key {
 func StoreOAuthState(c context.Context, state int64) error {
 	key := stateKey(c, state)
 
-	var stateObj OAuthState;
+	var stateObj OAuthState
 
 	// Store a timestamp so a cron job can periodically remove old states.
 	stateObj.timestamp = time.Now().UTC()
@@ -41,9 +41,9 @@ func CheckOAuthState(c context.Context, state int64) bool {
 	err := datastore.Get(c, key, &stateObj)
 
 	/*
-	if err != nil {
-		log.Errorf(c, "datastore.Get() failed: %v", err)
-	}
+		if err != nil {
+			log.Errorf(c, "datastore.Get() failed: %v", err)
+		}
 	*/
 
 	return err == nil

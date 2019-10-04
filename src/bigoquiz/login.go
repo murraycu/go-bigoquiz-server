@@ -13,9 +13,9 @@ import (
 	"google.golang.org/appengine/datastore"
 	"google.golang.org/appengine/log"
 	"io/ioutil"
+	"math/rand"
 	"net/http"
 	"strconv"
-	"math/rand"
 )
 
 /** Get an oauth2 URL based on the secret .json file.
@@ -56,7 +56,7 @@ func generateState(c context.Context) (string, error) {
 }
 
 func stateIsValid(c context.Context, state string) bool {
-	stateNum, err :=  strconv.ParseInt(state, 10, 64)
+	stateNum, err := strconv.ParseInt(state, 10, 64)
 	if err != nil {
 		return false
 	}
@@ -65,7 +65,7 @@ func stateIsValid(c context.Context, state string) bool {
 }
 
 func removeState(c context.Context, state string) error {
-	stateNum, err :=  strconv.ParseInt(state, 10, 64)
+	stateNum, err := strconv.ParseInt(state, 10, 64)
 	if err != nil {
 		return fmt.Errorf("strconv.ParseInt() failed: %v", err)
 	}

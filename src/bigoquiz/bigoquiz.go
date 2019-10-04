@@ -47,16 +47,16 @@ func init() {
 
 	router := httprouter.New()
 	router.GET("/api/quiz", restHandleQuizAll)
-	router.GET("/api/quiz/:" + PATH_PARAM_QUIZ_ID, restHandleQuizById)
-	router.GET("/api/quiz/:" + PATH_PARAM_QUIZ_ID + "/section", restHandleQuizSectionsByQuizId)
-	router.GET("/api/quiz/:" + PATH_PARAM_QUIZ_ID + "/question/:" + PATH_PARAM_QUESTION_ID, restHandleQuizQuestionById)
+	router.GET("/api/quiz/:"+PATH_PARAM_QUIZ_ID, restHandleQuizById)
+	router.GET("/api/quiz/:"+PATH_PARAM_QUIZ_ID+"/section", restHandleQuizSectionsByQuizId)
+	router.GET("/api/quiz/:"+PATH_PARAM_QUIZ_ID+"/question/:"+PATH_PARAM_QUESTION_ID, restHandleQuizQuestionById)
 
 	router.GET("/api/question/next", restHandleQuestionNext)
 
 	router.GET("/api/user", restHandleUser)
 
 	router.GET("/api/user-history", restHandleUserHistoryAll)
-	router.GET("/api/user-history/:" + PATH_PARAM_QUIZ_ID, restHandleUserHistoryByQuizId)
+	router.GET("/api/user-history/:"+PATH_PARAM_QUIZ_ID, restHandleUserHistoryByQuizId)
 	router.POST("/api/user-history/submit-answer", restHandleUserHistorySubmitAnswer)
 	router.POST("/api/user-history/submit-dont-know-answer", restHandleUserHistorySubmitDontKnowAnswer)
 	router.POST("/api/user-history/reset-sections", restHandleUserHistoryResetSections)
