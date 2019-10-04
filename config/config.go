@@ -23,7 +23,7 @@ const (
 
 	// This file must be downloaded
 	// (via the "DOWNLOAD JSON" link at https://console.developers.google.com/apis/credentials/oauthclient )
-	// and added with this exact filename, next to the bigoquiz.go source file.
+	// and added with this exact filename, next to the main.go source file.
 	googleConfigCredentialsFilename = "google_credentials_secret.json"
 
 	// See https://developers.google.com/+/web/api/rest/oauth#profile

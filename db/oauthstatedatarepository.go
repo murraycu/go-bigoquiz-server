@@ -31,12 +31,12 @@ type OAuthState struct {
 	timestamp time.Time
 }
 
-func stateKey(c context.Context, state int64) *datastore.Key {
+func stateKey(state int64) *datastore.Key {
 	return datastore.IDKey(DB_KIND_OAUTH_STATE, state, nil)
 }
 
 func (db *OAuthStateDataRepository) StoreOAuthState(c context.Context, state int64) error {
-	key := stateKey(c, state)
+	key := stateKey(state)
 
 	var stateObj OAuthState
 
@@ -52,7 +52,7 @@ func (db *OAuthStateDataRepository) StoreOAuthState(c context.Context, state int
 }
 
 func (db *OAuthStateDataRepository) CheckOAuthState(c context.Context, state int64) error {
-	key := stateKey(c, state)
+	key := stateKey(state)
 
 	var stateObj OAuthState
 	err := db.Client.Get(c, key, &stateObj)
@@ -64,6 +64,6 @@ func (db *OAuthStateDataRepository) CheckOAuthState(c context.Context, state int
 }
 
 func (db *OAuthStateDataRepository) RemoveOAuthState(c context.Context, state int64) error {
-	key := stateKey(c, state)
+	key := stateKey(state)
 	return db.Client.Delete(c, key)
 }
