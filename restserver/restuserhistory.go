@@ -50,7 +50,7 @@ func (s *RestServer) HandleUserHistoryAll(w http.ResponseWriter, r *http.Request
 			return
 		}
 
-		for quizId, q := range s.Quizzes {
+		for quizId, q := range s.Quizzes.Quizzes {
 			stats, ok := mapUserStats[quizId]
 			if !ok || stats == nil {
 				// Show an empty stats section,
