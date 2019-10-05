@@ -73,11 +73,11 @@ func main() {
 	router.POST("/api/user-history/reset-sections", restServer.HandleUserHistoryResetSections)
 
 	router.GET("/login/login-google", loginServer.HandleGoogleLogin)
-	router.GET("/login/callback-google", loginServer.HandleGoogleCallback)
+	router.GET("/login/"+config.PART_URL_LOGIN_CALLBACK_GOOGLE, loginServer.HandleGoogleCallback)
 	router.GET("/login/login-github", loginServer.HandleGitHubLogin)
-	router.GET("/login/callback-github", loginServer.HandleGitHubCallback)
+	router.GET("/login/"+config.PART_URL_LOGIN_CALLBACK_GITHUB, loginServer.HandleGitHubCallback)
 	router.GET("/login/login-facebook", loginServer.HandleFacebookLogin)
-	router.GET("/login/callback-facebook", loginServer.HandleFacebookCallback)
+	router.GET("/login/"+config.PART_URL_LOGIN_CALLBACK_FACEBOOK, loginServer.HandleFacebookCallback)
 	router.GET("/login/logout", loginServer.HandleLogout)
 
 	// Allow Javascript requests from some domains other than the one serving this API.
