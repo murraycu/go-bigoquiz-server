@@ -1,7 +1,7 @@
-# Use the .prod versions of the config files.
+# Use the .local versions of the config files.
 # (These cannot be added to the git repository.)
 
-prefix="./src/bigoquiz/config_oauth2/"
+prefix="./config_oauth2/"
 suffix="_credentials_secret.json"
 end=".local"
 
