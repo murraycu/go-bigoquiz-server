@@ -84,6 +84,7 @@ func (db *UserDataRepository) StoreGitHubLoginInUserProfile(c context.Context, u
 
 	if profile == nil {
 		// It is not in the datastore yet, so we add it.
+		profile = new(user.Profile)
 		if err := db.updateProfileFromGitHubUserInfo(profile, &userInfo, token); err != nil {
 			return nil, fmt.Errorf("updateProfileFromGitHubUserInfo() failed (new profile): %v", err)
 		}
