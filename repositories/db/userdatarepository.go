@@ -84,7 +84,9 @@ func (db *UserDataRepository) StoreGitHubLoginInUserProfile(c context.Context, u
 
 	if profile == nil {
 		// It is not in the datastore yet, so we add it.
-		db.updateProfileFromGitHubUserInfo(profile, &userInfo, token)
+		if err := db.updateProfileFromGitHubUserInfo(profile, &userInfo, token); err != nil {
+			return nil, fmt.Errorf("updateProfileFromGitHubUserInfo() failed (new profile): %v", err)
+		}
 
 		userId = datastore.IncompleteKey(DB_KIND_PROFILE, nil)
 		if userId, err = db.Client.Put(c, userId, profile); err != nil {
@@ -92,7 +94,9 @@ func (db *UserDataRepository) StoreGitHubLoginInUserProfile(c context.Context, u
 		}
 	} else if userId != nil {
 		// Update the Profile:
-		db.updateProfileFromGitHubUserInfo(profile, &userInfo, token)
+		if err := db.updateProfileFromGitHubUserInfo(profile, &userInfo, token); err != nil {
+			return nil, fmt.Errorf("updateProfileFromGitHubUserInfo() failed: %v", err)
+		}
 
 		if userId, err = db.Client.Put(c, userId, profile); err != nil {
 			return nil, fmt.Errorf("datastore Put(with userId %v) failed: %v", userId, err)
@@ -131,7 +135,9 @@ func (db *UserDataRepository) StoreFacebookLoginInUserProfile(c context.Context,
 	if profile == nil {
 		// It is not in the datastore yet, so we add it.
 		profile = new(user.Profile)
-		db.updateProfileFromFacebookUserInfo(profile, &userInfo, token)
+		if err := db.updateProfileFromFacebookUserInfo(profile, &userInfo, token); err != nil {
+			return nil, fmt.Errorf("updateProfileFromFacebookUserInfo() failed (new profile): %v", err)
+		}
 
 		userId = datastore.IncompleteKey(DB_KIND_PROFILE, nil)
 		if userId, err = db.Client.Put(c, userId, profile); err != nil {
@@ -139,7 +145,9 @@ func (db *UserDataRepository) StoreFacebookLoginInUserProfile(c context.Context,
 		}
 	} else if userId != nil {
 		// Update the Profile:
-		db.updateProfileFromFacebookUserInfo(profile, &userInfo, token)
+		if err := db.updateProfileFromFacebookUserInfo(profile, &userInfo, token); err != nil {
+			return nil, fmt.Errorf("updateProfileFromFacebookUserInfo() failed: %v", err)
+		}
 
 		if userId, err = db.Client.Put(c, userId, profile); err != nil {
 			return nil, fmt.Errorf("datastore Put(with userId %v) failed: %v", userId, err)
@@ -192,7 +200,9 @@ func (db *UserDataRepository) StoreGoogleLoginInUserProfile(c context.Context, u
 	if profile == nil {
 		// It is not in the datastore yet, so we add it.
 		profile = new(user.Profile)
-		db.updateProfileFromGoogleUserInfo(profile, &userInfo, token)
+		if err := db.updateProfileFromGoogleUserInfo(profile, &userInfo, token); err != nil {
+			return nil, fmt.Errorf("updateProfileFromGoogleUserInfo() failed (new profile): %v", err)
+		}
 
 		userId = datastore.IncompleteKey(DB_KIND_PROFILE, nil)
 		if userId, err = db.Client.Put(c, userId, profile); err != nil {
@@ -200,7 +210,9 @@ func (db *UserDataRepository) StoreGoogleLoginInUserProfile(c context.Context, u
 		}
 	} else if userId != nil {
 		// Update the Profile:
-		db.updateProfileFromGoogleUserInfo(profile, &userInfo, token)
+		if err := db.updateProfileFromGoogleUserInfo(profile, &userInfo, token); err != nil {
+			return nil, fmt.Errorf("updateProfileFromGoogleUserInfo() failed: %v", err)
+		}
 
 		if userId, err = db.Client.Put(c, userId, profile); err != nil {
 			return nil, fmt.Errorf("datastore Put(with userId %v) failed: %v", userId, err)
@@ -467,7 +479,19 @@ func (db *UserDataRepository) DeleteUserStatsForQuiz(c context.Context, userId *
 	return nil
 }
 
-func (db *UserDataRepository) updateProfileFromGoogleUserInfo(profile *user.Profile, userInfo *GoogleUserInfo, token *oauth2.Token) {
+func (db *UserDataRepository) updateProfileFromGoogleUserInfo(profile *user.Profile, userInfo *GoogleUserInfo, token *oauth2.Token) error {
+	if profile == nil {
+		return fmt.Errorf("profile is nil.")
+	}
+
+	if userInfo == nil {
+		return fmt.Errorf("userInfo is nil.")
+	}
+
+	if token == nil {
+		return fmt.Errorf("token is nil")
+	}
+
 	profile.GoogleId = userInfo.Sub
 	profile.Name = userInfo.Name
 
@@ -477,20 +501,50 @@ func (db *UserDataRepository) updateProfileFromGoogleUserInfo(profile *user.Prof
 
 	profile.GoogleAccessToken = *token
 	profile.GoogleProfileUrl = userInfo.ProfileUrl
+
+	return nil
 }
 
-func (db *UserDataRepository) updateProfileFromGitHubUserInfo(profile *user.Profile, userInfo *GitHubUserInfo, token *oauth2.Token) {
+func (db *UserDataRepository) updateProfileFromGitHubUserInfo(profile *user.Profile, userInfo *GitHubUserInfo, token *oauth2.Token) error {
+	if profile == nil {
+		return fmt.Errorf("profile is nil")
+	}
+
+	if userInfo == nil {
+		return fmt.Errorf("userInfo is nil")
+	}
+
+	if token == nil {
+		return fmt.Errorf("token is nil")
+	}
+
 	profile.GitHubId = userInfo.Id
 	profile.Name = userInfo.Name
 	// TODO: Get a verified email address, to compare with the other account?
 	profile.GitHubAccessToken = *token
 	profile.GitHubProfileUrl = userInfo.ProfileUrl
+
+	return nil
 }
 
-func (db *UserDataRepository) updateProfileFromFacebookUserInfo(profile *user.Profile, userInfo *FacebookUserInfo, token *oauth2.Token) {
+func (db *UserDataRepository) updateProfileFromFacebookUserInfo(profile *user.Profile, userInfo *FacebookUserInfo, token *oauth2.Token) error {
+	if profile == nil {
+		return fmt.Errorf("profile is nil")
+	}
+
+	if userInfo == nil {
+		return fmt.Errorf("userInfo is nil")
+	}
+
+	if token == nil {
+		return fmt.Errorf("token is nil")
+	}
+
 	profile.FacebookId = userInfo.Id
 	profile.Name = userInfo.Name
 	// TODO: Get a verified email address, to compare with the other account?
 	profile.FacebookAccessToken = *token
 	profile.FacebookProfileUrl = userInfo.ProfileUrl
+
+	return nil
 }
