@@ -57,10 +57,9 @@ func NewLoginServer(userSessionStore *usersessionstore.UserSessionStore) (*Login
 	return result, nil
 }
 
-/** Get an oauth2 URL based on the secret .json file.
- * See googleConfigCredentialsFilename.
+/** Get an oauth2 URL based on the oauth config.
  */
-func (s *LoginServer) generateGoogleOAuthUrl(r *http.Request) string {
+func (s *LoginServer) generateOAuthUrl(r *http.Request, oauthConfig *oauth2.Config) string {
 	c := r.Context()
 
 	state, err := generateState(c)
@@ -69,12 +68,12 @@ func (s *LoginServer) generateGoogleOAuthUrl(r *http.Request) string {
 		return ""
 	}
 
-	return s.ConfOAuthGoogle.AuthCodeURL(state)
+	return oauthConfig.AuthCodeURL(state)
 }
 
 func (s *LoginServer) HandleGoogleLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	// Redirect the user to the Google login page:
-	url := s.generateGoogleOAuthUrl(r)
+	url := s.generateOAuthUrl(r, s.ConfOAuthGoogle)
 	http.Redirect(w, r, url, http.StatusFound)
 }
 
@@ -287,7 +286,7 @@ func (s *LoginServer) generateGitHubOAuthUrl(r *http.Request) string {
 
 func (s *LoginServer) HandleGitHubLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	// Redirect the user to the GitHub login page:
-	url := s.generateGitHubOAuthUrl(r)
+	url := s.generateOAuthUrl(r, s.ConfOAuthGitHub)
 	http.Redirect(w, r, url, http.StatusFound)
 }
 
@@ -330,24 +329,9 @@ func (s *LoginServer) HandleGitHubCallback(w http.ResponseWriter, r *http.Reques
 	s.storeCookieAndRedirect(r, w, c, userId, token)
 }
 
-/** Get an oauth2 URL based on the secret .json file.
- * See githubConfigCredentialsFilename.
- */
-func (s *LoginServer) generateFacebookOAuthUrl(r *http.Request) string {
-	c := r.Context()
-
-	state, err := generateState(c)
-	if err != nil {
-		log.Printf("Unable to generate state.")
-		return ""
-	}
-
-	return s.ConfOAuthFacebook.AuthCodeURL(state, oauth2.AccessTypeOnline)
-}
-
 func (s *LoginServer) HandleFacebookLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	// Redirect the user to the GitHub login page:
-	url := s.generateFacebookOAuthUrl(r)
+	// Redirect the user to the Facebook login page:
+	url := s.generateOAuthUrl(r, s.ConfOAuthFacebook)
 	http.Redirect(w, r, url, http.StatusFound)
 }
 
