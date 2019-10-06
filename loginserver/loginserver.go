@@ -22,6 +22,10 @@ type LoginServer struct {
 
 	// Session cookie store.
 	UserSessionStore *usersessionstore.UserSessionStore
+
+	ConfOAuthGoogle   *oauth2.Config
+	ConfOAuthGitHub   *oauth2.Config
+	ConfOAuthFacebook *oauth2.Config
 }
 
 func NewLoginServer(userSessionStore *usersessionstore.UserSessionStore) (*LoginServer, error) {
@@ -35,20 +39,29 @@ func NewLoginServer(userSessionStore *usersessionstore.UserSessionStore) (*Login
 
 	result.UserSessionStore = userSessionStore
 
+	result.ConfOAuthGoogle, err = config.GenerateGoogleOAuthConfig()
+	if err != nil {
+		log.Fatalf("Unable to generate Google OAuth config: %v", err)
+	}
+
+	result.ConfOAuthGitHub, err = config.GenerateGitHubOAuthConfig()
+	if err != nil {
+		log.Fatalf("Unable to generate GitHub OAuth config: %v", err)
+	}
+
+	result.ConfOAuthFacebook, err = config.GenerateFacebookOAuthConfig()
+	if err != nil {
+		log.Fatalf("Unable to generate Facebook OAuth config: %v", err)
+	}
+
 	return result, nil
 }
 
 /** Get an oauth2 URL based on the secret .json file.
  * See googleConfigCredentialsFilename.
  */
-func generateGoogleOAuthUrl(r *http.Request) string {
+func (s *LoginServer) generateGoogleOAuthUrl(r *http.Request) string {
 	c := r.Context()
-
-	conf, err := config.GenerateGoogleOAuthConfig()
-	if err != nil {
-		log.Fatalf("Unable to generate config: %v", err)
-		return ""
-	}
 
 	state, err := generateState(c)
 	if err != nil {
@@ -56,12 +69,12 @@ func generateGoogleOAuthUrl(r *http.Request) string {
 		return ""
 	}
 
-	return conf.AuthCodeURL(state)
+	return s.ConfOAuthGoogle.AuthCodeURL(state)
 }
 
 func (s *LoginServer) HandleGoogleLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	// Redirect the user to the Google login page:
-	url := generateGoogleOAuthUrl(r)
+	url := s.generateGoogleOAuthUrl(r)
 	http.Redirect(w, r, url, http.StatusFound)
 }
 
@@ -133,20 +146,14 @@ func checkStateAndGetCode(c context.Context, r *http.Request) (string, error) {
 func (s *LoginServer) HandleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	c := r.Context()
 
-	conf, err := config.GenerateGoogleOAuthConfig()
-	if err != nil {
-		loginCallbackFailed("Unable to generate config.", w, r)
-		return
-	}
-
-	token, body, ok := checkStateAndGetBody(w, r, conf, "https://www.googleapis.com/oauth2/v3/userinfo", c)
+	token, body, ok := checkStateAndGetBody(w, r, s.ConfOAuthGoogle, "https://www.googleapis.com/oauth2/v3/userinfo", c)
 	if !ok {
 		// checkStateAndGetBody() already called loginFailed().
 		return
 	}
 
 	var userinfo db.GoogleUserInfo
-	err = json.Unmarshal(body, &userinfo)
+	err := json.Unmarshal(body, &userinfo)
 	if err != nil {
 		loginCallbackFailedErr("Unmarshaling of JSON from oauth2 callback failed", err, w, r)
 		return
@@ -266,14 +273,8 @@ func (s *LoginServer) HandleLogout(w http.ResponseWriter, r *http.Request, ps ht
 /** Get an oauth2 URL based on the secret .json file.
  * See githubConfigCredentialsFilename.
  */
-func generateGitHubOAuthUrl(r *http.Request) string {
+func (s *LoginServer) generateGitHubOAuthUrl(r *http.Request) string {
 	c := r.Context()
-
-	conf, err := config.GenerateGitHubOAuthConfig()
-	if err != nil {
-		log.Printf("Unable to generate config: %v", err)
-		return ""
-	}
 
 	state, err := generateState(c)
 	if err != nil {
@@ -281,32 +282,26 @@ func generateGitHubOAuthUrl(r *http.Request) string {
 		return ""
 	}
 
-	return conf.AuthCodeURL(state, oauth2.AccessTypeOnline)
+	return s.ConfOAuthGitHub.AuthCodeURL(state, oauth2.AccessTypeOnline)
 }
 
 func (s *LoginServer) HandleGitHubLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	// Redirect the user to the GitHub login page:
-	url := generateGitHubOAuthUrl(r)
+	url := s.generateGitHubOAuthUrl(r)
 	http.Redirect(w, r, url, http.StatusFound)
 }
 
 func (s *LoginServer) HandleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	c := r.Context()
 
-	conf, err := config.GenerateGitHubOAuthConfig()
-	if err != nil {
-		loginCallbackFailed("Unable to generate config", w, r)
-		return
-	}
-
-	token, body, ok := checkStateAndGetBody(w, r, conf, "https://api.github.com/user", c)
+	token, body, ok := checkStateAndGetBody(w, r, s.ConfOAuthGitHub, "https://api.github.com/user", c)
 	if !ok {
 		// checkStateAndGetBody() already called loginFailed().
 		return
 	}
 
 	var userinfo db.GitHubUserInfo
-	err = json.Unmarshal(body, &userinfo)
+	err := json.Unmarshal(body, &userinfo)
 	if err != nil {
 		loginCallbackFailedErr("Unmarshaling of JSON from oauth2 callback failed", err, w, r)
 		return
@@ -338,14 +333,8 @@ func (s *LoginServer) HandleGitHubCallback(w http.ResponseWriter, r *http.Reques
 /** Get an oauth2 URL based on the secret .json file.
  * See githubConfigCredentialsFilename.
  */
-func generateFacebookOAuthUrl(r *http.Request) string {
+func (s *LoginServer) generateFacebookOAuthUrl(r *http.Request) string {
 	c := r.Context()
-
-	conf, err := config.GenerateFacebookOAuthConfig()
-	if err != nil {
-		log.Printf("Unable to generate config: %v", err)
-		return ""
-	}
 
 	state, err := generateState(c)
 	if err != nil {
@@ -353,32 +342,26 @@ func generateFacebookOAuthUrl(r *http.Request) string {
 		return ""
 	}
 
-	return conf.AuthCodeURL(state, oauth2.AccessTypeOnline)
+	return s.ConfOAuthFacebook.AuthCodeURL(state, oauth2.AccessTypeOnline)
 }
 
 func (s *LoginServer) HandleFacebookLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	// Redirect the user to the GitHub login page:
-	url := generateFacebookOAuthUrl(r)
+	url := s.generateFacebookOAuthUrl(r)
 	http.Redirect(w, r, url, http.StatusFound)
 }
 
 func (s *LoginServer) HandleFacebookCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	c := r.Context()
 
-	conf, err := config.GenerateFacebookOAuthConfig()
-	if err != nil {
-		loginCallbackFailed("Unable to generate config", w, r)
-		return
-	}
-
-	token, body, ok := checkStateAndGetBody(w, r, conf, "https://graph.facebook.com/me?fields=link,name,email", c)
+	token, body, ok := checkStateAndGetBody(w, r, s.ConfOAuthFacebook, "https://graph.facebook.com/me?fields=link,name,email", c)
 	if !ok {
 		// checkStateAndGetBody() already called loginFailed().
 		return
 	}
 
 	var userinfo db.FacebookUserInfo
-	err = json.Unmarshal(body, &userinfo)
+	err := json.Unmarshal(body, &userinfo)
 	if err != nil {
 		loginCallbackFailedErr("Unmarshaling of JSON from oauth2 callback failed", err, w, r)
 		return
@@ -417,11 +400,6 @@ func loginFailed(message string, err error, w http.ResponseWriter, r *http.Reque
 
 func loginCallbackFailedErr(message string, err error, w http.ResponseWriter, r *http.Request) {
 	log.Printf(message+":'%v'\n", err)
-	http.Redirect(w, r, "/", http.StatusInternalServerError)
-}
-
-func loginCallbackFailed(message string, w http.ResponseWriter, r *http.Request) {
-	log.Printf(message)
 	http.Redirect(w, r, "/", http.StatusInternalServerError)
 }
 
