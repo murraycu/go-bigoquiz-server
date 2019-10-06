@@ -30,10 +30,6 @@ const (
 	// }
 	configFilename = "config.json"
 
-	googleConfigCredentialsFilename   = "google_credentials_secret.json"
-	githubConfigCredentialsFilename   = "github_credentials_secret.json"
-	facebookConfigCredentialsFilename = "facebook_credentials_secret.json"
-
 	// See https://developers.google.com/+/web/api/rest/oauth#profile
 	googleCredentialsScopeProfile = "profile"
 
