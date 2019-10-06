@@ -482,11 +482,11 @@ func (db *UserDataRepository) DeleteUserStatsForQuiz(c context.Context, userId *
 
 func (db *UserDataRepository) updateProfileFromGoogleUserInfo(profile *user.Profile, userInfo *GoogleUserInfo, token *oauth2.Token) error {
 	if profile == nil {
-		return fmt.Errorf("profile is nil.")
+		return fmt.Errorf("profile is nil")
 	}
 
 	if userInfo == nil {
-		return fmt.Errorf("userInfo is nil.")
+		return fmt.Errorf("userInfo is nil")
 	}
 
 	if token == nil {

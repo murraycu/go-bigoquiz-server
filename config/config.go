@@ -106,7 +106,7 @@ func addSecretsToOAuthConfig(credentialsFilenamePrefix string, config oauth2.Con
 
 	var secretConfig cred
 	if err := json.Unmarshal(b, &secretConfig); err != nil {
-		return nil, fmt.Errorf("Unable to parse client secret file (%s) to config (json.Unmarshal() failed): %v", credentialsFilename, err)
+		return nil, fmt.Errorf("unable to parse client secret file (%s) to config (json.Unmarshal() failed): %v", credentialsFilename, err)
 	}
 
 	config.ClientID = secretConfig.ClientID
