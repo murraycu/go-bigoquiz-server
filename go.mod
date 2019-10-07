@@ -8,6 +8,7 @@ require (
 	github.com/gorilla/sessions v1.2.0
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/rs/cors v1.7.0
+	github.com/stretchr/testify v1.4.0
 	go.opencensus.io v0.22.1 // indirect
 	golang.org/x/net v0.0.0-20191003171128-d98b1b443823
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45

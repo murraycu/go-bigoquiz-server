@@ -1,6 +1,7 @@
 package quiz
 
 import (
+	"github.com/stretchr/testify/assert"
 	"path/filepath"
 	"testing"
 )
@@ -47,17 +48,9 @@ func TestLoadQuiz(t *testing.T) {
 		t.Error("The quiz does not have the expected section.")
 	}
 
-	if section.Id != SECTION_ID {
-		t.Error("The section does not have the expected ID.")
-	}
-
-	if section.Title != "Data Structure Operations" {
-		t.Error("The section does not have the expected title.")
-	}
-
-	if section.Link != "" {
-		t.Error("The section does not have the expected link.")
-	}
+	assert.Equal(t, SECTION_ID, section.Id)
+	assert.Equal(t, "Data Structure Operations", section.Title)
+	assert.Equal(t, "", section.Link)
 
 	const QUESTION_ID = "b-tree-search-worst"
 	qa := q.GetQuestionAndAnswer(QUESTION_ID)
@@ -65,50 +58,22 @@ func TestLoadQuiz(t *testing.T) {
 		t.Error("The quiz does not have the expected question.")
 	}
 
-	if qa.Question.Id != QUESTION_ID {
-		t.Error("The question does not have the expected ID.")
-	}
-
-	if qa.Question.SectionId != SECTION_ID {
-		t.Error("The question does not have the expected SectionId.")
-	}
-
-	if qa.Question.Section.Id != SECTION_ID {
-		t.Error("The question does not have the expected section ID.")
-	}
-
-	if qa.Question.Section.Title != "Data Structure Operations" {
-		t.Error("The question does not have the expected section ID.")
-	}
+	assert.Equal(t, QUESTION_ID, qa.Question.Id)
+	assert.Equal(t, SECTION_ID, qa.Question.SectionId)
+	assert.Equal(t, SECTION_ID, qa.Question.Section.Id)
+	assert.Equal(t, "Data Structure Operations", qa.Question.Section.Title)
 
 	const SUB_SECTION_ID = "b-tree"
-	if qa.Question.SubSectionId != SUB_SECTION_ID {
-		t.Error("The question does not have the expected sub-section ID.")
-	}
+	assert.Equal(t, SUB_SECTION_ID, qa.Question.SubSectionId)
+	assert.Equal(t, SUB_SECTION_ID, qa.Question.SubSection.Id)
+	assert.Equal(t, "B-Tree", qa.Question.SubSection.Title)
 
-	if qa.Question.SubSection.Id != SUB_SECTION_ID {
-		t.Error("The question does not have the expected sub-section ID.")
-	}
+	assert.Equal(t, "Search (Worst)", qa.Question.Text.Text)
+	assert.Equal(t, false, qa.Question.Text.IsHtml)
 
-	if qa.Question.SubSection.Title != "B-Tree" {
-		t.Error("The question does not have the expected sub-section Title.")
-	}
+	assert.Equal(t, "O(log(n))", qa.Answer.Text)
 
-	if qa.Question.Text.Text != "Search (Worst)" {
-		t.Error("The question does not have the expected text.")
-	}
-
-	if qa.Question.Text.IsHtml {
-		t.Error("The question does not have the expected isHtml value.")
-	}
-
-	if qa.Answer.Text != "O(log(n))" {
-		t.Error("The question does not have the expected answer text.")
-	}
-
-	if len(qa.Question.Choices) == 0 {
-		t.Error("The question does not have any choices")
-	}
+	assert.NotEmpty(t, qa.Question.Choices)
 }
 
 func TestLoadQuizWithReverseSection(t *testing.T) {
@@ -124,17 +89,9 @@ func TestLoadQuizWithReverseSection(t *testing.T) {
 		t.Error("The quiz does not have the expected reverse section.")
 	}
 
-	if section.Id != SECTION_ID {
-		t.Error("The reverse section does not have the expected ID.")
-	}
-
-	if section.Title != "Reverse: Hash Tables" {
-		t.Error("The reverse section does not have the expected title.")
-	}
-
-	if section.Link != "https://en.wikipedia.org/wiki/Hash_table" {
-		t.Error("The reverse section does not have the expected link.")
-	}
+	assert.Equal(t, SECTION_ID, section.Id)
+	assert.Equal(t, "Reverse: Hash Tables", section.Title)
+	assert.Equal(t, "https://en.wikipedia.org/wiki/Hash_table", section.Link)
 
 	const QUESTION_ID = "reverse-datastructures-hash-tables-open-addressing-strategy-probe-sequence"
 	qa := q.GetQuestionAndAnswer(QUESTION_ID)
@@ -142,48 +99,20 @@ func TestLoadQuizWithReverseSection(t *testing.T) {
 		t.Error("The quiz does not have the expected reverse question.")
 	}
 
-	if qa.Question.Id != QUESTION_ID {
-		t.Error("The reverse question does not have the expected ID.")
-	}
-
-	if qa.Question.SectionId != SECTION_ID {
-		t.Error("The reverse question does not have the expected SectionId.")
-	}
-
-	if qa.Question.Section.Id != SECTION_ID {
-		t.Error("The reverse question does not have the expected section ID.")
-	}
-
-	if qa.Question.Section.Title != "Reverse: Hash Tables" {
-		t.Error("The reverse question does not have the expected section ID.")
-	}
+	assert.Equal(t, QUESTION_ID, qa.Question.Id)
+	assert.Equal(t, SECTION_ID, qa.SectionId)
+	assert.Equal(t, SECTION_ID, qa.Section.Id)
+	assert.Equal(t, "Reverse: Hash Tables", qa.Section.Title)
 
 	const SUB_SECTION_ID = "datastructures-hash-tables-open-addressing-strategies"
-	if qa.Question.SubSectionId != SUB_SECTION_ID {
-		t.Error("The question does not have the expected subSectionId.")
-	}
+	assert.Equal(t, SUB_SECTION_ID, qa.Question.SubSectionId)
+	assert.Equal(t, SUB_SECTION_ID, qa.Question.SubSection.Id)
 
-	if qa.Question.SubSection.Id != SUB_SECTION_ID {
-		t.Error("The question does not have the expected sub-section ID.")
-	}
+	assert.Equal(t, "Open addressing strategies", qa.Question.SubSection.Title)
+	assert.Equal(t, "The buckets are examined, starting with the hashed-to slot and proceeding in some probe sequence, until an unoccupied slot is found.", qa.Question.Text.Text)
+	assert.Equal(t, false, qa.Question.Text.IsHtml)
 
-	if qa.Question.SubSection.Title != "Open addressing strategies" {
-		t.Error("The question does not have the expected sub-section title.")
-	}
+	assert.Equal(t, "Probe sequence", qa.Answer.Text)
 
-	if qa.Question.Text.Text != "The buckets are examined, starting with the hashed-to slot and proceeding in some probe sequence, until an unoccupied slot is found." {
-		t.Error("The question does not have the expected text.", qa.Question.Text.Text)
-	}
-
-	if qa.Question.Text.IsHtml {
-		t.Error("The question does not have the expected isHtml value.")
-	}
-
-	if qa.Answer.Text != "Probe sequence" {
-		t.Error("The question does not have the expected answer text.", qa.Answer.Text)
-	}
-
-	if len(qa.Question.Choices) == 0 {
-		t.Error("The question does not have any choices")
-	}
+	assert.NotEmpty(t, qa.Question.Choices)
 }

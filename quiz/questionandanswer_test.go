@@ -1,6 +1,7 @@
 package quiz
 
 import (
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -19,15 +20,7 @@ func TestCreateReverse(t *testing.T) {
 		t.Error("createReverse() returned nil.")
 	}
 
-	if reverse.Id != ("reverse-" + TEST_ID) {
-		t.Error("The reverse QuestionAndAnswer did not have the expected ID.")
-	}
-
-	if reverse.Text.Text != TEST_ANSWER {
-		t.Error("The reverse QuestionAndAnswer did not have the expected title.")
-	}
-
-	if reverse.Answer.Text != TEST_QUESTION {
-		t.Error("The reverse QuestionAndAnswer did not have the expected answer.")
-	}
+	assert.Equal(t, "reverse-"+TEST_ID, reverse.Id)
+	assert.Equal(t, TEST_ANSWER, reverse.Text.Text)
+	assert.Equal(t, TEST_QUESTION, reverse.Answer.Text)
 }
