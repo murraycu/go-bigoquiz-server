@@ -7,7 +7,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"github.com/murraycu/go-bigoquiz-server/quiz"
 	"github.com/murraycu/go-bigoquiz-server/repositories/db"
-	"github.com/murraycu/go-bigoquiz-server/user"
+	"github.com/murraycu/go-bigoquiz-server/repositories/db/dtos/user"
 	"golang.org/x/net/context"
 	"io/ioutil"
 	"net/http"

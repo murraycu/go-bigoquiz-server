@@ -3,7 +3,7 @@ package db
 import (
 	"cloud.google.com/go/datastore"
 	"fmt"
-	"github.com/murraycu/go-bigoquiz-server/user"
+	"github.com/murraycu/go-bigoquiz-server/repositories/db/dtos/user"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"google.golang.org/api/iterator"
