@@ -6,6 +6,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"github.com/murraycu/go-bigoquiz-server/domain/user"
 	"github.com/murraycu/go-bigoquiz-server/repositories/db"
+	restuser "github.com/murraycu/go-bigoquiz-server/restserver/user"
 	"golang.org/x/oauth2"
 	"net/http"
 )
@@ -58,8 +59,8 @@ func (s *RestServer) getProfileFromSessionAndDb(r *http.Request) (*user.Profile,
 
 // Returns the LoginInfo and the userID.
 // TODO: Return the user info in the LoginInfo struct, but don't put it in a REST/JSON version of LoginInfo.
-func (s *RestServer) getLoginInfoFromSessionAndDb(r *http.Request) (*user.LoginInfo, string, error) {
-	var loginInfo user.LoginInfo
+func (s *RestServer) getLoginInfoFromSessionAndDb(r *http.Request) (*restuser.LoginInfo, string, error) {
+	var loginInfo restuser.LoginInfo
 
 	profile, userId, token, err := s.getProfileFromSessionAndDb(r)
 	if err != nil {
@@ -72,7 +73,7 @@ func (s *RestServer) getLoginInfoFromSessionAndDb(r *http.Request) (*user.LoginI
 	return &loginInfo, userId, err
 }
 
-func (s *RestServer) updateLoginInfoFromProfile(loginInfo *user.LoginInfo, profile *user.Profile, token *oauth2.Token) {
+func (s *RestServer) updateLoginInfoFromProfile(loginInfo *restuser.LoginInfo, profile *user.Profile, token *oauth2.Token) {
 	if profile == nil {
 		loginInfo.LoggedIn = false
 		loginInfo.ErrorMessage = "not logged in user (no profile found)"

@@ -7,6 +7,7 @@ import (
 	"github.com/murraycu/go-bigoquiz-server/domain/quiz"
 	"github.com/murraycu/go-bigoquiz-server/domain/user"
 	"github.com/murraycu/go-bigoquiz-server/repositories/db"
+	restuser "github.com/murraycu/go-bigoquiz-server/restserver/user"
 	"golang.org/x/net/context"
 	"io/ioutil"
 	"net/http"
@@ -35,7 +36,7 @@ func (s *RestServer) HandleUserHistoryAll(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	var info user.HistoryOverall
+	var info restuser.HistoryOverall
 	info.LoginInfo = loginInfo
 
 	// Note: We only show the entire user history for logged-in users,
@@ -529,7 +530,7 @@ func (s *RestServer) getQuestionAndAnswer(quizId string, questionId string) *qui
 	return q.GetQuestionAndAnswer(questionId)
 }
 
-func (s *RestServer) buildUserHistorySections(loginInfo *user.LoginInfo, quiz *quiz.Quiz, mapUserStats map[string]*user.Stats) *user.HistorySections {
+func (s *RestServer) buildUserHistorySections(loginInfo *restuser.LoginInfo, quiz *quiz.Quiz, mapUserStats map[string]*user.Stats) *restuser.HistorySections {
 	sections := quiz.Sections
 	if sections == nil {
 		return nil
@@ -537,7 +538,7 @@ func (s *RestServer) buildUserHistorySections(loginInfo *user.LoginInfo, quiz *q
 
 	quizId := quiz.Id
 
-	var result user.HistorySections
+	var result restuser.HistorySections
 	result.LoginInfo = *loginInfo
 	result.QuizId = quizId
 	result.QuizTitle = quiz.Title
