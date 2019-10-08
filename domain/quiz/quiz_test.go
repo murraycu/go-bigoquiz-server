@@ -8,7 +8,7 @@ import (
 
 func TestLoadQuizWithBadFilepath(t *testing.T) {
 	id := "doesnotexist"
-	absFilePath, err := filepath.Abs("../quizzes/" + id + ".xml")
+	absFilePath, err := filepath.Abs("../../quizzes/" + id + ".xml")
 	if err != nil {
 		t.Error("Could not find file.", err)
 	}
@@ -24,7 +24,7 @@ func TestLoadQuizWithBadFilepath(t *testing.T) {
 }
 
 func loadQuiz(t *testing.T, quizId string) *Quiz {
-	absFilePath, err := filepath.Abs("../quizzes/" + quizId + ".xml")
+	absFilePath, err := filepath.Abs("../../quizzes/" + quizId + ".xml")
 	if err != nil {
 		t.Error("Could not find file.", err)
 	}
@@ -58,22 +58,22 @@ func TestLoadQuiz(t *testing.T) {
 		t.Error("The quiz does not have the expected question.")
 	}
 
-	assert.Equal(t, QUESTION_ID, qa.Question.Id)
-	assert.Equal(t, SECTION_ID, qa.Question.SectionId)
-	assert.Equal(t, SECTION_ID, qa.Question.Section.Id)
-	assert.Equal(t, "Data Structure Operations", qa.Question.Section.Title)
+	assert.Equal(t, QUESTION_ID, qa.Id)
+	assert.Equal(t, SECTION_ID, qa.SectionId)
+	assert.Equal(t, SECTION_ID, qa.Section.Id)
+	assert.Equal(t, "Data Structure Operations", qa.Section.Title)
 
 	const SUB_SECTION_ID = "b-tree"
-	assert.Equal(t, SUB_SECTION_ID, qa.Question.SubSectionId)
-	assert.Equal(t, SUB_SECTION_ID, qa.Question.SubSection.Id)
-	assert.Equal(t, "B-Tree", qa.Question.SubSection.Title)
+	assert.Equal(t, SUB_SECTION_ID, qa.SubSectionId)
+	assert.Equal(t, SUB_SECTION_ID, qa.SubSection.Id)
+	assert.Equal(t, "B-Tree", qa.SubSection.Title)
 
-	assert.Equal(t, "Search (Worst)", qa.Question.Text.Text)
-	assert.Equal(t, false, qa.Question.Text.IsHtml)
+	assert.Equal(t, "Search (Worst)", qa.Text.Text)
+	assert.Equal(t, false, qa.Text.IsHtml)
 
 	assert.Equal(t, "O(log(n))", qa.Answer.Text)
 
-	assert.NotEmpty(t, qa.Question.Choices)
+	assert.NotEmpty(t, qa.Choices)
 }
 
 func TestLoadQuizWithReverseSection(t *testing.T) {
@@ -99,20 +99,20 @@ func TestLoadQuizWithReverseSection(t *testing.T) {
 		t.Error("The quiz does not have the expected reverse question.")
 	}
 
-	assert.Equal(t, QUESTION_ID, qa.Question.Id)
+	assert.Equal(t, QUESTION_ID, qa.Id)
 	assert.Equal(t, SECTION_ID, qa.SectionId)
 	assert.Equal(t, SECTION_ID, qa.Section.Id)
 	assert.Equal(t, "Reverse: Hash Tables", qa.Section.Title)
 
 	const SUB_SECTION_ID = "datastructures-hash-tables-open-addressing-strategies"
-	assert.Equal(t, SUB_SECTION_ID, qa.Question.SubSectionId)
-	assert.Equal(t, SUB_SECTION_ID, qa.Question.SubSection.Id)
+	assert.Equal(t, SUB_SECTION_ID, qa.SubSectionId)
+	assert.Equal(t, SUB_SECTION_ID, qa.SubSection.Id)
 
-	assert.Equal(t, "Open addressing strategies", qa.Question.SubSection.Title)
-	assert.Equal(t, "The buckets are examined, starting with the hashed-to slot and proceeding in some probe sequence, until an unoccupied slot is found.", qa.Question.Text.Text)
-	assert.Equal(t, false, qa.Question.Text.IsHtml)
+	assert.Equal(t, "Open addressing strategies", qa.SubSection.Title)
+	assert.Equal(t, "The buckets are examined, starting with the hashed-to slot and proceeding in some probe sequence, until an unoccupied slot is found.", qa.Text.Text)
+	assert.Equal(t, false, qa.Text.IsHtml)
 
 	assert.Equal(t, "Probe sequence", qa.Answer.Text)
 
-	assert.NotEmpty(t, qa.Question.Choices)
+	assert.NotEmpty(t, qa.Choices)
 }

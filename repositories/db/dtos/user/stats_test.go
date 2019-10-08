@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/murraycu/go-bigoquiz-server/quiz"
+	"github.com/murraycu/go-bigoquiz-server/domain/quiz"
 	"testing"
 )
 

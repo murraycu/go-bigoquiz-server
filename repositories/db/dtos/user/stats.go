@@ -2,7 +2,7 @@ package user
 
 import (
 	"cloud.google.com/go/datastore"
-	"github.com/murraycu/go-bigoquiz-server/quiz"
+	"github.com/murraycu/go-bigoquiz-server/domain/quiz"
 )
 
 // Statistics for the user, either per quiz (SectionId is then empty), or per section in a quiz.

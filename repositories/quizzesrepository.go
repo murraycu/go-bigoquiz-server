@@ -2,7 +2,7 @@ package repositories
 
 import (
 	"fmt"
-	"github.com/murraycu/go-bigoquiz-server/quiz"
+	"github.com/murraycu/go-bigoquiz-server/domain/quiz"
 	"io/ioutil"
 	"log"
 	"path/filepath"
