@@ -1,4 +1,4 @@
-package db
+package oauthparsers
 
 /** A representation of some of the JSON returned by
  * Google.
