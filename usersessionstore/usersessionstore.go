@@ -4,7 +4,7 @@ import (
 	"cloud.google.com/go/datastore"
 	"fmt"
 	"github.com/gorilla/sessions"
-	"github.com/murraycu/go-bigoquiz-server/quiz"
+	"github.com/murraycu/go-bigoquiz-server/domain/quiz"
 	"github.com/murraycu/go-bigoquiz-server/repositories/db"
 	"golang.org/x/oauth2"
 	"net/http"
