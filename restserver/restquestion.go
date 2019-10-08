@@ -38,7 +38,7 @@ func (s *RestServer) HandleQuestionNext(w http.ResponseWriter, r *http.Request, 
 	}
 
 	var question *quiz.Question
-	if userId == nil {
+	if len(userId) == 0 {
 		//The user is not logged in,
 		//so just return a random question:
 		question = q.GetRandomQuestion(sectionId)

@@ -1,7 +1,6 @@
 package loginserver
 
 import (
-	"cloud.google.com/go/datastore"
 	"encoding/json"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
@@ -228,7 +227,7 @@ func exchangeAndGetUserBody(w http.ResponseWriter, r *http.Request, conf *oauth2
 }
 
 // Called after user info has been successful stored in the database.
-func (s *LoginServer) storeCookieAndRedirect(r *http.Request, w http.ResponseWriter, c context.Context, userId *datastore.Key, token *oauth2.Token) {
+func (s *LoginServer) storeCookieAndRedirect(r *http.Request, w http.ResponseWriter, c context.Context, strUserId string, token *oauth2.Token) {
 	// Store the token in the cookie
 	// so we can retrieve it from subsequent requests from the browser.
 	session, err := s.UserSessionStore.Store.New(r, usersessionstore.DefaultSessionID)
@@ -238,7 +237,7 @@ func (s *LoginServer) storeCookieAndRedirect(r *http.Request, w http.ResponseWri
 	}
 
 	session.Values[usersessionstore.OAuthTokenSessionKey] = token
-	session.Values[usersessionstore.UserIdSessionKey] = userId
+	session.Values[usersessionstore.UserIdSessionKey] = strUserId
 
 	if err := session.Save(r, w); err != nil {
 		loginFailed("Could not save session", err, w, r)

@@ -3,7 +3,8 @@ package db
 import (
 	"cloud.google.com/go/datastore"
 	"fmt"
-	"github.com/murraycu/go-bigoquiz-server/repositories/db/dtos/user"
+	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
+	dtouser "github.com/murraycu/go-bigoquiz-server/repositories/db/dtos/user"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"google.golang.org/api/iterator"
@@ -37,13 +38,13 @@ func (db *UserDataRepository) dataStoreClient(c context.Context) (*datastore.Cli
 	return datastore.NewClient(c, "bigoquiz")
 }
 
-func (db *UserDataRepository) getProfileFromDbQuery(c context.Context, q *datastore.Query) (*datastore.Key, *user.Profile, error) {
+func (db *UserDataRepository) getProfileFromDbQuery(c context.Context, q *datastore.Query) (*datastore.Key, *dtouser.Profile, error) {
 	iter := db.Client.Run(c, q)
 	if iter == nil {
 		return nil, nil, fmt.Errorf("datastore query for googleId failed")
 	}
 
-	var profile user.Profile
+	var profile dtouser.Profile
 	userId, err := iter.Next(&profile)
 	if err == iterator.Done {
 		// This is not an error.
@@ -56,18 +57,23 @@ func (db *UserDataRepository) getProfileFromDbQuery(c context.Context, q *datast
 	return userId, &profile, nil
 }
 
-func (db *UserDataRepository) getProfileFromDbByGitHubID(c context.Context, id int) (*datastore.Key, *user.Profile, error) {
+func (db *UserDataRepository) getProfileFromDbByGitHubID(c context.Context, id int) (*datastore.Key, *dtouser.Profile, error) {
 	q := datastore.NewQuery(DB_KIND_PROFILE).
 		Filter("githubId =", id).
 		Limit(1)
 	return db.getProfileFromDbQuery(c, q)
 }
 
-func (db *UserDataRepository) StoreGitHubLoginInUserProfile(c context.Context, userInfo GitHubUserInfo, userId *datastore.Key, token *oauth2.Token) (*datastore.Key, error) {
+func (db *UserDataRepository) StoreGitHubLoginInUserProfile(c context.Context, userInfo GitHubUserInfo, strUserId string, token *oauth2.Token) (string, error) {
+	userId, err := datastore.DecodeKey(strUserId)
+	if err != nil {
+		return "", fmt.Errorf("datastore.DecodeKey() failed: %v", err)
+	}
+
 	userIdFound, profile, err := db.getProfileFromDbByGitHubID(c, userInfo.Id)
 	if err != nil {
 		// An unexpected error.
-		return nil, fmt.Errorf("getProfileFromDbByGitHubID() failed: %v", err)
+		return "", fmt.Errorf("getProfileFromDbByGitHubID() failed: %v", err)
 	}
 
 	if userIdFound != nil {
@@ -78,47 +84,52 @@ func (db *UserDataRepository) StoreGitHubLoginInUserProfile(c context.Context, u
 		// Try getting it via the supplied userID instead:
 		profile, err = db.getProfileFromDbByUserID(c, userId)
 		if err != nil {
-			return nil, fmt.Errorf("getProfileFromDbByUserID() failed")
+			return "", fmt.Errorf("getProfileFromDbByUserID() failed")
 		}
 	}
 
 	if profile == nil {
 		// It is not in the datastore yet, so we add it.
-		profile = new(user.Profile)
+		profile = new(dtouser.Profile)
 		if err := db.updateProfileFromGitHubUserInfo(profile, &userInfo, token); err != nil {
-			return nil, fmt.Errorf("updateProfileFromGitHubUserInfo() failed (new profile): %v", err)
+			return "", fmt.Errorf("updateProfileFromGitHubUserInfo() failed (new profile): %v", err)
 		}
 
 		userId = datastore.IncompleteKey(DB_KIND_PROFILE, nil)
 		if userId, err = db.Client.Put(c, userId, profile); err != nil {
-			return nil, fmt.Errorf("datastore Put(with incomplete userId %v) failed: %v", userId, err)
+			return "", fmt.Errorf("datastore Put(with incomplete userId %v) failed: %v", userId, err)
 		}
 	} else if userId != nil {
 		// Update the Profile:
 		if err := db.updateProfileFromGitHubUserInfo(profile, &userInfo, token); err != nil {
-			return nil, fmt.Errorf("updateProfileFromGitHubUserInfo() failed: %v", err)
+			return "", fmt.Errorf("updateProfileFromGitHubUserInfo() failed: %v", err)
 		}
 
 		if userId, err = db.Client.Put(c, userId, profile); err != nil {
-			return nil, fmt.Errorf("datastore Put(with userId %v) failed: %v", userId, err)
+			return "", fmt.Errorf("datastore Put(with userId %v) failed: %v", userId, err)
 		}
 	}
 
-	return userId, nil
+	return userId.Encode(), nil
 }
 
-func (db *UserDataRepository) getProfileFromDbByFacebookID(c context.Context, id string) (*datastore.Key, *user.Profile, error) {
+func (db *UserDataRepository) getProfileFromDbByFacebookID(c context.Context, id string) (*datastore.Key, *dtouser.Profile, error) {
 	q := datastore.NewQuery(DB_KIND_PROFILE).
 		Filter("facebookId =", id).
 		Limit(1)
 	return db.getProfileFromDbQuery(c, q)
 }
 
-func (db *UserDataRepository) StoreFacebookLoginInUserProfile(c context.Context, userInfo FacebookUserInfo, userId *datastore.Key, token *oauth2.Token) (*datastore.Key, error) {
+func (db *UserDataRepository) StoreFacebookLoginInUserProfile(c context.Context, userInfo FacebookUserInfo, strUserId string, token *oauth2.Token) (string, error) {
+	userId, err := datastore.DecodeKey(strUserId)
+	if err != nil {
+		return "", fmt.Errorf("datastore.DecodeKey() failed: %v", err)
+	}
+
 	userIdFound, profile, err := db.getProfileFromDbByFacebookID(c, userInfo.Id)
 	if err != nil {
 		// An unexpected error.
-		return nil, fmt.Errorf("getProfileFromDbByFacebookID() failed: %v", err)
+		return "", fmt.Errorf("getProfileFromDbByFacebookID() failed: %v", err)
 	}
 
 	if userIdFound != nil {
@@ -129,44 +140,44 @@ func (db *UserDataRepository) StoreFacebookLoginInUserProfile(c context.Context,
 		// Try getting it via the supplied userID instead:
 		profile, err = db.getProfileFromDbByUserID(c, userId)
 		if err != nil {
-			return nil, fmt.Errorf("getProfileFromDbByUserID() failed")
+			return "", fmt.Errorf("getProfileFromDbByUserID() failed")
 		}
 	}
 
 	if profile == nil {
 		// It is not in the datastore yet, so we add it.
-		profile = new(user.Profile)
+		profile = new(dtouser.Profile)
 		if err := db.updateProfileFromFacebookUserInfo(profile, &userInfo, token); err != nil {
-			return nil, fmt.Errorf("updateProfileFromFacebookUserInfo() failed (new profile): %v", err)
+			return "", fmt.Errorf("updateProfileFromFacebookUserInfo() failed (new profile): %v", err)
 		}
 
 		userId = datastore.IncompleteKey(DB_KIND_PROFILE, nil)
 		if userId, err = db.Client.Put(c, userId, profile); err != nil {
-			return nil, fmt.Errorf("datastore Put(with incomplete userId %v) failed: %v", userId, err)
+			return "", fmt.Errorf("datastore Put(with incomplete userId %v) failed: %v", userId, err)
 		}
 	} else if userId != nil {
 		// Update the Profile:
 		if err := db.updateProfileFromFacebookUserInfo(profile, &userInfo, token); err != nil {
-			return nil, fmt.Errorf("updateProfileFromFacebookUserInfo() failed: %v", err)
+			return "", fmt.Errorf("updateProfileFromFacebookUserInfo() failed: %v", err)
 		}
 
 		if userId, err = db.Client.Put(c, userId, profile); err != nil {
-			return nil, fmt.Errorf("datastore Put(with userId %v) failed: %v", userId, err)
+			return "", fmt.Errorf("datastore Put(with userId %v) failed: %v", userId, err)
 		}
 	}
 
-	return userId, nil
+	return userId.Encode(), nil
 }
 
-func (db *UserDataRepository) getProfileFromDbByGoogleID(c context.Context, sub string) (*datastore.Key, *user.Profile, error) {
+func (db *UserDataRepository) getProfileFromDbByGoogleID(c context.Context, sub string) (*datastore.Key, *dtouser.Profile, error) {
 	q := datastore.NewQuery(DB_KIND_PROFILE).
 		Filter("googleId =", sub).
 		Limit(1)
 	return db.getProfileFromDbQuery(c, q)
 }
 
-func (db *UserDataRepository) getProfileFromDbByUserID(c context.Context, userId *datastore.Key) (*user.Profile, error) {
-	var profile user.Profile
+func (db *UserDataRepository) getProfileFromDbByUserID(c context.Context, userId *datastore.Key) (*dtouser.Profile, error) {
+	var profile dtouser.Profile
 	err := db.Client.Get(c, userId, &profile)
 	if err != nil {
 		// This is not an error.
@@ -179,55 +190,66 @@ func (db *UserDataRepository) getProfileFromDbByUserID(c context.Context, userId
 // TODO: Make this function generic, parameterizing on GoogleUserInfo/GithubUserInfo,
 // if Go ever has generics.
 // Get the UserProfile via the GoogleID, adding it if necessary.
-func (db *UserDataRepository) StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, userId *datastore.Key, token *oauth2.Token) (*datastore.Key, error) {
+func (db *UserDataRepository) StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, strUserId string, token *oauth2.Token) (string, error) {
 	userIdFound, profile, err := db.getProfileFromDbByGoogleID(c, userInfo.Sub)
 	if err != nil {
 		// An unexpected error.
-		return nil, fmt.Errorf("getProfileFromDbByGoogleID() failed: %v", err)
+		return "", fmt.Errorf("getProfileFromDbByGoogleID() failed: %v", err)
 	}
 
+	var userId *datastore.Key
 	if userIdFound != nil {
 		// Use the found user ID,
 		// ignoring any user id from the caller.
 		userId = userIdFound
-	} else if userId != nil {
+	} else {
+		userId, err := datastore.DecodeKey(strUserId)
+		if err != nil {
+			return "", fmt.Errorf("datastore.DecodeKey() failed for key: %v: %v", strUserId, err)
+		}
+
 		// Try getting it via the supplied userID instead:
 		profile, err = db.getProfileFromDbByUserID(c, userId)
 		if err != nil {
-			return nil, fmt.Errorf("getProfileFromDbByUserID() failed")
+			return "", fmt.Errorf("getProfileFromDbByUserID() failed")
 		}
 	}
 
 	if profile == nil {
 		// It is not in the datastore yet, so we add it.
-		profile = new(user.Profile)
+		profile = new(dtouser.Profile)
 		if err := db.updateProfileFromGoogleUserInfo(profile, &userInfo, token); err != nil {
-			return nil, fmt.Errorf("updateProfileFromGoogleUserInfo() failed (new profile): %v", err)
+			return "", fmt.Errorf("updateProfileFromGoogleUserInfo() failed (new profile): %v", err)
 		}
 
 		userId = datastore.IncompleteKey(DB_KIND_PROFILE, nil)
 		if userId, err = db.Client.Put(c, userId, profile); err != nil {
-			return nil, fmt.Errorf("datastore. ut(with incomplete userId %v) failed: %v", userId, err)
+			return "", fmt.Errorf("datastore. ut(with incomplete userId %v) failed: %v", userId, err)
 		}
 	} else if userId != nil {
 		// Update the Profile:
 		if err := db.updateProfileFromGoogleUserInfo(profile, &userInfo, token); err != nil {
-			return nil, fmt.Errorf("updateProfileFromGoogleUserInfo() failed: %v", err)
+			return "", fmt.Errorf("updateProfileFromGoogleUserInfo() failed: %v", err)
 		}
 
 		if userId, err = db.Client.Put(c, userId, profile); err != nil {
-			return nil, fmt.Errorf("datastore Put(with userId %v) failed: %v", userId, err)
+			return "", fmt.Errorf("datastore Put(with userId %v) failed: %v", userId, err)
 		}
 	}
 
-	return userId, nil
+	return userId.Encode(), nil
 }
 
-func (db *UserDataRepository) GetUserProfileById(c context.Context, userId *datastore.Key) (*user.Profile, error) {
-	var profile user.Profile
-	err := db.Client.Get(c, userId, &profile)
+func (db *UserDataRepository) GetUserProfileById(c context.Context, strUserId string) (*domainuser.Profile, error) {
+	userId, err := datastore.DecodeKey(strUserId)
+	if err != nil {
+		return nil, fmt.Errorf("datastore.DecodeKey() failed: %v", err)
+	}
+
+	var profile dtouser.Profile
+	err = db.Client.Get(c, userId, &profile)
 	if err == nil {
-		return &profile, nil
+		return convertDtoProfileToDomainProfile(&profile), nil
 	}
 
 	// It's OK if no profile was found.
@@ -240,17 +262,44 @@ func (db *UserDataRepository) GetUserProfileById(c context.Context, userId *data
 	// TODO: The documentation does not clearly state that all matching fields will still be extracted.
 	_, ok := err.(*datastore.ErrFieldMismatch)
 	if ok {
-		return &profile, nil
+		return convertDtoProfileToDomainProfile(&profile), nil
 	}
 
 	return nil, fmt.Errorf("datastore.Get() failed with key: %v: %v", userId, err)
 }
 
+/** Add the values from userStat to this instance,
+* returning a combined UserStats,
+* ignoring the question histories,
+* without changing this instance.
+ */
+func createCombinedUserStatsWithoutQuestionHistories(self *domainuser.Stats, stats *dtouser.Stats) *domainuser.Stats {
+	if stats == nil {
+		return self
+	}
+
+	var result domainuser.Stats
+	result.QuizId = self.QuizId
+
+	result.Answered = self.Answered + stats.Answered
+	result.Correct = self.Correct + stats.Correct
+
+	result.CountQuestionsAnsweredOnce = self.CountQuestionsAnsweredOnce + stats.CountQuestionsAnsweredOnce
+	result.CountQuestionsCorrectOnce = self.CountQuestionsCorrectOnce + stats.CountQuestionsCorrectOnce
+
+	return &result
+}
+
 /** Get a map of stats by quiz ID, for all quizzes, from the database.
  * userId may be nil.
  */
-func (db *UserDataRepository) GetUserStats(c context.Context, userId *datastore.Key) (map[string]*user.Stats, error) {
-	var result = make(map[string]*user.Stats)
+func (db *UserDataRepository) GetUserStats(c context.Context, strUserId string) (map[string]*domainuser.Stats, error) {
+	userId, err := datastore.DecodeKey(strUserId)
+	if err != nil {
+		return nil, fmt.Errorf("datastore.DecodeKey() failed: %v", err)
+	}
+
+	var result = make(map[string]*domainuser.Stats)
 
 	// In case a nil value could lead to getting all users' stats:
 	if userId == nil {
@@ -267,7 +316,7 @@ func (db *UserDataRepository) GetUserStats(c context.Context, userId *datastore.
 	}
 
 	// Build a map of the stats by section ID:
-	var stats user.Stats
+	var stats dtouser.Stats
 	for {
 		_, err := iter.Next(&stats)
 		if err == iterator.Done {
@@ -289,13 +338,13 @@ func (db *UserDataRepository) GetUserStats(c context.Context, userId *datastore.
 
 		existing, exists := result[quizId]
 		if !exists {
-			result[quizId] = &stats
+			result[quizId] = convertDtoStatsToDomainStats(&stats)
 		} else {
-			combinedStats := existing.CreateCombinedUserStatsWithoutQuestionHistories(&stats)
+			combinedStats := createCombinedUserStatsWithoutQuestionHistories(existing, &stats)
 			result[stats.QuizId] = combinedStats
 		}
 
-		// This does not correspond to a user.Stats in the datastore.
+		// This does not correspond to a dtouser.Stats in the datastore.
 		// Instead this one is for the whole quiz, not just a section in a quiz.
 		// So we wipe the Key to make sure that we don't try to write it back sometime.
 		stats.Key = nil // See the comment on Stats.Key.
@@ -309,8 +358,13 @@ func (db *UserDataRepository) GetUserStats(c context.Context, userId *datastore.
  * userId may be nil.
  * quizId may not be nil.
  */
-func (db *UserDataRepository) GetUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string) (map[string]*user.Stats, error) {
-	var result = make(map[string]*user.Stats)
+func (db *UserDataRepository) GetUserStatsForQuiz(c context.Context, strUserId string, quizId string) (map[string]*domainuser.Stats, error) {
+	userId, err := datastore.DecodeKey(strUserId)
+	if err != nil {
+		return nil, fmt.Errorf("datastore.DecodeKey() failed: %v", err)
+	}
+
+	var result = make(map[string]*domainuser.Stats)
 
 	// In case a nil value could lead to getting all users' stats:
 	if userId == nil {
@@ -333,7 +387,7 @@ func (db *UserDataRepository) GetUserStatsForQuiz(c context.Context, userId *dat
 
 	// Build a map of the stats by section ID:
 	for {
-		var stats user.Stats
+		var stats dtouser.Stats
 		key, err := iter.Next(&stats)
 		if err == iterator.Done {
 			break
@@ -351,14 +405,19 @@ func (db *UserDataRepository) GetUserStatsForQuiz(c context.Context, userId *dat
 		}
 
 		stats.Key = key // See the comment on user.Stats.Key
-		result[stats.SectionId] = &stats
+		result[stats.SectionId] = convertDtoStatsToDomainStats(&stats)
 	}
 
 	return result, nil
 }
 
 // Get the stats for a specific section ID, from the database.
-func (db *UserDataRepository) GetUserStatsForSection(c context.Context, userId *datastore.Key, quizId string, sectionId string) (*user.Stats, error) {
+func (db *UserDataRepository) GetUserStatsForSection(c context.Context, strUserId string, quizId string, sectionId string) (*domainuser.Stats, error) {
+	userId, err := datastore.DecodeKey(strUserId)
+	if err != nil {
+		return nil, fmt.Errorf("datastore.DecodeKey() failed: %v", err)
+	}
+
 	// Get all the Stats from the db, for each section:
 	q := db.getQueryForUserStatsForQuiz(userId, quizId).
 		Filter("sectionId =", sectionId).
@@ -370,7 +429,7 @@ func (db *UserDataRepository) GetUserStatsForSection(c context.Context, userId *
 		return nil, fmt.Errorf("datastore query for Stats failed")
 	}
 
-	var stats user.Stats
+	var stats dtouser.Stats
 	key, err := iter.Next(&stats)
 	if err != nil {
 		if err == iterator.Done {
@@ -388,10 +447,10 @@ func (db *UserDataRepository) GetUserStatsForSection(c context.Context, userId *
 	}
 
 	stats.Key = key // See the comment on user.Stats.Key
-	return &stats, nil
+	return convertDtoStatsToDomainStats(&stats), nil
 }
 
-func (db *UserDataRepository) StoreUserStats(c context.Context, stats *user.Stats) error {
+func (db *UserDataRepository) StoreUserStats(c context.Context, userID string, stats *domainuser.Stats) error {
 	if len(stats.QuizId) == 0 {
 		return fmt.Errorf("StoreUserStats(): QuizId is empty")
 	}
@@ -400,7 +459,12 @@ func (db *UserDataRepository) StoreUserStats(c context.Context, stats *user.Stat
 		return fmt.Errorf("StoreUserStats(): SectionId is empty")
 	}
 
-	key := stats.Key
+	dtoStats, err := convertDomainStatsToDtoStats(stats, userID)
+	if err != nil {
+		return fmt.Errorf("convertDomainStatsToDtoStats() failed: %v", err)
+	}
+
+	key := dtoStats.Key
 	if key == nil {
 		// It hasn't been updated yet.
 		//
@@ -414,12 +478,11 @@ func (db *UserDataRepository) StoreUserStats(c context.Context, stats *user.Stat
 		key = datastore.IncompleteKey(DB_KIND_USER_STATS, nil)
 	}
 
-	var err error
 	if key, err = db.Client.Put(c, key, stats); err != nil {
 		return fmt.Errorf("StoreUserStats(): datastore Put() failed: %v", err)
 	}
 
-	stats.Key = key // See the comment on Stats.Key.
+	// TODO: stats.UserId = key // See the comment on Stats.Key.
 
 	return nil
 }
@@ -434,7 +497,12 @@ func (db *UserDataRepository) getQueryForUserStatsForQuiz(userId *datastore.Key,
 		Filter("quizId = ", quizId)
 }
 
-func (db *UserDataRepository) DeleteUserStatsForQuiz(c context.Context, userId *datastore.Key, quizId string) error {
+func (db *UserDataRepository) DeleteUserStatsForQuiz(c context.Context, strUserId string, quizId string) error {
+	userId, err := datastore.DecodeKey(strUserId)
+	if err != nil {
+		return fmt.Errorf("datastore.DecodeKey() failed: %v", err)
+	}
+
 	// In case a nil value could lead to deleting all users' stats:
 	if userId == nil {
 		return fmt.Errorf("DeleteUserStatsForQuiz(): userId is nil")
@@ -452,7 +520,7 @@ func (db *UserDataRepository) DeleteUserStatsForQuiz(c context.Context, userId *
 		return fmt.Errorf("datastore query for Stats failed")
 	}
 
-	var stats user.Stats
+	var stats dtouser.Stats
 	for {
 		_, err := iter.Next(&stats)
 		if err == iterator.Done {
@@ -480,7 +548,7 @@ func (db *UserDataRepository) DeleteUserStatsForQuiz(c context.Context, userId *
 	return nil
 }
 
-func (db *UserDataRepository) updateProfileFromGoogleUserInfo(profile *user.Profile, userInfo *GoogleUserInfo, token *oauth2.Token) error {
+func (db *UserDataRepository) updateProfileFromGoogleUserInfo(profile *dtouser.Profile, userInfo *GoogleUserInfo, token *oauth2.Token) error {
 	if profile == nil {
 		return fmt.Errorf("profile is nil")
 	}
@@ -506,7 +574,7 @@ func (db *UserDataRepository) updateProfileFromGoogleUserInfo(profile *user.Prof
 	return nil
 }
 
-func (db *UserDataRepository) updateProfileFromGitHubUserInfo(profile *user.Profile, userInfo *GitHubUserInfo, token *oauth2.Token) error {
+func (db *UserDataRepository) updateProfileFromGitHubUserInfo(profile *dtouser.Profile, userInfo *GitHubUserInfo, token *oauth2.Token) error {
 	if profile == nil {
 		return fmt.Errorf("profile is nil")
 	}
@@ -528,7 +596,7 @@ func (db *UserDataRepository) updateProfileFromGitHubUserInfo(profile *user.Prof
 	return nil
 }
 
-func (db *UserDataRepository) updateProfileFromFacebookUserInfo(profile *user.Profile, userInfo *FacebookUserInfo, token *oauth2.Token) error {
+func (db *UserDataRepository) updateProfileFromFacebookUserInfo(profile *dtouser.Profile, userInfo *FacebookUserInfo, token *oauth2.Token) error {
 	if profile == nil {
 		return fmt.Errorf("profile is nil")
 	}
