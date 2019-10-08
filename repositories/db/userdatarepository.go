@@ -4,6 +4,7 @@ import (
 	"cloud.google.com/go/datastore"
 	"fmt"
 	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
+	"github.com/murraycu/go-bigoquiz-server/loginserver/oauthparsers"
 	dtouser "github.com/murraycu/go-bigoquiz-server/repositories/db/dtos/user"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
@@ -64,7 +65,7 @@ func (db *UserDataRepository) getProfileFromDbByGitHubID(c context.Context, id i
 	return db.getProfileFromDbQuery(c, q)
 }
 
-func (db *UserDataRepository) StoreGitHubLoginInUserProfile(c context.Context, userInfo GitHubUserInfo, strUserId string, token *oauth2.Token) (string, error) {
+func (db *UserDataRepository) StoreGitHubLoginInUserProfile(c context.Context, userInfo oauthparsers.GitHubUserInfo, strUserId string, token *oauth2.Token) (string, error) {
 	userId, err := datastore.DecodeKey(strUserId)
 	if err != nil {
 		return "", fmt.Errorf("datastore.DecodeKey() failed: %v", err)
@@ -120,7 +121,7 @@ func (db *UserDataRepository) getProfileFromDbByFacebookID(c context.Context, id
 	return db.getProfileFromDbQuery(c, q)
 }
 
-func (db *UserDataRepository) StoreFacebookLoginInUserProfile(c context.Context, userInfo FacebookUserInfo, strUserId string, token *oauth2.Token) (string, error) {
+func (db *UserDataRepository) StoreFacebookLoginInUserProfile(c context.Context, userInfo oauthparsers.FacebookUserInfo, strUserId string, token *oauth2.Token) (string, error) {
 	userId, err := datastore.DecodeKey(strUserId)
 	if err != nil {
 		return "", fmt.Errorf("datastore.DecodeKey() failed: %v", err)
@@ -190,7 +191,7 @@ func (db *UserDataRepository) getProfileFromDbByUserID(c context.Context, userId
 // TODO: Make this function generic, parameterizing on GoogleUserInfo/GithubUserInfo,
 // if Go ever has generics.
 // Get the UserProfile via the GoogleID, adding it if necessary.
-func (db *UserDataRepository) StoreGoogleLoginInUserProfile(c context.Context, userInfo GoogleUserInfo, strUserId string, token *oauth2.Token) (string, error) {
+func (db *UserDataRepository) StoreGoogleLoginInUserProfile(c context.Context, userInfo oauthparsers.GoogleUserInfo, strUserId string, token *oauth2.Token) (string, error) {
 	userIdFound, profile, err := db.getProfileFromDbByGoogleID(c, userInfo.Sub)
 	if err != nil {
 		// An unexpected error.
@@ -548,7 +549,7 @@ func (db *UserDataRepository) DeleteUserStatsForQuiz(c context.Context, strUserI
 	return nil
 }
 
-func (db *UserDataRepository) updateProfileFromGoogleUserInfo(profile *dtouser.Profile, userInfo *GoogleUserInfo, token *oauth2.Token) error {
+func (db *UserDataRepository) updateProfileFromGoogleUserInfo(profile *dtouser.Profile, userInfo *oauthparsers.GoogleUserInfo, token *oauth2.Token) error {
 	if profile == nil {
 		return fmt.Errorf("profile is nil")
 	}
@@ -574,7 +575,7 @@ func (db *UserDataRepository) updateProfileFromGoogleUserInfo(profile *dtouser.P
 	return nil
 }
 
-func (db *UserDataRepository) updateProfileFromGitHubUserInfo(profile *dtouser.Profile, userInfo *GitHubUserInfo, token *oauth2.Token) error {
+func (db *UserDataRepository) updateProfileFromGitHubUserInfo(profile *dtouser.Profile, userInfo *oauthparsers.GitHubUserInfo, token *oauth2.Token) error {
 	if profile == nil {
 		return fmt.Errorf("profile is nil")
 	}
@@ -596,7 +597,7 @@ func (db *UserDataRepository) updateProfileFromGitHubUserInfo(profile *dtouser.P
 	return nil
 }
 
-func (db *UserDataRepository) updateProfileFromFacebookUserInfo(profile *dtouser.Profile, userInfo *FacebookUserInfo, token *oauth2.Token) error {
+func (db *UserDataRepository) updateProfileFromFacebookUserInfo(profile *dtouser.Profile, userInfo *oauthparsers.FacebookUserInfo, token *oauth2.Token) error {
 	if profile == nil {
 		return fmt.Errorf("profile is nil")
 	}
