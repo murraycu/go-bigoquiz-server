@@ -1,18 +1,17 @@
 package restserver
 
 import (
-	"cloud.google.com/go/datastore"
 	"encoding/json"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
+	"github.com/murraycu/go-bigoquiz-server/domain/user"
 	"github.com/murraycu/go-bigoquiz-server/repositories/db"
-	"github.com/murraycu/go-bigoquiz-server/repositories/db/dtos/user"
 	"golang.org/x/oauth2"
 	"net/http"
 )
 
 func (s *RestServer) HandleUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	loginInfo, err := s.getLoginInfoFromSessionAndDb(r)
+	loginInfo, _, err := s.getLoginInfoFromSessionAndDb(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -30,33 +29,36 @@ func (s *RestServer) HandleUser(w http.ResponseWriter, r *http.Request, ps httpr
 	}
 }
 
-func (s *RestServer) getProfileFromSessionAndDb(r *http.Request) (*user.Profile, *datastore.Key, *oauth2.Token, error) {
+// Returns the LoginInfo and the userID.
+func (s *RestServer) getProfileFromSessionAndDb(r *http.Request) (*user.Profile, string, *oauth2.Token, error) {
 	userId, token, err := s.UserSessionStore.GetProfileFromSession(r)
 	if err != nil {
-		return nil, nil, nil, fmt.Errorf("GetProfileFromSession() failed: %v", err)
+		return nil, "", nil, fmt.Errorf("GetProfileFromSession() failed: %v", err)
 	}
 
-	if userId == nil {
+	if len(userId) == 0 {
 		// Not an error.
 		// It's just not in the session cookie.
-		return nil, nil, nil, nil
+		return nil, "", nil, nil
 	}
 
 	dbClient, err := db.NewUserDataRepository()
 	if err != nil {
-		return nil, nil, nil, fmt.Errorf("NewUserDataRepository() failed: %v", err)
+		return nil, "", nil, fmt.Errorf("NewUserDataRepository() failed: %v", err)
 	}
 
 	c := r.Context()
 	profile, err := dbClient.GetUserProfileById(c, userId)
 	if err != nil {
-		return nil, nil, nil, fmt.Errorf("GetUserProfileById() failed: %v", err)
+		return nil, "", nil, fmt.Errorf("GetUserProfileById() failed: %v", err)
 	}
 
 	return profile, userId, token, nil
 }
 
-func (s *RestServer) getLoginInfoFromSessionAndDb(r *http.Request) (*user.LoginInfo, error) {
+// Returns the LoginInfo and the userID.
+// TODO: Return the user info in the LoginInfo struct, but don't put it in a REST/JSON version of LoginInfo.
+func (s *RestServer) getLoginInfoFromSessionAndDb(r *http.Request) (*user.LoginInfo, string, error) {
 	var loginInfo user.LoginInfo
 
 	profile, userId, token, err := s.getProfileFromSessionAndDb(r)
@@ -65,12 +67,12 @@ func (s *RestServer) getLoginInfoFromSessionAndDb(r *http.Request) (*user.LoginI
 		loginInfo.ErrorMessage = fmt.Sprintf("not logged in (%v)", err)
 	}
 
-	s.updateLoginInfoFromProfile(&loginInfo, profile, token, userId)
+	s.updateLoginInfoFromProfile(&loginInfo, profile, token)
 
-	return &loginInfo, err
+	return &loginInfo, userId, err
 }
 
-func (s *RestServer) updateLoginInfoFromProfile(loginInfo *user.LoginInfo, profile *user.Profile, token *oauth2.Token, userId *datastore.Key) {
+func (s *RestServer) updateLoginInfoFromProfile(loginInfo *user.LoginInfo, profile *user.Profile, token *oauth2.Token) {
 	if profile == nil {
 		loginInfo.LoggedIn = false
 		loginInfo.ErrorMessage = "not logged in user (no profile found)"
@@ -80,25 +82,24 @@ func (s *RestServer) updateLoginInfoFromProfile(loginInfo *user.LoginInfo, profi
 	} else {
 		loginInfo.LoggedIn = true
 		loginInfo.Nickname = profile.Name
-		loginInfo.UserId = userId // Not for the JSON, but useful to callers.
 
-		loginInfo.GoogleLinked = profile.GoogleId != ""
+		loginInfo.GoogleLinked = len(profile.GoogleProfileUrl) != 0
 		loginInfo.GoogleProfileUrl = profile.GoogleProfileUrl
-		loginInfo.GitHubLinked = profile.GitHubId != 0
+		loginInfo.GitHubLinked = len(profile.GitHubProfileUrl) != 0
 		loginInfo.GitHubProfileUrl = profile.GitHubProfileUrl
-		loginInfo.FacebookLinked = profile.FacebookId != ""
+		loginInfo.FacebookLinked = len(profile.FacebookProfileUrl) != 0
 		loginInfo.FacebookProfileUrl = profile.FacebookProfileUrl
 	}
 }
 
 /** Get the user ID.
- * Returns a nil Key, and a nil error, if the user is not logged in.
+ * Returns an empty user ID, and a nil error, if the user is not logged in.
  */
-func (s *RestServer) getUserIdFromSessionAndDb(r *http.Request, w http.ResponseWriter) (*datastore.Key, error) {
-	loginInfo, err := s.getLoginInfoFromSessionAndDb(r)
+func (s *RestServer) getUserIdFromSessionAndDb(r *http.Request, w http.ResponseWriter) (string, error) {
+	userId, _, err := s.UserSessionStore.GetProfileFromSession(r)
 	if err != nil {
-		return nil, fmt.Errorf("getLoginInfoFromSessionAndDb() failed: %v", err)
+		return "", fmt.Errorf("GetProfileFromSession() failed: %v", err)
 	}
 
-	return loginInfo.UserId, nil
+	return userId, nil
 }

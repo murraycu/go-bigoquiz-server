@@ -1,13 +1,12 @@
 package restserver
 
 import (
-	"cloud.google.com/go/datastore"
 	"encoding/json"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"github.com/murraycu/go-bigoquiz-server/domain/quiz"
+	"github.com/murraycu/go-bigoquiz-server/domain/user"
 	"github.com/murraycu/go-bigoquiz-server/repositories/db"
-	"github.com/murraycu/go-bigoquiz-server/repositories/db/dtos/user"
 	"golang.org/x/net/context"
 	"io/ioutil"
 	"net/http"
@@ -30,7 +29,7 @@ func (s StatsListByTitle) Less(i, j int) bool {
 }
 
 func (s *RestServer) HandleUserHistoryAll(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	loginInfo, err := s.getLoginInfoFromSessionAndDb(r)
+	loginInfo, userId, err := s.getLoginInfoFromSessionAndDb(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -41,10 +40,10 @@ func (s *RestServer) HandleUserHistoryAll(w http.ResponseWriter, r *http.Request
 
 	// Note: We only show the entire user history for logged-in users,
 	// so there is no point in constructing an empty sets of stats for not-logged in users.
-	if loginInfo.UserId != nil {
+	if loginInfo.LoggedIn && len(userId) != 0 {
 		c := r.Context()
 
-		mapUserStats, err := s.UserDataClient.GetUserStats(c, loginInfo.UserId)
+		mapUserStats, err := s.UserDataClient.GetUserStats(c, userId)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -95,14 +94,14 @@ func (s *RestServer) HandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	loginInfo, err := s.getLoginInfoFromSessionAndDb(r)
+	loginInfo, userId, err := s.getLoginInfoFromSessionAndDb(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	var mapUserStats map[string]*user.Stats
-	if loginInfo.UserId != nil {
+	if loginInfo.LoggedIn && len(userId) != 0 {
 		c := r.Context()
 
 		dbClient, err := db.NewUserDataRepository()
@@ -111,7 +110,7 @@ func (s *RestServer) HandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Re
 			return
 		}
 
-		mapUserStats, err = dbClient.GetUserStatsForQuiz(c, loginInfo.UserId, quizId)
+		mapUserStats, err = dbClient.GetUserStatsForQuiz(c, userId, quizId)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -248,8 +247,8 @@ func (s *RestServer) HandleUserHistoryResetSections(w http.ResponseWriter, r *ht
 		return
 	}
 
-	if userId == nil {
-		loginInfo, err := s.getLoginInfoFromSessionAndDb(r)
+	if len(userId) == 0 {
+		loginInfo, _, err := s.getLoginInfoFromSessionAndDb(r)
 		if err != nil {
 			http.Error(w, "not logged in. getLoginInfoFromSessionAndDb() returned err.", http.StatusForbidden)
 			return
@@ -299,7 +298,7 @@ func (s *RestServer) storeAnswerCorrectnessAndGetSubmissionResult(w http.Respons
 	c := r.Context()
 	if nextQuestionSectionId == sectionId {
 		var stats *user.Stats
-		if userId != nil {
+		if len(userId) == 0 {
 			stats, err = s.UserDataClient.GetUserStatsForSection(c, userId, quizId, nextQuestionSectionId)
 			if err != nil {
 				return nil, fmt.Errorf("GetUserStatsForQuiz() failed: %v", err)
@@ -314,7 +313,7 @@ func (s *RestServer) storeAnswerCorrectnessAndGetSubmissionResult(w http.Respons
 		return s.createSubmissionResultForSection(result, quizId, questionId, nextQuestionSectionId, stats)
 	} else {
 		var stats map[string]*user.Stats
-		if userId != nil {
+		if len(userId) == 0 {
 			stats, err = s.UserDataClient.GetUserStatsForQuiz(c, userId, quizId)
 			if err != nil {
 				return nil, fmt.Errorf("GetUserStatsForQuiz() failed: %v", err)
@@ -443,9 +442,9 @@ func (s *RestServer) getNextQuestionFromUserStatsForSection(sectionId string, qu
  * storing a new user.Stats in the database if necessary.
  * To update an existing user.Stats in the database, via the stats parameter, its Key field must be set.
  */
-func (s *RestServer) storeAnswer(c context.Context, result bool, quizId string, question *quiz.Question, userId *datastore.Key, stats map[string]*user.Stats) error {
-	if userId == nil {
-		return fmt.Errorf("storeAnswer(): userId is nil")
+func (s *RestServer) storeAnswer(c context.Context, result bool, quizId string, question *quiz.Question, userId string, stats map[string]*user.Stats) error {
+	if len(userId) == 0 {
+		return fmt.Errorf("storeAnswer(): userId is empty")
 	}
 
 	if question == nil {
@@ -461,7 +460,6 @@ func (s *RestServer) storeAnswer(c context.Context, result bool, quizId string, 
 	if !ok {
 		// It's not in the map yet, so we add it.
 		sectionStats = new(user.Stats)
-		sectionStats.UserId = userId
 		sectionStats.QuizId = quizId
 		sectionStats.SectionId = sectionId
 	}
@@ -473,9 +471,9 @@ func (s *RestServer) storeAnswer(c context.Context, result bool, quizId string, 
  * storing a new user.Stats in the database if necessary.
  * To update an existing user.Stats in the database, its Key field must be set.
  */
-func (s *RestServer) storeAnswerForSection(c context.Context, result bool, quizId string, question *quiz.Question, userId *datastore.Key, sectionStats *user.Stats) error {
-	if userId == nil {
-		return fmt.Errorf("storeAnswerForSection(): userId is nil")
+func (s *RestServer) storeAnswerForSection(c context.Context, result bool, quizId string, question *quiz.Question, userId string, sectionStats *user.Stats) error {
+	if len(userId) == 0 {
+		return fmt.Errorf("storeAnswerForSection(): userId is empty")
 	}
 
 	if question == nil {
@@ -489,7 +487,6 @@ func (s *RestServer) storeAnswerForSection(c context.Context, result bool, quizI
 
 	if sectionStats == nil {
 		sectionStats = new(user.Stats)
-		sectionStats.UserId = userId
 		sectionStats.QuizId = quizId
 		sectionStats.SectionId = sectionId
 	}
@@ -507,8 +504,8 @@ func (s *RestServer) storeAnswerForSection(c context.Context, result bool, quizI
 		return fmt.Errorf("NewUserDataRepository() failed: %v", err)
 	}
 
-	if err := dbClient.StoreUserStats(c, sectionStats); err != nil {
-		return fmt.Errorf("db.StoreUserStat() for key: %v: %v", sectionStats.Key, err)
+	if err := dbClient.StoreUserStats(c, userId, sectionStats); err != nil {
+		return fmt.Errorf("db.StoreUserStat() failed for: %v: %v", sectionStats, err)
 	}
 
 	return nil
@@ -538,7 +535,6 @@ func (s *RestServer) buildUserHistorySections(loginInfo *user.LoginInfo, quiz *q
 		return nil
 	}
 
-	userId := loginInfo.UserId
 	quizId := quiz.Id
 
 	var result user.HistorySections
@@ -566,7 +562,6 @@ func (s *RestServer) buildUserHistorySections(loginInfo *user.LoginInfo, quiz *q
 
 		if userStats == nil {
 			userStats = new(user.Stats)
-			userStats.UserId = userId
 			userStats.QuizId = quizId
 			userStats.SectionId = sectionId
 		}
@@ -575,14 +570,14 @@ func (s *RestServer) buildUserHistorySections(loginInfo *user.LoginInfo, quiz *q
 		userStats.SectionTitle = section.Title
 		userStats.CountQuestions = section.CountQuestions
 
-		s.fillUserStatsWithExtras(userStats, quiz)
+		fillUserStatsWithExtras(userStats, quiz)
 		result.Stats = append(result.Stats, userStats)
 	}
 
 	return &result
 }
 
-func (s *RestServer) fillUserStatsWithExtras(userStats *user.Stats, qz *quiz.Quiz) {
+func fillUserStatsWithExtras(userStats *user.Stats, qz *quiz.Quiz) {
 	// Set the titles.
 	// We don't store these in the datastore because we can get them easily from the Quiz.
 

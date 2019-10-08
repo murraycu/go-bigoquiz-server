@@ -37,10 +37,10 @@ func NewUserSessionStore(cookieKey string) (*UserSessionStore, error) {
 	return result, nil
 }
 
-func (s *UserSessionStore) GetProfileFromSession(r *http.Request) (*datastore.Key, *oauth2.Token, error) {
+func (s *UserSessionStore) GetProfileFromSession(r *http.Request) (string, *oauth2.Token, error) {
 	session, err := s.Store.Get(r, DefaultSessionID)
 	if err != nil {
-		return nil, nil, fmt.Errorf("getLoginInfoFromSessionAndDb(): store.Get() failed: %v", err)
+		return "", nil, fmt.Errorf("GetProfileFromSession(): store.Get() failed: %v", err)
 	}
 
 	// Get the token from the cookie:
@@ -48,32 +48,37 @@ func (s *UserSessionStore) GetProfileFromSession(r *http.Request) (*datastore.Ke
 	if !ok {
 		// Not an error.
 		// It's just not in the cookie.
-		return nil, nil, nil
+		return "", nil, nil
 	}
 
 	// Try casting it to the expected type:
 	var token *oauth2.Token
 	token, ok = tokenVal.(*oauth2.Token)
 	if !ok {
-		return nil, nil, fmt.Errorf("oauthTokenSessionKey is not a *Token")
+		return "", nil, fmt.Errorf("oauthTokenSessionKey is not a *Token")
 	}
 
 	// Get the name from the database, via the userID from the cookie:
 	userIdVal, ok := session.Values[UserIdSessionKey]
 	if !ok {
-		return nil, nil, fmt.Errorf("no name as value")
+		return "", nil, fmt.Errorf("no name as value")
 	}
 
 	// Try casting it to the expected type:
-	var userId *datastore.Key
-	userId, ok = userIdVal.(*datastore.Key)
+	var strUserId string
+	strUserId, ok = userIdVal.(string)
 	if !ok {
-		return nil, nil, fmt.Errorf("no name as *Key. userIdVal is not a *Key")
+		return "", nil, fmt.Errorf("no name as string. userIdVal is not a string")
+	}
+
+	userId, err := datastore.DecodeKey(strUserId)
+	if err != nil {
+		return "", nil, fmt.Errorf("datastore.DecodeKey() failed: %v", err)
 	}
 
 	if userId == nil {
-		return nil, nil, fmt.Errorf("userId is null")
+		return "", nil, fmt.Errorf("userId is null")
 	}
 
-	return userId, token, nil
+	return userId.Encode(), token, nil
 }
