@@ -61,14 +61,19 @@ func (s *UserSessionStore) GetProfileFromSession(r *http.Request) (string, *oaut
 	// Get the name from the database, via the userID from the cookie:
 	userIdVal, ok := session.Values[UserIdSessionKey]
 	if !ok {
-		return "", nil, fmt.Errorf("no name as value")
+		// Not an error.
+		// It's just not in the cookie.
+		return "", nil, nil
 	}
 
 	// Try casting it to the expected type:
 	var strUserId string
 	strUserId, ok = userIdVal.(string)
 	if !ok {
-		return "", nil, fmt.Errorf("no name as string. userIdVal is not a string")
+		// Not an error.
+		// It's just not (correctly) in the cookie.
+		// (We changed its format in 2019/10.)
+		return "", nil, nil
 	}
 
 	userId, err := datastore.DecodeKey(strUserId)
