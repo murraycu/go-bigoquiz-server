@@ -59,21 +59,25 @@ func NewLoginServer(userSessionStore *usersessionstore.UserSessionStore) (*Login
 
 /** Get an oauth2 URL based on the oauth config.
  */
-func (s *LoginServer) generateOAuthUrl(r *http.Request, oauthConfig *oauth2.Config) string {
+func (s *LoginServer) generateOAuthUrl(r *http.Request, oauthConfig *oauth2.Config) (string, error) {
 	c := r.Context()
 
 	state, err := generateState(c)
 	if err != nil {
-		log.Printf("Unable to generate state: %v", err)
-		return ""
+		return "", fmt.Errorf("Unable to generate state: %v", err)
 	}
 
-	return oauthConfig.AuthCodeURL(state)
+	return oauthConfig.AuthCodeURL(state), nil
 }
 
 func (s *LoginServer) HandleGoogleLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	// Redirect the user to the Google login page:
-	url := s.generateOAuthUrl(r, s.ConfOAuthGoogle)
+	url, err := s.generateOAuthUrl(r, s.ConfOAuthGoogle)
+	if err != nil {
+		loginStartFailedErr("generateOAuthUrl() failed", err, w, r)
+		return
+	}
+
 	http.Redirect(w, r, url, http.StatusFound)
 }
 
@@ -286,7 +290,12 @@ func (s *LoginServer) generateGitHubOAuthUrl(r *http.Request) string {
 
 func (s *LoginServer) HandleGitHubLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	// Redirect the user to the GitHub login page:
-	url := s.generateOAuthUrl(r, s.ConfOAuthGitHub)
+	url, err := s.generateOAuthUrl(r, s.ConfOAuthGitHub)
+	if err != nil {
+		loginStartFailedErr("generateOAuthUrl() failed", err, w, r)
+		return
+	}
+
 	http.Redirect(w, r, url, http.StatusFound)
 }
 
@@ -331,7 +340,12 @@ func (s *LoginServer) HandleGitHubCallback(w http.ResponseWriter, r *http.Reques
 
 func (s *LoginServer) HandleFacebookLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	// Redirect the user to the Facebook login page:
-	url := s.generateOAuthUrl(r, s.ConfOAuthFacebook)
+	url, err := s.generateOAuthUrl(r, s.ConfOAuthFacebook)
+	if err != nil {
+		loginStartFailedErr("generateOAuthUrl() failed", err, w, r)
+		return
+	}
+
 	http.Redirect(w, r, url, http.StatusFound)
 }
 
@@ -380,6 +394,11 @@ func loginFailed(message string, err error, w http.ResponseWriter, r *http.Reque
 
 	log.Printf(message+":'%v'\n", err)
 	http.Redirect(w, r, loginFailedUrl, http.StatusTemporaryRedirect)
+}
+
+func loginStartFailedErr(message string, err error, w http.ResponseWriter, r *http.Request) {
+	log.Printf(message+":'%v'\n", err)
+	http.Redirect(w, r, "/", http.StatusInternalServerError)
 }
 
 func loginCallbackFailedErr(message string, err error, w http.ResponseWriter, r *http.Request) {
