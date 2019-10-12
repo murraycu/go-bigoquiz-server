@@ -14,7 +14,7 @@ const UserIdSessionKey = "id" // A generic user ID, not a google user ID.
 
 type UserSessionStore struct {
 	// Session cookie store.
-	Store *sessions.CookieStore
+	store *sessions.CookieStore
 }
 
 func NewUserSessionStore(cookieKey string) (*UserSessionStore, error) {
@@ -22,15 +22,24 @@ func NewUserSessionStore(cookieKey string) (*UserSessionStore, error) {
 
 	// Create the session cookie store,
 	// using the secret key from the configuration file.
-	result.Store = sessions.NewCookieStore([]byte(cookieKey))
-	result.Store.Options.HttpOnly = true
-	result.Store.Options.Secure = true // Only send via HTTPS connections, not HTTP.
+	result.store = sessions.NewCookieStore([]byte(cookieKey))
+	result.store.Options.HttpOnly = true
+	result.store.Options.Secure = true // Only send via HTTPS connections, not HTTP.
+
+	return result, nil
+}
+
+func (s *UserSessionStore) GetSession(r *http.Request) (*sessions.Session, error) {
+	result, err := s.store.New(r, DefaultSessionID)
+	if err != nil {
+		return nil, fmt.Errorf("store.New() failed: %v", err)
+	}
 
 	return result, nil
 }
 
 func (s *UserSessionStore) GetProfileFromSession(r *http.Request) (string, *oauth2.Token, error) {
-	session, err := s.Store.Get(r, DefaultSessionID)
+	session, err := s.store.Get(r, DefaultSessionID)
 	if err != nil {
 		return "", nil, fmt.Errorf("GetProfileFromSession(): store.Get() failed: %v", err)
 	}

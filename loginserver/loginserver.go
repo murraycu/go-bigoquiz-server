@@ -214,7 +214,7 @@ func exchangeAndGetUserBody(w http.ResponseWriter, r *http.Request, conf *oauth2
 func (s *LoginServer) storeCookieAndRedirect(r *http.Request, w http.ResponseWriter, c context.Context, strUserId string, token *oauth2.Token) {
 	// Store the token in the cookie
 	// so we can retrieve it from subsequent requests from the browser.
-	session, err := s.userSessionStore.Store.New(r, usersessionstore.DefaultSessionID)
+	session, err := s.userSessionStore.GetSession(r)
 	if err != nil {
 		loginFailed("Could not create new session", err, w, r)
 		return
@@ -235,7 +235,7 @@ func (s *LoginServer) storeCookieAndRedirect(r *http.Request, w http.ResponseWri
 
 func (s *LoginServer) HandleLogout(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	// Wipe the cookie:
-	session, err := s.userSessionStore.Store.New(r, usersessionstore.DefaultSessionID)
+	session, err := s.userSessionStore.GetSession(r)
 	if err != nil {
 		logoutError("could not get default session", err, w)
 		return
