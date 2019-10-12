@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"github.com/murraycu/go-bigoquiz-server/config"
-	"github.com/murraycu/go-bigoquiz-server/loginserver/oauthparsers"
 	"github.com/murraycu/go-bigoquiz-server/repositories/db"
-	"github.com/murraycu/go-bigoquiz-server/usersessionstore"
+	oauthparsers2 "github.com/murraycu/go-bigoquiz-server/server/loginserver/oauthparsers"
+	"github.com/murraycu/go-bigoquiz-server/server/usersessionstore"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"io/ioutil"
@@ -146,7 +146,7 @@ func (s *LoginServer) HandleGoogleCallback(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	var userinfo oauthparsers.GoogleUserInfo
+	var userinfo oauthparsers2.GoogleUserInfo
 	err := json.Unmarshal(body, &userinfo)
 	if err != nil {
 		loginCallbackFailedErr("Unmarshaling of JSON from oauth2 callback failed", err, w, r)
@@ -291,7 +291,7 @@ func (s *LoginServer) HandleGitHubCallback(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	var userinfo oauthparsers.GitHubUserInfo
+	var userinfo oauthparsers2.GitHubUserInfo
 	err := json.Unmarshal(body, &userinfo)
 	if err != nil {
 		loginCallbackFailedErr("Unmarshaling of JSON from oauth2 callback failed", err, w, r)
@@ -334,7 +334,7 @@ func (s *LoginServer) HandleFacebookCallback(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	var userinfo oauthparsers.FacebookUserInfo
+	var userinfo oauthparsers2.FacebookUserInfo
 	err := json.Unmarshal(body, &userinfo)
 	if err != nil {
 		loginCallbackFailedErr("Unmarshaling of JSON from oauth2 callback failed", err, w, r)

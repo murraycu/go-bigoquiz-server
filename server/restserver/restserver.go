@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/murraycu/go-bigoquiz-server/repositories"
 	"github.com/murraycu/go-bigoquiz-server/repositories/db"
-	"github.com/murraycu/go-bigoquiz-server/usersessionstore"
+	"github.com/murraycu/go-bigoquiz-server/server/usersessionstore"
 )
 
 const QUERY_PARAM_QUIZ_ID = "quiz-id"
