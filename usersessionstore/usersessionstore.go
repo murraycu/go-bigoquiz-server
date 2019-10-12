@@ -4,8 +4,6 @@ import (
 	"cloud.google.com/go/datastore"
 	"fmt"
 	"github.com/gorilla/sessions"
-	"github.com/murraycu/go-bigoquiz-server/domain/quiz"
-	"github.com/murraycu/go-bigoquiz-server/repositories/db"
 	"golang.org/x/oauth2"
 	"net/http"
 )
@@ -15,12 +13,6 @@ const DefaultSessionID = "default"
 const UserIdSessionKey = "id" // A generic user ID, not a google user ID.
 
 type UserSessionStore struct {
-	Quizzes           map[string]*quiz.Quiz
-	QuizzesListSimple []*quiz.Quiz
-	QuizzesListFull   []*quiz.Quiz
-
-	UserDataClient *db.UserDataRepository
-
 	// Session cookie store.
 	Store *sessions.CookieStore
 }
