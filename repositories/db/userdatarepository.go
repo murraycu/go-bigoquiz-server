@@ -35,10 +35,6 @@ func NewUserDataRepository() (*UserDataRepository, error) {
 	return result, nil
 }
 
-func (db *UserDataRepository) dataStoreClient(c context.Context) (*datastore.Client, error) {
-	return datastore.NewClient(c, "bigoquiz")
-}
-
 func (db *UserDataRepository) getProfileFromDbQuery(c context.Context, q *datastore.Query) (*datastore.Key, *dtouser.Profile, error) {
 	iter := db.Client.Run(c, q)
 	if iter == nil {
