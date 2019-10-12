@@ -168,17 +168,9 @@ func (s *LoginServer) HandleGoogleCallback(w http.ResponseWriter, r *http.Reques
 		loginCallbackFailedErr("getProfileFromSession() failed", err, w, r)
 		return
 	}
-
-	// Store in the database:
-	dbClient, err := db.NewUserDataRepository()
-	if err != nil {
-		loginCallbackFailedErr("dbClient.NewUserDataRepository() failed", err, w, r)
-		return
-	}
-
 	// Store in the database,
 	// either creating a new user or updating an existing user.
-	userId, err = dbClient.StoreGoogleLoginInUserProfile(c, userinfo, userId, token)
+	userId, err = s.UserDataClient.StoreGoogleLoginInUserProfile(c, userinfo, userId, token)
 	if err != nil {
 		loginCallbackFailedErr("StoreGoogleLoginInUserProfile() failed", err, w, r)
 		return
@@ -322,14 +314,7 @@ func (s *LoginServer) HandleGitHubCallback(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	// Store in the database:
-	dbClient, err := db.NewUserDataRepository()
-	if err != nil {
-		loginCallbackFailedErr("dbClient.NewUserDataRepository() failed", err, w, r)
-		return
-	}
-
-	userId, err = dbClient.StoreGitHubLoginInUserProfile(c, userinfo, userId, token)
+	userId, err = s.UserDataClient.StoreGitHubLoginInUserProfile(c, userinfo, userId, token)
 	if err != nil {
 		loginCallbackFailedErr("StoreGitHubLoginInUserProfile() failed", err, w, r)
 		return
@@ -373,14 +358,7 @@ func (s *LoginServer) HandleFacebookCallback(w http.ResponseWriter, r *http.Requ
 	}
 
 	// Store in the database:
-	dbClient, err := db.NewUserDataRepository()
-	if err != nil {
-		loginCallbackFailedErr("dbClient.NewUserDataRepository() failed", err, w, r)
-		return
-	}
-
-	// Store in the database:
-	userId, err = dbClient.StoreFacebookLoginInUserProfile(c, userinfo, userId, token)
+	userId, err = s.UserDataClient.StoreFacebookLoginInUserProfile(c, userinfo, userId, token)
 	if err != nil {
 		loginCallbackFailedErr("StoreFacebookLoginInUserProfile() failed.", err, w, r)
 		return
