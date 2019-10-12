@@ -19,7 +19,7 @@ const (
 )
 
 type UserDataRepository struct {
-	Client *datastore.Client
+	client *datastore.Client
 }
 
 func NewUserDataRepository() (*UserDataRepository, error) {
@@ -27,7 +27,7 @@ func NewUserDataRepository() (*UserDataRepository, error) {
 
 	c := context.Background()
 	var err error
-	result.Client, err = datastore.NewClient(c, "bigoquiz")
+	result.client, err = datastore.NewClient(c, "bigoquiz")
 	if err != nil {
 		return nil, fmt.Errorf("datastore.NewClient() failed: %v", err)
 	}
@@ -36,7 +36,7 @@ func NewUserDataRepository() (*UserDataRepository, error) {
 }
 
 func (db *UserDataRepository) getProfileFromDbQuery(c context.Context, q *datastore.Query) (*datastore.Key, *dtouser.Profile, error) {
-	iter := db.Client.Run(c, q)
+	iter := db.client.Run(c, q)
 	if iter == nil {
 		return nil, nil, fmt.Errorf("datastore query for googleId failed")
 	}
@@ -93,7 +93,7 @@ func (db *UserDataRepository) StoreGitHubLoginInUserProfile(c context.Context, u
 		}
 
 		userId = datastore.IncompleteKey(DB_KIND_PROFILE, nil)
-		if userId, err = db.Client.Put(c, userId, profile); err != nil {
+		if userId, err = db.client.Put(c, userId, profile); err != nil {
 			return "", fmt.Errorf("datastore Put(with incomplete userId %v) failed: %v", userId, err)
 		}
 	} else if userId != nil {
@@ -102,7 +102,7 @@ func (db *UserDataRepository) StoreGitHubLoginInUserProfile(c context.Context, u
 			return "", fmt.Errorf("updateProfileFromGitHubUserInfo() failed: %v", err)
 		}
 
-		if userId, err = db.Client.Put(c, userId, profile); err != nil {
+		if userId, err = db.client.Put(c, userId, profile); err != nil {
 			return "", fmt.Errorf("datastore Put(with userId %v) failed: %v", userId, err)
 		}
 	}
@@ -149,7 +149,7 @@ func (db *UserDataRepository) StoreFacebookLoginInUserProfile(c context.Context,
 		}
 
 		userId = datastore.IncompleteKey(DB_KIND_PROFILE, nil)
-		if userId, err = db.Client.Put(c, userId, profile); err != nil {
+		if userId, err = db.client.Put(c, userId, profile); err != nil {
 			return "", fmt.Errorf("datastore Put(with incomplete userId %v) failed: %v", userId, err)
 		}
 	} else if userId != nil {
@@ -158,7 +158,7 @@ func (db *UserDataRepository) StoreFacebookLoginInUserProfile(c context.Context,
 			return "", fmt.Errorf("updateProfileFromFacebookUserInfo() failed: %v", err)
 		}
 
-		if userId, err = db.Client.Put(c, userId, profile); err != nil {
+		if userId, err = db.client.Put(c, userId, profile); err != nil {
 			return "", fmt.Errorf("datastore Put(with userId %v) failed: %v", userId, err)
 		}
 	}
@@ -175,7 +175,7 @@ func (db *UserDataRepository) getProfileFromDbByGoogleID(c context.Context, sub 
 
 func (db *UserDataRepository) getProfileFromDbByUserID(c context.Context, userId *datastore.Key) (*dtouser.Profile, error) {
 	var profile dtouser.Profile
-	err := db.Client.Get(c, userId, &profile)
+	err := db.client.Get(c, userId, &profile)
 	if err != nil {
 		// This is not an error.
 		return nil, nil
@@ -220,7 +220,7 @@ func (db *UserDataRepository) StoreGoogleLoginInUserProfile(c context.Context, u
 		}
 
 		userId = datastore.IncompleteKey(DB_KIND_PROFILE, nil)
-		if userId, err = db.Client.Put(c, userId, profile); err != nil {
+		if userId, err = db.client.Put(c, userId, profile); err != nil {
 			return "", fmt.Errorf("datastore. ut(with incomplete userId %v) failed: %v", userId, err)
 		}
 	} else if userId != nil {
@@ -229,7 +229,7 @@ func (db *UserDataRepository) StoreGoogleLoginInUserProfile(c context.Context, u
 			return "", fmt.Errorf("updateProfileFromGoogleUserInfo() failed: %v", err)
 		}
 
-		if userId, err = db.Client.Put(c, userId, profile); err != nil {
+		if userId, err = db.client.Put(c, userId, profile); err != nil {
 			return "", fmt.Errorf("datastore Put(with userId %v) failed: %v", userId, err)
 		}
 	}
@@ -244,7 +244,7 @@ func (db *UserDataRepository) GetUserProfileById(c context.Context, strUserId st
 	}
 
 	var profile dtouser.Profile
-	err = db.Client.Get(c, userId, &profile)
+	err = db.client.Get(c, userId, &profile)
 	if err == nil {
 		return convertDtoProfileToDomainProfile(&profile), nil
 	}
@@ -306,7 +306,7 @@ func (db *UserDataRepository) GetUserStats(c context.Context, strUserId string) 
 	// Get all the Stats from the db, for each section:
 	q := db.getQueryForUserStats(userId)
 
-	iter := db.Client.Run(c, q)
+	iter := db.client.Run(c, q)
 
 	if iter == nil {
 		return nil, fmt.Errorf("datastore query for Stats failed")
@@ -376,7 +376,7 @@ func (db *UserDataRepository) GetUserStatsForQuiz(c context.Context, strUserId s
 	// Get all the Stats from the db, for each section:
 	q := db.getQueryForUserStatsForQuiz(userId, quizId)
 
-	iter := db.Client.Run(c, q)
+	iter := db.client.Run(c, q)
 
 	if iter == nil {
 		return nil, fmt.Errorf("datastore query for Stats failed")
@@ -420,7 +420,7 @@ func (db *UserDataRepository) GetUserStatsForSection(c context.Context, strUserI
 		Filter("sectionId =", sectionId).
 		Limit(1)
 
-	iter := db.Client.Run(c, q)
+	iter := db.client.Run(c, q)
 
 	if iter == nil {
 		return nil, fmt.Errorf("datastore query for Stats failed")
@@ -475,7 +475,7 @@ func (db *UserDataRepository) StoreUserStats(c context.Context, userID string, s
 		key = datastore.IncompleteKey(DB_KIND_USER_STATS, nil)
 	}
 
-	if key, err = db.Client.Put(c, key, stats); err != nil {
+	if key, err = db.client.Put(c, key, stats); err != nil {
 		return fmt.Errorf("StoreUserStats(): datastore Put() failed: %v", err)
 	}
 
@@ -511,7 +511,7 @@ func (db *UserDataRepository) DeleteUserStatsForQuiz(c context.Context, strUserI
 	}
 
 	q := db.getQueryForUserStatsForQuiz(userId, quizId)
-	iter := db.Client.Run(c, q)
+	iter := db.client.Run(c, q)
 
 	if iter == nil {
 		return fmt.Errorf("datastore query for Stats failed")
@@ -536,7 +536,7 @@ func (db *UserDataRepository) DeleteUserStatsForQuiz(c context.Context, strUserI
 		}
 
 		// TODO: Batch these with datastore.DeleteMulti().
-		err = db.Client.Delete(c, stats.Key)
+		err = db.client.Delete(c, stats.Key)
 		if err != nil {
 			return fmt.Errorf("datastore Delete() failed: %v", err)
 		}
