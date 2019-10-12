@@ -8,7 +8,7 @@ import (
 )
 
 type OAuthStateDataRepository struct {
-	Client *datastore.Client
+	client *datastore.Client
 }
 
 func NewOAuthStateDataRepository() (*OAuthStateDataRepository, error) {
@@ -16,7 +16,7 @@ func NewOAuthStateDataRepository() (*OAuthStateDataRepository, error) {
 
 	c := context.Background()
 	var err error
-	result.Client, err = datastore.NewClient(c, "bigoquiz")
+	result.client, err = datastore.NewClient(c, "bigoquiz")
 	if err != nil {
 		return nil, fmt.Errorf("datastore.NewClient() failed: %v", err)
 	}
@@ -43,7 +43,7 @@ func (db *OAuthStateDataRepository) StoreOAuthState(c context.Context, state int
 	// Store a timestamp so a cron job can periodically remove old states.
 	stateObj.timestamp = time.Now().UTC()
 
-	_, err := db.Client.Put(c, key, &stateObj)
+	_, err := db.client.Put(c, key, &stateObj)
 	if err != nil {
 		return fmt.Errorf("datastore.Put() failed: %v", err)
 	}
@@ -55,7 +55,7 @@ func (db *OAuthStateDataRepository) CheckOAuthState(c context.Context, state int
 	key := stateKey(state)
 
 	var stateObj OAuthState
-	err := db.Client.Get(c, key, &stateObj)
+	err := db.client.Get(c, key, &stateObj)
 	if err != nil {
 		return fmt.Errorf("datastore Get() failed: %v", err)
 	}
@@ -65,5 +65,5 @@ func (db *OAuthStateDataRepository) CheckOAuthState(c context.Context, state int
 
 func (db *OAuthStateDataRepository) RemoveOAuthState(c context.Context, state int64) error {
 	key := stateKey(state)
-	return db.Client.Delete(c, key)
+	return db.client.Delete(c, key)
 }
