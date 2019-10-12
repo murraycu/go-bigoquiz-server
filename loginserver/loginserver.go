@@ -70,7 +70,7 @@ func (s *LoginServer) generateOAuthUrl(r *http.Request, oauthConfig *oauth2.Conf
 
 	state, err := s.generateState(c)
 	if err != nil {
-		return "", fmt.Errorf("Unable to generate state: %v", err)
+		return "", fmt.Errorf("unable to generate state: %v", err)
 	}
 
 	return oauthConfig.AuthCodeURL(state), nil
