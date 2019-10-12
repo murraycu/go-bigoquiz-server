@@ -58,7 +58,6 @@ func (s *RestServer) getProfileFromSessionAndDb(r *http.Request) (*user.Profile,
 }
 
 // Returns the LoginInfo and the userID.
-// TODO: Return the user info in the LoginInfo struct, but don't put it in a REST/JSON version of LoginInfo.
 func (s *RestServer) getLoginInfoFromSessionAndDb(r *http.Request) (*restuser.LoginInfo, string, error) {
 	var loginInfo restuser.LoginInfo
 

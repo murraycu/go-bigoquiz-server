@@ -12,7 +12,7 @@ type Stats struct {
 	// we should be able to populate this from datastore.Get() calls automatically,
 	// with datastore.Put() calls ignoring it:
 	//   https://godoc.org/cloud.google.com/go/datastore#hdr-Key_Field
-	// Key *datastore.Key `json:"-" datastore:"__key__"`
+	// Key *datastore.Key `datastore:"__key__"`
 	// But that does not work with the appengine datastore we are using:
 	//   https://github.com/GoogleCloudPlatform/google-cloud-go/issues/453#issuecomment-328797122
 	// So we instead set it manually after each Get() and after each Put().
@@ -28,8 +28,6 @@ type Stats struct {
 
 	CountQuestionsAnsweredOnce int `datastore:"countQuestionsAnsweredOnce"`
 	CountQuestionsCorrectOnce  int `datastore:"countQuestionsCorrectOnce"`
-
-	// TODO: Avoid putting this in the JSON?
 
 	// Note: Go's datastore API doesn't let us use a map,
 	// though Java's does let us use a Map.
