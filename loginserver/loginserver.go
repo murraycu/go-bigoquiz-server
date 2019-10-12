@@ -18,44 +18,44 @@ import (
 )
 
 type LoginServer struct {
-	UserDataClient   *db.UserDataRepository
-	OAuthStateClient *db.OAuthStateDataRepository
+	userDataClient   *db.UserDataRepository
+	oAuthStateClient *db.OAuthStateDataRepository
 
 	// Session cookie store.
-	UserSessionStore *usersessionstore.UserSessionStore
+	userSessionStore *usersessionstore.UserSessionStore
 
-	ConfOAuthGoogle   *oauth2.Config
-	ConfOAuthGitHub   *oauth2.Config
-	ConfOAuthFacebook *oauth2.Config
+	confOAuthGoogle   *oauth2.Config
+	confOAuthGitHub   *oauth2.Config
+	confOAuthFacebook *oauth2.Config
 }
 
 func NewLoginServer(userSessionStore *usersessionstore.UserSessionStore) (*LoginServer, error) {
 	result := &LoginServer{}
 
 	var err error
-	result.UserDataClient, err = db.NewUserDataRepository()
+	result.userDataClient, err = db.NewUserDataRepository()
 	if err != nil {
 		return nil, fmt.Errorf("NewUserDataRepository() failed: %v", err)
 	}
 
-	result.OAuthStateClient, err = db.NewOAuthStateDataRepository()
+	result.oAuthStateClient, err = db.NewOAuthStateDataRepository()
 	if err != nil {
 		return nil, fmt.Errorf("NewOAuthStateDataRepository() failed: %v", err)
 	}
 
-	result.UserSessionStore = userSessionStore
+	result.userSessionStore = userSessionStore
 
-	result.ConfOAuthGoogle, err = config.GenerateGoogleOAuthConfig()
+	result.confOAuthGoogle, err = config.GenerateGoogleOAuthConfig()
 	if err != nil {
 		log.Fatalf("Unable to generate Google OAuth config: %v", err)
 	}
 
-	result.ConfOAuthGitHub, err = config.GenerateGitHubOAuthConfig()
+	result.confOAuthGitHub, err = config.GenerateGitHubOAuthConfig()
 	if err != nil {
 		log.Fatalf("Unable to generate GitHub OAuth config: %v", err)
 	}
 
-	result.ConfOAuthFacebook, err = config.GenerateFacebookOAuthConfig()
+	result.confOAuthFacebook, err = config.GenerateFacebookOAuthConfig()
 	if err != nil {
 		log.Fatalf("Unable to generate Facebook OAuth config: %v", err)
 	}
@@ -78,7 +78,7 @@ func (s *LoginServer) generateOAuthUrl(r *http.Request, oauthConfig *oauth2.Conf
 
 func (s *LoginServer) HandleGoogleLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	// Redirect the user to the Google login page:
-	url, err := s.generateOAuthUrl(r, s.ConfOAuthGoogle)
+	url, err := s.generateOAuthUrl(r, s.confOAuthGoogle)
 	if err != nil {
 		loginStartFailedErr("generateOAuthUrl() failed", err, w, r)
 		return
@@ -89,7 +89,7 @@ func (s *LoginServer) HandleGoogleLogin(w http.ResponseWriter, r *http.Request, 
 
 func (s *LoginServer) generateState(c context.Context) (string, error) {
 	state := rand.Int63()
-	err := s.OAuthStateClient.StoreOAuthState(c, state)
+	err := s.oAuthStateClient.StoreOAuthState(c, state)
 	if err != nil {
 		return "", fmt.Errorf("StoreOAuthState() failed: %v", err)
 	}
@@ -103,7 +103,7 @@ func (s *LoginServer) checkState(c context.Context, state string) error {
 		return fmt.Errorf("strconv.ParseInt() failed: %v", err)
 	}
 
-	err = s.OAuthStateClient.CheckOAuthState(c, stateNum)
+	err = s.oAuthStateClient.CheckOAuthState(c, stateNum)
 	if err != nil {
 		return fmt.Errorf("db.CheckOAuthState() failed: %v", err)
 	}
@@ -117,7 +117,7 @@ func (s *LoginServer) removeState(c context.Context, state string) error {
 		return fmt.Errorf("strconv.ParseInt() failed: %v", err)
 	}
 
-	return s.OAuthStateClient.RemoveOAuthState(c, stateNum)
+	return s.oAuthStateClient.RemoveOAuthState(c, stateNum)
 }
 
 func (s *LoginServer) checkStateAndGetCode(c context.Context, r *http.Request) (string, error) {
@@ -140,7 +140,7 @@ func (s *LoginServer) checkStateAndGetCode(c context.Context, r *http.Request) (
 func (s *LoginServer) HandleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	c := r.Context()
 
-	token, body, ok := s.checkStateAndGetBody(w, r, s.ConfOAuthGoogle, "https://www.googleapis.com/oauth2/v3/userinfo", c)
+	token, body, ok := s.checkStateAndGetBody(w, r, s.confOAuthGoogle, "https://www.googleapis.com/oauth2/v3/userinfo", c)
 	if !ok {
 		// checkStateAndGetBody() already called loginFailed().
 		return
@@ -154,14 +154,14 @@ func (s *LoginServer) HandleGoogleCallback(w http.ResponseWriter, r *http.Reques
 	}
 
 	// Get the existing logged-in user's userId, if any, from the cookie, if any:
-	userId, _, err := s.UserSessionStore.GetProfileFromSession(r)
+	userId, _, err := s.userSessionStore.GetProfileFromSession(r)
 	if err != nil {
 		loginCallbackFailedErr("getProfileFromSession() failed", err, w, r)
 		return
 	}
 	// Store in the database,
 	// either creating a new user or updating an existing user.
-	userId, err = s.UserDataClient.StoreGoogleLoginInUserProfile(c, userinfo, userId, token)
+	userId, err = s.userDataClient.StoreGoogleLoginInUserProfile(c, userinfo, userId, token)
 	if err != nil {
 		loginCallbackFailedErr("StoreGoogleLoginInUserProfile() failed", err, w, r)
 		return
@@ -214,7 +214,7 @@ func exchangeAndGetUserBody(w http.ResponseWriter, r *http.Request, conf *oauth2
 func (s *LoginServer) storeCookieAndRedirect(r *http.Request, w http.ResponseWriter, c context.Context, strUserId string, token *oauth2.Token) {
 	// Store the token in the cookie
 	// so we can retrieve it from subsequent requests from the browser.
-	session, err := s.UserSessionStore.Store.New(r, usersessionstore.DefaultSessionID)
+	session, err := s.userSessionStore.Store.New(r, usersessionstore.DefaultSessionID)
 	if err != nil {
 		loginFailed("Could not create new session", err, w, r)
 		return
@@ -235,7 +235,7 @@ func (s *LoginServer) storeCookieAndRedirect(r *http.Request, w http.ResponseWri
 
 func (s *LoginServer) HandleLogout(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	// Wipe the cookie:
-	session, err := s.UserSessionStore.Store.New(r, usersessionstore.DefaultSessionID)
+	session, err := s.userSessionStore.Store.New(r, usersessionstore.DefaultSessionID)
 	if err != nil {
 		logoutError("could not get default session", err, w)
 		return
@@ -268,12 +268,12 @@ func (s *LoginServer) generateGitHubOAuthUrl(r *http.Request) string {
 		return ""
 	}
 
-	return s.ConfOAuthGitHub.AuthCodeURL(state, oauth2.AccessTypeOnline)
+	return s.confOAuthGitHub.AuthCodeURL(state, oauth2.AccessTypeOnline)
 }
 
 func (s *LoginServer) HandleGitHubLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	// Redirect the user to the GitHub login page:
-	url, err := s.generateOAuthUrl(r, s.ConfOAuthGitHub)
+	url, err := s.generateOAuthUrl(r, s.confOAuthGitHub)
 	if err != nil {
 		loginStartFailedErr("generateOAuthUrl() failed", err, w, r)
 		return
@@ -285,7 +285,7 @@ func (s *LoginServer) HandleGitHubLogin(w http.ResponseWriter, r *http.Request, 
 func (s *LoginServer) HandleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	c := r.Context()
 
-	token, body, ok := s.checkStateAndGetBody(w, r, s.ConfOAuthGitHub, "https://api.github.com/user", c)
+	token, body, ok := s.checkStateAndGetBody(w, r, s.confOAuthGitHub, "https://api.github.com/user", c)
 	if !ok {
 		// checkStateAndGetBody() already called loginFailed().
 		return
@@ -299,13 +299,13 @@ func (s *LoginServer) HandleGitHubCallback(w http.ResponseWriter, r *http.Reques
 	}
 
 	// Get the existing logged-in user's userId, if any, from the cookie, if any:
-	userId, _, err := s.UserSessionStore.GetProfileFromSession(r)
+	userId, _, err := s.userSessionStore.GetProfileFromSession(r)
 	if err != nil {
 		loginCallbackFailedErr("getProfileFromSession() failed", err, w, r)
 		return
 	}
 
-	userId, err = s.UserDataClient.StoreGitHubLoginInUserProfile(c, userinfo, userId, token)
+	userId, err = s.userDataClient.StoreGitHubLoginInUserProfile(c, userinfo, userId, token)
 	if err != nil {
 		loginCallbackFailedErr("StoreGitHubLoginInUserProfile() failed", err, w, r)
 		return
@@ -316,7 +316,7 @@ func (s *LoginServer) HandleGitHubCallback(w http.ResponseWriter, r *http.Reques
 
 func (s *LoginServer) HandleFacebookLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	// Redirect the user to the Facebook login page:
-	url, err := s.generateOAuthUrl(r, s.ConfOAuthFacebook)
+	url, err := s.generateOAuthUrl(r, s.confOAuthFacebook)
 	if err != nil {
 		loginStartFailedErr("generateOAuthUrl() failed", err, w, r)
 		return
@@ -328,7 +328,7 @@ func (s *LoginServer) HandleFacebookLogin(w http.ResponseWriter, r *http.Request
 func (s *LoginServer) HandleFacebookCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	c := r.Context()
 
-	token, body, ok := s.checkStateAndGetBody(w, r, s.ConfOAuthFacebook, "https://graph.facebook.com/me?fields=link,name,email", c)
+	token, body, ok := s.checkStateAndGetBody(w, r, s.confOAuthFacebook, "https://graph.facebook.com/me?fields=link,name,email", c)
 	if !ok {
 		// checkStateAndGetBody() already called loginFailed().
 		return
@@ -342,14 +342,14 @@ func (s *LoginServer) HandleFacebookCallback(w http.ResponseWriter, r *http.Requ
 	}
 
 	// Get the existing logged-in user's userId, if any, from the cookie, if any:
-	userId, _, err := s.UserSessionStore.GetProfileFromSession(r)
+	userId, _, err := s.userSessionStore.GetProfileFromSession(r)
 	if err != nil {
 		loginCallbackFailedErr("getProfileFromSession() failed.", err, w, r)
 		return
 	}
 
 	// Store in the database:
-	userId, err = s.UserDataClient.StoreFacebookLoginInUserProfile(c, userinfo, userId, token)
+	userId, err = s.userDataClient.StoreFacebookLoginInUserProfile(c, userinfo, userId, token)
 	if err != nil {
 		loginCallbackFailedErr("StoreFacebookLoginInUserProfile() failed.", err, w, r)
 		return
