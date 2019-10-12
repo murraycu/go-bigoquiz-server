@@ -18,7 +18,8 @@ import (
 )
 
 type LoginServer struct {
-	UserDataClient *db.UserDataRepository
+	UserDataClient   *db.UserDataRepository
+	OAuthStateClient *db.OAuthStateDataRepository
 
 	// Session cookie store.
 	UserSessionStore *usersessionstore.UserSessionStore
@@ -35,6 +36,11 @@ func NewLoginServer(userSessionStore *usersessionstore.UserSessionStore) (*Login
 	result.UserDataClient, err = db.NewUserDataRepository()
 	if err != nil {
 		return nil, fmt.Errorf("NewUserDataRepository() failed: %v", err)
+	}
+
+	result.OAuthStateClient, err = db.NewOAuthStateDataRepository()
+	if err != nil {
+		return nil, fmt.Errorf("NewOAuthStateDataRepository() failed: %v", err)
 	}
 
 	result.UserSessionStore = userSessionStore
@@ -62,7 +68,7 @@ func NewLoginServer(userSessionStore *usersessionstore.UserSessionStore) (*Login
 func (s *LoginServer) generateOAuthUrl(r *http.Request, oauthConfig *oauth2.Config) (string, error) {
 	c := r.Context()
 
-	state, err := generateState(c)
+	state, err := s.generateState(c)
 	if err != nil {
 		return "", fmt.Errorf("Unable to generate state: %v", err)
 	}
@@ -81,14 +87,9 @@ func (s *LoginServer) HandleGoogleLogin(w http.ResponseWriter, r *http.Request, 
 	http.Redirect(w, r, url, http.StatusFound)
 }
 
-func generateState(c context.Context) (string, error) {
-	dbClient, err := db.NewOAuthStateDataRepository()
-	if err != nil {
-		return "", fmt.Errorf("NewOAuthStateDataRepository() failed: %v", err)
-	}
-
+func (s *LoginServer) generateState(c context.Context) (string, error) {
 	state := rand.Int63()
-	err = dbClient.StoreOAuthState(c, state)
+	err := s.OAuthStateClient.StoreOAuthState(c, state)
 	if err != nil {
 		return "", fmt.Errorf("StoreOAuthState() failed: %v", err)
 	}
@@ -96,18 +97,13 @@ func generateState(c context.Context) (string, error) {
 	return strconv.FormatInt(state, 10), nil
 }
 
-func checkState(c context.Context, state string) error {
+func (s *LoginServer) checkState(c context.Context, state string) error {
 	stateNum, err := strconv.ParseInt(state, 10, 64)
 	if err != nil {
 		return fmt.Errorf("strconv.ParseInt() failed: %v", err)
 	}
 
-	dbClient, err := db.NewOAuthStateDataRepository()
-	if err != nil {
-		return fmt.Errorf("NewUserDataRepository() failed: %v", err)
-	}
-
-	err = dbClient.CheckOAuthState(c, stateNum)
+	err = s.OAuthStateClient.CheckOAuthState(c, stateNum)
 	if err != nil {
 		return fmt.Errorf("db.CheckOAuthState() failed: %v", err)
 	}
@@ -115,30 +111,25 @@ func checkState(c context.Context, state string) error {
 	return nil
 }
 
-func removeState(c context.Context, state string) error {
+func (s *LoginServer) removeState(c context.Context, state string) error {
 	stateNum, err := strconv.ParseInt(state, 10, 64)
 	if err != nil {
 		return fmt.Errorf("strconv.ParseInt() failed: %v", err)
 	}
 
-	dbClient, err := db.NewOAuthStateDataRepository()
-	if err != nil {
-		return fmt.Errorf("NewUserDataRepository() failed: %v", err)
-	}
-
-	return dbClient.RemoveOAuthState(c, stateNum)
+	return s.OAuthStateClient.RemoveOAuthState(c, stateNum)
 }
 
-func checkStateAndGetCode(c context.Context, r *http.Request) (string, error) {
+func (s *LoginServer) checkStateAndGetCode(c context.Context, r *http.Request) (string, error) {
 	state := r.FormValue("state")
-	err := checkState(c, state)
+	err := s.checkState(c, state)
 	if err != nil {
 		return "", fmt.Errorf("invalid oauth state ('%s): %v", state, err)
 	}
 
 	// The state will not be used again,
 	// so remove it from the datastore.
-	err = removeState(c, state)
+	err = s.removeState(c, state)
 	if err != nil {
 		return "", fmt.Errorf("removeState() failed: %v", err)
 	}
@@ -149,7 +140,7 @@ func checkStateAndGetCode(c context.Context, r *http.Request) (string, error) {
 func (s *LoginServer) HandleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	c := r.Context()
 
-	token, body, ok := checkStateAndGetBody(w, r, s.ConfOAuthGoogle, "https://www.googleapis.com/oauth2/v3/userinfo", c)
+	token, body, ok := s.checkStateAndGetBody(w, r, s.ConfOAuthGoogle, "https://www.googleapis.com/oauth2/v3/userinfo", c)
 	if !ok {
 		// checkStateAndGetBody() already called loginFailed().
 		return
@@ -179,8 +170,8 @@ func (s *LoginServer) HandleGoogleCallback(w http.ResponseWriter, r *http.Reques
 	s.storeCookieAndRedirect(r, w, c, userId, token)
 }
 
-func checkStateAndGetBody(w http.ResponseWriter, r *http.Request, conf *oauth2.Config, url string, c context.Context) (*oauth2.Token, []byte, bool) {
-	code, err := checkStateAndGetCode(c, r)
+func (s *LoginServer) checkStateAndGetBody(w http.ResponseWriter, r *http.Request, conf *oauth2.Config, url string, c context.Context) (*oauth2.Token, []byte, bool) {
+	code, err := s.checkStateAndGetCode(c, r)
 	if err != nil {
 		log.Printf("checkStateAndGetCode() failed: %v", err)
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
@@ -271,7 +262,7 @@ func (s *LoginServer) HandleLogout(w http.ResponseWriter, r *http.Request, ps ht
 func (s *LoginServer) generateGitHubOAuthUrl(r *http.Request) string {
 	c := r.Context()
 
-	state, err := generateState(c)
+	state, err := s.generateState(c)
 	if err != nil {
 		log.Printf("Unable to generate state.")
 		return ""
@@ -294,7 +285,7 @@ func (s *LoginServer) HandleGitHubLogin(w http.ResponseWriter, r *http.Request, 
 func (s *LoginServer) HandleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	c := r.Context()
 
-	token, body, ok := checkStateAndGetBody(w, r, s.ConfOAuthGitHub, "https://api.github.com/user", c)
+	token, body, ok := s.checkStateAndGetBody(w, r, s.ConfOAuthGitHub, "https://api.github.com/user", c)
 	if !ok {
 		// checkStateAndGetBody() already called loginFailed().
 		return
@@ -337,7 +328,7 @@ func (s *LoginServer) HandleFacebookLogin(w http.ResponseWriter, r *http.Request
 func (s *LoginServer) HandleFacebookCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	c := r.Context()
 
-	token, body, ok := checkStateAndGetBody(w, r, s.ConfOAuthFacebook, "https://graph.facebook.com/me?fields=link,name,email", c)
+	token, body, ok := s.checkStateAndGetBody(w, r, s.ConfOAuthFacebook, "https://graph.facebook.com/me?fields=link,name,email", c)
 	if !ok {
 		// checkStateAndGetBody() already called loginFailed().
 		return
