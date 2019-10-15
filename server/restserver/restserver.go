@@ -16,7 +16,7 @@ const PATH_PARAM_QUIZ_ID = "quizId"
 const PATH_PARAM_QUESTION_ID = "questionId"
 
 type RestServer struct {
-	Quizzes *repositories.QuizzesRepository
+	Quizzes *repositories.QuizzesAndCaches
 
 	UserDataClient *db.UserDataRepository
 
@@ -24,7 +24,7 @@ type RestServer struct {
 	UserSessionStore *usersessionstore.UserSessionStore
 }
 
-func NewRestServer(quizzes *repositories.QuizzesRepository, userSessionStore *usersessionstore.UserSessionStore) (*RestServer, error) {
+func NewRestServer(quizzesStore *repositories.QuizzesRepository, userSessionStore *usersessionstore.UserSessionStore) (*RestServer, error) {
 	result := &RestServer{}
 
 	var err error
@@ -33,7 +33,7 @@ func NewRestServer(quizzes *repositories.QuizzesRepository, userSessionStore *us
 		return nil, fmt.Errorf("NewUserDataRepository() failed: %v", err)
 	}
 
-	result.Quizzes = quizzes
+	result.Quizzes, err = quizzesStore.GetQuizzesAndCaches()
 	result.UserSessionStore = userSessionStore
 
 	return result, nil

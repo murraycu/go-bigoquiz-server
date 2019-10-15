@@ -38,13 +38,13 @@ func main() {
 		return
 	}
 
-	quizzes, err := repositories.NewQuizzesRepository()
+	quizzesStore, err := repositories.NewQuizzesRepository()
 	if err != nil {
 		log.Fatalf("NewQuizzesRepository failed: %v\n", err)
 		return
 	}
 
-	restServer, err := restserver.NewRestServer(quizzes, userSessionStore)
+	restServer, err := restserver.NewRestServer(quizzesStore, userSessionStore)
 	if err != nil {
 		log.Fatalf("NewRestServer failed: %v\n", err)
 		return
