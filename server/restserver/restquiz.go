@@ -18,9 +18,9 @@ func (s *RestServer) HandleQuizAll(w http.ResponseWriter, r *http.Request, _ htt
 
 	var quizArray []*quiz.Quiz = nil
 	if listOnly {
-		quizArray = s.Quizzes.QuizzesListSimple
+		quizArray = s.quizzes.QuizzesListSimple
 	} else {
-		quizArray = s.Quizzes.QuizzesListFull
+		quizArray = s.quizzes.QuizzesListFull
 	}
 
 	w.Header().Set("Content-Type", "application/json") // normal header
@@ -39,7 +39,7 @@ func (s *RestServer) HandleQuizAll(w http.ResponseWriter, r *http.Request, _ htt
 }
 
 func (s *RestServer) getQuiz(quizId string) *quiz.Quiz {
-	return s.Quizzes.Quizzes[quizId]
+	return s.quizzes.Quizzes[quizId]
 }
 
 func (s *RestServer) HandleQuizById(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
