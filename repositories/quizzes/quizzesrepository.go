@@ -2,7 +2,8 @@ package quizzes
 
 import (
 	"fmt"
-	"github.com/murraycu/go-bigoquiz-server/domain/quiz"
+	domainquiz "github.com/murraycu/go-bigoquiz-server/domain/quiz"
+	dtoquiz "github.com/murraycu/go-bigoquiz-server/repositories/quizzes/dtos/quiz"
 	"io/ioutil"
 	"path/filepath"
 	"sort"
@@ -10,7 +11,7 @@ import (
 )
 
 // See https://gobyexample.com/sorting-by-functions
-type quizListByTitle []*quiz.Quiz
+type quizListByTitle []*domainquiz.Quiz
 
 func (s quizListByTitle) Len() int {
 	return len(s)
@@ -28,9 +29,9 @@ type QuizzesRepository struct {
 }
 
 // Map of quiz IDs to Quiz.
-type mapQuizzes map[string]*quiz.Quiz
+type mapQuizzes map[string]*domainquiz.Quiz
 
-type mapList []*quiz.Quiz
+type mapList []*domainquiz.Quiz
 
 type QuizzesAndCaches struct {
 	Quizzes           mapQuizzes
@@ -67,18 +68,20 @@ func filesWithExtension(dirPath string, ext string) ([]string, error) {
 	return result, nil
 }
 
-func loadQuiz(id string) (*quiz.Quiz, error) {
+func loadQuiz(id string) (*dtoquiz.Quiz, error) {
 	absFilePath, err := filepath.Abs("quizzes/" + id + ".xml")
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
 	}
 
-	return quiz.LoadQuiz(absFilePath, id)
+	return dtoquiz.LoadQuiz(absFilePath, id)
 }
 
-func loadQuizzes() (mapQuizzes, error) {
-	quizzes := make(mapQuizzes, 0)
+type mapDtoQuizzes map[string]*dtoquiz.Quiz
+
+func loadQuizzes() (mapDtoQuizzes, error) {
+	quizzes := make(mapDtoQuizzes, 0)
 
 	absFilePath, err := filepath.Abs("quizzes")
 	if err != nil {
@@ -112,8 +115,12 @@ func buildQuizzesSimple(quizzes mapQuizzes) mapList {
 	result := make(mapList, 0, len(quizzes))
 
 	for _, q := range quizzes {
-		var simple quiz.Quiz
-		q.CopyHasIdAndTitle(&simple.HasIdAndTitle)
+		var simple domainquiz.Quiz
+
+		simple.Id = q.Id
+		simple.Title = q.Title
+		simple.Link = q.Link
+
 		simple.IsPrivate = q.IsPrivate
 
 		result = append(result, &simple)
@@ -138,12 +145,15 @@ func buildQuizzesFull(quizzes mapQuizzes) mapList {
 }
 
 func (q *QuizzesRepository) GetQuizzesAndCaches() (*QuizzesAndCaches, error) {
-	var err error
+	quizzes, err := loadQuizzes()
+	if err != nil {
+		return nil, fmt.Errorf("could not load quiz files: %v", err)
+	}
 
 	var result QuizzesAndCaches
-	result.Quizzes, err = loadQuizzes()
+	result.Quizzes, err = convertDtoQuizzesToDomainQuizzes(quizzes)
 	if err != nil {
-		return nil, fmt.Errorf("Could not load quiz files: %v", err)
+		return nil, fmt.Errorf("could not convert DTO quizzes to domain quizzes: %v", err)
 	}
 
 	result.QuizzesListSimple = buildQuizzesSimple(result.Quizzes)
