@@ -32,7 +32,7 @@ func (s *RestServer) HandleUser(w http.ResponseWriter, r *http.Request, ps httpr
 
 // Returns the LoginInfo and the userID.
 func (s *RestServer) getProfileFromSessionAndDb(r *http.Request) (*user.Profile, string, *oauth2.Token, error) {
-	userId, token, err := s.UserSessionStore.GetProfileFromSession(r)
+	userId, token, err := s.userSessionStore.GetProfileFromSession(r)
 	if err != nil {
 		return nil, "", nil, fmt.Errorf("GetProfileFromSession() failed: %v", err)
 	}
@@ -96,7 +96,7 @@ func (s *RestServer) updateLoginInfoFromProfile(loginInfo *user2.LoginInfo, prof
  * Returns an empty user ID, and a nil error, if the user is not logged in.
  */
 func (s *RestServer) getUserIdFromSessionAndDb(r *http.Request, w http.ResponseWriter) (string, error) {
-	userId, _, err := s.UserSessionStore.GetProfileFromSession(r)
+	userId, _, err := s.userSessionStore.GetProfileFromSession(r)
 	if err != nil {
 		return "", fmt.Errorf("GetProfileFromSession() failed: %v", err)
 	}

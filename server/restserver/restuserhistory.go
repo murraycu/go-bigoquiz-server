@@ -44,13 +44,13 @@ func (s *RestServer) HandleUserHistoryAll(w http.ResponseWriter, r *http.Request
 	if loginInfo.LoggedIn && len(userId) != 0 {
 		c := r.Context()
 
-		mapUserStats, err := s.UserDataClient.GetUserStats(c, userId)
+		mapUserStats, err := s.userDataClient.GetUserStats(c, userId)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		for quizId, q := range s.Quizzes.Quizzes {
+		for quizId, q := range s.quizzes.Quizzes {
 			stats, ok := mapUserStats[quizId]
 			if !ok || stats == nil {
 				// Show an empty stats section,
@@ -300,7 +300,7 @@ func (s *RestServer) storeAnswerCorrectnessAndGetSubmissionResult(w http.Respons
 	if nextQuestionSectionId == sectionId {
 		var stats *user.Stats
 		if len(userId) == 0 {
-			stats, err = s.UserDataClient.GetUserStatsForSection(c, userId, quizId, nextQuestionSectionId)
+			stats, err = s.userDataClient.GetUserStatsForSection(c, userId, quizId, nextQuestionSectionId)
 			if err != nil {
 				return nil, fmt.Errorf("GetUserStatsForQuiz() failed: %v", err)
 			}
@@ -315,7 +315,7 @@ func (s *RestServer) storeAnswerCorrectnessAndGetSubmissionResult(w http.Respons
 	} else {
 		var stats map[string]*user.Stats
 		if len(userId) == 0 {
-			stats, err = s.UserDataClient.GetUserStatsForQuiz(c, userId, quizId)
+			stats, err = s.userDataClient.GetUserStatsForQuiz(c, userId, quizId)
 			if err != nil {
 				return nil, fmt.Errorf("GetUserStatsForQuiz() failed: %v", err)
 			}
