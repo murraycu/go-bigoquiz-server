@@ -2,22 +2,35 @@ package quiz
 
 type Section struct {
 	HasIdAndTitle
-	Questions   []*QuestionAndAnswer `json:"questions,omitempty" xml:"question"`
-	SubSections []*SubSection        `json:"subSections,omitempty" xml:"subsection"`
+	Questions   []*QuestionAndAnswer `json:"questions,omitempty"`
+	SubSections []*SubSection        `json:"subSections,omitempty"`
 
-	DefaultChoices   []*Text `json:"defaultChoices,omitempty" xml:"default_choices"`
-	AnswersAsChoices bool    `json:"answersAsChoices" xml:"answers_as_choices,attr"`
-
-	// Whether the quiz should contain an extra generated section,
-	// with the answers as questions, and the questions as the answers.
-	AndReverse bool `json:"-" xml:"and_reverse,attr"`
+	DefaultChoices   []*Text `json:"defaultChoices,omitempty"`
+	AnswersAsChoices bool    `json:"answersAsChoices"`
 
 	// These do not appear in the JSON.
-	subSectionsMap map[string]*SubSection `json:"-" xml:"-"`
-	CountQuestions int                    `json:"-" xml:"-"`
+	subSectionsMap map[string]*SubSection `json:"-"`
+	CountQuestions int                    `json:"-"`
 
 	// An array of all questions in all sub-sections and in this section directly.
-	QuestionsArray []*QuestionAndAnswer `json:"-" xml:"-"`
+	QuestionsArray []*QuestionAndAnswer `json:"-"`
+}
+
+func (self *Section) InitMaps() error {
+	self.subSectionsMap = make(map[string]*SubSection)
+	for _, s := range self.SubSections {
+		self.subSectionsMap[s.HasIdAndTitle.Id] = s
+
+		for _, qa := range s.Questions {
+			self.addQuestionArray(qa)
+		}
+	}
+
+	for _, qa := range self.Questions {
+		self.addQuestionArray(qa)
+	}
+
+	return nil
 }
 
 func (self *Section) GetSubSection(subSectionId string) *SubSection {
@@ -64,4 +77,9 @@ func (self *Section) createReverse() *Section {
 	}
 
 	return &result
+}
+
+func (self *Section) addQuestionArray(qa *QuestionAndAnswer) {
+	self.QuestionsArray = append(self.QuestionsArray, qa)
+	self.CountQuestions++
 }
