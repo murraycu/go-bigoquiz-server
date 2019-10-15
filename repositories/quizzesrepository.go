@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/murraycu/go-bigoquiz-server/domain/quiz"
 	"io/ioutil"
-	"log"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -26,6 +25,9 @@ func (s QuizListByTitle) Less(i, j int) bool {
 }
 
 type QuizzesRepository struct {
+}
+
+type QuizzesAndCaches struct {
 	Quizzes           map[string]*quiz.Quiz
 	QuizzesListSimple []*quiz.Quiz
 	QuizzesListFull   []*quiz.Quiz
@@ -33,8 +35,6 @@ type QuizzesRepository struct {
 
 func NewQuizzesRepository() (*QuizzesRepository, error) {
 	result := &QuizzesRepository{}
-
-	result.loadQuizzesAndCaches()
 
 	return result, nil
 }
@@ -132,14 +132,17 @@ func buildQuizzesFull(quizzes map[string]*quiz.Quiz) []*quiz.Quiz {
 	return result
 }
 
-func (q *QuizzesRepository) loadQuizzesAndCaches() {
+func (q *QuizzesRepository) GetQuizzesAndCaches() (*QuizzesAndCaches, error) {
 	var err error
-	q.Quizzes, err = loadQuizzes()
+
+	var result QuizzesAndCaches
+	result.Quizzes, err = loadQuizzes()
 	if err != nil {
-		log.Printf("Could not load quiz files: %v\n", err)
-		return
+		return nil, fmt.Errorf("Could not load quiz files: %v", err)
 	}
 
-	q.QuizzesListSimple = buildQuizzesSimple(q.Quizzes)
-	q.QuizzesListFull = buildQuizzesFull(q.Quizzes)
+	result.QuizzesListSimple = buildQuizzesSimple(result.Quizzes)
+	result.QuizzesListFull = buildQuizzesFull(result.Quizzes)
+
+	return &result, nil
 }
