@@ -3,8 +3,8 @@ package restserver
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/murraycu/go-bigoquiz-server/repositories"
 	"github.com/murraycu/go-bigoquiz-server/repositories/db"
+	"github.com/murraycu/go-bigoquiz-server/repositories/quizzes"
 	"github.com/murraycu/go-bigoquiz-server/server/usersessionstore"
 	"log"
 	"net/http"
@@ -19,7 +19,7 @@ const PATH_PARAM_QUIZ_ID = "quizId"
 const PATH_PARAM_QUESTION_ID = "questionId"
 
 type RestServer struct {
-	quizzes *repositories.QuizzesAndCaches
+	quizzes *quizzes.QuizzesAndCaches
 
 	userDataClient *db.UserDataRepository
 
@@ -27,7 +27,7 @@ type RestServer struct {
 	userSessionStore *usersessionstore.UserSessionStore
 }
 
-func NewRestServer(quizzesStore *repositories.QuizzesRepository, userSessionStore *usersessionstore.UserSessionStore) (*RestServer, error) {
+func NewRestServer(quizzesStore *quizzes.QuizzesRepository, userSessionStore *usersessionstore.UserSessionStore) (*RestServer, error) {
 	result := &RestServer{}
 
 	var err error

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"github.com/murraycu/go-bigoquiz-server/config"
-	"github.com/murraycu/go-bigoquiz-server/repositories"
+	"github.com/murraycu/go-bigoquiz-server/repositories/quizzes"
 	"github.com/murraycu/go-bigoquiz-server/server/loginserver"
 	"github.com/murraycu/go-bigoquiz-server/server/restserver"
 	"github.com/murraycu/go-bigoquiz-server/server/usersessionstore"
@@ -38,7 +38,7 @@ func main() {
 		return
 	}
 
-	quizzesStore, err := repositories.NewQuizzesRepository()
+	quizzesStore, err := quizzes.NewQuizzesRepository()
 	if err != nil {
 		log.Fatalf("NewQuizzesRepository failed: %v\n", err)
 		return
