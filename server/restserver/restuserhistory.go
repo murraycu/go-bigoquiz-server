@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"github.com/murraycu/go-bigoquiz-server/domain/quiz"
-	"github.com/murraycu/go-bigoquiz-server/domain/user"
+	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
 	"github.com/murraycu/go-bigoquiz-server/repositories/db"
-	user2 "github.com/murraycu/go-bigoquiz-server/server/restserver/user"
+	restuser "github.com/murraycu/go-bigoquiz-server/server/restserver/user"
 	"golang.org/x/net/context"
 	"io/ioutil"
 	"net/http"
@@ -15,7 +15,7 @@ import (
 )
 
 // See https://gobyexample.com/sorting-by-functions
-type StatsListByTitle []*user.Stats
+type StatsListByTitle []*domainuser.Stats
 
 func (s StatsListByTitle) Len() int {
 	return len(s)
@@ -36,7 +36,7 @@ func (s *RestServer) HandleUserHistoryAll(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	var info user2.HistoryOverall
+	var info restuser.HistoryOverall
 	info.LoginInfo = loginInfo
 
 	// Note: We only show the entire user history for logged-in users,
@@ -55,7 +55,7 @@ func (s *RestServer) HandleUserHistoryAll(w http.ResponseWriter, r *http.Request
 			if !ok || stats == nil {
 				// Show an empty stats section,
 				// if there is none in the database yet.
-				stats = new(user.Stats)
+				stats = new(domainuser.Stats)
 				stats.QuizId = quizId
 			}
 
@@ -101,7 +101,7 @@ func (s *RestServer) HandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	var mapUserStats map[string]*user.Stats
+	var mapUserStats map[string]*domainuser.Stats
 	if loginInfo.LoggedIn && len(userId) != 0 {
 		c := r.Context()
 
@@ -298,7 +298,7 @@ func (s *RestServer) storeAnswerCorrectnessAndGetSubmissionResult(w http.Respons
 	// question's section ID, to avoid allocating a map just containing one Stats.
 	c := r.Context()
 	if nextQuestionSectionId == sectionId {
-		var stats *user.Stats
+		var stats *domainuser.Stats
 		if len(userId) == 0 {
 			stats, err = s.userDataClient.GetUserStatsForSection(c, userId, quizId, nextQuestionSectionId)
 			if err != nil {
@@ -313,7 +313,7 @@ func (s *RestServer) storeAnswerCorrectnessAndGetSubmissionResult(w http.Respons
 
 		return s.createSubmissionResultForSection(result, quizId, questionId, nextQuestionSectionId, stats)
 	} else {
-		var stats map[string]*user.Stats
+		var stats map[string]*domainuser.Stats
 		if len(userId) == 0 {
 			stats, err = s.userDataClient.GetUserStatsForQuiz(c, userId, quizId)
 			if err != nil {
@@ -333,7 +333,7 @@ func (s *RestServer) storeAnswerCorrectnessAndGetSubmissionResult(w http.Respons
 /**
  * stats may be nil.
  */
-func (s *RestServer) createSubmissionResult(result bool, quizId string, questionId string, nextQuestionSectionId string, stats map[string]*user.Stats) (*SubmissionResult, error) {
+func (s *RestServer) createSubmissionResult(result bool, quizId string, questionId string, nextQuestionSectionId string, stats map[string]*domainuser.Stats) (*SubmissionResult, error) {
 	q := s.getQuiz(quizId)
 
 	//We only provide the correct answer if the supplied answer was wrong:
@@ -346,7 +346,7 @@ func (s *RestServer) createSubmissionResult(result bool, quizId string, question
 	return s.generateSubmissionResult(result, q, correctAnswer, nextQuestion)
 }
 
-func (s *RestServer) createSubmissionResultForSection(result bool, quizId string, questionId string, nextQuestionSectionId string, stats *user.Stats) (*SubmissionResult, error) {
+func (s *RestServer) createSubmissionResultForSection(result bool, quizId string, questionId string, nextQuestionSectionId string, stats *domainuser.Stats) (*SubmissionResult, error) {
 	q := s.getQuiz(quizId)
 
 	//We only provide the correct answer if the supplied answer was wrong:
@@ -375,7 +375,7 @@ func (s *RestServer) generateSubmissionResult(result bool, quiz *quiz.Quiz, corr
 	return &submissionResult, nil
 }
 
-func (s *RestServer) getNextQuestionFromUserStats(sectionId string, q *quiz.Quiz, stats map[string]*user.Stats) *quiz.Question {
+func (s *RestServer) getNextQuestionFromUserStats(sectionId string, q *quiz.Quiz, stats map[string]*domainuser.Stats) *quiz.Question {
 	const MAX_TRIES int = 10
 	var tries int
 	var question *quiz.Question
@@ -428,9 +428,9 @@ func (s *RestServer) getNextQuestionFromUserStats(sectionId string, q *quiz.Quiz
 
 /** stats may be nil
  */
-func (s *RestServer) getNextQuestionFromUserStatsForSection(sectionId string, quiz *quiz.Quiz, stats *user.Stats) *quiz.Question {
+func (s *RestServer) getNextQuestionFromUserStatsForSection(sectionId string, quiz *quiz.Quiz, stats *domainuser.Stats) *quiz.Question {
 	//TODO: Avoid this temporary map:
-	m := make(map[string]*user.Stats)
+	m := make(map[string]*domainuser.Stats)
 
 	if stats != nil {
 		m[stats.SectionId] = stats
@@ -443,7 +443,7 @@ func (s *RestServer) getNextQuestionFromUserStatsForSection(sectionId string, qu
  * storing a new user.Stats in the database if necessary.
  * To update an existing user.Stats in the database, via the stats parameter, its Key field must be set.
  */
-func (s *RestServer) storeAnswer(c context.Context, result bool, quizId string, question *quiz.Question, userId string, stats map[string]*user.Stats) error {
+func (s *RestServer) storeAnswer(c context.Context, result bool, quizId string, question *quiz.Question, userId string, stats map[string]*domainuser.Stats) error {
 	if len(userId) == 0 {
 		return fmt.Errorf("storeAnswer(): userId is empty")
 	}
@@ -460,7 +460,7 @@ func (s *RestServer) storeAnswer(c context.Context, result bool, quizId string, 
 	sectionStats, ok := stats[sectionId]
 	if !ok {
 		// It's not in the map yet, so we add it.
-		sectionStats = new(user.Stats)
+		sectionStats = new(domainuser.Stats)
 		sectionStats.QuizId = quizId
 		sectionStats.SectionId = sectionId
 	}
@@ -472,7 +472,7 @@ func (s *RestServer) storeAnswer(c context.Context, result bool, quizId string, 
  * storing a new user.Stats in the database if necessary.
  * To update an existing user.Stats in the database, its Key field must be set.
  */
-func (s *RestServer) storeAnswerForSection(c context.Context, result bool, quizId string, question *quiz.Question, userId string, sectionStats *user.Stats) error {
+func (s *RestServer) storeAnswerForSection(c context.Context, result bool, quizId string, question *quiz.Question, userId string, sectionStats *domainuser.Stats) error {
 	if len(userId) == 0 {
 		return fmt.Errorf("storeAnswerForSection(): userId is empty")
 	}
@@ -487,7 +487,7 @@ func (s *RestServer) storeAnswerForSection(c context.Context, result bool, quizI
 	}
 
 	if sectionStats == nil {
-		sectionStats = new(user.Stats)
+		sectionStats = new(domainuser.Stats)
 		sectionStats.QuizId = quizId
 		sectionStats.SectionId = sectionId
 	}
@@ -530,7 +530,7 @@ func (s *RestServer) getQuestionAndAnswer(quizId string, questionId string) *qui
 	return q.GetQuestionAndAnswer(questionId)
 }
 
-func (s *RestServer) buildUserHistorySections(loginInfo *user2.LoginInfo, quiz *quiz.Quiz, mapUserStats map[string]*user.Stats) *user2.HistorySections {
+func (s *RestServer) buildUserHistorySections(loginInfo *restuser.LoginInfo, quiz *quiz.Quiz, mapUserStats map[string]*domainuser.Stats) *restuser.HistorySections {
 	sections := quiz.Sections
 	if sections == nil {
 		return nil
@@ -538,7 +538,7 @@ func (s *RestServer) buildUserHistorySections(loginInfo *user2.LoginInfo, quiz *
 
 	quizId := quiz.Id
 
-	var result user2.HistorySections
+	var result restuser.HistorySections
 	result.LoginInfo = *loginInfo
 	result.QuizId = quizId
 	result.QuizTitle = quiz.Title
@@ -549,7 +549,7 @@ func (s *RestServer) buildUserHistorySections(loginInfo *user2.LoginInfo, quiz *
 			continue
 		}
 
-		var userStats *user.Stats = nil
+		var userStats *domainuser.Stats = nil
 		if mapUserStats != nil {
 			var ok bool
 			userStats, ok = mapUserStats[sectionId]
@@ -562,7 +562,7 @@ func (s *RestServer) buildUserHistorySections(loginInfo *user2.LoginInfo, quiz *
 		}
 
 		if userStats == nil {
-			userStats = new(user.Stats)
+			userStats = new(domainuser.Stats)
 			userStats.QuizId = quizId
 			userStats.SectionId = sectionId
 		}
@@ -578,7 +578,7 @@ func (s *RestServer) buildUserHistorySections(loginInfo *user2.LoginInfo, quiz *
 	return &result
 }
 
-func fillUserStatsWithExtras(userStats *user.Stats, qz *quiz.Quiz) {
+func fillUserStatsWithExtras(userStats *domainuser.Stats, qz *quiz.Quiz) {
 	// Set the titles.
 	// We don't store these in the datastore because we can get them easily from the Quiz.
 
