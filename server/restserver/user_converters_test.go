@@ -1,140 +1,127 @@
 package restserver
 
 import (
-	"fmt"
-	domainquiz "github.com/murraycu/go-bigoquiz-server/domain/quiz"
 	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
+	restquiz "github.com/murraycu/go-bigoquiz-server/server/restserver/quiz"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-func testQuestions(suffix string) []*domainquiz.QuestionAndAnswer {
-	return []*domainquiz.QuestionAndAnswer{
-		testQuestion(suffix + "0"),
-		{
-			Question: domainquiz.Question{
-				Id:   "some-question-id-1",
-				Link: "some-question-link-1",
-				Text: domainquiz.Text{
-					Text:   "some-text-1",
-					IsHtml: true,
-				},
-			},
-			Answer: domainquiz.Text{
-				Text:   "some-text-1",
-				IsHtml: true,
-			},
-		},
-		{
-			Question: domainquiz.Question{
-				Id:   "some-id-2",
-				Link: "some-link-2",
-				Text: domainquiz.Text{
-					Text:   "some-text-2",
-					IsHtml: false,
-				},
-			},
-			Answer: domainquiz.Text{
-				Text:   "some-text-2",
-				IsHtml: true,
-			},
-		},
+func testRestQuestions(prefix string) []*restquiz.QuestionAndAnswer {
+	subPrefix := prefix + "_some_questions"
+
+	return []*restquiz.QuestionAndAnswer{
+		testRestQuestion(subPrefix + "-0"),
+		testRestQuestion(subPrefix + "-1"),
+		testRestQuestion(subPrefix + "-2"),
+		testRestQuestion(subPrefix + "-3"),
 	}
 }
 
-func testQuestion(suffix string) *domainquiz.QuestionAndAnswer {
-	return &domainquiz.QuestionAndAnswer{
-		Question: domainquiz.Question{
-			Id:   fmt.Sprintf("some-question-id-%v", suffix),
-			Link: fmt.Sprintf("some-question-link-%v", suffix),
-			Text: domainquiz.Text{
-				Text:   fmt.Sprintf("some-question-text-%v", suffix),
+func testRestQuestion(prefix string) *restquiz.QuestionAndAnswer {
+	subPrefix := prefix + "_some-qa-"
+
+	return &restquiz.QuestionAndAnswer{
+		Question: restquiz.Question{
+			Id:   subPrefix + "some-question-id",
+			Link: subPrefix + "some-question-link",
+			Text: restquiz.Text{
+				Text:   subPrefix + "some-question-text",
 				IsHtml: true,
 			},
 		},
-		Answer: domainquiz.Text{
-			Text:   fmt.Sprintf("some-answer-text-%v", suffix),
+		Answer: restquiz.Text{
+			Text:   subPrefix + "some-question-answer",
 			IsHtml: true,
 		},
 	}
 }
 
-func testDefaultChoices(suffix string) []*domainquiz.Text {
-	return []*domainquiz.Text{
+func testRestDefaultChoices(prefix string) []*restquiz.Text {
+	subPrefix := prefix + "_some-default-choice"
+
+	return []*restquiz.Text{
 		{
-			Text:   fmt.Sprintf("some-default-choice-1-%v", suffix),
+			Text:   subPrefix + "-0-some-default-choice-text",
 			IsHtml: true,
 		},
 		{
-			Text:   fmt.Sprintf("some-default-choice-2-%v", suffix),
+			Text:   subPrefix + "-1-some-default-choice-text",
 			IsHtml: false,
 		},
 		{
-			Text:   fmt.Sprintf("some-default-choice-3-%v", suffix),
+			Text:   subPrefix + "-2-some-default-choice-text",
 			IsHtml: true,
 		},
 	}
 }
 
-func testSubSections(suffix string) []*domainquiz.SubSection {
-	return []*domainquiz.SubSection{
-		testSubSection(suffix + "0"),
-		testSubSection(suffix + "1"),
+func testRestSubSections(prefix string) []*restquiz.SubSection {
+	subPrefix := prefix + "_some-sub-sections"
+
+	return []*restquiz.SubSection{
+		testRestSubSection(subPrefix + "-0"),
+		testRestSubSection(subPrefix + "-1"),
 	}
 }
 
-func testSubSection(suffix string) *domainquiz.SubSection {
-	return &domainquiz.SubSection{
-		HasIdAndTitle: domainquiz.HasIdAndTitle{
-			Id:    fmt.Sprintf("some-subsection-id-%v", suffix),
-			Title: fmt.Sprintf("some-subsection-title-%v", suffix),
-			Link:  fmt.Sprintf("some-subsection-link-%v", suffix),
-		},
-		Questions:        testQuestions(suffix),
-		AnswersAsChoices: false,
-	}
-}
+func testRestSubSection(prefix string) *restquiz.SubSection {
+	subPrefix := prefix + "_some-sub-section"
 
-func testSection(suffix string) *domainquiz.Section {
-	return &domainquiz.Section{
-		HasIdAndTitle: domainquiz.HasIdAndTitle{
-			Id:    fmt.Sprintf("some-id-%v", suffix),
-			Title: fmt.Sprintf("some-title-%v", suffix),
-			Link:  fmt.Sprintf("some-link-%v", suffix),
+	return &restquiz.SubSection{
+		HasIdAndTitle: restquiz.HasIdAndTitle{
+			Id:    subPrefix + "-some-sub-section-id",
+			Title: subPrefix + "-some-sub-section-title",
+			Link:  subPrefix + "-some-sub-section-link",
 		},
-		Questions:        testQuestions(suffix),
-		SubSections:      testSubSections(suffix),
-		DefaultChoices:   testDefaultChoices(suffix),
+		Questions:        testRestQuestions(subPrefix + "-some-sub-section-questions"),
 		AnswersAsChoices: true,
 	}
 }
 
-func testSections(suffix string) []*domainquiz.Section {
-	return []*domainquiz.Section{
-		testSection(suffix + "0"),
-		testSection(suffix + "1"),
-		testSection(suffix + "2"),
+func testRestSection(prefix string) *restquiz.Section {
+	subPrefix := prefix + "_some_section"
+	return &restquiz.Section{
+		HasIdAndTitle: restquiz.HasIdAndTitle{
+			Id:    subPrefix + "-id",
+			Title: subPrefix + "-title",
+			Link:  subPrefix + "_-link",
+		},
+		Questions:        testRestQuestions(subPrefix + "-questions"),
+		SubSections:      testRestSubSections(subPrefix + "-sub-sections"),
+		DefaultChoices:   testRestDefaultChoices(subPrefix + "-default-choices"),
+		AnswersAsChoices: true,
 	}
 }
 
-func testQuiz(suffix string) *domainquiz.Quiz {
-	return &domainquiz.Quiz{
-		HasIdAndTitle: domainquiz.HasIdAndTitle{
-			Id:    fmt.Sprintf("some-quiz-id-%v", suffix),
-			Title: fmt.Sprintf("some-quiz-title-%v", suffix),
-			Link:  fmt.Sprintf("some-quiz-link-%v", suffix),
-		},
-		IsPrivate:        true,
-		AnswersAsChoices: true,
+func testRestSections(prefix string) []*restquiz.Section {
+	subPrefix := prefix + "_some-section"
+	return []*restquiz.Section{
+		testRestSection(subPrefix + "-0"),
+		testRestSection(subPrefix + "-1"),
+		testRestSection(subPrefix + "-2"),
+	}
+}
 
-		Sections:  testSections(suffix),
-		Questions: testQuestions(suffix),
+func testRestQuiz() *restquiz.Quiz {
+	prefix := "some-quiz_"
+	return &restquiz.Quiz{
+		HasIdAndTitle: restquiz.HasIdAndTitle{
+			Id:    prefix + "some-quiz-id",
+			Title: prefix + "some-quiz-title",
+			Link:  prefix + "some-quiz-link",
+		},
+		IsPrivate: true,
+
+		Sections: testRestSections(prefix + "some-quiz-sections"),
+
+		UsesMathML: true,
 	}
 }
 
 func TestConvertDomainQuestionHistoryToRestQuestionHistory(t *testing.T) {
-	quiz := testQuiz("")
-	question := quiz.Questions[1].Question
+	quiz := testRestQuiz()
+	question := quiz.Sections[1].Questions[1].Question
 
 	obj := domainuser.QuestionHistory{
 		QuestionId:            question.Id,
@@ -152,7 +139,7 @@ func TestConvertDomainQuestionHistoryToRestQuestionHistory(t *testing.T) {
 }
 
 func TestConvertDomainStatsToRestStats(t *testing.T) {
-	quiz := testQuiz("")
+	quiz := testRestQuiz()
 
 	section := quiz.Sections[1]
 	questionID0 := section.Questions[0].Id
@@ -179,7 +166,11 @@ func TestConvertDomainStatsToRestStats(t *testing.T) {
 		},
 	}
 
-	result, err := convertDomainStatsToRestStats(&obj, quiz)
+	quizCache, err := NewQuizCache(quiz)
+	assert.Nil(t, err)
+	assert.NotNil(t, quizCache)
+
+	result, err := convertDomainStatsToRestStats(&obj, quizCache)
 	assert.Nil(t, err)
 	assert.NotNil(t, result)
 
@@ -203,4 +194,9 @@ func TestConvertDomainStatsToRestStats(t *testing.T) {
 	assert.Equal(t, obj.QuestionHistories[1].QuestionId, qh1.QuestionId)
 	assert.Equal(t, obj.QuestionHistories[1].AnsweredCorrectlyOnce, qh1.AnsweredCorrectlyOnce)
 	assert.Equal(t, obj.QuestionHistories[1].CountAnsweredWrong, qh1.CountAnsweredWrong)
+
+	// Extras:
+	assert.Equal(t, quizCache.GetQuestionsCount(), result.CountQuestions)
+	assert.Equal(t, quizCache.Quiz.Title, result.QuizTitle)
+	assert.Equal(t, section.Title, result.SectionTitle)
 }

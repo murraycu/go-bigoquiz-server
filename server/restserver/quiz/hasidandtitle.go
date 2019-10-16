@@ -1,11 +1,11 @@
 package quiz
 
 type HasIdAndTitle struct {
-	Id    string
-	Title string
+	Id    string `json:"id"`
+	Title string `json:"title,omitempty"`
 
 	// A URL.
-	Link string
+	Link string `json:"link,omitempty"`
 }
 
 func (self *HasIdAndTitle) CopyHasIdAndTitle(dest *HasIdAndTitle) {

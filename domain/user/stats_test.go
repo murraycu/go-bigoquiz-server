@@ -15,17 +15,17 @@ func TestStatsCountAnsweredWrong(t *testing.T) {
 		t.Error("stats.GetQuestionCountAnsweredWrong() did not default to 0.")
 	}
 
-	stats.UpdateProblemQuestion(&question, false)
+	stats.UpdateProblemQuestion(question.Id, false)
 	if stats.GetQuestionCountAnsweredWrong(TEST_QUESTION_ID) != 1 {
 		t.Error("stats.GetQuestionCountAnsweredWrong() did not increase to 1.")
 	}
 
-	stats.UpdateProblemQuestion(&question, false)
+	stats.UpdateProblemQuestion(question.Id, false)
 	if stats.GetQuestionCountAnsweredWrong(TEST_QUESTION_ID) != 2 {
 		t.Errorf("stats.GetQuestionCountAnsweredWrong() did not increase to 2. Instead it is %v", stats.GetQuestionCountAnsweredWrong(TEST_QUESTION_ID))
 	}
 
-	stats.UpdateProblemQuestion(&question, true)
+	stats.UpdateProblemQuestion(question.Id, true)
 	if stats.GetQuestionCountAnsweredWrong(TEST_QUESTION_ID) != 1 {
 		t.Error("stats.GetQuestionCountAnsweredWrong() did not decrease to 1.")
 	}

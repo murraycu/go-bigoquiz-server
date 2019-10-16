@@ -57,32 +57,9 @@ func LoadQuiz(absFilePath string, id string) (*Quiz, error) {
 		q.Sections = append(q.Sections, &section)
 	}
 
-	q.process()
+	q.addReverseSections()
 
 	return &q, nil
-}
-
-/** Various processing of the quiz after the simple unmarshalling from the XML.
- * For instance, build a map of all questions in all sections and at the top-level,
- * and a map of sections by section ID.
- * And also make sure that questions have their section ID and sub-section IDs,
- * and that the questions have the correct choices.
- */
-func (self *Quiz) process() {
-	self.addReverseSections()
-
-	for _, s := range self.Sections {
-		//Make sure that we set sub-section choices from the answers from all questions in the whole section:
-		if s.AnswersAsChoices {
-			questionsIncludingSubSections := make([]*QuestionAndAnswer, 0)
-			questionsIncludingSubSections = append(questionsIncludingSubSections, s.Questions...)
-
-			for _, sub := range s.SubSections {
-				questionsIncludingSubSections = append(questionsIncludingSubSections, sub.Questions...)
-			}
-		}
-	}
-
 }
 
 /** Optionally generate reverse sections.

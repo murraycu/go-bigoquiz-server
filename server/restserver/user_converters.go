@@ -2,15 +2,25 @@ package restserver
 
 import (
 	"fmt"
-	domainquiz "github.com/murraycu/go-bigoquiz-server/domain/quiz"
 	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
+	restquiz "github.com/murraycu/go-bigoquiz-server/server/restserver/quiz"
 	restuser "github.com/murraycu/go-bigoquiz-server/server/restserver/user"
 )
 
-func convertDomainStatsToRestStats(stats *domainuser.Stats, quiz *domainquiz.Quiz) (*restuser.Stats, error) {
-	questionHistories, err := convertDomainQuestionHistoriesToRestQuestionHistories(stats.QuestionHistories, quiz)
+func convertDomainStatsToRestStats(stats *domainuser.Stats, quizCache *QuizCache) (*restuser.Stats, error) {
+	questionHistories, err := convertDomainQuestionHistoriesToRestQuestionHistories(stats.QuestionHistories, quizCache)
 	if err != nil {
 		return nil, fmt.Errorf("convertDomainQuestionHistoriesToRestQuestionHistories() failed: %v", err)
+	}
+
+	section, err := quizCache.GetSection(stats.SectionId)
+	if err != nil {
+		return nil, fmt.Errorf("GetSection() failed: %v", err)
+	}
+
+	var sectionTitle string
+	if section != nil {
+		sectionTitle = section.Title
 	}
 
 	return &restuser.Stats{
@@ -21,14 +31,18 @@ func convertDomainStatsToRestStats(stats *domainuser.Stats, quiz *domainquiz.Qui
 		CountQuestionsAnsweredOnce: stats.CountQuestionsAnsweredOnce,
 		CountQuestionsCorrectOnce:  stats.CountQuestionsCorrectOnce,
 		QuestionHistories:          questionHistories,
+
+		CountQuestions: quizCache.GetQuestionsCount(),
+		QuizTitle:      quizCache.Quiz.Title,
+		SectionTitle:   sectionTitle,
 	}, nil
 }
 
-func convertDomainQuestionHistoriesToRestQuestionHistories(questionHistories []domainuser.QuestionHistory, quiz *domainquiz.Quiz) ([]restuser.QuestionHistory, error) {
+func convertDomainQuestionHistoriesToRestQuestionHistories(questionHistories []domainuser.QuestionHistory, quizCache *QuizCache) ([]restuser.QuestionHistory, error) {
 	var result []restuser.QuestionHistory
 
 	for _, qh := range questionHistories {
-		qa := quiz.GetQuestionAndAnswer(qh.QuestionId)
+		qa := quizCache.GetQuestionAndAnswer(qh.QuestionId)
 		if qa == nil {
 			continue
 		}
@@ -44,7 +58,7 @@ func convertDomainQuestionHistoriesToRestQuestionHistories(questionHistories []d
 	return result, nil
 }
 
-func convertDomainQuestionHistoryToRestQuestionHistory(obj domainuser.QuestionHistory, question *domainquiz.Question) (restuser.QuestionHistory, error) {
+func convertDomainQuestionHistoryToRestQuestionHistory(obj domainuser.QuestionHistory, question *restquiz.Question) (restuser.QuestionHistory, error) {
 	var subSectionTitle string
 	if question.SubSection != nil {
 		subSectionTitle = question.SubSection.Title

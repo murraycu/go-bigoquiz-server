@@ -2,7 +2,7 @@ package restserver
 
 import (
 	"github.com/julienschmidt/httprouter"
-	"github.com/murraycu/go-bigoquiz-server/domain/quiz"
+	restquiz "github.com/murraycu/go-bigoquiz-server/server/restserver/quiz"
 	"net/http"
 	"strconv"
 )
@@ -15,11 +15,11 @@ func (s *RestServer) HandleQuizAll(w http.ResponseWriter, r *http.Request, _ htt
 		listOnly, _ = strconv.ParseBool(listOnlyStr)
 	}
 
-	var quizArray []*quiz.Quiz = nil
+	var quizArray []*restquiz.Quiz = nil
 	if listOnly {
-		quizArray = s.quizzes.QuizzesListSimple
+		quizArray = s.quizzesListSimple
 	} else {
-		quizArray = s.quizzes.QuizzesListFull
+		quizArray = s.quizzesListFull
 	}
 
 	w.Header().Set("Content-Type", "application/json") // normal header
@@ -28,8 +28,8 @@ func (s *RestServer) HandleQuizAll(w http.ResponseWriter, r *http.Request, _ htt
 	marshalAndWriteOrHttpError(w, &quizArray)
 }
 
-func (s *RestServer) getQuiz(quizId string) *quiz.Quiz {
-	return s.quizzes.Quizzes[quizId]
+func (s *RestServer) getQuiz(quizId string) *restquiz.Quiz {
+	return s.quizzes[quizId]
 }
 
 func (s *RestServer) HandleQuizById(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -75,9 +75,9 @@ func (s *RestServer) HandleQuizSectionsByQuizId(w http.ResponseWriter, r *http.R
 
 	sections := q.Sections
 	if listOnly {
-		simpleSections := make([]*quiz.Section, 0, len(sections))
+		simpleSections := make([]*restquiz.Section, 0, len(sections))
 		for _, s := range sections {
-			var simple quiz.Section
+			var simple restquiz.Section
 			s.CopyHasIdAndTitle(&simple.HasIdAndTitle)
 			simpleSections = append(simpleSections, &simple)
 		}
@@ -109,13 +109,16 @@ func (s *RestServer) HandleQuizQuestionById(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	qa := q.GetQuestionAndAnswer(questionId)
+	quizCache, ok := s.quizCacheMap[quizId]
+	if !ok {
+		http.Error(w, "quiz cache not found for quiz", http.StatusNotFound)
+	}
+
+	qa := quizCache.GetQuestionAndAnswer(questionId)
 	if qa == nil {
 		handleErrorAsHttpError(w, http.StatusInternalServerError, "question not found")
 		return
 	}
-
-	qa.Question.SetQuestionExtras(q)
 
 	marshalAndWriteOrHttpError(w, &(qa.Question))
 }
