@@ -1,9 +1,5 @@
 package user
 
-import (
-	"github.com/murraycu/go-bigoquiz-server/domain/quiz"
-)
-
 // Statistics for the user, either per quiz (SectionId is then empty), or per section in a quiz.
 type Stats struct {
 	QuizId    string
@@ -58,8 +54,7 @@ func (self *Stats) getQuestionHistoryForQuestionId(questionId string) (*Question
 	return nil, false
 }
 
-func (self *Stats) UpdateProblemQuestion(question *quiz.Question, answerIsCorrect bool) {
-	questionId := question.Id
+func (self *Stats) UpdateProblemQuestion(questionId string, answerIsCorrect bool) {
 	if len(questionId) == 0 {
 		// Log.error("updateProblemQuestion(): questionId is empty.");
 		return
@@ -78,7 +73,7 @@ func (self *Stats) UpdateProblemQuestion(question *quiz.Question, answerIsCorrec
 		}
 
 		questionHistory = new(QuestionHistory)
-		questionHistory.QuestionId = question.Id
+		questionHistory.QuestionId = questionId
 	} else if answerIsCorrect && !questionHistory.AnsweredCorrectlyOnce {
 		firstTimeCorrect = true
 	}

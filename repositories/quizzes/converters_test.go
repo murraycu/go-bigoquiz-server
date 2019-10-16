@@ -1,7 +1,6 @@
 package quizzes
 
 import (
-	"fmt"
 	dtoquiz "github.com/murraycu/go-bigoquiz-server/repositories/quizzes/dtos/quiz"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -85,113 +84,96 @@ func TestConvertDtoQAToDomainQA(t *testing.T) {
 	assert.Equal(t, dto.Answer.IsHtml, result.Answer.IsHtml)
 }
 
-func testQuestions(suffix string) []*dtoquiz.QuestionAndAnswer {
+func testQuestions(prefix string) []*dtoquiz.QuestionAndAnswer {
+	subPrefix := prefix + "_some-questions_question-"
 	return []*dtoquiz.QuestionAndAnswer{
-		testQuestion(suffix + "0"),
-		{
-			Question: dtoquiz.Question{
-				Id:   "some-question-id-1",
-				Link: "some-question-link-1",
-				Text: dtoquiz.Text{
-					Text:   "some-text-1",
-					IsHtml: true,
-				},
-			},
-			Answer: dtoquiz.Text{
-				Text:   "some-text-1",
-				IsHtml: true,
-			},
-		},
-		{
-			Question: dtoquiz.Question{
-				Id:   "some-id-2",
-				Link: "some-link-2",
-				Text: dtoquiz.Text{
-					Text:   "some-text-2",
-					IsHtml: false,
-				},
-			},
-			Answer: dtoquiz.Text{
-				Text:   "some-text-2",
-				IsHtml: true,
-			},
-		},
+		testQuestion(subPrefix + "0"),
+		testQuestion(subPrefix + "1"),
+		testQuestion(subPrefix + "2"),
+		testQuestion(subPrefix + "3"),
 	}
 }
 
-func testQuestion(suffix string) *dtoquiz.QuestionAndAnswer {
+func testQuestion(prefix string) *dtoquiz.QuestionAndAnswer {
+	subPrefix := prefix + "_qa_"
 	return &dtoquiz.QuestionAndAnswer{
 		Question: dtoquiz.Question{
-			Id:   fmt.Sprintf("some-question-id-%v", suffix),
-			Link: fmt.Sprintf("some-question-link-%v", suffix),
+			Id:   subPrefix + "some-question-id",
+			Link: subPrefix + "some-question-link",
 			Text: dtoquiz.Text{
-				Text:   fmt.Sprintf("some-question-text-%v", suffix),
+				Text:   subPrefix + "some-question-text",
 				IsHtml: true,
 			},
 		},
 		Answer: dtoquiz.Text{
-			Text:   fmt.Sprintf("some-answer-text-%v", suffix),
+			Text:   subPrefix + "some-answer-text",
 			IsHtml: true,
 		},
 	}
 }
 
-func testDefaultChoices(suffix string) []*dtoquiz.Text {
+func testDefaultChoices(prefix string) []*dtoquiz.Text {
+	subPrefix := prefix + "_default_choices_some-default-choice-text"
 	return []*dtoquiz.Text{
 		{
-			Text:   fmt.Sprintf("some-default-choice-1-%v", suffix),
+			Text:   subPrefix + "-1",
 			IsHtml: true,
 		},
 		{
-			Text:   fmt.Sprintf("some-default-choice-2-%v", suffix),
+			Text:   subPrefix + "-2",
 			IsHtml: false,
 		},
 		{
-			Text:   fmt.Sprintf("some-default-choice-3-%v", suffix),
+			Text:   subPrefix + "-3",
 			IsHtml: true,
 		},
 	}
 }
 
-func testSubSections(suffix string) []*dtoquiz.SubSection {
+func testSubSections(prefix string) []*dtoquiz.SubSection {
+	subPrefix := prefix + "_some-sub-sections-"
 	return []*dtoquiz.SubSection{
-		testSubSection(suffix + "0"),
-		testSubSection(suffix + "1"),
+		testSubSection(subPrefix + "0"),
+		testSubSection(subPrefix + "1"),
 	}
 }
 
-func testSubSection(suffix string) *dtoquiz.SubSection {
+func testSubSection(prefix string) *dtoquiz.SubSection {
+	subPrefix := prefix + "_some-sub-section_"
 	return &dtoquiz.SubSection{
 		HasIdAndTitle: dtoquiz.HasIdAndTitle{
-			Id:    fmt.Sprintf("some-subsection-id-%v", suffix),
-			Title: fmt.Sprintf("some-subsection-title-%v", suffix),
-			Link:  fmt.Sprintf("some-subsection-link-%v", suffix),
+			Id:    subPrefix + "some-subsection-id",
+			Title: subPrefix + "some-subsection-title",
+			Link:  subPrefix + "some-subsection-link",
 		},
-		Questions:        testQuestions(suffix),
+		Questions:        testQuestions(prefix),
 		AnswersAsChoices: false,
 	}
 }
 
-func testSection(suffix string) *dtoquiz.Section {
+func testSection(prefix string) *dtoquiz.Section {
+	subPrefix := prefix + "_some-section_"
+
 	return &dtoquiz.Section{
 		HasIdAndTitle: dtoquiz.HasIdAndTitle{
-			Id:    fmt.Sprintf("some-id-%v", suffix),
-			Title: fmt.Sprintf("some-title-%v", suffix),
-			Link:  fmt.Sprintf("some-link-%v", suffix),
+			Id:    subPrefix + "some-section-id",
+			Title: subPrefix + "some-section-title",
+			Link:  subPrefix + "some-section-link",
 		},
-		Questions:        testQuestions(suffix),
-		SubSections:      testSubSections(suffix),
-		DefaultChoices:   testDefaultChoices(suffix),
+		Questions:        testQuestions(subPrefix + "some-questions"),
+		SubSections:      testSubSections(prefix + "some-sub-sections"),
+		DefaultChoices:   testDefaultChoices(prefix + "some-default-choices"),
 		AnswersAsChoices: true,
 		AndReverse:       true,
 	}
 }
 
-func testSections(suffix string) []*dtoquiz.Section {
+func testSections(prefix string) []*dtoquiz.Section {
+	subPrefix := prefix + "_some-section"
 	return []*dtoquiz.Section{
-		testSection(suffix + "0"),
-		testSection(suffix + "1"),
-		testSection(suffix + "2"),
+		testSection(subPrefix + "-0"),
+		testSection(subPrefix + "-1"),
+		testSection(subPrefix + "-2"),
 	}
 }
 
@@ -258,32 +240,21 @@ func TestConvertDtoSectionToDomainSection(t *testing.T) {
 	assert.Equal(t, dto.DefaultChoices[0].IsHtml, result.DefaultChoices[0].IsHtml)
 	assert.Equal(t, dto.DefaultChoices[1].Text, result.DefaultChoices[1].Text)
 	assert.Equal(t, dto.DefaultChoices[1].IsHtml, result.DefaultChoices[1].IsHtml)
-
-	assert.Equal(t, dto.AnswersAsChoices, result.AnswersAsChoices)
-
-	// Test extras:
-
-	dtoSubSection := dto.SubSections[0]
-	subSection := result.GetSubSection(dtoSubSection.Id)
-	assert.NotNil(t, subSection)
-	assert.Equal(t, dtoSubSection.Id, subSection.Id)
-	assert.Equal(t, dtoSubSection.Title, subSection.Title)
-
-	assert.Equal(t, 9, result.CountQuestions)
 }
 
-func testQuiz(suffix string) *dtoquiz.Quiz {
+func testQuiz(prefix string) *dtoquiz.Quiz {
+	subPrefix := prefix + "_some-quiz-"
 	return &dtoquiz.Quiz{
 		HasIdAndTitle: dtoquiz.HasIdAndTitle{
-			Id:    fmt.Sprintf("some-quiz-id-%v", suffix),
-			Title: fmt.Sprintf("some-quiz-title-%v", suffix),
-			Link:  fmt.Sprintf("some-quiz-link-%v", suffix),
+			Id:    subPrefix + "some-quiz-id",
+			Title: subPrefix + "some-quiz-title",
+			Link:  subPrefix + "some-quiz-link",
 		},
 		IsPrivate:        true,
 		AnswersAsChoices: true,
 
-		Sections:  testSections(suffix),
-		Questions: testQuestions(suffix),
+		Sections:  testSections(subPrefix + "-some-quiz-sections"),
+		Questions: testQuestions(subPrefix + "-some-quiz-questions"),
 	}
 }
 
@@ -300,7 +271,6 @@ func TestConvertDtoQuizToDomainQuiz(t *testing.T) {
 	assert.Equal(t, dto.HasIdAndTitle.Link, result.HasIdAndTitle.Link)
 
 	assert.Equal(t, dto.IsPrivate, result.IsPrivate)
-	assert.Equal(t, dto.AnswersAsChoices, result.AnswersAsChoices)
 
 	assert.Len(t, result.Sections, len(dto.Sections))
 	assert.Equal(t, dto.Sections[0].Id, result.Sections[0].Id)
@@ -309,10 +279,7 @@ func TestConvertDtoQuizToDomainQuiz(t *testing.T) {
 	assert.Equal(t, dto.Questions[0].Id, result.Questions[0].Id)
 
 	assert.Equal(t, dto.UsesMathML, result.UsesMathML)
-
-	// Test extras:
-	randomQuestion := result.GetRandomQuestion(dto.Sections[0].Id)
-	assert.NotNil(t, randomQuestion)
+	assert.Equal(t, dto.AnswersAsChoices, result.AnswersAsChoices)
 }
 
 func TestConvertDtoQuizzesToDomainQuizzes(t *testing.T) {

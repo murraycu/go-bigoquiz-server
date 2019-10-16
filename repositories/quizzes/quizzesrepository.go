@@ -6,37 +6,17 @@ import (
 	dtoquiz "github.com/murraycu/go-bigoquiz-server/repositories/quizzes/dtos/quiz"
 	"io/ioutil"
 	"path/filepath"
-	"sort"
 	"strings"
 )
-
-// See https://gobyexample.com/sorting-by-functions
-type quizListByTitle []*domainquiz.Quiz
-
-func (s quizListByTitle) Len() int {
-	return len(s)
-}
-
-func (s quizListByTitle) Swap(i, j int) {
-	s[i], s[j] = s[j], s[i]
-}
-
-func (s quizListByTitle) Less(i, j int) bool {
-	return s[i].Title < s[j].Title
-}
 
 type QuizzesRepository struct {
 }
 
 // Map of quiz IDs to Quiz.
-type mapQuizzes map[string]*domainquiz.Quiz
-
-type mapList []*domainquiz.Quiz
+type MapQuizzes map[string]*domainquiz.Quiz
 
 type QuizzesAndCaches struct {
-	Quizzes           mapQuizzes
-	QuizzesListSimple mapList
-	QuizzesListFull   mapList
+	Quizzes MapQuizzes
 }
 
 func NewQuizzesRepository() (*QuizzesRepository, error) {
@@ -78,10 +58,10 @@ func loadQuiz(id string) (*dtoquiz.Quiz, error) {
 	return dtoquiz.LoadQuiz(absFilePath, id)
 }
 
-type mapDtoQuizzes map[string]*dtoquiz.Quiz
+type MapDtoQuizzes map[string]*dtoquiz.Quiz
 
-func loadQuizzes() (mapDtoQuizzes, error) {
-	quizzes := make(mapDtoQuizzes, 0)
+func loadQuizzes() (MapDtoQuizzes, error) {
+	quizzes := make(MapDtoQuizzes, 0)
 
 	absFilePath, err := filepath.Abs("quizzes")
 	if err != nil {
@@ -108,56 +88,16 @@ func loadQuizzes() (mapDtoQuizzes, error) {
 	return quizzes, nil
 }
 
-// TODO: Is there instead some way to output just the top-level of the JSON,
-// and only some of the fields?
-func buildQuizzesSimple(quizzes mapQuizzes) mapList {
-	// Create a slice with the same capacity.
-	result := make(mapList, 0, len(quizzes))
-
-	for _, q := range quizzes {
-		var simple domainquiz.Quiz
-
-		simple.Id = q.Id
-		simple.Title = q.Title
-		simple.Link = q.Link
-
-		simple.IsPrivate = q.IsPrivate
-
-		result = append(result, &simple)
-	}
-
-	sort.Sort(quizListByTitle(result))
-
-	return result
-}
-
-func buildQuizzesFull(quizzes mapQuizzes) mapList {
-	// Create a slice with the same capacity.
-	result := make(mapList, 0, len(quizzes))
-
-	for _, q := range quizzes {
-		result = append(result, q)
-	}
-
-	sort.Sort(quizListByTitle(result))
-
-	return result
-}
-
-func (q *QuizzesRepository) GetQuizzesAndCaches() (*QuizzesAndCaches, error) {
+func (q *QuizzesRepository) GetQuizzes() (MapQuizzes, error) {
 	quizzes, err := loadQuizzes()
 	if err != nil {
 		return nil, fmt.Errorf("could not load quiz files: %v", err)
 	}
 
-	var result QuizzesAndCaches
-	result.Quizzes, err = convertDtoQuizzesToDomainQuizzes(quizzes)
+	result, err := convertDtoQuizzesToDomainQuizzes(quizzes)
 	if err != nil {
 		return nil, fmt.Errorf("could not convert DTO quizzes to domain quizzes: %v", err)
 	}
 
-	result.QuizzesListSimple = buildQuizzesSimple(result.Quizzes)
-	result.QuizzesListFull = buildQuizzesFull(result.Quizzes)
-
-	return &result, nil
+	return result, nil
 }

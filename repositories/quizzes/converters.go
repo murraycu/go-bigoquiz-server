@@ -6,8 +6,8 @@ import (
 	dtoquiz "github.com/murraycu/go-bigoquiz-server/repositories/quizzes/dtos/quiz"
 )
 
-func convertDtoQuizzesToDomainQuizzes(dtos map[string]*dtoquiz.Quiz) (map[string]*domainquiz.Quiz, error) {
-	result := make(map[string]*domainquiz.Quiz)
+func convertDtoQuizzesToDomainQuizzes(dtos map[string]*dtoquiz.Quiz) (MapQuizzes, error) {
+	result := make(MapQuizzes)
 
 	for _, dto := range dtos {
 		quiz, err := convertDtoQuizToDomainQuiz(dto)
@@ -42,7 +42,6 @@ func convertDtoQuizToDomainQuiz(dto *dtoquiz.Quiz) (*domainquiz.Quiz, error) {
 	result.HasIdAndTitle = *hasIdAndTitle
 
 	result.IsPrivate = dto.IsPrivate
-	result.AnswersAsChoices = dto.AnswersAsChoices
 
 	for _, dtoSection := range dto.Sections {
 		section, err := convertDtoSectionToDomainSection(dtoSection)
@@ -58,12 +57,8 @@ func convertDtoQuizToDomainQuiz(dto *dtoquiz.Quiz) (*domainquiz.Quiz, error) {
 		return nil, fmt.Errorf("convertDtoQuestionsToDomainQuestions() failed: %v", err)
 	}
 
-	err = result.InitMaps()
-	if err != nil {
-		return nil, fmt.Errorf("InitMaps() failed: %v", err)
-	}
-
 	result.UsesMathML = dto.UsesMathML
+	result.AnswersAsChoices = dto.AnswersAsChoices
 
 	return &result, nil
 }
@@ -180,11 +175,6 @@ func convertDtoSectionToDomainSection(dto *dtoquiz.Section) (*domainquiz.Section
 	}
 
 	result.AnswersAsChoices = dto.AnswersAsChoices
-
-	err = result.InitMaps()
-	if err != nil {
-		return nil, fmt.Errorf("InitMaps() failed: %v", err)
-	}
 
 	return &result, nil
 }

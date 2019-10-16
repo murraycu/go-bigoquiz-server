@@ -2,7 +2,7 @@ package restserver
 
 import (
 	"github.com/julienschmidt/httprouter"
-	"github.com/murraycu/go-bigoquiz-server/domain/quiz"
+	restquiz "github.com/murraycu/go-bigoquiz-server/server/restserver/quiz"
 	"net/http"
 )
 
@@ -29,17 +29,22 @@ func (s *RestServer) HandleQuestionNext(w http.ResponseWriter, r *http.Request, 
 		return
 	}
 
+	quizCache, ok := s.quizCacheMap[quizId]
+	if !ok {
+		http.Error(w, "quiz cache not found", http.StatusNotFound)
+	}
+
 	userId, err := s.getUserIdFromSessionAndDb(r)
 	if err != nil {
 		handleErrorAsHttpError(w, http.StatusInternalServerError, "logged-in check failed. getUserIdFromSessionAndDb() failed: %v", err)
 		return
 	}
 
-	var question *quiz.Question
+	var question *restquiz.Question
 	if len(userId) == 0 {
 		//The user is not logged in,
 		//so just return a random question:
-		question = q.GetRandomQuestion(sectionId)
+		question = quizCache.GetRandomQuestion(sectionId)
 	} else {
 		c := r.Context()
 
@@ -68,8 +73,6 @@ func (s *RestServer) HandleQuestionNext(w http.ResponseWriter, r *http.Request, 
 		handleErrorAsHttpError(w, http.StatusNotFound, "question not found")
 		return
 	}
-
-	question.SetQuestionExtras(q)
 
 	marshalAndWriteOrHttpError(w, &question)
 }
