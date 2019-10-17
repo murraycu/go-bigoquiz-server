@@ -6,16 +6,23 @@ import (
 
 // Statistics for the user, either per quiz (SectionId is then empty), or per section in a quiz.
 type Stats struct {
-	QuizId    string
-	SectionId string
+	QuizId    string `json:"quizId,omitEmpty"`
+	SectionId string `json:"sectionId,omitEmpty"`
 
-	Answered int
-	Correct  int
+	Answered int `json:"answered"`
+	Correct  int `json:"correct"`
 
-	CountQuestionsAnsweredOnce int
-	CountQuestionsCorrectOnce  int
+	CountQuestionsAnsweredOnce int `json:"countQuestionsAnsweredOnce"`
+	CountQuestionsCorrectOnce  int `json:"countQuestionsCorrectOnce"`
 
-	QuestionHistories []QuestionHistory
+	QuestionHistories []QuestionHistory `json:"questionHistories,omitEmpty"`
+
+	// These are from the quiz, for convenience
+	// so they don't need to be in the database.
+	// TODO: Make sure they are set for per-section stats.
+	CountQuestions int    `json:"countQuestions"`
+	QuizTitle      string `json:"quizTitle,omitEmpty"`
+	SectionTitle   string `json:"sectionTitle,omitEmpty"`
 }
 
 func (self *Stats) GetQuestionCountAnsweredWrong(questionId string) int {
