@@ -20,11 +20,6 @@ func TestConvertDtoQuestionHistoryToDomainQuestionHistory(t *testing.T) {
 	assert.Equal(t, dto.QuestionId, result.QuestionId)
 	assert.Equal(t, dto.AnsweredCorrectlyOnce, result.AnsweredCorrectlyOnce)
 	assert.Equal(t, dto.CountAnsweredWrong, result.CountAnsweredWrong)
-
-	// These are not in the DTO, so they not in the resulting domain object:
-	assert.Nil(t, result.QuestionTitle)
-	assert.Empty(t, result.SectionId)
-	assert.Empty(t, result.SubSectionTitle)
 }
 
 func TestConvertDtoStatsToDomainStats(t *testing.T) {
@@ -72,11 +67,6 @@ func TestConvertDtoStatsToDomainStats(t *testing.T) {
 	assert.Equal(t, dto.QuestionHistories[1].QuestionId, qh1.QuestionId)
 	assert.Equal(t, dto.QuestionHistories[1].AnsweredCorrectlyOnce, qh1.AnsweredCorrectlyOnce)
 	assert.Equal(t, dto.QuestionHistories[1].CountAnsweredWrong, qh1.CountAnsweredWrong)
-
-	// These are not in the dto, so they will not be in the domain object.
-	assert.Equal(t, 0, result.CountQuestions)
-	assert.Empty(t, result.QuizTitle)
-	assert.Empty(t, result.SectionTitle)
 }
 
 func TestConvertDomainQuestionHistoryToDtoQuestionHistory(t *testing.T) {

@@ -15,7 +15,7 @@ import (
 )
 
 // See https://gobyexample.com/sorting-by-functions
-type StatsListByTitle []*domainuser.Stats
+type StatsListByTitle []*restuser.Stats
 
 func (s StatsListByTitle) Len() int {
 	return len(s)
@@ -59,9 +59,17 @@ func (s *RestServer) HandleUserHistoryAll(w http.ResponseWriter, r *http.Request
 				stats.QuizId = quizId
 			}
 
-			stats.QuizTitle = q.Title
-			stats.CountQuestions = q.GetQuestionsCount()
-			info.SetQuizStats(q.Id, stats)
+			restStats, err := convertDomainStatsToRestStats(stats, q)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			// Set extras for REST:
+			restStats.QuizTitle = q.Title
+			restStats.CountQuestions = q.GetQuestionsCount()
+
+			info.SetQuizStats(q.Id, restStats)
 		}
 	}
 
@@ -118,7 +126,11 @@ func (s *RestServer) HandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Re
 		}
 	}
 
-	info := s.buildUserHistorySections(loginInfo, q, mapUserStats)
+	info, err := s.buildRestUserHistorySections(loginInfo, q, mapUserStats)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	jsonStr, err := json.Marshal(info)
 	if err != nil {
@@ -530,10 +542,10 @@ func (s *RestServer) getQuestionAndAnswer(quizId string, questionId string) *qui
 	return q.GetQuestionAndAnswer(questionId)
 }
 
-func (s *RestServer) buildUserHistorySections(loginInfo *restuser.LoginInfo, quiz *quiz.Quiz, mapUserStats map[string]*domainuser.Stats) *restuser.HistorySections {
+func (s *RestServer) buildRestUserHistorySections(loginInfo *restuser.LoginInfo, quiz *quiz.Quiz, mapUserStats map[string]*domainuser.Stats) (*restuser.HistorySections, error) {
 	sections := quiz.Sections
 	if sections == nil {
-		return nil
+		return nil, nil
 	}
 
 	quizId := quiz.Id
@@ -567,18 +579,24 @@ func (s *RestServer) buildUserHistorySections(loginInfo *restuser.LoginInfo, qui
 			userStats.SectionId = sectionId
 		}
 
-		userStats.QuizTitle = quiz.Title
-		userStats.SectionTitle = section.Title
-		userStats.CountQuestions = section.CountQuestions
+		restStats, err := convertDomainStatsToRestStats(userStats, quiz)
+		if err != nil {
+			return nil, fmt.Errorf("convertDomainStatsToRestStats() failed: %v", err)
+		}
 
-		fillUserStatsWithExtras(userStats, quiz)
-		result.Stats = append(result.Stats, userStats)
+		// Set extras for REST:
+		restStats.QuizTitle = quiz.Title
+		restStats.SectionTitle = section.Title
+		restStats.CountQuestions = section.CountQuestions
+
+		fillUserStatsWithExtras(restStats, quiz)
+		result.Stats = append(result.Stats, restStats)
 	}
 
-	return &result
+	return &result, nil
 }
 
-func fillUserStatsWithExtras(userStats *domainuser.Stats, qz *quiz.Quiz) {
+func fillUserStatsWithExtras(userStats *restuser.Stats, qz *quiz.Quiz) {
 	// Set the titles.
 	// We don't store these in the datastore because we can get them easily from the Quiz.
 
