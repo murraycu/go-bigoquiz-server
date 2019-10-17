@@ -27,10 +27,15 @@ func (s QuizListByTitle) Less(i, j int) bool {
 type QuizzesRepository struct {
 }
 
+// Map of quiz IDs to Quiz.
+type MapQuizzes map[string]*quiz.Quiz
+
+type MapList []*quiz.Quiz
+
 type QuizzesAndCaches struct {
-	Quizzes           map[string]*quiz.Quiz
-	QuizzesListSimple []*quiz.Quiz
-	QuizzesListFull   []*quiz.Quiz
+	Quizzes           MapQuizzes
+	QuizzesListSimple MapList
+	QuizzesListFull   MapList
 }
 
 func NewQuizzesRepository() (*QuizzesRepository, error) {
@@ -72,8 +77,8 @@ func loadQuiz(id string) (*quiz.Quiz, error) {
 	return quiz.LoadQuiz(absFilePath, id)
 }
 
-func loadQuizzes() (map[string]*quiz.Quiz, error) {
-	quizzes := make(map[string]*quiz.Quiz, 0)
+func loadQuizzes() (MapQuizzes, error) {
+	quizzes := make(MapQuizzes, 0)
 
 	absFilePath, err := filepath.Abs("quizzes")
 	if err != nil {
@@ -102,9 +107,9 @@ func loadQuizzes() (map[string]*quiz.Quiz, error) {
 
 // TODO: Is there instead some way to output just the top-level of the JSON,
 // and only some of the fields?
-func buildQuizzesSimple(quizzes map[string]*quiz.Quiz) []*quiz.Quiz {
+func buildQuizzesSimple(quizzes MapQuizzes) MapList {
 	// Create a slice with the same capacity.
-	result := make([]*quiz.Quiz, 0, len(quizzes))
+	result := make(MapList, 0, len(quizzes))
 
 	for _, q := range quizzes {
 		var simple quiz.Quiz
@@ -119,9 +124,9 @@ func buildQuizzesSimple(quizzes map[string]*quiz.Quiz) []*quiz.Quiz {
 	return result
 }
 
-func buildQuizzesFull(quizzes map[string]*quiz.Quiz) []*quiz.Quiz {
+func buildQuizzesFull(quizzes MapQuizzes) MapList {
 	// Create a slice with the same capacity.
-	result := make([]*quiz.Quiz, 0, len(quizzes))
+	result := make(MapList, 0, len(quizzes))
 
 	for _, q := range quizzes {
 		result = append(result, q)
