@@ -10,17 +10,17 @@ import (
 )
 
 // See https://gobyexample.com/sorting-by-functions
-type QuizListByTitle []*quiz.Quiz
+type quizListByTitle []*quiz.Quiz
 
-func (s QuizListByTitle) Len() int {
+func (s quizListByTitle) Len() int {
 	return len(s)
 }
 
-func (s QuizListByTitle) Swap(i, j int) {
+func (s quizListByTitle) Swap(i, j int) {
 	s[i], s[j] = s[j], s[i]
 }
 
-func (s QuizListByTitle) Less(i, j int) bool {
+func (s quizListByTitle) Less(i, j int) bool {
 	return s[i].Title < s[j].Title
 }
 
@@ -28,14 +28,14 @@ type QuizzesRepository struct {
 }
 
 // Map of quiz IDs to Quiz.
-type MapQuizzes map[string]*quiz.Quiz
+type mapQuizzes map[string]*quiz.Quiz
 
-type MapList []*quiz.Quiz
+type mapList []*quiz.Quiz
 
 type QuizzesAndCaches struct {
-	Quizzes           MapQuizzes
-	QuizzesListSimple MapList
-	QuizzesListFull   MapList
+	Quizzes           mapQuizzes
+	QuizzesListSimple mapList
+	QuizzesListFull   mapList
 }
 
 func NewQuizzesRepository() (*QuizzesRepository, error) {
@@ -77,8 +77,8 @@ func loadQuiz(id string) (*quiz.Quiz, error) {
 	return quiz.LoadQuiz(absFilePath, id)
 }
 
-func loadQuizzes() (MapQuizzes, error) {
-	quizzes := make(MapQuizzes, 0)
+func loadQuizzes() (mapQuizzes, error) {
+	quizzes := make(mapQuizzes, 0)
 
 	absFilePath, err := filepath.Abs("quizzes")
 	if err != nil {
@@ -107,9 +107,9 @@ func loadQuizzes() (MapQuizzes, error) {
 
 // TODO: Is there instead some way to output just the top-level of the JSON,
 // and only some of the fields?
-func buildQuizzesSimple(quizzes MapQuizzes) MapList {
+func buildQuizzesSimple(quizzes mapQuizzes) mapList {
 	// Create a slice with the same capacity.
-	result := make(MapList, 0, len(quizzes))
+	result := make(mapList, 0, len(quizzes))
 
 	for _, q := range quizzes {
 		var simple quiz.Quiz
@@ -119,20 +119,20 @@ func buildQuizzesSimple(quizzes MapQuizzes) MapList {
 		result = append(result, &simple)
 	}
 
-	sort.Sort(QuizListByTitle(result))
+	sort.Sort(quizListByTitle(result))
 
 	return result
 }
 
-func buildQuizzesFull(quizzes MapQuizzes) MapList {
+func buildQuizzesFull(quizzes mapQuizzes) mapList {
 	// Create a slice with the same capacity.
-	result := make(MapList, 0, len(quizzes))
+	result := make(mapList, 0, len(quizzes))
 
 	for _, q := range quizzes {
 		result = append(result, q)
 	}
 
-	sort.Sort(QuizListByTitle(result))
+	sort.Sort(quizListByTitle(result))
 
 	return result
 }
