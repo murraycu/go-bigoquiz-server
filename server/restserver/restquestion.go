@@ -29,9 +29,10 @@ func (s *RestServer) HandleQuestionNext(w http.ResponseWriter, r *http.Request, 
 		return
 	}
 
-	quizCache, ok := s.quizCacheMap[quizId]
-	if !ok {
-		http.Error(w, "quiz cache not found", http.StatusNotFound)
+	quizCache, err := s.getQuizCache(q.Id)
+	if err != nil {
+		handleErrorAsHttpError(w, http.StatusNotFound, "quiz cache not found")
+		return
 	}
 
 	userId, err := s.getUserIdFromSessionAndDb(r)
@@ -55,7 +56,11 @@ func (s *RestServer) HandleQuestionNext(w http.ResponseWriter, r *http.Request, 
 				return
 			}
 
-			question = s.getNextQuestionFromUserStats("", q, mapUserStats)
+			question, err = s.getNextQuestionFromUserStats("", q, mapUserStats)
+			if err != nil {
+				handleErrorAsHttpError(w, http.StatusInternalServerError, "getNextQuestionFromUserStats() failed")
+				return
+			}
 		} else {
 			//This special case is a bit copy-and-pasty of the general case with the
 			//map, but it seems more efficient to avoid an unnecessary Map.
@@ -65,7 +70,11 @@ func (s *RestServer) HandleQuestionNext(w http.ResponseWriter, r *http.Request, 
 				return
 			}
 
-			question = s.getNextQuestionFromUserStatsForSection(sectionId, q, userStats)
+			question, err = s.getNextQuestionFromUserStatsForSection(sectionId, q, userStats)
+			if err != nil {
+				handleErrorAsHttpError(w, http.StatusInternalServerError, "getNextQuestionFromUserStatsForSection() failed")
+				return
+			}
 		}
 	}
 

@@ -377,6 +377,12 @@ func loginCallbackFailedErr(message string, err error, w http.ResponseWriter, r 
 }
 
 func logoutError(message string, err error, w http.ResponseWriter) {
-	log.Printf(message+":'%v'\n", err)
-	http.Error(w, err.Error(), http.StatusInternalServerError)
+	handleErrorAsHttpError(w, http.StatusInternalServerError, "messsage: %v", err)
+}
+
+func handleErrorAsHttpError(w http.ResponseWriter, code int, format string, a ...interface{}) {
+	msg := fmt.Sprintf(format, a...)
+	log.Print(msg)
+
+	http.Error(w, msg, code)
 }

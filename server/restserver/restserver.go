@@ -134,17 +134,26 @@ func buildQuizzesFull(quizzes restQuizMap) restQuizList {
 	return result
 }
 
-func (self *RestServer) GetRandomQuestion(quiz *restquiz.Quiz, sectionId string) *restquiz.Question {
-	if self.quizCacheMap == nil { // TODO: Get map for quiz
-		return nil
+func (self *RestServer) GetRandomQuestion(quiz *restquiz.Quiz, sectionId string) (*restquiz.Question, error) {
+	quizCache, err := self.getQuizCache(quiz.Id)
+	if err != nil {
+		return nil, fmt.Errorf("getQuizCache() failed: %v", err)
 	}
 
-	quizCache, ok := self.quizCacheMap[quiz.Id]
+	return quizCache.GetRandomQuestion(sectionId), nil
+}
+
+func (self *RestServer) getQuizCache(quizId string) (*QuizCache, error) {
+	if self.quizCacheMap == nil {
+		return nil, fmt.Errorf("quizCacheMap is nil")
+	}
+
+	quizCache, ok := self.quizCacheMap[quizId]
 	if !ok {
-		return nil
+		return nil, fmt.Errorf("could not find Quiz cache for quiz ID: %v", quizId)
 	}
 
-	return quizCache.GetRandomQuestion(sectionId)
+	return quizCache, nil
 }
 
 /** Set extra details for the question,
