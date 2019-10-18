@@ -142,7 +142,12 @@ func (s *RestServer) HandleUserHistorySubmitAnswer(w http.ResponseWriter, r *htt
 		nextQuestionSectionId = queryValues.Get(QUERY_PARAM_NEXT_QUESTION_SECTION_ID)
 	}
 
-	qa := s.getQuestionAndAnswer(quizId, questionId)
+	qa, err := s.getQuestionAndAnswer(quizId, questionId)
+	if err != nil {
+		handleErrorAsHttpError(w, http.StatusNotFound, "question not found")
+		return
+	}
+
 	if qa == nil {
 		handleErrorAsHttpError(w, http.StatusNotFound, "question not found")
 		return
@@ -183,7 +188,12 @@ func (s *RestServer) HandleUserHistorySubmitDontKnowAnswer(w http.ResponseWriter
 		nextQuestionSectionId = queryValues.Get(QUERY_PARAM_NEXT_QUESTION_SECTION_ID)
 	}
 
-	qa := s.getQuestionAndAnswer(quizId, questionId)
+	qa, err := s.getQuestionAndAnswer(quizId, questionId)
+	if err != nil {
+		handleErrorAsHttpError(w, http.StatusNotFound, "question not found")
+		return
+	}
+
 	if qa == nil {
 		handleErrorAsHttpError(w, http.StatusNotFound, "question not found")
 		return
@@ -281,7 +291,12 @@ func (s *RestServer) storeAnswerCorrectnessAndGetSubmissionResult(w http.Respons
 			}
 		}
 
-		return s.createSubmissionResultForSection(result, quizId, questionId, nextQuestionSectionId, stats)
+		result, err := s.createSubmissionResultForSection(result, quizId, questionId, nextQuestionSectionId, stats)
+		if err != nil {
+			return nil, fmt.Errorf("createSubmissionResultForSection() failed: %v", err)
+		}
+
+		return result, nil
 	} else {
 		var stats map[string]*domainuser.Stats
 		if len(userId) != 0 {
@@ -296,7 +311,12 @@ func (s *RestServer) storeAnswerCorrectnessAndGetSubmissionResult(w http.Respons
 			}
 		}
 
-		return s.createSubmissionResult(result, quizId, questionId, nextQuestionSectionId, stats)
+		result, err := s.createSubmissionResult(result, quizId, questionId, nextQuestionSectionId, stats)
+		if err != nil {
+			return nil, fmt.Errorf("createSubmissionResultForSection() failed: %v", err)
+		}
+
+		return result, nil
 	}
 }
 
@@ -304,9 +324,9 @@ func (s *RestServer) storeAnswerCorrectnessAndGetSubmissionResult(w http.Respons
  * stats may be nil.
  */
 func (s *RestServer) createSubmissionResult(result bool, quizId string, questionId string, nextQuestionSectionId string, stats map[string]*domainuser.Stats) (*SubmissionResult, error) {
-	quizCache, ok := s.quizCacheMap[quizId]
-	if !ok {
-		return nil, fmt.Errorf("Couldn't find quiz in quizCacheMap with quiz ID: %v", quizId)
+	quizCache, err := s.getQuizCache(quizId)
+	if err != nil {
+		return nil, fmt.Errorf("couldn't find quiz in quizCacheMap with quiz ID: %v: %v", quizId, err)
 	}
 
 	//We only provide the correct answer if the supplied answer was wrong:
@@ -320,14 +340,18 @@ func (s *RestServer) createSubmissionResult(result bool, quizId string, question
 		return nil, fmt.Errorf("Couldn't find quiz with quiz ID: %v", quizId)
 	}
 
-	nextQuestion := s.getNextQuestionFromUserStats(nextQuestionSectionId, q, stats)
+	nextQuestion, err := s.getNextQuestionFromUserStats(nextQuestionSectionId, q, stats)
+	if err != nil {
+		return nil, fmt.Errorf("getNextQuestionFromUserStats() failed: %v", err)
+	}
+
 	return s.generateSubmissionResult(result, quizCache, correctAnswer, nextQuestion)
 }
 
 func (s *RestServer) createSubmissionResultForSection(result bool, quizId string, questionId string, nextQuestionSectionId string, stats *domainuser.Stats) (*SubmissionResult, error) {
-	quizCache, ok := s.quizCacheMap[quizId]
-	if !ok {
-		return nil, fmt.Errorf("Couldn't find quiz in quizCacheMap with quiz ID: %v", quizId)
+	quizCache, err := s.getQuizCache(quizId)
+	if err != nil {
+		return nil, fmt.Errorf("couldn't find quiz in quizCacheMap with quiz ID: %v: %v", quizId, err)
 	}
 
 	//We only provide the correct answer if the supplied answer was wrong:
@@ -341,8 +365,17 @@ func (s *RestServer) createSubmissionResultForSection(result bool, quizId string
 		return nil, fmt.Errorf("Couldn't find quiz with quiz ID: %v", quizId)
 	}
 
-	nextQuestion := s.getNextQuestionFromUserStatsForSection(nextQuestionSectionId, q, stats)
-	return s.generateSubmissionResult(result, quizCache, correctAnswer, nextQuestion)
+	nextQuestion, err := s.getNextQuestionFromUserStatsForSection(nextQuestionSectionId, q, stats)
+	if err != nil {
+		return nil, fmt.Errorf("getNextQuestionFromUserStatsForSection() failed: %v", err)
+	}
+
+	submissionresult, err := s.generateSubmissionResult(result, quizCache, correctAnswer, nextQuestion)
+	if err != nil {
+		return nil, fmt.Errorf("generateSubmissionResult() failed: %v", err)
+	}
+
+	return submissionresult, nil
 }
 
 func (s *RestServer) generateSubmissionResult(result bool, quizCache *QuizCache, correctAnswer *restquiz.Text, nextQuestion *restquiz.Question) (*SubmissionResult, error) {
@@ -360,7 +393,7 @@ func (s *RestServer) generateSubmissionResult(result bool, quizCache *QuizCache,
 	return &submissionResult, nil
 }
 
-func (s *RestServer) getNextQuestionFromUserStats(sectionId string, q *restquiz.Quiz, stats map[string]*domainuser.Stats) *restquiz.Question {
+func (s *RestServer) getNextQuestionFromUserStats(sectionId string, q *restquiz.Quiz, stats map[string]*domainuser.Stats) (*restquiz.Question, error) {
 	const MAX_TRIES int = 10
 	var tries int
 	var question *restquiz.Question
@@ -370,7 +403,12 @@ func (s *RestServer) getNextQuestionFromUserStats(sectionId string, q *restquiz.
 	for tries < MAX_TRIES {
 		tries += 1
 
-		question = s.GetRandomQuestion(q, sectionId)
+		var err error
+		question, err = s.GetRandomQuestion(q, sectionId)
+		if err != nil {
+			return nil, fmt.Errorf("GetRandomQuestion() failed: %v", err)
+		}
+
 		if question == nil {
 			continue
 		}
@@ -381,20 +419,20 @@ func (s *RestServer) getNextQuestionFromUserStats(sectionId string, q *restquiz.
 
 		if stats == nil {
 			//Assume this means the user has never answered any question in any section.
-			return question
+			return question, nil
 		}
 
 		userStats, ok := stats[question.SectionId]
 		if !ok || userStats == nil {
 			//Assume this means the user has never answered any question in the section.
-			return question
+			return question, nil
 		}
 
 		questionId := question.Id
 
 		//Prioritize questions that have never been asked.
 		if !userStats.GetQuestionWasAnswered(questionId) {
-			return question
+			return question, nil
 		}
 
 		//Otherwise, try a few times to get a question that
@@ -408,12 +446,13 @@ func (s *RestServer) getNextQuestionFromUserStats(sectionId string, q *restquiz.
 		}
 	}
 
-	return questionBestSoFar
+	return questionBestSoFar, nil
 }
 
 /** stats may be nil
  */
-func (s *RestServer) getNextQuestionFromUserStatsForSection(sectionId string, quiz *restquiz.Quiz, stats *domainuser.Stats) *restquiz.Question {
+func (s *RestServer) getNextQuestionFromUserStatsForSection(
+	sectionId string, quiz *restquiz.Quiz, stats *domainuser.Stats) (*restquiz.Question, error) {
 	//TODO: Avoid this temporary map:
 	m := make(map[string]*domainuser.Stats)
 
@@ -421,7 +460,12 @@ func (s *RestServer) getNextQuestionFromUserStatsForSection(sectionId string, qu
 		m[stats.SectionId] = stats
 	}
 
-	return s.getNextQuestionFromUserStats(sectionId, quiz, m)
+	result, err := s.getNextQuestionFromUserStats(sectionId, quiz, m)
+	if err != nil {
+		return nil, fmt.Errorf("getNextQuestionFromUserStats() failed: %v", err)
+	}
+
+	return result, nil
 }
 
 /** Update the user.Stats for the question's quiz section, in the database,
@@ -500,13 +544,13 @@ func answerIsCorrect(answer string, correctAnswer *restquiz.Text) bool {
 	return correctAnswer.Text == answer
 }
 
-func (s *RestServer) getQuestionAndAnswer(quizId string, questionId string) *restquiz.QuestionAndAnswer {
-	quizCache, ok := s.quizCacheMap[quizId]
-	if !ok {
-		return nil
+func (s *RestServer) getQuestionAndAnswer(quizId string, questionId string) (*restquiz.QuestionAndAnswer, error) {
+	quizCache, err := s.getQuizCache(quizId)
+	if err != nil {
+		return nil, fmt.Errorf("could not find quiz cache for quiz with ID: %v: %v", quizId, err)
 	}
 
-	return quizCache.GetQuestionAndAnswer(questionId)
+	return quizCache.GetQuestionAndAnswer(questionId), nil
 }
 
 func (s *RestServer) buildRestUserHistorySections(loginInfo *restuser.LoginInfo, quiz *restquiz.Quiz, mapUserStats map[string]*domainuser.Stats) (*restuser.HistorySections, error) {
@@ -546,8 +590,8 @@ func (s *RestServer) buildRestUserHistorySections(loginInfo *restuser.LoginInfo,
 			userStats.SectionId = sectionId
 		}
 
-		quizCache, ok := s.quizCacheMap[quizId]
-		if !ok {
+		quizCache, err := s.getQuizCache(quizId)
+		if err != nil {
 			return nil, fmt.Errorf("could not find quiz cache for quiz with ID: %v", quizId)
 		}
 
@@ -578,10 +622,9 @@ func (s *RestServer) fillUserStatsWithExtras(userStats *restuser.Stats, qz *rest
 	// Set the titles.
 	// We don't store these in the datastore because we can get them easily from the Quiz.
 
-	quizCache, ok := s.quizCacheMap[qz.Id]
-	if !ok {
-		// TODO:  fmt.Errorf("Couldn't find quiz in quizCacheMap with quiz ID: %v", quizId)
-		return fmt.Errorf("Could not find quiz cache for quiz with ID: %v", qz.Id)
+	quizCache, err := s.getQuizCache(qz.Id)
+	if err != nil {
+		return fmt.Errorf("couldn't find quiz in quizCacheMap with quiz ID: %v: %v", qz.Id, err)
 	}
 
 	// TODO: Only send the top problem question histories in the JSON,

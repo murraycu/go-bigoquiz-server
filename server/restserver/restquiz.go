@@ -109,9 +109,10 @@ func (s *RestServer) HandleQuizQuestionById(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	quizCache, ok := s.quizCacheMap[quizId]
-	if !ok {
-		http.Error(w, "quiz cache not found for quiz", http.StatusNotFound)
+	quizCache, err := s.getQuizCache(q.Id)
+	if err != nil {
+		handleErrorAsHttpError(w, http.StatusNotFound, "quiz cache not found")
+		return
 	}
 
 	qa := quizCache.GetQuestionAndAnswer(questionId)
