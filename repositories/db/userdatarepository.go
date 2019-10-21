@@ -61,6 +61,9 @@ func (db *UserDataRepository) getProfileFromDbByGitHubID(c context.Context, id i
 	return db.getProfileFromDbQuery(c, q)
 }
 
+// Create, or update (if strUsedId is not empty) a user profile,
+// using the provided Google login data.
+// Returns the user ID.
 func (db *UserDataRepository) StoreGitHubLoginInUserProfile(c context.Context, userInfo oauthparsers.GitHubUserInfo, strUserId string, token *oauth2.Token) (string, error) {
 	userIdFound, profile, err := db.getProfileFromDbByGitHubID(c, userInfo.Id)
 	if err != nil {
@@ -118,6 +121,9 @@ func (db *UserDataRepository) getProfileFromDbByFacebookID(c context.Context, id
 	return db.getProfileFromDbQuery(c, q)
 }
 
+// Create, or update (if strUsedId is not empty) a user profile,
+// using the provided Facebook login data.
+// Returns the user ID.
 func (db *UserDataRepository) StoreFacebookLoginInUserProfile(c context.Context, userInfo oauthparsers.FacebookUserInfo, strUserId string, token *oauth2.Token) (string, error) {
 	userIdFound, profile, err := db.getProfileFromDbByFacebookID(c, userInfo.Id)
 	if err != nil {
@@ -186,6 +192,10 @@ func (db *UserDataRepository) getProfileFromDbByUserID(c context.Context, userId
 	return &profile, nil
 }
 
+// Create, or update (if strUsedId is not empty) a user profile,
+// using the provided Google login data.
+// Returns the user ID.
+//
 // TODO: Make this function generic, parameterizing on GoogleUserInfo/GithubUserInfo,
 // if Go ever has generics.
 // Get the UserProfile via the GoogleID, adding it if necessary.
