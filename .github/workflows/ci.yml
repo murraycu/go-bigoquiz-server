@@ -20,4 +20,6 @@ jobs:
       run: make
 
     - name: Test
-      run: make test
+      run: |
+        sudo apt-get install google-cloud-sdk-datastore-emulator
+        make full-test
