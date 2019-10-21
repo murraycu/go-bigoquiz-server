@@ -1,7 +1,9 @@
 package restserver
 
 import (
+	"github.com/murraycu/go-bigoquiz-server/repositories/quizzes"
 	"github.com/stretchr/testify/assert"
+	"path/filepath"
 	"testing"
 )
 
@@ -88,4 +90,137 @@ func TestQuizCacheGetSubSection(t *testing.T) {
 
 	subSection := quizCache.GetSubSection(sectionId, subSectionId)
 	assert.NotNil(t, subSection)
+}
+
+func loadRealRestQuizzes(t *testing.T) restQuizMap {
+	directoryFilepath, err := filepath.Abs("../../quizzes")
+	assert.Nil(t, err)
+	assert.NotNil(t, directoryFilepath)
+
+	quizzesStore, err := quizzes.NewQuizzesRepository(directoryFilepath)
+	assert.Nil(t, err)
+	assert.NotNil(t, quizzesStore)
+
+	quizzes, err := quizzesStore.LoadQuizzes()
+	assert.Nil(t, err)
+	assert.NotNil(t, quizzes)
+
+	restQuizzes, err := convertDomainQuizzesToRestQuizzes(quizzes)
+	assert.Nil(t, err)
+	assert.NotNil(t, quizzes)
+
+	return restQuizzes
+}
+
+func TestQuizCacheNewWithRealQuizzes(t *testing.T) {
+	restQuizzes := loadRealRestQuizzes(t)
+
+	for _, quiz := range restQuizzes {
+		quizCache, err := NewQuizCache(quiz)
+		assert.Nil(t, err)
+		assert.NotNil(t, quizCache)
+	}
+}
+
+func TestQuizCacheRealQuizHasQuestions(t *testing.T) {
+	restQuizzes := loadRealRestQuizzes(t)
+
+	for _, quiz := range restQuizzes {
+		quizCache, err := NewQuizCache(quiz)
+		assert.Nil(t, err)
+		assert.NotNil(t, quizCache)
+
+		assert.NotZero(t, quizCache.GetQuestionsCount())
+	}
+}
+
+/* TODO: Check if there are reverse sections, if there should be reverse sections.
+func TestQuizCacheRealQuizHasReverseSections(t *testing.T) {
+	restQuizzes := loadRealRestQuizzes(t)
+
+	for _, quiz := range restQuizzes {
+		quizCache, err := NewQuizCache(quiz)
+		assert.Nil(t, err)
+		assert.NotNil(t, quizCache)
+
+		reverseSectionFound := false
+		for _, section := range quiz.Sections {
+			if strings.HasPrefix(section.Id, "reverse-") {
+				reverseSectionFound = true
+				break
+			}
+		}
+
+		assert.True(t, reverseSectionFound)
+	}
+}
+*/
+
+func TestQuizCacheRealQuizFound(t *testing.T) {
+	restQuizzes := loadRealRestQuizzes(t)
+	graph, ok := restQuizzes["graphs"]
+	assert.True(t, ok)
+	assert.NotNil(t, graph)
+}
+
+func TestQuizCacheRealQuizShouldNotHaveReverseSections(t *testing.T) {
+	restQuizzes := loadRealRestQuizzes(t)
+
+	// TODO: This depends on knowledge of the real quiz.
+	quiz, ok := restQuizzes["compilers"]
+	assert.True(t, ok)
+	assert.NotNil(t, quiz)
+
+	quizCache, err := NewQuizCache(quiz)
+	assert.Nil(t, err)
+	assert.NotNil(t, quizCache)
+
+	section, err := quizCache.GetSection("reverse-compilers-structure")
+	assert.Nil(t, section)
+}
+
+func TestQuizCacheRealQuizShouldHaveReverseSections(t *testing.T) {
+	restQuizzes := loadRealRestQuizzes(t)
+
+	// TODO: This depends on knowledge of the real quiz.
+	quiz, ok := restQuizzes["graphs"]
+	assert.True(t, ok)
+	assert.NotNil(t, quiz)
+
+	quizCache, err := NewQuizCache(quiz)
+	assert.Nil(t, err)
+	assert.NotNil(t, quizCache)
+
+	section, err := quizCache.GetSection("reverse-graph-algorithm-definitions-shortest-path")
+	assert.Nil(t, err)
+	assert.NotNil(t, section)
+}
+
+func TestQuizCacheRealQuizHasChoices(t *testing.T) {
+	restQuizzes := loadRealRestQuizzes(t)
+
+	for _, quiz := range restQuizzes {
+		quizCache, err := NewQuizCache(quiz)
+		assert.Nil(t, err)
+		assert.NotNil(t, quizCache)
+
+		err = fillRestQuizExtrasFromQuizCache(quiz, quizCache)
+		assert.Nil(t, err)
+
+		for _, section := range quiz.Sections {
+			if section.AnswersAsChoices {
+				for _, question := range section.Questions {
+					assert.NotEmpty(t, question.Question.Choices)
+				}
+			}
+
+			for _, subSection := range section.SubSections {
+				if subSection.AnswersAsChoices {
+					for _, question := range subSection.Questions {
+						assert.NotEmpty(t, question.Question.Choices)
+					}
+				}
+			}
+		}
+	}
 }
