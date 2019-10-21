@@ -48,7 +48,7 @@ func filesWithExtension(dirPath string, ext string) ([]string, error) {
 	return result, nil
 }
 
-func loadQuiz(id string) (*dtoquiz.Quiz, error) {
+func loadQuizAsDto(id string) (*dtoquiz.Quiz, error) {
 	absFilePath, err := filepath.Abs("quizzes/" + id + ".xml")
 	if err != nil {
 		fmt.Println(err)
@@ -60,7 +60,7 @@ func loadQuiz(id string) (*dtoquiz.Quiz, error) {
 
 type MapDtoQuizzes map[string]*dtoquiz.Quiz
 
-func loadQuizzes() (MapDtoQuizzes, error) {
+func loadQuizzesAsDto() (MapDtoQuizzes, error) {
 	quizzes := make(MapDtoQuizzes, 0)
 
 	absFilePath, err := filepath.Abs("quizzes")
@@ -76,7 +76,7 @@ func loadQuizzes() (MapDtoQuizzes, error) {
 	}
 
 	for _, name := range quizNames {
-		q, err := loadQuiz(name)
+		q, err := loadQuizAsDto(name)
 		if err != nil {
 			fmt.Println(err)
 			return quizzes, err
@@ -88,8 +88,8 @@ func loadQuizzes() (MapDtoQuizzes, error) {
 	return quizzes, nil
 }
 
-func (q *QuizzesRepository) GetQuizzes() (MapQuizzes, error) {
-	quizzes, err := loadQuizzes()
+func (q *QuizzesRepository) LoadQuizzes() (MapQuizzes, error) {
+	quizzes, err := loadQuizzesAsDto()
 	if err != nil {
 		return nil, fmt.Errorf("could not load quiz files: %v", err)
 	}
