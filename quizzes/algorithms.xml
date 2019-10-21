@@ -429,14 +429,14 @@
             <answer>NP-Complete</answer>
         </question>
 
-        <question id="polynomial-or-np-complete-knapsack-problem">
+        <question id="polynomial-or-np-complete-0-1-knapsack-problem">
             <text>(O-1) Knapsack Problem</text>
             <link>https://en.wikipedia.org/wiki/Knapsack_problem</link>
             <answer>NP-Complete</answer>
             <note>This is solvable by dynamic programming. The Fractional Knapsack problem is Polynomial, and solvable via a greedy algorithm.</note>
         </question>
 
-        <question id="polynomial-or-np-complete-knapsack-problem">
+        <question id="polynomial-or-np-complete-fractional-knapsack-problem">
             <text>Fractional Knapsack Problem</text>
             <link>https://en.wikipedia.org/wiki/Continuous_knapsack_problem</link>
             <answer>Polynomial</answer>

@@ -249,7 +249,7 @@
             <link>https://en.wikipedia.org/wiki/Integer_%28computer_science%29#Bytes_and_octets</link>
             <answer>8 bits</answer>
         </question>
-        <question id="units-bits-byte">
+        <question id="units-bits-word">
             <text>Word</text>
             <link>https://en.wikipedia.org/wiki/Integer_%28computer_science%29#Words</link>
             <answer>8/16/32/64 bits (depending on CPU)</answer>

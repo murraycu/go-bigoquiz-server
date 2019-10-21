@@ -265,7 +265,7 @@
             <answer>An abelian group whose operation is addition.</answer>
         </question>
 
-        <question id="fmtgp-groups-additive">
+        <question id="fmtgp-groups-multiplicative">
             <text>Multiplicative Group</text>
             <link>https://en.wikipedia.org/wiki/Multiplicative_group</link>
             <answer>An abelian group whose operation is multiplication.</answer>
