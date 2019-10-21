@@ -34,7 +34,7 @@
             <answer>Encapsulates interchangeable behaviors and uses delegation to decide which one to use.</answer>
         </question>
 
-        <question id="definition-strategy">
+        <question id="definition-proxy">
             <text>Proxy</text>
             <link>https://en.wikipedia.org/wiki/Proxy_pattern</link>
             <answer>Wraps an object to control access to it.</answer>
