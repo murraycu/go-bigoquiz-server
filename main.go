@@ -15,6 +15,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 )
 
 func main() {
@@ -38,7 +39,13 @@ func main() {
 		return
 	}
 
-	quizzesStore, err := quizzes.NewQuizzesRepository()
+	directoryFilepath, err := filepath.Abs("quizzes")
+	if err != nil {
+		log.Fatalf("Couldn't get absolute filepath for quizzes: %v", err)
+		return
+	}
+
+	quizzesStore, err := quizzes.NewQuizzesRepository(directoryFilepath)
 	if err != nil {
 		log.Fatalf("NewQuizzesRepository failed: %v\n", err)
 		return

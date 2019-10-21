@@ -10,6 +10,7 @@ import (
 )
 
 type QuizzesRepository struct {
+	directoryPath string
 }
 
 // Map of quiz IDs to Quiz.
@@ -19,8 +20,11 @@ type QuizzesAndCaches struct {
 	Quizzes MapQuizzes
 }
 
-func NewQuizzesRepository() (*QuizzesRepository, error) {
+/** directoryPath is the path to a directory containing quizzes in XML files.
+ */
+func NewQuizzesRepository(directoryPath string) (*QuizzesRepository, error) {
 	result := &QuizzesRepository{}
+	result.directoryPath = directoryPath
 
 	return result, nil
 }
@@ -48,10 +52,10 @@ func filesWithExtension(dirPath string, ext string) ([]string, error) {
 	return result, nil
 }
 
-func loadQuizAsDto(id string) (*dtoquiz.Quiz, error) {
-	absFilePath, err := filepath.Abs("quizzes/" + id + ".xml")
+func loadQuizAsDto(directoryFilepath string, id string) (*dtoquiz.Quiz, error) {
+	fullPath := filepath.Join(directoryFilepath, id+".xml")
+	absFilePath, err := filepath.Abs(fullPath)
 	if err != nil {
-		fmt.Println(err)
 		return nil, err
 	}
 
@@ -60,23 +64,17 @@ func loadQuizAsDto(id string) (*dtoquiz.Quiz, error) {
 
 type MapDtoQuizzes map[string]*dtoquiz.Quiz
 
-func loadQuizzesAsDto() (MapDtoQuizzes, error) {
+func loadQuizzesAsDto(directoryFilepath string) (MapDtoQuizzes, error) {
 	quizzes := make(MapDtoQuizzes, 0)
 
-	absFilePath, err := filepath.Abs("quizzes")
-	if err != nil {
-		fmt.Println(err)
-		return quizzes, err
-	}
-
-	quizNames, err := filesWithExtension(absFilePath, "xml")
+	quizNames, err := filesWithExtension(directoryFilepath, "xml")
 	if err != nil {
 		fmt.Println(err)
 		return quizzes, err
 	}
 
 	for _, name := range quizNames {
-		q, err := loadQuizAsDto(name)
+		q, err := loadQuizAsDto(directoryFilepath, name)
 		if err != nil {
 			fmt.Println(err)
 			return quizzes, err
@@ -89,7 +87,7 @@ func loadQuizzesAsDto() (MapDtoQuizzes, error) {
 }
 
 func (q *QuizzesRepository) LoadQuizzes() (MapQuizzes, error) {
-	quizzes, err := loadQuizzesAsDto()
+	quizzes, err := loadQuizzesAsDto(q.directoryPath)
 	if err != nil {
 		return nil, fmt.Errorf("could not load quiz files: %v", err)
 	}
