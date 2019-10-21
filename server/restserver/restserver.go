@@ -48,9 +48,9 @@ func NewRestServer(quizzesStore *quizzes.QuizzesRepository, userSessionStore *us
 		return nil, fmt.Errorf("NewUserDataRepository() failed: %v", err)
 	}
 
-	quizzes, err := quizzesStore.GetQuizzes()
+	quizzes, err := quizzesStore.LoadQuizzes()
 	if err != nil {
-		return nil, fmt.Errorf("GetQuizzes() failed: %v", err)
+		return nil, fmt.Errorf("LoadQuizzes() failed: %v", err)
 	}
 
 	result.quizzes, err = convertDomainQuizzesToRestQuizzes(quizzes)
