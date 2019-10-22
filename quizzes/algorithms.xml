@@ -78,7 +78,7 @@
                     <answer>O(n log(n))</answer>
                 </question>
                 <question id="algorithms-sort-time-3-way-quicksort">
-                    <text>Quicksort</text>
+                    <text>3-Way Quicksort</text>
                     <link>https://en.wikipedia.org/wiki/Quicksort#Repeated_elements</link>
                     <answer>O(n log(n))</answer>
                     <note>But worst time is O(n^2). O(n log(n)) time requires randomization.</note>
