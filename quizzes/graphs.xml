@@ -2,7 +2,7 @@
 <quiz xmlns="https://bigoquiz.com/document" format_version="1" id="graphs">
     <title>Graphs</title>
 
-    <section id="terminology" answers_as_choices="true">
+    <section id="terminology" answers_as_choices="true" and_reverse="true">
         <title>Terminology</title>
         <question id="terminology-undirected-graph">
             <text>Undirected Graph</text>
@@ -169,7 +169,7 @@
         </question>
     </section>
 
-    <section id="polynomial-time-problems-definitions" answers_as_choices="true">
+    <section id="polynomial-time-problems-definitions" answers_as_choices="true" and_reverse="true">
         <title>Definitions: Polynomial-Time Problems</title>
         <question id="definition-connected-components">
             <text>Connected Components</text>
@@ -298,7 +298,7 @@
 
     </section>
 
-    <section id="hard-problems-definitions" answers_as_choices="true">
+    <section id="hard-problems-definitions" answers_as_choices="true" and_reverse="true">
         <title>Definitions: Hard Problems</title>
         <question id="definition-clique">
             <text>Clique</text>
@@ -385,7 +385,7 @@
         </question>
     </section>
 
-    <section id="polynomial-or-np-complete" answers_as_choices="true">
+    <section id="polynomial-or-np-complete" answers_as_choices="true" and_reverse="true">
         <title>Polynomial or NP-complete</title>
         <question id="polynomial-or-np-complete-connected-components">
             <text>Connected Components</text>
@@ -601,7 +601,7 @@
         <!-- TODO: Mention the critical path method. Pages 663 and 666 of Sedgewick. -->
     </section>
 
-    <section id="graph-algorithm-purposes-shortest-path" answers_as_choices="true">
+    <section id="graph-algorithm-purposes-shortest-path" answers_as_choices="true" and_reverse="true">
         <title>Graph Algorithm Purposes: Shortest Path</title>
 
         <question id="purpose-bellman-ford">
@@ -633,7 +633,7 @@
         </question>
     </section>
 
-    <section id="graph-algorithm-purposes-others" answers_as_choices="true">
+    <section id="graph-algorithm-purposes-others" answers_as_choices="true" and_reverse="true">
         <title>Graph Algorithm Purposes: Others</title>
         <question id="purpose-prims">
             <text>Prim's Algorithm</text>
@@ -900,7 +900,7 @@
         </question>
     </section>
 
-    <section id="graph-bfs-or-dfs" answers_as_choices="true">
+    <section id="graph-bfs-or-dfs" answers_as_choices="true" and_reverse="true">
         <title>Breadth First Search (BFS) or Depth First Search (DFS)</title>
         <question id="bfs-or-dfs-shortest-path">
             <text>Single Source Shortest Path (unweighted)</text>
@@ -969,7 +969,7 @@
     <!-- TODO: This needs an example of a dense graph that occurs naturally,
     instead of being a subset of a sparse graph.
     Note: In sparse graphs, the number of edges increases linearly with the number of vertices.
-    <section  id="graph-sparse-or-dense" answers_as_choices="true" >
+    <section  id="graph-sparse-or-dense" answers_as_choices="true" and_reverse="true">
         <title>Sparse or Dense Graphs</title>
 
         <question id="graph-sparse-or-dense-list">
