@@ -28,13 +28,13 @@ func (s *RestServer) HandleQuizAll(w http.ResponseWriter, r *http.Request, _ htt
 
 	jsonStr, err := json.Marshal(quizArray)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	_, err = w.Write(jsonStr)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 	}
 }
 
@@ -46,13 +46,13 @@ func (s *RestServer) HandleQuizById(w http.ResponseWriter, r *http.Request, ps h
 	quizId := ps.ByName(PATH_PARAM_QUIZ_ID)
 	if quizId == "" {
 		// This makes no sense. restHandleQuizAll() should have been called.
-		http.Error(w, "Empty quiz ID", http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, "Empty quiz ID")
 		return
 	}
 
 	q := s.getQuiz(quizId)
 	if q == nil {
-		http.Error(w, "quiz not found", http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, "quiz not found")
 		return
 	}
 
@@ -61,13 +61,13 @@ func (s *RestServer) HandleQuizById(w http.ResponseWriter, r *http.Request, ps h
 
 	jsonStr, err := json.Marshal(q)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	_, err = w.Write(jsonStr)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 	}
 }
 
@@ -82,13 +82,13 @@ func (s *RestServer) HandleQuizSectionsByQuizId(w http.ResponseWriter, r *http.R
 	quizId := ps.ByName(PATH_PARAM_QUIZ_ID)
 	if quizId == "" {
 		// This makes no sense. restHandleQuizAll() should have been called.
-		http.Error(w, "Empty quiz ID", http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, "Empty quiz ID")
 		return
 	}
 
 	q := s.getQuiz(quizId)
 	if q == nil {
-		http.Error(w, "quiz not found", http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, "quiz not found")
 		return
 	}
 
@@ -106,13 +106,13 @@ func (s *RestServer) HandleQuizSectionsByQuizId(w http.ResponseWriter, r *http.R
 
 	jsonStr, err := json.Marshal(sections)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	_, err = w.Write(jsonStr)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 	}
 }
 
@@ -120,26 +120,26 @@ func (s *RestServer) HandleQuizQuestionById(w http.ResponseWriter, r *http.Reque
 	quizId := ps.ByName(PATH_PARAM_QUIZ_ID)
 	if quizId == "" {
 		// This makes no sense. restHandleQuizAll() should have been called.
-		http.Error(w, "Empty quiz ID", http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, "Empty quiz ID")
 		return
 	}
 
 	questionId := ps.ByName(PATH_PARAM_QUESTION_ID)
 	if questionId == "" {
 		// This makes no sense.
-		http.Error(w, "Empty question ID", http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, "Empty question ID")
 		return
 	}
 
 	q := s.getQuiz(quizId)
 	if q == nil {
-		http.Error(w, "quiz not found", http.StatusNotFound)
+		handleErrorAsHttpError(w, http.StatusNotFound, "quiz not found")
 		return
 	}
 
 	qa := q.GetQuestionAndAnswer(questionId)
 	if qa == nil {
-		http.Error(w, "question not found", http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, "question not found")
 		return
 	}
 
@@ -147,12 +147,12 @@ func (s *RestServer) HandleQuizQuestionById(w http.ResponseWriter, r *http.Reque
 
 	jsonStr, err := json.Marshal(qa.Question)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	_, err = w.Write(jsonStr)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 	}
 }

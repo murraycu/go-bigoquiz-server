@@ -21,19 +21,19 @@ func (s *RestServer) HandleQuestionNext(w http.ResponseWriter, r *http.Request, 
 	if len(quizId) == 0 {
 		// TODO: One day we might let the user answer questions from a
 		// random quiz, so they wouldn't have to specify a quiz-id.
-		http.Error(w, "No quiz-id specified", http.StatusBadRequest)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, "No quiz-id specified")
 		return
 	}
 
 	q := s.getQuiz(quizId)
 	if q == nil {
-		http.Error(w, "quiz not found", http.StatusNotFound)
+		handleErrorAsHttpError(w, http.StatusNotFound, "quiz not found")
 		return
 	}
 
 	userId, err := s.getUserIdFromSessionAndDb(r, w)
 	if err != nil {
-		http.Error(w, "logged-in check failed.", http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, "logged-in check failed.")
 		return
 	}
 
@@ -47,14 +47,14 @@ func (s *RestServer) HandleQuestionNext(w http.ResponseWriter, r *http.Request, 
 
 		dbClient, err := db.NewUserDataRepository()
 		if err != nil {
-			http.Error(w, "failed getting stats for user (failed to connect to user data repository)", http.StatusInternalServerError)
+			handleErrorAsHttpError(w, http.StatusInternalServerError, "failed getting stats for user (failed to connect to user data repository)")
 			return
 		}
 
 		if len(sectionId) == 0 {
 			mapUserStats, err := dbClient.GetUserStatsForQuiz(c, userId, quizId)
 			if err != nil {
-				http.Error(w, "failed getting stats for user", http.StatusInternalServerError)
+				handleErrorAsHttpError(w, http.StatusInternalServerError, "failed getting stats for user")
 				return
 			}
 
@@ -64,7 +64,7 @@ func (s *RestServer) HandleQuestionNext(w http.ResponseWriter, r *http.Request, 
 			//map, but it seems more efficient to avoid an unnecessary Map.
 			userStats, err := dbClient.GetUserStatsForSection(c, userId, sectionId, quizId)
 			if err != nil {
-				http.Error(w, "failed getting stats for user for section", http.StatusInternalServerError)
+				handleErrorAsHttpError(w, http.StatusInternalServerError, "failed getting stats for user for section")
 				return
 			}
 
@@ -73,7 +73,7 @@ func (s *RestServer) HandleQuestionNext(w http.ResponseWriter, r *http.Request, 
 	}
 
 	if question == nil {
-		http.Error(w, "question not found", http.StatusNotFound)
+		handleErrorAsHttpError(w, http.StatusNotFound, "question not found")
 		return
 	}
 
@@ -81,12 +81,12 @@ func (s *RestServer) HandleQuestionNext(w http.ResponseWriter, r *http.Request, 
 
 	jsonStr, err := json.Marshal(question)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	_, err = w.Write(jsonStr)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 	}
 }

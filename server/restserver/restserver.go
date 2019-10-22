@@ -5,6 +5,8 @@ import (
 	"github.com/murraycu/go-bigoquiz-server/repositories"
 	"github.com/murraycu/go-bigoquiz-server/repositories/db"
 	"github.com/murraycu/go-bigoquiz-server/server/usersessionstore"
+	"log"
+	"net/http"
 )
 
 const QUERY_PARAM_QUIZ_ID = "quiz-id"
@@ -37,4 +39,11 @@ func NewRestServer(quizzesStore *repositories.QuizzesRepository, userSessionStor
 	result.userSessionStore = userSessionStore
 
 	return result, nil
+}
+
+func handleErrorAsHttpError(w http.ResponseWriter, code int, format string, a ...interface{}) {
+	msg := fmt.Sprintf(format, a...)
+	log.Print(msg)
+
+	http.Error(w, msg, code)
 }

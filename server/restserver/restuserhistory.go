@@ -32,7 +32,7 @@ func (s StatsListByTitle) Less(i, j int) bool {
 func (s *RestServer) HandleUserHistoryAll(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	loginInfo, userId, err := s.getLoginInfoFromSessionAndDb(r)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -46,7 +46,7 @@ func (s *RestServer) HandleUserHistoryAll(w http.ResponseWriter, r *http.Request
 
 		mapUserStats, err := s.userDataClient.GetUserStats(c, userId)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 			return
 		}
 
@@ -61,7 +61,7 @@ func (s *RestServer) HandleUserHistoryAll(w http.ResponseWriter, r *http.Request
 
 			restStats, err := convertDomainStatsToRestStats(stats, q)
 			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
+				handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 				return
 			}
 
@@ -79,13 +79,13 @@ func (s *RestServer) HandleUserHistoryAll(w http.ResponseWriter, r *http.Request
 
 	jsonStr, err := json.Marshal(info)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	_, err = w.Write(jsonStr)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 	}
 }
 
@@ -93,19 +93,19 @@ func (s *RestServer) HandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Re
 	quizId := ps.ByName(PATH_PARAM_QUIZ_ID)
 	if quizId == "" {
 		// This makes no sense. restHandleQuizAll() should have been called.
-		http.Error(w, "Empty quiz ID", http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, "Empty quiz ID")
 		return
 	}
 
 	q := s.getQuiz(quizId)
 	if q == nil {
-		http.Error(w, "quiz not found", http.StatusNotFound)
+		handleErrorAsHttpError(w, http.StatusNotFound, "quiz not found")
 		return
 	}
 
 	loginInfo, userId, err := s.getLoginInfoFromSessionAndDb(r)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -115,32 +115,32 @@ func (s *RestServer) HandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Re
 
 		dbClient, err := db.NewUserDataRepository()
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 			return
 		}
 
 		mapUserStats, err = dbClient.GetUserStatsForQuiz(c, userId, quizId)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 			return
 		}
 	}
 
 	info, err := s.buildRestUserHistorySections(loginInfo, q, mapUserStats)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	jsonStr, err := json.Marshal(info)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	_, err = w.Write(jsonStr)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 	}
 }
 
@@ -162,39 +162,39 @@ func (s *RestServer) HandleUserHistorySubmitAnswer(w http.ResponseWriter, r *htt
 
 	qa := s.getQuestionAndAnswer(quizId, questionId)
 	if qa == nil {
-		http.Error(w, "question not found", http.StatusNotFound)
+		handleErrorAsHttpError(w, http.StatusNotFound, "question not found")
 		return
 	}
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		http.Error(w, "Could not parse body.", http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, "Could not parse body.")
 		return
 	}
 
 	var submission Submission
 	err = json.Unmarshal(body, &submission)
 	if err != nil {
-		http.Error(w, "Could not parse JSON.", http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, "Could not parse JSON.")
 		return
 	}
 
 	result := answerIsCorrect(submission.Answer, &qa.Answer)
 	submissionResult, err := s.storeAnswerCorrectnessAndGetSubmissionResult(w, r, quizId, questionId, nextQuestionSectionId, qa, result)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	jsonStr, err := json.Marshal(submissionResult)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	_, err = w.Write(jsonStr)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 	}
 }
 
@@ -212,26 +212,26 @@ func (s *RestServer) HandleUserHistorySubmitDontKnowAnswer(w http.ResponseWriter
 
 	qa := s.getQuestionAndAnswer(quizId, questionId)
 	if qa == nil {
-		http.Error(w, "question not found", http.StatusNotFound)
+		handleErrorAsHttpError(w, http.StatusNotFound, "question not found")
 		return
 	}
 
 	//Store this like a don't know answer:
 	submissionResult, err := s.storeAnswerCorrectnessAndGetSubmissionResult(w, r, quizId, questionId, nextQuestionSectionId, qa, false)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	jsonStr, err := json.Marshal(submissionResult)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	_, err = w.Write(jsonStr)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 	}
 }
 
@@ -244,31 +244,31 @@ func (s *RestServer) HandleUserHistoryResetSections(w http.ResponseWriter, r *ht
 	}
 
 	if len(quizId) == 0 {
-		http.Error(w, "quiz-id not specified", http.StatusBadRequest)
+		handleErrorAsHttpError(w, http.StatusBadRequest, "quiz-id not specified")
 		return
 	}
 
 	q := s.getQuiz(quizId)
 	if q == nil {
-		http.Error(w, "quiz not found", http.StatusNotFound)
+		handleErrorAsHttpError(w, http.StatusNotFound, "quiz not found")
 		return
 	}
 
 	userId, err := s.getUserIdFromSessionAndDb(r, w)
 	if err != nil {
-		http.Error(w, "logged-in check failed.", http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, "logged-in check failed.")
 		return
 	}
 
 	if len(userId) == 0 {
 		loginInfo, _, err := s.getLoginInfoFromSessionAndDb(r)
 		if err != nil {
-			http.Error(w, "not logged in. getLoginInfoFromSessionAndDb() returned err.", http.StatusForbidden)
+			handleErrorAsHttpError(w, http.StatusForbidden, "not logged in. getLoginInfoFromSessionAndDb() returned err.")
 			return
 		}
 
 		msg := fmt.Sprintf("not logged in. loginInfo=%v", loginInfo)
-		http.Error(w, msg, http.StatusForbidden)
+		handleErrorAsHttpError(w, http.StatusForbidden, msg)
 		return
 	}
 
@@ -276,13 +276,13 @@ func (s *RestServer) HandleUserHistoryResetSections(w http.ResponseWriter, r *ht
 
 	dbClient, err := db.NewUserDataRepository()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	err = dbClient.DeleteUserStatsForQuiz(c, userId, quizId)
 	if err != nil {
-		http.Error(w, "deletion of stats failed", http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, "deletion of stats failed")
 		return
 	}
 

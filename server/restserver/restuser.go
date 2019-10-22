@@ -14,19 +14,19 @@ import (
 func (s *RestServer) HandleUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	loginInfo, _, err := s.getLoginInfoFromSessionAndDb(r)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	jsonStr, err := json.Marshal(loginInfo)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	_, err = w.Write(jsonStr)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
 	}
 }
 
