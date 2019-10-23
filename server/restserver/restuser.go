@@ -13,7 +13,7 @@ import (
 func (s *RestServer) HandleUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	loginInfo, _, err := s.getLoginInfoFromSessionAndDb(r)
 	if err != nil {
-		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
+		handleErrorAsHttpError(w, http.StatusInternalServerError, "getLoginInfoFromSessionAndDb() failed: %v", err)
 		return
 	}
 

@@ -32,7 +32,7 @@ func (s *RestServer) HandleQuestionNext(w http.ResponseWriter, r *http.Request, 
 
 	userId, err := s.getUserIdFromSessionAndDb(r, w)
 	if err != nil {
-		handleErrorAsHttpError(w, http.StatusInternalServerError, "logged-in check failed.")
+		handleErrorAsHttpError(w, http.StatusInternalServerError, "logged-in check failed. getUserIdFromSessionAndDb() failed: %v", err)
 		return
 	}
 
@@ -46,14 +46,14 @@ func (s *RestServer) HandleQuestionNext(w http.ResponseWriter, r *http.Request, 
 
 		dbClient, err := db.NewUserDataRepository()
 		if err != nil {
-			handleErrorAsHttpError(w, http.StatusInternalServerError, "failed getting stats for user (failed to connect to user data repository)")
+			handleErrorAsHttpError(w, http.StatusInternalServerError, "failed getting stats for user (failed to connect to user data repository). NewUserDataRepository() failed: %v", err)
 			return
 		}
 
 		if len(sectionId) == 0 {
 			mapUserStats, err := dbClient.GetUserStatsForQuiz(c, userId, quizId)
 			if err != nil {
-				handleErrorAsHttpError(w, http.StatusInternalServerError, "failed getting stats for user")
+				handleErrorAsHttpError(w, http.StatusInternalServerError, "failed getting stats for user. GetUserStatsForQuiz() failed: %v", err)
 				return
 			}
 
@@ -63,7 +63,7 @@ func (s *RestServer) HandleQuestionNext(w http.ResponseWriter, r *http.Request, 
 			//map, but it seems more efficient to avoid an unnecessary Map.
 			userStats, err := dbClient.GetUserStatsForSection(c, userId, sectionId, quizId)
 			if err != nil {
-				handleErrorAsHttpError(w, http.StatusInternalServerError, "failed getting stats for user for section")
+				handleErrorAsHttpError(w, http.StatusInternalServerError, "failed getting stats for user for section. GetUserStatsForSection() failed: %v", err)
 				return
 			}
 

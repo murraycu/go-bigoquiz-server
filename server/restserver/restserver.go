@@ -56,6 +56,7 @@ func marshalAndWriteOrHttpError(w http.ResponseWriter, v interface{}) {
 		handleErrorAsHttpError(w, http.StatusInternalServerError, "json.Marshal() failed: %v", err)
 		return
 	}
+
 	_, err = w.Write(jsonStr)
 	if err != nil {
 		handleErrorAsHttpError(w, http.StatusInternalServerError, "w.Write() failed: %v", err)
