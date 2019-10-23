@@ -1,7 +1,6 @@
 package restserver
 
 import (
-	"encoding/json"
 	"github.com/julienschmidt/httprouter"
 	"github.com/murraycu/go-bigoquiz-server/domain/quiz"
 	"net/http"
@@ -26,16 +25,7 @@ func (s *RestServer) HandleQuizAll(w http.ResponseWriter, r *http.Request, _ htt
 	w.Header().Set("Content-Type", "application/json") // normal header
 	w.WriteHeader(http.StatusOK)
 
-	jsonStr, err := json.Marshal(quizArray)
-	if err != nil {
-		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	_, err = w.Write(jsonStr)
-	if err != nil {
-		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
-	}
+	marshalAndWriteOrHttpError(w, quizArray)
 }
 
 func (s *RestServer) getQuiz(quizId string) *quiz.Quiz {
@@ -59,16 +49,7 @@ func (s *RestServer) HandleQuizById(w http.ResponseWriter, r *http.Request, ps h
 	w.Header().Set("Content-Type", "application/json") // normal header
 	w.WriteHeader(http.StatusOK)
 
-	jsonStr, err := json.Marshal(q)
-	if err != nil {
-		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	_, err = w.Write(jsonStr)
-	if err != nil {
-		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
-	}
+	marshalAndWriteOrHttpError(w, q)
 }
 
 func (s *RestServer) HandleQuizSectionsByQuizId(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -104,16 +85,7 @@ func (s *RestServer) HandleQuizSectionsByQuizId(w http.ResponseWriter, r *http.R
 		sections = simpleSections
 	}
 
-	jsonStr, err := json.Marshal(sections)
-	if err != nil {
-		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	_, err = w.Write(jsonStr)
-	if err != nil {
-		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
-	}
+	marshalAndWriteOrHttpError(w, sections)
 }
 
 func (s *RestServer) HandleQuizQuestionById(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -145,14 +117,5 @@ func (s *RestServer) HandleQuizQuestionById(w http.ResponseWriter, r *http.Reque
 
 	qa.Question.SetQuestionExtras(q)
 
-	jsonStr, err := json.Marshal(qa.Question)
-	if err != nil {
-		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	_, err = w.Write(jsonStr)
-	if err != nil {
-		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
-	}
+	marshalAndWriteOrHttpError(w, qa)
 }

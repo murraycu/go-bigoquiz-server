@@ -1,7 +1,6 @@
 package restserver
 
 import (
-	"encoding/json"
 	"github.com/julienschmidt/httprouter"
 	"github.com/murraycu/go-bigoquiz-server/domain/quiz"
 	"github.com/murraycu/go-bigoquiz-server/repositories/db"
@@ -79,14 +78,5 @@ func (s *RestServer) HandleQuestionNext(w http.ResponseWriter, r *http.Request, 
 
 	question.SetQuestionExtras(q)
 
-	jsonStr, err := json.Marshal(question)
-	if err != nil {
-		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	_, err = w.Write(jsonStr)
-	if err != nil {
-		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
-	}
+	marshalAndWriteOrHttpError(w, question)
 }

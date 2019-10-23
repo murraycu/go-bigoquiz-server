@@ -77,16 +77,7 @@ func (s *RestServer) HandleUserHistoryAll(w http.ResponseWriter, r *http.Request
 	// a a convenience to the client.
 	sort.Sort(StatsListByTitle(info.Stats))
 
-	jsonStr, err := json.Marshal(info)
-	if err != nil {
-		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	_, err = w.Write(jsonStr)
-	if err != nil {
-		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
-	}
+	marshalAndWriteOrHttpError(w, info)
 }
 
 func (s *RestServer) HandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -132,16 +123,7 @@ func (s *RestServer) HandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	jsonStr, err := json.Marshal(info)
-	if err != nil {
-		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	_, err = w.Write(jsonStr)
-	if err != nil {
-		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
-	}
+	marshalAndWriteOrHttpError(w, info)
 }
 
 type Submission struct {
@@ -186,16 +168,7 @@ func (s *RestServer) HandleUserHistorySubmitAnswer(w http.ResponseWriter, r *htt
 		return
 	}
 
-	jsonStr, err := json.Marshal(submissionResult)
-	if err != nil {
-		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	_, err = w.Write(jsonStr)
-	if err != nil {
-		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
-	}
+	marshalAndWriteOrHttpError(w, submissionResult)
 }
 
 func (s *RestServer) HandleUserHistorySubmitDontKnowAnswer(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -223,16 +196,7 @@ func (s *RestServer) HandleUserHistorySubmitDontKnowAnswer(w http.ResponseWriter
 		return
 	}
 
-	jsonStr, err := json.Marshal(submissionResult)
-	if err != nil {
-		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	_, err = w.Write(jsonStr)
-	if err != nil {
-		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
-	}
+	marshalAndWriteOrHttpError(w, submissionResult)
 }
 
 func (s *RestServer) HandleUserHistoryResetSections(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
