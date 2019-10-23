@@ -1,6 +1,7 @@
 package restserver
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/murraycu/go-bigoquiz-server/repositories"
 	"github.com/murraycu/go-bigoquiz-server/repositories/db"
@@ -46,4 +47,17 @@ func handleErrorAsHttpError(w http.ResponseWriter, code int, format string, a ..
 	log.Print(msg)
 
 	http.Error(w, msg, code)
+}
+
+// marshalAndWriteOrHttpError() writes the object to the writer as JSON.
+func marshalAndWriteOrHttpError(w http.ResponseWriter, v interface{}) {
+	jsonStr, err := json.Marshal(v)
+	if err != nil {
+		handleErrorAsHttpError(w, http.StatusInternalServerError, "json.Marshal() failed: %v", err)
+		return
+	}
+	_, err = w.Write(jsonStr)
+	if err != nil {
+		handleErrorAsHttpError(w, http.StatusInternalServerError, "w.Write() failed: %v", err)
+	}
 }

@@ -1,7 +1,6 @@
 package restserver
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
@@ -18,16 +17,7 @@ func (s *RestServer) HandleUser(w http.ResponseWriter, r *http.Request, ps httpr
 		return
 	}
 
-	jsonStr, err := json.Marshal(loginInfo)
-	if err != nil {
-		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	_, err = w.Write(jsonStr)
-	if err != nil {
-		handleErrorAsHttpError(w, http.StatusInternalServerError, err.Error())
-	}
+	marshalAndWriteOrHttpError(w, &loginInfo)
 }
 
 // Returns the LoginInfo and the userID.
