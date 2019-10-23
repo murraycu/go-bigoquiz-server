@@ -311,7 +311,7 @@ func (s *RestServer) storeAnswerCorrectnessAndGetSubmissionResult(w http.Respons
 	c := r.Context()
 	if nextQuestionSectionId == sectionId {
 		var stats *domainuser.Stats
-		if len(userId) == 0 {
+		if len(userId) != 0 {
 			stats, err = s.userDataClient.GetUserStatsForSection(c, userId, quizId, nextQuestionSectionId)
 			if err != nil {
 				return nil, fmt.Errorf("GetUserStatsForQuiz() failed: %v", err)
@@ -326,7 +326,7 @@ func (s *RestServer) storeAnswerCorrectnessAndGetSubmissionResult(w http.Respons
 		return s.createSubmissionResultForSection(result, quizId, questionId, nextQuestionSectionId, stats)
 	} else {
 		var stats map[string]*domainuser.Stats
-		if len(userId) == 0 {
+		if len(userId) != 0 {
 			stats, err = s.userDataClient.GetUserStatsForQuiz(c, userId, quizId)
 			if err != nil {
 				return nil, fmt.Errorf("GetUserStatsForQuiz() failed: %v", err)
