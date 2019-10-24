@@ -62,22 +62,23 @@ func (db *UserDataRepository) getProfileFromDbByGitHubID(c context.Context, id i
 }
 
 func (db *UserDataRepository) StoreGitHubLoginInUserProfile(c context.Context, userInfo oauthparsers.GitHubUserInfo, strUserId string, token *oauth2.Token) (string, error) {
-	userId, err := datastore.DecodeKey(strUserId)
-	if err != nil {
-		return "", fmt.Errorf("datastore.DecodeKey() failed: %v", err)
-	}
-
 	userIdFound, profile, err := db.getProfileFromDbByGitHubID(c, userInfo.Id)
 	if err != nil {
 		// An unexpected error.
 		return "", fmt.Errorf("getProfileFromDbByGitHubID() failed: %v", err)
 	}
 
+	var userId *datastore.Key
 	if userIdFound != nil {
 		// Use the found user ID,
 		// ignoring any user id from the caller.
 		userId = userIdFound
-	} else if userId != nil {
+	} else if len(strUserId) != 0 {
+		userId, err := datastore.DecodeKey(strUserId)
+		if err != nil {
+			return "", fmt.Errorf("datastore.DecodeKey() failed: %v", err)
+		}
+
 		// Try getting it via the supplied userID instead:
 		profile, err = db.getProfileFromDbByUserID(c, userId)
 		if err != nil {
@@ -118,22 +119,23 @@ func (db *UserDataRepository) getProfileFromDbByFacebookID(c context.Context, id
 }
 
 func (db *UserDataRepository) StoreFacebookLoginInUserProfile(c context.Context, userInfo oauthparsers.FacebookUserInfo, strUserId string, token *oauth2.Token) (string, error) {
-	userId, err := datastore.DecodeKey(strUserId)
-	if err != nil {
-		return "", fmt.Errorf("datastore.DecodeKey() failed: %v", err)
-	}
-
 	userIdFound, profile, err := db.getProfileFromDbByFacebookID(c, userInfo.Id)
 	if err != nil {
 		// An unexpected error.
 		return "", fmt.Errorf("getProfileFromDbByFacebookID() failed: %v", err)
 	}
 
+	var userId *datastore.Key
 	if userIdFound != nil {
 		// Use the found user ID,
 		// ignoring any user id from the caller.
 		userId = userIdFound
-	} else if userId != nil {
+	} else if len(strUserId) != 0 {
+		userId, err := datastore.DecodeKey(strUserId)
+		if err != nil {
+			return "", fmt.Errorf("datastore.DecodeKey() failed: %v", err)
+		}
+
 		// Try getting it via the supplied userID instead:
 		profile, err = db.getProfileFromDbByUserID(c, userId)
 		if err != nil {
@@ -199,13 +201,13 @@ func (db *UserDataRepository) StoreGoogleLoginInUserProfile(c context.Context, u
 		// Use the found user ID,
 		// ignoring any user id from the caller.
 		userId = userIdFound
-	} else {
+	} else if len(strUserId) != 0 {
+		// Try getting it via the supplied userID instead:
 		userId, err := datastore.DecodeKey(strUserId)
 		if err != nil {
 			return "", fmt.Errorf("datastore.DecodeKey() failed for key: %v: %v", strUserId, err)
 		}
 
-		// Try getting it via the supplied userID instead:
 		profile, err = db.getProfileFromDbByUserID(c, userId)
 		if err != nil {
 			return "", fmt.Errorf("getProfileFromDbByUserID() failed")
