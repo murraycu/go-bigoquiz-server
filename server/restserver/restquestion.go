@@ -3,7 +3,6 @@ package restserver
 import (
 	"github.com/julienschmidt/httprouter"
 	"github.com/murraycu/go-bigoquiz-server/domain/quiz"
-	"github.com/murraycu/go-bigoquiz-server/repositories/db"
 	"net/http"
 )
 
@@ -44,14 +43,8 @@ func (s *RestServer) HandleQuestionNext(w http.ResponseWriter, r *http.Request, 
 	} else {
 		c := r.Context()
 
-		dbClient, err := db.NewUserDataRepository()
-		if err != nil {
-			handleErrorAsHttpError(w, http.StatusInternalServerError, "failed getting stats for user (failed to connect to user data repository). NewUserDataRepository() failed: %v", err)
-			return
-		}
-
 		if len(sectionId) == 0 {
-			mapUserStats, err := dbClient.GetUserStatsForQuiz(c, userId, quizId)
+			mapUserStats, err := s.userDataClient.GetUserStatsForQuiz(c, userId, quizId)
 			if err != nil {
 				handleErrorAsHttpError(w, http.StatusInternalServerError, "failed getting stats for user. GetUserStatsForQuiz() failed: %v", err)
 				return
@@ -61,7 +54,7 @@ func (s *RestServer) HandleQuestionNext(w http.ResponseWriter, r *http.Request, 
 		} else {
 			//This special case is a bit copy-and-pasty of the general case with the
 			//map, but it seems more efficient to avoid an unnecessary Map.
-			userStats, err := dbClient.GetUserStatsForSection(c, userId, sectionId, quizId)
+			userStats, err := s.userDataClient.GetUserStatsForSection(c, userId, sectionId, quizId)
 			if err != nil {
 				handleErrorAsHttpError(w, http.StatusInternalServerError, "failed getting stats for user for section. GetUserStatsForSection() failed: %v", err)
 				return

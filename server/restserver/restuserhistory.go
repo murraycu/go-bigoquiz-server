@@ -6,7 +6,6 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"github.com/murraycu/go-bigoquiz-server/domain/quiz"
 	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
-	"github.com/murraycu/go-bigoquiz-server/repositories/db"
 	restuser "github.com/murraycu/go-bigoquiz-server/server/restserver/user"
 	"golang.org/x/net/context"
 	"io/ioutil"
@@ -104,13 +103,7 @@ func (s *RestServer) HandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Re
 	if loginInfo.LoggedIn && len(userId) != 0 {
 		c := r.Context()
 
-		dbClient, err := db.NewUserDataRepository()
-		if err != nil {
-			handleErrorAsHttpError(w, http.StatusInternalServerError, "NewUserDataRepository() failed: %v", err)
-			return
-		}
-
-		mapUserStats, err = dbClient.GetUserStatsForQuiz(c, userId, quizId)
+		mapUserStats, err = s.userDataClient.GetUserStatsForQuiz(c, userId, quizId)
 		if err != nil {
 			handleErrorAsHttpError(w, http.StatusInternalServerError, "GetUserStatsForQuiz() falied: %v", err)
 			return
@@ -238,13 +231,7 @@ func (s *RestServer) HandleUserHistoryResetSections(w http.ResponseWriter, r *ht
 
 	c := r.Context()
 
-	dbClient, err := db.NewUserDataRepository()
-	if err != nil {
-		handleErrorAsHttpError(w, http.StatusInternalServerError, "NewUserDataRepository() failed: %v", err)
-		return
-	}
-
-	err = dbClient.DeleteUserStatsForQuiz(c, userId, quizId)
+	err = s.userDataClient.DeleteUserStatsForQuiz(c, userId, quizId)
 	if err != nil {
 		handleErrorAsHttpError(w, http.StatusInternalServerError, "deletion of stats failed: %v", err)
 		return
@@ -476,12 +463,7 @@ func (s *RestServer) storeAnswerForSection(c context.Context, result bool, quizI
 
 	sectionStats.UpdateProblemQuestion(question, result)
 
-	dbClient, err := db.NewUserDataRepository()
-	if err != nil {
-		return fmt.Errorf("NewUserDataRepository() failed: %v", err)
-	}
-
-	if err := dbClient.StoreUserStats(c, userId, sectionStats); err != nil {
+	if err := s.userDataClient.StoreUserStats(c, userId, sectionStats); err != nil {
 		return fmt.Errorf("db.StoreUserStat() failed for: %v: %v", sectionStats, err)
 	}
 
