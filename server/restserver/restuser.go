@@ -26,6 +26,11 @@ func (s *RestServer) getProfileFromSessionAndDb(r *http.Request) (*domainuser.Pr
 		return nil, "", fmt.Errorf("GetProfileFromSession() failed: %v", err)
 	}
 
+	if !token.Valid() {
+		// TODO: Revalidate it.
+		return nil, "", fmt.Errorf("oauth token (from session cookie) is not valid")
+	}
+
 	if len(userId) == 0 {
 		// Not an error.
 		// It's just not in the session cookie.
