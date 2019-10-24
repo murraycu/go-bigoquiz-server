@@ -86,9 +86,18 @@ func (s *RestServer) updateLoginInfoFromProfile(loginInfo *restuser.LoginInfo, p
  * Returns an empty user ID, and a nil error, if the user is not logged in.
  */
 func (s *RestServer) getUserIdFromSessionAndDb(r *http.Request, w http.ResponseWriter) (string, error) {
-	userId, _, err := s.userSessionStore.GetProfileFromSession(r)
+	userId, token, err := s.userSessionStore.GetProfileFromSession(r)
 	if err != nil {
 		return "", fmt.Errorf("GetProfileFromSession() failed: %v", err)
+	}
+
+	if !token.Valid() {
+		// TODO: Revalidate it.
+
+		// This is not an error
+		// (it is normal for a token to expire.)
+		// (the user is now not logged in.)
+		return "", nil
 	}
 
 	return userId, nil
