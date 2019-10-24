@@ -547,6 +547,10 @@ func (db *UserDataRepository) DeleteUserStatsForQuiz(c context.Context, strUserI
 			return fmt.Errorf("iter.Next() failed: %v", err)
 		}
 
+		if stats.Key == nil {
+			return fmt.Errorf("The retrieved Stats's key is nil: %v", err)
+		}
+
 		// TODO: Batch these with datastore.DeleteMulti().
 		err = db.client.Delete(c, stats.Key)
 		if err != nil {
