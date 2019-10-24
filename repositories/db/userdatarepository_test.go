@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/oauth2"
 	"testing"
+	"time"
 )
 
 func TestNewRestServerInstantiate(t *testing.T) {
@@ -135,6 +136,9 @@ func TestNewRestServerStoreAndGetStatsForSection(t *testing.T) {
 	userId := createUserInStore(t, c, userDataClient)
 
 	stats := storeUserStatsInStore(t, c, userDataClient, userId)
+
+	// This seems to be necessary for the datastore emulator to let us read the data back reliably.
+	time.Sleep(time.Second * 1)
 
 	result, err := userDataClient.GetUserStatsForSection(c, userId, stats.QuizId, stats.SectionId)
 	assert.Nil(t, err)
