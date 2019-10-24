@@ -1,13 +1,13 @@
 package restserver
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"github.com/murraycu/go-bigoquiz-server/domain/quiz"
 	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
 	restuser "github.com/murraycu/go-bigoquiz-server/server/restserver/user"
-	"golang.org/x/net/context"
 	"io/ioutil"
 	"net/http"
 	"sort"

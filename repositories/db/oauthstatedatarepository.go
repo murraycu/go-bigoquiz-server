@@ -2,8 +2,8 @@ package db
 
 import (
 	"cloud.google.com/go/datastore"
+	"context"
 	"fmt"
-	"golang.org/x/net/context"
 	"time"
 )
 
