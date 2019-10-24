@@ -1,32 +1,23 @@
 package user
 
 import (
-	"github.com/murraycu/go-bigoquiz-server/domain/quiz"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 const TEST_QUESTION_ID = "test-question-id"
 
 func TestStatsCountAnsweredWrong(t *testing.T) {
-	var question quiz.Question
-	question.Id = TEST_QUESTION_ID
 	var stats Stats
-	if stats.GetQuestionCountAnsweredWrong(TEST_QUESTION_ID) != 0 {
-		t.Error("stats.GetQuestionCountAnsweredWrong() did not default to 0.")
-	}
 
-	stats.UpdateProblemQuestion(question.Id, false)
-	if stats.GetQuestionCountAnsweredWrong(TEST_QUESTION_ID) != 1 {
-		t.Error("stats.GetQuestionCountAnsweredWrong() did not increase to 1.")
-	}
+	assert.Equal(t, 0, stats.GetQuestionCountAnsweredWrong(TEST_QUESTION_ID))
 
-	stats.UpdateProblemQuestion(question.Id, false)
-	if stats.GetQuestionCountAnsweredWrong(TEST_QUESTION_ID) != 2 {
-		t.Errorf("stats.GetQuestionCountAnsweredWrong() did not increase to 2. Instead it is %v", stats.GetQuestionCountAnsweredWrong(TEST_QUESTION_ID))
-	}
+	stats.UpdateProblemQuestion(TEST_QUESTION_ID, false)
+	assert.Equal(t, 1, stats.GetQuestionCountAnsweredWrong(TEST_QUESTION_ID))
 
-	stats.UpdateProblemQuestion(question.Id, true)
-	if stats.GetQuestionCountAnsweredWrong(TEST_QUESTION_ID) != 1 {
-		t.Error("stats.GetQuestionCountAnsweredWrong() did not decrease to 1.")
-	}
+	stats.UpdateProblemQuestion(TEST_QUESTION_ID, false)
+	assert.Equal(t, 2, stats.GetQuestionCountAnsweredWrong(TEST_QUESTION_ID))
+
+	stats.UpdateProblemQuestion(TEST_QUESTION_ID, true)
+	assert.Equal(t, 1, stats.GetQuestionCountAnsweredWrong(TEST_QUESTION_ID))
 }
