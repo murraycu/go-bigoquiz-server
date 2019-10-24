@@ -29,7 +29,7 @@ func (s *RestServer) HandleQuestionNext(w http.ResponseWriter, r *http.Request, 
 		return
 	}
 
-	userId, err := s.getUserIdFromSessionAndDb(r, w)
+	userId, err := s.getUserIdFromSessionAndDb(r)
 	if err != nil {
 		handleErrorAsHttpError(w, http.StatusInternalServerError, "logged-in check failed. getUserIdFromSessionAndDb() failed: %v", err)
 		return

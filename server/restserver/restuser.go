@@ -80,7 +80,7 @@ func (s *RestServer) updateLoginInfoFromProfile(loginInfo *restuser.LoginInfo, p
 /** Get the user ID.
  * Returns an empty user ID, and a nil error, if the user is not logged in.
  */
-func (s *RestServer) getUserIdFromSessionAndDb(r *http.Request, w http.ResponseWriter) (string, error) {
+func (s *RestServer) getUserIdFromSessionAndDb(r *http.Request) (string, error) {
 	userId, token, err := s.userSessionStore.GetProfileFromSession(r)
 	if err != nil {
 		return "", fmt.Errorf("GetProfileFromSession() failed: %v", err)

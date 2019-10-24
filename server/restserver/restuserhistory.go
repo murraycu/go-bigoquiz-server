@@ -211,7 +211,7 @@ func (s *RestServer) HandleUserHistoryResetSections(w http.ResponseWriter, r *ht
 		return
 	}
 
-	userId, err := s.getUserIdFromSessionAndDb(r, w)
+	userId, err := s.getUserIdFromSessionAndDb(r)
 	if err != nil {
 		handleErrorAsHttpError(w, http.StatusInternalServerError, "logged-in check failed. getUserIdFromSessionAndDb() failed: %v", err)
 		return
@@ -247,7 +247,7 @@ type SubmissionResult struct {
 }
 
 func (s *RestServer) storeAnswerCorrectnessAndGetSubmissionResult(w http.ResponseWriter, r *http.Request, quizId string, questionId string, nextQuestionSectionId string, qa *quiz.QuestionAndAnswer, result bool) (*SubmissionResult, error) {
-	userId, err := s.getUserIdFromSessionAndDb(r, w)
+	userId, err := s.getUserIdFromSessionAndDb(r)
 	if err != nil {
 		return nil, fmt.Errorf("getUserIdFromSessionAndDb() failed: %v", err)
 	}
