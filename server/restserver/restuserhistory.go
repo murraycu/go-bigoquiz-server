@@ -166,8 +166,13 @@ func (s *RestServer) HandleUserHistorySubmitAnswer(w http.ResponseWriter, r *htt
 		return
 	}
 
+	userId, err := s.getUserIdFromSessionAndDb(r)
+	if err != nil {
+		handleErrorAsHttpError(w, http.StatusInternalServerError, "getUserIdFromSessionAndDb() failed: %v", err)
+	}
+
 	result := answerIsCorrect(submission.Answer, &qa.Answer)
-	submissionResult, err := s.storeAnswerCorrectnessAndGetSubmissionResult(w, r, quizId, questionId, nextQuestionSectionId, qa, result)
+	submissionResult, err := s.storeAnswerCorrectnessAndGetSubmissionResult(r.Context(), userId, quizId, nextQuestionSectionId, qa, result)
 	if err != nil {
 		handleErrorAsHttpError(w, http.StatusInternalServerError, "storeAnswerCorrectnessAndGetSubmissionResult() failed: %v", err)
 		return
@@ -199,8 +204,13 @@ func (s *RestServer) HandleUserHistorySubmitDontKnowAnswer(w http.ResponseWriter
 		return
 	}
 
+	userId, err := s.getUserIdFromSessionAndDb(r)
+	if err != nil {
+		handleErrorAsHttpError(w, http.StatusInternalServerError, "getUserIdFromSessionAndDb() failed: %v", err)
+	}
+
 	//Store this like a don't know answer:
-	submissionResult, err := s.storeAnswerCorrectnessAndGetSubmissionResult(w, r, quizId, questionId, nextQuestionSectionId, qa, false)
+	submissionResult, err := s.storeAnswerCorrectnessAndGetSubmissionResult(r.Context(), userId, quizId, nextQuestionSectionId, qa, false)
 	if err != nil {
 		handleErrorAsHttpError(w, http.StatusInternalServerError, "storeAnswerCorrectnessAndGetSubmissionResult() failed: %v", err)
 		return
@@ -263,29 +273,25 @@ type SubmissionResult struct {
 	NextQuestion  restquiz.Question `json:"nextQuestion,omitempty"`
 }
 
-func (s *RestServer) storeAnswerCorrectnessAndGetSubmissionResult(w http.ResponseWriter, r *http.Request, quizId string, questionId string, nextQuestionSectionId string, qa *restquiz.QuestionAndAnswer, result bool) (*SubmissionResult, error) {
-	userId, err := s.getUserIdFromSessionAndDb(r)
-	if err != nil {
-		return nil, fmt.Errorf("getUserIdFromSessionAndDb() failed: %v", err)
-	}
-
+func (s *RestServer) storeAnswerCorrectnessAndGetSubmissionResult(c context.Context, userId string, quizId string, nextQuestionSectionId string, qa *restquiz.QuestionAndAnswer, result bool) (*SubmissionResult, error) {
 	sectionId := qa.Question.SectionId
+	questionId := qa.Question.Id
 
 	// Get the Stats (or a map of them), and use it for both storing the answer and getting the next question,
 	// to avoid getting the UserStats twice from the datastore.
 	//
 	// Call different methods depending on whether nextQuestionSectionId is specified and is the same as the
 	// question's section ID, to avoid allocating a map just containing one Stats.
-	c := r.Context()
 	if nextQuestionSectionId == sectionId {
 		var stats *domainuser.Stats
 		if len(userId) != 0 {
+			var err error
 			stats, err = s.userDataClient.GetUserStatsForSection(c, userId, quizId, nextQuestionSectionId)
 			if err != nil {
 				return nil, fmt.Errorf("GetUserStatsForQuiz() failed: %v", err)
 			}
 
-			err := s.storeAnswerForSection(c, result, quizId, &qa.Question, userId, stats)
+			err = s.storeAnswerForSection(c, result, quizId, &qa.Question, userId, stats)
 			if err != nil {
 				return nil, fmt.Errorf("storeAnswerForSection() failed: %v", err)
 			}
@@ -300,12 +306,12 @@ func (s *RestServer) storeAnswerCorrectnessAndGetSubmissionResult(w http.Respons
 	} else {
 		var stats map[string]*domainuser.Stats
 		if len(userId) != 0 {
-			stats, err = s.userDataClient.GetUserStatsForQuiz(c, userId, quizId)
+			stats, err := s.userDataClient.GetUserStatsForQuiz(c, userId, quizId)
 			if err != nil {
 				return nil, fmt.Errorf("GetUserStatsForQuiz() failed: %v", err)
 			}
 
-			err := s.storeAnswer(c, result, quizId, &qa.Question, userId, stats)
+			err = s.storeAnswer(c, result, quizId, &qa.Question, userId, stats)
 			if err != nil {
 				return nil, fmt.Errorf("storeAnswer() failed: %v", err)
 			}
