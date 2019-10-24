@@ -477,7 +477,7 @@ func (db *UserDataRepository) StoreUserStats(c context.Context, userID string, s
 	if key == nil {
 		// It hasn't been updated yet.
 		//
-		// Not: Don't store the key in stats.Key - that confuses the datastore API,
+		// Note: Don't store the key in stats.Key - that confuses the datastore API,
 		// (but without any error being returned to our code.)
 		// so we won't be able to read the entity back later.
 		// That also results in an error when trying to list the UserStats entities in dev_server.py's
@@ -487,7 +487,7 @@ func (db *UserDataRepository) StoreUserStats(c context.Context, userID string, s
 		key = datastore.IncompleteKey(DB_KIND_USER_STATS, nil)
 	}
 
-	if key, err = db.client.Put(c, key, stats); err != nil {
+	if key, err = db.client.Put(c, key, dtoStats); err != nil {
 		return fmt.Errorf("StoreUserStats(): datastore Put() failed: %v", err)
 	}
 
