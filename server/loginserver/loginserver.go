@@ -342,6 +342,7 @@ func (s *LoginServer) HandleFacebookCallback(w http.ResponseWriter, r *http.Requ
 	}
 
 	// Get the existing logged-in user's userId, if any, from the cookie, if any:
+	// (This lets us associate multiple oauth2 logins with a single user ID.)
 	userId, _, err := s.userSessionStore.GetProfileFromSession(r)
 	if err != nil {
 		loginCallbackFailedErr("getProfileFromSession() failed.", err, w, r)

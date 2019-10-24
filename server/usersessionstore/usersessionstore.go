@@ -44,7 +44,8 @@ func (s *UserSessionStore) GetProfileFromSession(r *http.Request) (string, *oaut
 		return "", nil, fmt.Errorf("GetProfileFromSession(): store.Get() failed: %v", err)
 	}
 
-	// Get the token from the cookie:
+	// Get the oauth2 token from the cookie:
+	// (If the cookie has no token then the user is not logged in.)
 	tokenVal, ok := session.Values[OAuthTokenSessionKey]
 	if !ok {
 		// Not an error.
@@ -59,11 +60,12 @@ func (s *UserSessionStore) GetProfileFromSession(r *http.Request) (string, *oaut
 		return "", nil, fmt.Errorf("oauthTokenSessionKey is not a *Token")
 	}
 
-	// Get the name from the database, via the userID from the cookie:
+	// Get the userID from the cookie:
 	userIdVal, ok := session.Values[UserIdSessionKey]
 	if !ok {
 		// Not an error.
 		// It's just not in the cookie.
+		// (the user is not logged in.)
 		return "", nil, nil
 	}
 
