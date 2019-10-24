@@ -37,6 +37,10 @@ func NewRestServer(quizzesStore *repositories.QuizzesRepository, userSessionStor
 	}
 
 	result.quizzes, err = quizzesStore.GetQuizzesAndCaches()
+	if err != nil {
+		return nil, fmt.Errorf("GetQuizzesAndCaches() failed: %v", err)
+	}
+
 	result.userSessionStore = userSessionStore
 
 	return result, nil
