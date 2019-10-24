@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
-	"github.com/murraycu/go-bigoquiz-server/repositories/db"
 	restuser "github.com/murraycu/go-bigoquiz-server/server/restserver/user"
 	"net/http"
 )
@@ -37,13 +36,8 @@ func (s *RestServer) getProfileFromSessionAndDb(r *http.Request) (*domainuser.Pr
 		return nil, "", nil
 	}
 
-	dbClient, err := db.NewUserDataRepository()
-	if err != nil {
-		return nil, "", fmt.Errorf("NewUserDataRepository() failed: %v", err)
-	}
-
 	c := r.Context()
-	profile, err := dbClient.GetUserProfileById(c, userId)
+	profile, err := s.userDataClient.GetUserProfileById(c, userId)
 	if err != nil {
 		return nil, "", fmt.Errorf("GetUserProfileById() failed: %v", err)
 	}
