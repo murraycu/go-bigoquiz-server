@@ -1,6 +1,7 @@
 package loginserver
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
@@ -8,7 +9,6 @@ import (
 	"github.com/murraycu/go-bigoquiz-server/repositories/db"
 	oauthparsers2 "github.com/murraycu/go-bigoquiz-server/server/loginserver/oauthparsers"
 	"github.com/murraycu/go-bigoquiz-server/server/usersessionstore"
-	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"io/ioutil"
 	"log"

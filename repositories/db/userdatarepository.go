@@ -2,11 +2,11 @@ package db
 
 import (
 	"cloud.google.com/go/datastore"
+	"context"
 	"fmt"
 	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
 	dtouser "github.com/murraycu/go-bigoquiz-server/repositories/db/dtos/user"
 	"github.com/murraycu/go-bigoquiz-server/server/loginserver/oauthparsers"
-	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"google.golang.org/api/iterator"
 )
