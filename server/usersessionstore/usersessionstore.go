@@ -39,7 +39,7 @@ func (s *UserSessionStore) GetSession(r *http.Request) (*sessions.Session, error
 }
 
 func (s *UserSessionStore) GetProfileFromSession(r *http.Request) (string, *oauth2.Token, error) {
-	session, err := s.store.Get(r, DefaultSessionID)
+	session, err := s.GetSession(r)
 	if err != nil {
 		return "", nil, fmt.Errorf("GetProfileFromSession(): store.Get() failed: %v", err)
 	}
