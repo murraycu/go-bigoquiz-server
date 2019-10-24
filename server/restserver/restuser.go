@@ -20,14 +20,9 @@ func (s *RestServer) HandleUser(w http.ResponseWriter, r *http.Request, ps httpr
 
 // Returns the LoginInfo and the userID.
 func (s *RestServer) getProfileFromSessionAndDb(r *http.Request) (*domainuser.Profile, string, error) {
-	userId, token, err := s.userSessionStore.GetProfileFromSession(r)
+	userId, err := s.getUserIdFromSessionAndDb(r)
 	if err != nil {
-		return nil, "", fmt.Errorf("GetProfileFromSession() failed: %v", err)
-	}
-
-	if !token.Valid() {
-		// TODO: Revalidate it.
-		return nil, "", fmt.Errorf("oauth token (from session cookie) is not valid")
+		return nil, "", fmt.Errorf("getUserIdFromSessionAndDb() failed: %v", err)
 	}
 
 	if len(userId) == 0 {
