@@ -82,9 +82,7 @@ func TestLoadQuiz(t *testing.T) {
 
 	const SECTION_ID = "data-structure-operations"
 	section := getSection(q, SECTION_ID)
-	if section == nil {
-		t.Error("The quiz does not have the expected section.")
-	}
+	assert.NotNil(t, section)
 
 	assert.Equal(t, SECTION_ID, section.Id)
 	assert.Equal(t, "Data Structure Operations", section.Title)
