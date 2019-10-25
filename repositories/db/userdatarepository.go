@@ -422,18 +422,32 @@ func (db *UserDataRepository) GetUserStatsForQuiz(c context.Context, strUserId s
 
 // Get the stats for a specific section ID, from the database.
 func (db *UserDataRepository) GetUserStatsForSection(c context.Context, strUserId string, quizId string, sectionId string) (*domainuser.Stats, error) {
+	stats, err := db.getUserStatsForSectionAsDto(c, quizId, sectionId, strUserId)
+	if err != nil {
+		return nil, fmt.Errorf("getUserStatsForSectionAsDto() failed: %v", err)
+	}
+
+	if stats == nil {
+		// This is not an error.
+		// There are just no stats stored yet for this section.
+		return nil, nil
+	}
+
+	return convertDtoStatsToDomainStats(stats), nil
+}
+
+func (db *UserDataRepository) getUserStatsForSectionAsDto(c context.Context, quizId string, sectionId string, strUserId string) (*dtouser.Stats, error) {
 	userId, err := datastore.DecodeKey(strUserId)
 	if err != nil {
 		return nil, fmt.Errorf("datastore.DecodeKey() failed: %v", err)
 	}
 
-	// Get all the Stats from the db, for each section:
+	// Get the Stats from the db, for this section:
+	// TODO: Remove duplicates if there is more than one?
 	q := db.getQueryForUserStatsForQuiz(userId, quizId).
 		Filter("sectionId =", sectionId).
 		Limit(1)
-
 	iter := db.client.Run(c, q)
-
 	if iter == nil {
 		return nil, fmt.Errorf("datastore query for Stats failed")
 	}
@@ -455,8 +469,9 @@ func (db *UserDataRepository) GetUserStatsForSection(c context.Context, strUserI
 		}
 	}
 
-	stats.Key = key // See the comment on user.Stats.Key
-	return convertDtoStatsToDomainStats(&stats), nil
+	stats.Key = key
+	// See the comment on user.Stats.Key
+	return &stats, nil
 }
 
 func (db *UserDataRepository) StoreUserStats(c context.Context, userID string, stats *domainuser.Stats) error {
@@ -468,9 +483,20 @@ func (db *UserDataRepository) StoreUserStats(c context.Context, userID string, s
 		return fmt.Errorf("StoreUserStats(): SectionId is empty")
 	}
 
+	dtoOldStats, err := db.getUserStatsForSectionAsDto(c, stats.QuizId, stats.SectionId, userID)
+	if err != nil {
+		return fmt.Errorf("getUserStatsForSectionAsDto() failed: %v", err)
+	}
+
 	dtoStats, err := convertDomainStatsToDtoStats(stats, userID)
 	if err != nil {
 		return fmt.Errorf("convertDomainStatsToDtoStats() failed: %v", err)
+	}
+
+	// Use an existing key, to replace the existing entity, if one exists,
+	// instead of just adding another one.
+	if dtoOldStats != nil {
+		dtoStats.Key = dtoOldStats.Key
 	}
 
 	key := dtoStats.Key
