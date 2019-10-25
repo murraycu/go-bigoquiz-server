@@ -57,22 +57,28 @@ func TestStatsIncrementAnswered(t *testing.T) {
 
 	assert.Equal(t, 0, stats.Answered)
 
-	stats.IncrementAnswered()
+	stats.UpdateStatsForAnswerCorrectness(TEST_QUESTION_ID, true)
 	assert.Equal(t, 1, stats.Answered)
 
-	stats.IncrementAnswered()
+	stats.UpdateStatsForAnswerCorrectness(TEST_QUESTION_ID, true)
 	assert.Equal(t, 2, stats.Answered)
+
+	stats.UpdateStatsForAnswerCorrectness(TEST_QUESTION_ID, false)
+	assert.Equal(t, 3, stats.Answered)
 }
 
-func TestStatsIncrementCorrect(t *testing.T) {
+func TestStatsCorrect(t *testing.T) {
 	var stats Stats
 
 	assert.Equal(t, 0, stats.Correct)
 
-	stats.IncrementCorrect()
+	stats.UpdateStatsForAnswerCorrectness(TEST_QUESTION_ID, true)
 	assert.Equal(t, 1, stats.Correct)
 
-	stats.IncrementCorrect()
+	stats.UpdateStatsForAnswerCorrectness(TEST_QUESTION_ID, true)
+	assert.Equal(t, 2, stats.Correct)
+
+	stats.UpdateStatsForAnswerCorrectness(TEST_QUESTION_ID, false)
 	assert.Equal(t, 2, stats.Correct)
 }
 
