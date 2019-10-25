@@ -47,38 +47,30 @@ func getSection(q *Quiz, sectionId string) *Section {
 func TestLoadQuizWithBadFilepath(t *testing.T) {
 	id := "doesnotexist"
 	absFilePath, err := filepath.Abs("../../quizzes/" + id + ".xml")
-	if err != nil {
-		t.Error("Could not find file.", err)
-	}
+	assert.Nil(t, err)
+	assert.NotNil(t, absFilePath)
 
 	q, err := LoadQuiz(absFilePath, id)
-	if err == nil {
-		t.Error("LoadQuiz() did not fail with an error.")
-	}
-
-	if q != nil {
-		t.Error("LoadQuiz() returned a quiz when it should have returned nil.")
-	}
+	assert.NotNil(t, err)
+	assert.Nil(t, q)
 }
 
 func loadQuiz(t *testing.T, quizId string) *Quiz {
 	absFilePath, err := filepath.Abs("../../../../quizzes/" + quizId + ".xml")
-	if err != nil {
-		t.Error("Could not find file.", err)
-	}
+	assert.Nil(t, err)
+	assert.NotNil(t, absFilePath)
+
 	q, err := LoadQuiz(absFilePath, quizId)
-	if err != nil {
-		t.Error("LoadQuiz() failed.", err)
-	}
+	assert.Nil(t, err)
+	assert.NotNil(t, q)
+
 	return q
 }
 
 func TestLoadQuiz(t *testing.T) {
 	q := loadQuiz(t, "bigo")
 
-	if q.Sections == nil {
-		t.Error("The quiz has no sections.")
-	}
+	assert.NotNil(t, q.Sections)
 
 	const SECTION_ID = "data-structure-operations"
 	section := getSection(q, SECTION_ID)
@@ -90,9 +82,7 @@ func TestLoadQuiz(t *testing.T) {
 
 	const QUESTION_ID = "b-tree-search-worst"
 	qa := getQuestionAndAnswer(q, QUESTION_ID) // (Gets it from a sub-section)
-	if qa == nil {
-		t.Error("The quiz does not have the expected question.")
-	}
+	assert.NotNil(t, qa)
 
 	assert.Equal(t, QUESTION_ID, qa.Id)
 
@@ -105,15 +95,11 @@ func TestLoadQuiz(t *testing.T) {
 func TestLoadQuizWithReverseSection(t *testing.T) {
 	q := loadQuiz(t, "datastructures")
 
-	if q.Sections == nil {
-		t.Error("The quiz has no sections.")
-	}
+	assert.NotNil(t, q.Sections)
 
 	const SECTION_ID = "reverse-datastructures-hash-tables"
 	section := getSection(q, SECTION_ID)
-	if section == nil {
-		t.Error("The quiz does not have the expected reverse section.")
-	}
+	assert.NotNil(t, section)
 
 	assert.Equal(t, SECTION_ID, section.Id)
 	assert.Equal(t, "Reverse: Hash Tables", section.Title)
@@ -121,9 +107,7 @@ func TestLoadQuizWithReverseSection(t *testing.T) {
 
 	const QUESTION_ID = "reverse-datastructures-hash-tables-open-addressing-strategy-probe-sequence"
 	qa := getQuestionAndAnswer(q, QUESTION_ID)
-	if qa == nil {
-		t.Error("The quiz does not have the expected reverse question.")
-	}
+	assert.NotNil(t, qa)
 
 	assert.Equal(t, QUESTION_ID, qa.Id)
 
