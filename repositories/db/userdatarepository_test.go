@@ -144,17 +144,17 @@ func TestNewRestServerStoreAndGetStatsForSection(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, result)
 
-	assert.Equal(t, result.QuizId, stats.QuizId)
-	assert.Equal(t, result.SectionId, stats.SectionId)
-	assert.Equal(t, result.Answered, stats.Answered)
-	assert.Equal(t, result.Correct, stats.Correct)
-	assert.Equal(t, result.CountQuestionsAnsweredOnce, stats.CountQuestionsAnsweredOnce)
-	assert.Equal(t, result.CountQuestionsCorrectOnce, stats.CountQuestionsCorrectOnce)
+	assert.Equal(t, stats.QuizId, result.QuizId)
+	assert.Equal(t, stats.SectionId, result.SectionId)
+	assert.Equal(t, stats.Answered, result.Answered)
+	assert.Equal(t, stats.Correct, result.Correct)
+	assert.Equal(t, stats.CountQuestionsAnsweredOnce, result.CountQuestionsAnsweredOnce)
+	assert.Equal(t, stats.CountQuestionsCorrectOnce, result.CountQuestionsCorrectOnce)
 
 	qa0 := stats.QuestionHistories[0]
 	questionHistoryQuestionId := qa0.QuestionId
-	assert.Equal(t, result.GetQuestionWasAnswered(questionHistoryQuestionId), qa0.AnsweredCorrectlyOnce)
-	assert.Equal(t, result.GetQuestionCountAnsweredWrong(questionHistoryQuestionId), qa0.CountAnsweredWrong)
+	assert.Equal(t, qa0.AnsweredCorrectlyOnce, result.GetQuestionWasAnswered(questionHistoryQuestionId))
+	assert.Equal(t, qa0.CountAnsweredWrong, result.GetQuestionCountAnsweredWrong(questionHistoryQuestionId))
 }
 
 func TestNewRestServerStoreAndGetStatsForQuiz(t *testing.T) {
