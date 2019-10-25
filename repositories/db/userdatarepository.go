@@ -549,15 +549,15 @@ func (db *UserDataRepository) DeleteUserStatsForQuiz(c context.Context, strUserI
 	}
 
 	q := db.getQueryForUserStatsForQuiz(userId, quizId)
+	q = q.KeysOnly()
 	iter := db.client.Run(c, q)
 
 	if iter == nil {
 		return fmt.Errorf("datastore query for Stats failed")
 	}
 
-	var stats dtouser.Stats
 	for {
-		_, err := iter.Next(&stats)
+		key, err := iter.Next(nil)
 		if err == iterator.Done {
 			break
 		}
@@ -573,12 +573,10 @@ func (db *UserDataRepository) DeleteUserStatsForQuiz(c context.Context, strUserI
 			return fmt.Errorf("iter.Next() failed: %v", err)
 		}
 
-		if stats.Key == nil {
-			return fmt.Errorf("The retrieved Stats's key is nil: %v", err)
-		}
+		// Note that stats.key is nil, for some reason, but we have it from Next().
 
 		// TODO: Batch these with datastore.DeleteMulti().
-		err = db.client.Delete(c, stats.Key)
+		err = db.client.Delete(c, key)
 		if err != nil {
 			return fmt.Errorf("datastore Delete() failed: %v", err)
 		}
