@@ -12,13 +12,13 @@ func TestStatsCountAnsweredWrong(t *testing.T) {
 
 	assert.Equal(t, 0, stats.GetQuestionCountAnsweredWrong(TEST_QUESTION_ID))
 
-	stats.UpdateProblemQuestion(TEST_QUESTION_ID, false)
+	stats.UpdateStatsForAnswerCorrectness(TEST_QUESTION_ID, false)
 	assert.Equal(t, 1, stats.GetQuestionCountAnsweredWrong(TEST_QUESTION_ID))
 
-	stats.UpdateProblemQuestion(TEST_QUESTION_ID, false)
+	stats.UpdateStatsForAnswerCorrectness(TEST_QUESTION_ID, false)
 	assert.Equal(t, 2, stats.GetQuestionCountAnsweredWrong(TEST_QUESTION_ID))
 
-	stats.UpdateProblemQuestion(TEST_QUESTION_ID, true)
+	stats.UpdateStatsForAnswerCorrectness(TEST_QUESTION_ID, true)
 	assert.Equal(t, 1, stats.GetQuestionCountAnsweredWrong(TEST_QUESTION_ID))
 }
 
@@ -27,7 +27,7 @@ func TestStatsGetQuestionWasAnsweredWithWrong(t *testing.T) {
 
 	assert.False(t, stats.GetQuestionWasAnswered(TEST_QUESTION_ID))
 
-	stats.UpdateProblemQuestion(TEST_QUESTION_ID, false)
+	stats.UpdateStatsForAnswerCorrectness(TEST_QUESTION_ID, false)
 	assert.True(t, stats.GetQuestionWasAnswered(TEST_QUESTION_ID))
 }
 
@@ -36,7 +36,7 @@ func TestStatsGetQuestionWasAnsweredWithCorrect(t *testing.T) {
 
 	assert.False(t, stats.GetQuestionWasAnswered(TEST_QUESTION_ID))
 
-	stats.UpdateProblemQuestion(TEST_QUESTION_ID, true)
+	stats.UpdateStatsForAnswerCorrectness(TEST_QUESTION_ID, true)
 	assert.True(t, stats.GetQuestionWasAnswered(TEST_QUESTION_ID))
 }
 
@@ -45,10 +45,10 @@ func TestStatsGetQuestionCountAnsweredWrong(t *testing.T) {
 
 	assert.Equal(t, 0, stats.GetQuestionCountAnsweredWrong(TEST_QUESTION_ID))
 
-	stats.UpdateProblemQuestion(TEST_QUESTION_ID, true)
+	stats.UpdateStatsForAnswerCorrectness(TEST_QUESTION_ID, true)
 	assert.Equal(t, -1, stats.GetQuestionCountAnsweredWrong(TEST_QUESTION_ID))
 
-	stats.UpdateProblemQuestion(TEST_QUESTION_ID, false)
+	stats.UpdateStatsForAnswerCorrectness(TEST_QUESTION_ID, false)
 	assert.Equal(t, 0, stats.GetQuestionCountAnsweredWrong(TEST_QUESTION_ID))
 }
 
@@ -81,13 +81,13 @@ func TestStatsIncrementAnsweredOnce(t *testing.T) {
 
 	assert.Equal(t, 0, stats.CountQuestionsAnsweredOnce)
 
-	stats.UpdateProblemQuestion("some-question-1", true)
+	stats.UpdateStatsForAnswerCorrectness("some-question-1", true)
 	assert.Equal(t, 1, stats.CountQuestionsAnsweredOnce)
 
-	stats.UpdateProblemQuestion("some-question-2", true)
+	stats.UpdateStatsForAnswerCorrectness("some-question-2", true)
 	assert.Equal(t, 2, stats.CountQuestionsAnsweredOnce)
 
-	stats.UpdateProblemQuestion("some-question-3", false)
+	stats.UpdateStatsForAnswerCorrectness("some-question-3", false)
 	assert.Equal(t, 3, stats.CountQuestionsAnsweredOnce)
 }
 
@@ -97,18 +97,18 @@ func TestStatsIncrementAnsweredCorrectOnce(t *testing.T) {
 	assert.Equal(t, 0, stats.CountQuestionsCorrectOnce)
 
 	// This should only increment for correct answers, and only for questions that have not been correct before.
-	stats.UpdateProblemQuestion("some-question-1", true)
+	stats.UpdateStatsForAnswerCorrectness("some-question-1", true)
 	assert.Equal(t, 1, stats.CountQuestionsCorrectOnce)
 
-	stats.UpdateProblemQuestion("some-question-2", true)
+	stats.UpdateStatsForAnswerCorrectness("some-question-2", true)
 	assert.Equal(t, 2, stats.CountQuestionsCorrectOnce)
 
-	stats.UpdateProblemQuestion("some-question-2", true)
+	stats.UpdateStatsForAnswerCorrectness("some-question-2", true)
 	assert.Equal(t, 2, stats.CountQuestionsCorrectOnce)
 
-	stats.UpdateProblemQuestion("some-question-3", false)
+	stats.UpdateStatsForAnswerCorrectness("some-question-3", false)
 	assert.Equal(t, 2, stats.CountQuestionsCorrectOnce)
 
-	stats.UpdateProblemQuestion("some-question-4", true)
+	stats.UpdateStatsForAnswerCorrectness("some-question-4", true)
 	assert.Equal(t, 3, stats.CountQuestionsCorrectOnce)
 }

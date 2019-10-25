@@ -54,7 +54,8 @@ func (self *Stats) getQuestionHistoryForQuestionId(questionId string) (*Question
 	return nil, false
 }
 
-func (self *Stats) UpdateProblemQuestion(questionId string, answerIsCorrect bool) {
+// UpdateStatsForAnswerCorrectness updates the various counts based on whether a question was answered correctly.
+func (self *Stats) UpdateStatsForAnswerCorrectness(questionId string, answerIsCorrect bool) {
 	if len(questionId) == 0 {
 		// Log.error("updateProblemQuestion(): questionId is empty.");
 		return
