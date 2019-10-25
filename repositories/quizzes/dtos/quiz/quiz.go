@@ -22,7 +22,13 @@ func LoadQuiz(absFilePath string, id string) (*Quiz, error) {
 	var q Quiz
 
 	file, err := os.Open(absFilePath)
-	defer file.Close()
+	defer func() {
+		err := file.Close()
+		if err != nil {
+			fmt.Println(err)
+		}
+	}()
+
 	if err != nil {
 		fmt.Println(err)
 		return nil, err

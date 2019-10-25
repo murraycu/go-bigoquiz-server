@@ -200,7 +200,13 @@ func exchangeAndGetUserBody(w http.ResponseWriter, r *http.Request, conf *oauth2
 		return nil, nil, false
 	}
 
-	defer infoResponse.Body.Close()
+	defer func() {
+		err := infoResponse.Body.Close()
+		if err != nil {
+			loginFailed("Body.Close() failed", err, w, r)
+		}
+	}()
+
 	body, err := ioutil.ReadAll(infoResponse.Body)
 	if err != nil {
 		loginFailed("ReadAll(body) failed", err, w, r)
