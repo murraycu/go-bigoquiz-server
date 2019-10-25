@@ -28,11 +28,11 @@ func (self *Stats) GetQuestionWasAnswered(questionId string) bool {
 	return found
 }
 
-func (self *Stats) IncrementAnswered() {
+func (self *Stats) incrementAnswered() {
 	self.Answered += 1
 }
 
-func (self *Stats) IncrementCorrect() {
+func (self *Stats) incrementCorrect() {
 	self.Correct += 1
 }
 
@@ -59,6 +59,12 @@ func (self *Stats) UpdateStatsForAnswerCorrectness(questionId string, answerIsCo
 	if len(questionId) == 0 {
 		// Log.error("updateProblemQuestion(): questionId is empty.");
 		return
+	}
+
+	self.incrementAnswered()
+
+	if answerIsCorrect {
+		self.incrementCorrect()
 	}
 
 	firstTimeAsked := false

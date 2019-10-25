@@ -527,12 +527,6 @@ func (s *RestServer) storeAnswerForSection(c context.Context, result bool, quizI
 		sectionStats.SectionId = sectionId
 	}
 
-	sectionStats.IncrementAnswered()
-
-	if result {
-		sectionStats.IncrementCorrect()
-	}
-
 	sectionStats.UpdateStatsForAnswerCorrectness(question.Id, result)
 
 	if err := s.userDataClient.StoreUserStats(c, userId, sectionStats); err != nil {
