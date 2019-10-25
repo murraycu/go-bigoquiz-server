@@ -16,9 +16,7 @@ func TestCreateReverse(t *testing.T) {
 	qa.Answer.Text = TEST_ANSWER
 
 	reverse := qa.createReverse()
-	if reverse == nil {
-		t.Error("createReverse() returned nil.")
-	}
+	assert.NotNil(t, reverse)
 
 	assert.Equal(t, "reverse-"+TEST_ID, reverse.Id)
 	assert.Equal(t, TEST_ANSWER, reverse.Text.Text)
