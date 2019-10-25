@@ -205,7 +205,6 @@ func TestNewRestServerStoreAndGetStatsForAll(t *testing.T) {
 	assert.Equal(t, stats.QuizId, resultQuiz.QuizId)
 }
 
-/* TODO:
 func TestNewRestServerStoreAndDeleteStatsForSection(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping test which requires more setup.")
@@ -219,16 +218,24 @@ func TestNewRestServerStoreAndDeleteStatsForSection(t *testing.T) {
 
 	userId := createUserInStore(t, c, userDataClient)
 
+	// This seems to be necessary for the datastore emulator to let us read the data back reliably.
+	time.Sleep(time.Millisecond * 500)
+
 	stats := storeUserStatsInStore(t, c, userDataClient, userId)
+
+	// This seems to be necessary for the datastore emulator to let us read the data back reliably.
+	time.Sleep(time.Millisecond * 500)
 
 	err = userDataClient.DeleteUserStatsForQuiz(c, userId, stats.QuizId)
 	assert.Nil(t, err)
+
+	// This seems to be necessary for the datastore emulator to let us read the data back reliably.
+	time.Sleep(time.Millisecond * 500)
 
 	result, err := userDataClient.GetUserStatsForSection(c, userId, stats.QuizId, stats.SectionId)
 	assert.Nil(t, err)
 	assert.Nil(t, result)
 }
-*/
 
 func TestNewRestServerUpdateStatsCorrectly(t *testing.T) {
 	if testing.Short() {
