@@ -63,7 +63,7 @@ func TestQuizzesRepositoryRealQuizHasQuestions(t *testing.T) {
 	}
 }
 
-func questionHasAnswer(t *testing.T, question *domainquiz.QuestionAndAnswer) bool {
+func questionHasAnswer(question *domainquiz.QuestionAndAnswer) bool {
 	return len(question.Answer.Text) > 0
 }
 
@@ -74,17 +74,17 @@ func TestQuizzesRepositoryRealQuizHasAnswers(t *testing.T) {
 		assert.NotNil(t, quiz)
 
 		for _, question := range quiz.Questions {
-			assert.True(t, questionHasAnswer(t, question))
+			assert.True(t, questionHasAnswer(question))
 		}
 
 		for _, section := range quiz.Sections {
 			for _, question := range section.Questions {
-				assert.True(t, questionHasAnswer(t, question))
+				assert.True(t, questionHasAnswer(question))
 			}
 
 			for _, subSection := range section.SubSections {
 				for _, question := range subSection.Questions {
-					assert.True(t, questionHasAnswer(t, question))
+					assert.True(t, questionHasAnswer(question))
 				}
 			}
 		}
