@@ -533,7 +533,7 @@ func (s *RestServer) storeAnswerForSection(c context.Context, result bool, quizI
 		sectionStats.IncrementCorrect()
 	}
 
-	sectionStats.UpdateProblemQuestion(question.Id, result)
+	sectionStats.UpdateStatsForAnswerCorrectness(question.Id, result)
 
 	if err := s.userDataClient.StoreUserStats(c, userId, sectionStats); err != nil {
 		return fmt.Errorf("db.StoreUserStat() failed for: %v: %v", sectionStats, err)
