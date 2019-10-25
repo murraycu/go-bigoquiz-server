@@ -137,9 +137,6 @@ func TestNewRestServerStoreAndGetStatsForSection(t *testing.T) {
 
 	stats := storeUserStatsInStore(t, c, userDataClient, userId)
 
-	// This seems to be necessary for the datastore emulator to let us read the data back reliably.
-	time.Sleep(time.Second * 1)
-
 	result, err := userDataClient.GetUserStatsForSection(c, userId, stats.QuizId, stats.SectionId)
 	assert.Nil(t, err)
 	assert.NotNil(t, result)
@@ -232,3 +229,45 @@ func TestNewRestServerStoreAndDeleteStatsForSection(t *testing.T) {
 	assert.Nil(t, result)
 }
 */
+
+
+func TestNewRestServerUpdateStatsCorrectly(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping test which requires more setup.")
+	}
+
+	userDataClient, err := NewUserDataRepository()
+	assert.Nil(t, err)
+	assert.NotNil(t, userDataClient)
+
+	c := context.Background()
+
+	quizId := "some-quiz-id-1"
+	sectionId := "some-section-id"
+	questionId := "some-question-id"
+
+	userId := createUserInStore(t, c, userDataClient)
+
+	sectionStats := new(domainuser.Stats)
+	sectionStats.QuizId = quizId
+	sectionStats.SectionId = sectionId
+	sectionStats.UpdateStatsForAnswerCorrectness(questionId, true)
+
+	err = userDataClient.StoreUserStats(c, userId, sectionStats)
+	assert.Nil(t, err)
+
+	// This seems to be necessary for the datastore emulator to let us read the data back reliably.
+	time.Sleep(time.Millisecond * 500)
+
+	result, err := userDataClient.GetUserStatsForSection(c, userId, quizId, sectionId)
+	assert.Nil(t, err)
+	assert.NotNil(t, result)
+
+	assert.Equal(t, result.QuizId, quizId)
+	assert.Equal(t, result.SectionId, sectionId)
+
+	assert.Equal(t, 1, result.Answered)
+	assert.Equal(t, 1, result.Correct)
+	assert.Equal(t, 1, result.CountQuestionsAnsweredOnce)
+	assert.Equal(t, 1, result.CountQuestionsCorrectOnce)
+}
