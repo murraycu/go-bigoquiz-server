@@ -230,7 +230,6 @@ func TestNewRestServerStoreAndDeleteStatsForSection(t *testing.T) {
 }
 */
 
-
 func TestNewRestServerUpdateStatsCorrectly(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping test which requires more setup.")
@@ -270,4 +269,22 @@ func TestNewRestServerUpdateStatsCorrectly(t *testing.T) {
 	assert.Equal(t, 1, result.Correct)
 	assert.Equal(t, 1, result.CountQuestionsAnsweredOnce)
 	assert.Equal(t, 1, result.CountQuestionsCorrectOnce)
+
+	sectionStats.UpdateStatsForAnswerCorrectness(questionId, true)
+
+	err = userDataClient.StoreUserStats(c, userId, sectionStats)
+	assert.Nil(t, err)
+
+	// This seems to be necessary for the datastore emulator to let us read the data back reliably.
+	time.Sleep(time.Millisecond * 500)
+
+	result, err = userDataClient.GetUserStatsForSection(c, userId, quizId, sectionId)
+	assert.Nil(t, err)
+	assert.NotNil(t, result)
+
+	assert.Equal(t, 2, result.Answered)
+	assert.Equal(t, 2, result.Correct)
+	assert.Equal(t, 1, result.CountQuestionsAnsweredOnce)
+	assert.Equal(t, 1, result.CountQuestionsCorrectOnce)
+
 }
