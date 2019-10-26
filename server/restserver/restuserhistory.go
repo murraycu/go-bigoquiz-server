@@ -75,7 +75,7 @@ func (s *RestServer) HandleUserHistoryAll(w http.ResponseWriter, r *http.Request
 			restStats.QuizTitle = q.Title
 			restStats.CountQuestions = quizCache.GetQuestionsCount()
 
-			info.SetQuizStats(q.Id, restStats)
+			info.AddQuizStats(q.Id, restStats)
 		}
 	}
 
