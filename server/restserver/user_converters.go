@@ -23,6 +23,15 @@ func convertDomainStatsToRestStats(stats *domainuser.Stats, quizCache *QuizCache
 		sectionTitle = section.Title
 	}
 
+	questionsCount := 0
+	if len(stats.SectionId) == 0 {
+		// This should be stats for a whole quiz.
+		questionsCount = quizCache.GetQuestionsCount()
+	} else {
+		// This should be stats for just one section.
+		questionsCount = quizCache.GetSectionQuestionsCount(stats.SectionId)
+	}
+
 	return &restuser.Stats{
 		QuizId:                     stats.QuizId,
 		SectionId:                  stats.SectionId,
@@ -32,7 +41,7 @@ func convertDomainStatsToRestStats(stats *domainuser.Stats, quizCache *QuizCache
 		CountQuestionsCorrectOnce:  stats.CountQuestionsCorrectOnce,
 		QuestionHistories:          questionHistories,
 
-		CountQuestions: quizCache.GetQuestionsCount(),
+		CountQuestions: questionsCount,
 		QuizTitle:      quizCache.Quiz.Title,
 		SectionTitle:   sectionTitle,
 	}, nil
