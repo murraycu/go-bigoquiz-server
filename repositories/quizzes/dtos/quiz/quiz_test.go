@@ -116,3 +116,21 @@ func TestLoadQuizWithReverseSection(t *testing.T) {
 
 	assert.Equal(t, "Probe sequence", qa.Answer.Text)
 }
+
+func TestLoadQuizWithNoSections(t *testing.T) {
+	q := loadQuiz(t, "bitwise")
+
+	// loadQuiz() creates a section for the top-level questions.
+	// (TODO: Just require this in the original .xml?)
+	assert.NotNil(t, q.Sections)
+
+	section := q.Sections[0]
+	assert.NotNil(t, section)
+	assert.Equal(t, q.Title, section.Title)
+
+	const QUESTION_ID = "bitwise-divide-by-2"
+	qa := getQuestionAndAnswer(q, QUESTION_ID)
+	assert.NotNil(t, qa)
+
+	assert.Equal(t, QUESTION_ID, qa.Id)
+}
