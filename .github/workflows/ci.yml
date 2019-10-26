@@ -23,3 +23,9 @@ jobs:
       run: |
         sudo apt-get install google-cloud-sdk-datastore-emulator
         make full-test
+
+    - name: Store test coverage report as artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: Test Coverage
+        path: coverage.html
