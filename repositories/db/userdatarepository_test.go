@@ -122,6 +122,89 @@ func createGoogleUserInStore(t *testing.T, c context.Context, userDataClient *Us
 	return userId
 }
 
+// Returns the user ID of the created user.
+func createGitHubUserInStore(t *testing.T, c context.Context, userDataClient *UserDataRepository) string {
+	userInfo := oauthparsers.GitHubUserInfo{
+		Id:    1234,
+		Email: "example@example.com",
+		Name:  "Example McExample",
+	}
+	// Create a new user.
+	token := oauth2.Token{
+		AccessToken: "some-access-token",
+	}
+
+	userId, err := userDataClient.StoreGitHubLoginInUserProfile(c, userInfo, "", &token)
+	assert.Nil(t, err)
+	assert.NotNil(t, userId)
+
+	return userId
+}
+
+// Returns the user ID of the created user.
+func createFacebookUserInStore(t *testing.T, c context.Context, userDataClient *UserDataRepository) string {
+	userInfo := oauthparsers.FacebookUserInfo{
+		Id:    "1234",
+		Email: "example@example.com",
+		Name:  "Example McExample",
+	}
+	// Create a new user.
+	token := oauth2.Token{
+		AccessToken: "some-access-token",
+	}
+
+	userId, err := userDataClient.StoreFacebookLoginInUserProfile(c, userInfo, "", &token)
+	assert.Nil(t, err)
+	assert.NotNil(t, userId)
+
+	return userId
+}
+
+func TestNewRestServerStoreStoreGoogleLoginInUserProfile(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping test which requires more setup.")
+	}
+
+	userDataClient, err := NewUserDataRepository()
+	assert.Nil(t, err)
+	assert.NotNil(t, userDataClient)
+
+	c := context.Background()
+
+	userId := createGoogleUserInStore(t, c, userDataClient)
+	assert.NotEmpty(t, userId)
+}
+
+func TestNewRestServerStoreStoreGitHubLoginInUserProfile(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping test which requires more setup.")
+	}
+
+	userDataClient, err := NewUserDataRepository()
+	assert.Nil(t, err)
+	assert.NotNil(t, userDataClient)
+
+	c := context.Background()
+
+	userId := createGitHubUserInStore(t, c, userDataClient)
+	assert.NotEmpty(t, userId)
+}
+
+func TestNewRestServerStoreStoreFacebookLoginInUserProfile(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping test which requires more setup.")
+	}
+
+	userDataClient, err := NewUserDataRepository()
+	assert.Nil(t, err)
+	assert.NotNil(t, userDataClient)
+
+	c := context.Background()
+
+	userId := createFacebookUserInStore(t, c, userDataClient)
+	assert.NotEmpty(t, userId)
+}
+
 func TestNewRestServerStoreAndGetStatsForSection(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping test which requires more setup.")
