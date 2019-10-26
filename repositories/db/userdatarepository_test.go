@@ -103,7 +103,7 @@ func storeUserStatsInStore(t *testing.T, c context.Context, userDataClient *User
 }
 
 // Returns the user ID of the created user.
-func createUserInStore(t *testing.T, c context.Context, userDataClient *UserDataRepository) string {
+func createGoogleUserInStore(t *testing.T, c context.Context, userDataClient *UserDataRepository) string {
 	userInfo := oauthparsers.GoogleUserInfo{
 		Sub:           "some-google-user-id",
 		Email:         "example@example.com",
@@ -133,7 +133,7 @@ func TestNewRestServerStoreAndGetStatsForSection(t *testing.T) {
 
 	c := context.Background()
 
-	userId := createUserInStore(t, c, userDataClient)
+	userId := createGoogleUserInStore(t, c, userDataClient)
 
 	stats := storeUserStatsInStore(t, c, userDataClient, userId)
 
@@ -165,7 +165,7 @@ func TestNewRestServerStoreAndGetStatsForQuiz(t *testing.T) {
 
 	c := context.Background()
 
-	userId := createUserInStore(t, c, userDataClient)
+	userId := createGoogleUserInStore(t, c, userDataClient)
 
 	stats := storeUserStatsInStore(t, c, userDataClient, userId)
 
@@ -191,7 +191,7 @@ func TestNewRestServerStoreAndGetStatsForAll(t *testing.T) {
 
 	c := context.Background()
 
-	userId := createUserInStore(t, c, userDataClient)
+	userId := createGoogleUserInStore(t, c, userDataClient)
 
 	stats := storeUserStatsInStore(t, c, userDataClient, userId)
 
@@ -216,7 +216,7 @@ func TestNewRestServerStoreAndDeleteStatsForSection(t *testing.T) {
 
 	c := context.Background()
 
-	userId := createUserInStore(t, c, userDataClient)
+	userId := createGoogleUserInStore(t, c, userDataClient)
 
 	// This seems to be necessary for the datastore emulator to let us read the data back reliably.
 	time.Sleep(time.Millisecond * 500)
@@ -252,7 +252,7 @@ func TestNewRestServerUpdateStatsCorrectly(t *testing.T) {
 	sectionId := "some-section-id"
 	questionId := "some-question-id"
 
-	userId := createUserInStore(t, c, userDataClient)
+	userId := createGoogleUserInStore(t, c, userDataClient)
 
 	sectionStats := new(domainuser.Stats)
 	sectionStats.QuizId = quizId
