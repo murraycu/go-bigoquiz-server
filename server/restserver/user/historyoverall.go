@@ -7,6 +7,6 @@ type HistoryOverall struct {
 	Stats []*Stats `json:"stats,omitempty"`
 }
 
-func (self *HistoryOverall) SetQuizStats(quizId string, stats *Stats) {
+func (self *HistoryOverall) AddQuizStats(quizId string, stats *Stats) {
 	self.Stats = append(self.Stats, stats)
 }
