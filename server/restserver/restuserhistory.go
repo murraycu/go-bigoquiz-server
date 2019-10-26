@@ -71,10 +71,6 @@ func (s *RestServer) HandleUserHistoryAll(w http.ResponseWriter, r *http.Request
 				return
 			}
 
-			// Set extras for REST:
-			restStats.QuizTitle = q.Title
-			restStats.CountQuestions = quizCache.GetQuestionsCount()
-
 			info.AddQuizStats(q.Id, restStats)
 		}
 	}
@@ -601,11 +597,6 @@ func (s *RestServer) buildRestUserHistorySections(loginInfo *restuser.LoginInfo,
 			log.Printf("convertDomainStatsToRestStats() failed: %v", err)
 			continue
 		}
-
-		// Set extras for REST:
-		restStats.QuizTitle = quiz.Title
-		restStats.SectionTitle = section.Title
-		restStats.CountQuestions = quizCache.GetQuestionsCount()
 
 		err = s.fillUserStatsWithExtras(restStats, quiz)
 		if err != nil {

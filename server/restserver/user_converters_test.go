@@ -138,7 +138,7 @@ func TestConvertDomainQuestionHistoryToRestQuestionHistory(t *testing.T) {
 	assert.Equal(t, obj.CountAnsweredWrong, result.CountAnsweredWrong)
 }
 
-func TestConvertDomainStatsToRestStats(t *testing.T) {
+func TestConvertDomainStatsToRestStatsPerSection(t *testing.T) {
 	quiz := testRestQuiz()
 
 	section := quiz.Sections[1]
@@ -196,7 +196,37 @@ func TestConvertDomainStatsToRestStats(t *testing.T) {
 	assert.Equal(t, obj.QuestionHistories[1].CountAnsweredWrong, qh1.CountAnsweredWrong)
 
 	// Extras:
-	assert.Equal(t, quizCache.GetQuestionsCount(), result.CountQuestions)
+	assert.Equal(t, quizCache.GetSectionQuestionsCount(section.Id), result.CountQuestions)
 	assert.Equal(t, quizCache.Quiz.Title, result.QuizTitle)
 	assert.Equal(t, section.Title, result.SectionTitle)
+}
+
+func TestConvertDomainStatsToRestStatsPerQuiz(t *testing.T) {
+	quiz := testRestQuiz()
+
+	obj := domainuser.Stats{
+		QuizId:                     quiz.Id,
+		SectionId:                  "",
+		Answered:                   11,
+		Correct:                    9,
+		CountQuestionsAnsweredOnce: 5,
+		CountQuestionsCorrectOnce:  4,
+		QuestionHistories:          nil,
+	}
+
+	quizCache, err := NewQuizCache(quiz)
+	assert.Nil(t, err)
+	assert.NotNil(t, quizCache)
+
+	result, err := convertDomainStatsToRestStats(&obj, quizCache)
+	assert.Nil(t, err)
+	assert.NotNil(t, result)
+
+	assert.Equal(t, obj.QuizId, result.QuizId)
+	assert.Equal(t, obj.SectionId, result.SectionId)
+
+	// Extras:
+	assert.Equal(t, quizCache.GetQuestionsCount(), result.CountQuestions)
+	assert.Equal(t, quizCache.Quiz.Title, result.QuizTitle)
+	assert.Empty(t, result.SectionTitle)
 }

@@ -124,8 +124,29 @@ func (self *QuizCache) GetRandomQuestion(sectionId string) *restquiz.Question {
 	}
 }
 
+// GetQuestionsCount returns the number of questions in the entire quiz.
 func (self *QuizCache) GetQuestionsCount() int {
 	return len(self.questionsArray)
+}
+
+// GetSectionQuestionsCount returns the number of questions in the section and all its sub-sections.
+func (self *QuizCache) GetSectionQuestionsCount(sectionId string) int {
+	section, err := self.GetSection(sectionId)
+	if err != nil || section == nil {
+		return 0
+	}
+
+	result := len(section.Questions)
+
+	for _, subSection := range section.SubSections {
+		if subSection == nil {
+			continue
+		}
+
+		result += len(subSection.Questions)
+	}
+
+	return result
 }
 
 func (self *QuizCache) GetAnswer(questionId string) *restquiz.Text {
