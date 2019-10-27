@@ -352,12 +352,6 @@ func (db *UserDataRepository) GetUserStats(c context.Context, strUserId string) 
 			combinedStats := createCombinedUserStatsWithoutQuestionHistories(existing, &stats)
 			result[stats.QuizId] = combinedStats
 		}
-
-		// This does not correspond to a dtouser.Stats in the datastore.
-		// Instead this one is for the whole quiz, not just a section in a quiz.
-		// So we wipe the Key to make sure that we don't try to write it back sometime.
-		stats.Key = nil // See the comment on Stats.Key.
-
 	}
 
 	return result, nil
