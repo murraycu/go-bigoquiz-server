@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func TestNewRestServerInstantiate(t *testing.T) {
+func TestNewUserDataRepositoryInstantiate(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping test which requires more setup.")
 	}
@@ -20,7 +20,7 @@ func TestNewRestServerInstantiate(t *testing.T) {
 	assert.NotNil(t, userDataClient)
 }
 
-func TestNewRestServerGetUserProfileByIdForNonExistantUser(t *testing.T) {
+func TestNewUserDataRepositoryGetUserProfileByIdForNonExistantUser(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping test which requires more setup.")
 	}
@@ -39,7 +39,7 @@ func TestNewRestServerGetUserProfileByIdForNonExistantUser(t *testing.T) {
 	assert.Nil(t, userProfile)
 }
 
-func TestNewRestServerStoreAndGetUserProfileById(t *testing.T) {
+func TestNewUserDataRepositoryStoreAndGetUserProfileById(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping test which requires more setup.")
 	}
@@ -160,7 +160,7 @@ func createFacebookUserInStore(t *testing.T, c context.Context, userDataClient *
 	return userId
 }
 
-func TestNewRestServerStoreStoreGoogleLoginInUserProfile(t *testing.T) {
+func TestNewUserDataRepositoryStoreStoreGoogleLoginInUserProfile(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping test which requires more setup.")
 	}
@@ -175,7 +175,7 @@ func TestNewRestServerStoreStoreGoogleLoginInUserProfile(t *testing.T) {
 	assert.NotEmpty(t, userId)
 }
 
-func TestNewRestServerStoreStoreGitHubLoginInUserProfile(t *testing.T) {
+func TestNewUserDataRepositoryStoreStoreGitHubLoginInUserProfile(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping test which requires more setup.")
 	}
@@ -190,7 +190,7 @@ func TestNewRestServerStoreStoreGitHubLoginInUserProfile(t *testing.T) {
 	assert.NotEmpty(t, userId)
 }
 
-func TestNewRestServerStoreStoreFacebookLoginInUserProfile(t *testing.T) {
+func TestNewUserDataRepositoryStoreStoreFacebookLoginInUserProfile(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping test which requires more setup.")
 	}
@@ -205,7 +205,7 @@ func TestNewRestServerStoreStoreFacebookLoginInUserProfile(t *testing.T) {
 	assert.NotEmpty(t, userId)
 }
 
-func TestNewRestServerStoreAndGetStatsForSection(t *testing.T) {
+func TestNewUserDataRepositoryStoreAndGetStatsForSection(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping test which requires more setup.")
 	}
@@ -237,7 +237,7 @@ func TestNewRestServerStoreAndGetStatsForSection(t *testing.T) {
 	assert.Equal(t, qa0.CountAnsweredWrong, result.GetQuestionCountAnsweredWrong(questionHistoryQuestionId))
 }
 
-func TestNewRestServerStoreAndGetStatsForQuiz(t *testing.T) {
+func TestNewUserDataRepositoryStoreAndGetStatsForQuiz(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping test which requires more setup.")
 	}
@@ -263,7 +263,7 @@ func TestNewRestServerStoreAndGetStatsForQuiz(t *testing.T) {
 	assert.Equal(t, stats.SectionId, resultSection.SectionId)
 }
 
-func TestNewRestServerStoreAndGetStatsForAll(t *testing.T) {
+func TestNewUserDataRepositoryStoreAndGetStatsForAll(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping test which requires more setup.")
 	}
@@ -289,7 +289,7 @@ func TestNewRestServerStoreAndGetStatsForAll(t *testing.T) {
 	assert.Nil(t, resultQuiz.SectionId)
 }
 
-func TestNewRestServerStoreAndDeleteStatsForSection(t *testing.T) {
+func TestNewUserDataRepositoryStoreAndDeleteStatsForSection(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping test which requires more setup.")
 	}
@@ -321,7 +321,7 @@ func TestNewRestServerStoreAndDeleteStatsForSection(t *testing.T) {
 	assert.Nil(t, result)
 }
 
-func TestNewRestServerUpdateStatsCorrectly(t *testing.T) {
+func TestNewUserDataRepositoryUpdateStatsCorrectly(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping test which requires more setup.")
 	}
