@@ -60,9 +60,10 @@ func (s *RestServer) HandleUserHistoryAll(w http.ResponseWriter, r *http.Request
 				stats.QuizId = quizId
 			}
 
-			quizCache, ok := s.quizCacheMap[q.Id]
-			if !ok {
-				continue
+			quizCache, err := s.getQuizCache(q.Id)
+			if err != nil {
+				handleErrorAsHttpError(w, http.StatusInternalServerError, "getQuizCache() failed: %v", err)
+				return
 			}
 
 			restStats, err := convertDomainStatsToRestStats(stats, quizCache)
