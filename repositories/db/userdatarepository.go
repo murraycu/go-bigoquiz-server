@@ -299,7 +299,7 @@ func createCombinedUserStatsWithoutQuestionHistories(self *domainuser.Stats, sta
 	return &result
 }
 
-/** Get a map of stats by quiz ID, for all quizzes, from the database.
+/** Get a map of stats by quiz ID, for all quizzes that have ever been used, from the database.
  * userId may be nil.
  */
 func (db *UserDataRepository) GetUserStats(c context.Context, strUserId string) (map[string]*domainuser.Stats, error) {
@@ -315,7 +315,7 @@ func (db *UserDataRepository) GetUserStats(c context.Context, strUserId string) 
 		return result, nil
 	}
 
-	// Get all the Stats from the db, for each section:
+	// Get all the Stats from the db, for each section, for each quiz:
 	q := db.getQueryForUserStats(userId)
 
 	iter := db.client.Run(c, q)
@@ -324,7 +324,7 @@ func (db *UserDataRepository) GetUserStats(c context.Context, strUserId string) 
 		return nil, fmt.Errorf("datastore query for Stats failed")
 	}
 
-	// Build a map of the stats by section ID:
+	// Build a map of the stats by quiz ID:
 	var stats dtouser.Stats
 	for {
 		_, err := iter.Next(&stats)
@@ -347,11 +347,13 @@ func (db *UserDataRepository) GetUserStats(c context.Context, strUserId string) 
 
 		existing, exists := result[quizId]
 		if !exists {
-			result[quizId] = convertDtoStatsToDomainStats(&stats)
-		} else {
-			combinedStats := createCombinedUserStatsWithoutQuestionHistories(existing, &stats)
-			result[stats.QuizId] = combinedStats
+			// Start with this:
+			existing = &domainuser.Stats{}
+			existing.QuizId = quizId;
 		}
+
+		combinedStats := createCombinedUserStatsWithoutQuestionHistories(existing, &stats)
+		result[stats.QuizId] = combinedStats
 	}
 
 	return result, nil
