@@ -286,6 +286,7 @@ func TestNewRestServerStoreAndGetStatsForAll(t *testing.T) {
 	assert.True(t, ok)
 	assert.NotNil(t, resultQuiz)
 	assert.Equal(t, stats.QuizId, resultQuiz.QuizId)
+	assert.Nil(t, resultQuiz.SectionId)
 }
 
 func TestNewRestServerStoreAndDeleteStatsForSection(t *testing.T) {
