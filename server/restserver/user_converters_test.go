@@ -230,3 +230,73 @@ func TestConvertDomainStatsToRestStatsPerQuiz(t *testing.T) {
 	assert.Equal(t, quizCache.Quiz.Title, result.QuizTitle)
 	assert.Empty(t, result.SectionTitle)
 }
+
+func loadRealRestQuizWithExtras(t *testing.T, quizId string) (*restquiz.Quiz, *QuizCache) {
+	quiz := loadRealRestQuiz(t, quizId)
+	quizCache, err := NewQuizCache(quiz)
+	assert.Nil(t, err)
+	assert.NotNil(t, quizCache)
+
+	err = fillRestQuizExtrasFromQuizCache(quiz, quizCache)
+	assert.Nil(t, err)
+
+	return quiz, quizCache
+}
+
+func TestConvertDomainStatsToRestStatsPerQuizForRealQuiz(t *testing.T) {
+	quiz, quizCache := loadRealRestQuizWithExtras(t, "algorithms_analysis")
+
+	obj := domainuser.Stats{
+		QuizId:                     quiz.Id,
+		SectionId:                  "",
+		Answered:                   11,
+		Correct:                    9,
+		CountQuestionsAnsweredOnce: 5,
+		CountQuestionsCorrectOnce:  4,
+		QuestionHistories:          nil,
+	}
+
+	result, err := convertDomainStatsToRestStats(&obj, quizCache)
+	assert.Nil(t, err)
+	assert.NotNil(t, result)
+
+	assert.Equal(t, obj.QuizId, result.QuizId)
+	assert.Equal(t, obj.SectionId, result.SectionId)
+
+	// Extras:
+	assert.Equal(t, 65, result.CountQuestions)
+	assert.Equal(t, quizCache.Quiz.Title, result.QuizTitle)
+	assert.Empty(t, result.SectionTitle)
+}
+
+func TestConvertDomainStatsToRestStatsPerSectionForRealQuiz(t *testing.T) {
+	quiz, quizCache := loadRealRestQuizWithExtras(t, "algorithms_analysis")
+
+	quizCache, err := NewQuizCache(quiz)
+	assert.Nil(t, err)
+	assert.NotNil(t, quizCache)
+
+	fillRestQuizExtrasFromQuizCache(quiz, quizCache)
+
+	obj := domainuser.Stats{
+		QuizId:                     quiz.Id,
+		SectionId:                  "master-theorem",
+		Answered:                   11,
+		Correct:                    9,
+		CountQuestionsAnsweredOnce: 5,
+		CountQuestionsCorrectOnce:  4,
+		QuestionHistories:          nil,
+	}
+
+	result, err := convertDomainStatsToRestStats(&obj, quizCache)
+	assert.Nil(t, err)
+	assert.NotNil(t, result)
+
+	assert.Equal(t, obj.QuizId, result.QuizId)
+	assert.Equal(t, obj.SectionId, result.SectionId)
+
+	// Extras:
+	assert.Equal(t, 9, result.CountQuestions)
+	assert.Equal(t, quizCache.Quiz.Title, result.QuizTitle)
+	assert.NotEmpty(t, result.SectionTitle)
+}
