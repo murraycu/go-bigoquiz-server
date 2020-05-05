@@ -1,15 +1,17 @@
 # go-bigoquiz-server
 
-This is a go-based server implementation for bigoquiz.com.
-It is not yet live at bigoquiz.com.
+This is the go-based backend server implementation for bigoquiz.com.
 
-## Products
+## Products Used
+
 - [App Engine][1]
 
 ## Language
+
 - [Go][2]
 
-## APIs
+## APIs Used
+
 - [NDB Datastore API][3]
 - [Users API][4]
 
