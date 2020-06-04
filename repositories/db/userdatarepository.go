@@ -349,7 +349,7 @@ func (db *UserDataRepository) GetUserStats(c context.Context, strUserId string) 
 		if !exists {
 			// Start with this:
 			existing = &domainuser.Stats{}
-			existing.QuizId = quizId;
+			existing.QuizId = quizId
 		}
 
 		combinedStats := createCombinedUserStatsWithoutQuestionHistories(existing, &stats)
