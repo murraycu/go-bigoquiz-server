@@ -195,7 +195,7 @@ func (self *QuizCache) GetSection(sectionID string) (*restquiz.Section, error) {
 
 	section, ok := self.sectionsMap[sectionID]
 	if !ok {
-		return nil, fmt.Errorf("Section not found with section ID: %v", sectionID)
+		return nil, fmt.Errorf("section not found with section ID: %v", sectionID)
 	}
 
 	return section, nil

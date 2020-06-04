@@ -340,7 +340,7 @@ func (s *RestServer) createSubmissionResult(result bool, quizId string, question
 
 	q := s.getQuiz(quizId)
 	if q == nil {
-		return nil, fmt.Errorf("Couldn't find quiz with quiz ID: %v", quizId)
+		return nil, fmt.Errorf("couldn't find quiz with quiz ID: %v", quizId)
 	}
 
 	nextQuestion, err := s.getNextQuestionFromUserStats(nextQuestionSectionId, q, stats)
@@ -365,7 +365,7 @@ func (s *RestServer) createSubmissionResultForSection(result bool, quizId string
 
 	q := s.getQuiz(quizId)
 	if q == nil {
-		return nil, fmt.Errorf("Couldn't find quiz with quiz ID: %v", quizId)
+		return nil, fmt.Errorf("couldn't find quiz with quiz ID: %v", quizId)
 	}
 
 	nextQuestion, err := s.getNextQuestionFromUserStatsForSection(nextQuestionSectionId, q, stats)
