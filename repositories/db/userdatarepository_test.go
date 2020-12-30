@@ -286,7 +286,7 @@ func TestNewUserDataRepositoryStoreAndGetStatsForAll(t *testing.T) {
 	assert.True(t, ok)
 	assert.NotNil(t, resultQuiz)
 	assert.Equal(t, stats.QuizId, resultQuiz.QuizId)
-	assert.Nil(t, resultQuiz.SectionId)
+	assert.Empty(t, resultQuiz.SectionId)
 }
 
 func TestNewUserDataRepositoryStoreAndDeleteStatsForSection(t *testing.T) {
