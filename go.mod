@@ -5,7 +5,7 @@ go 1.12
 require (
 	cloud.google.com/go v0.74.0 // indirect
 	cloud.google.com/go/datastore v1.3.0
-	github.com/gorilla/sessions v1.2.0
+	github.com/gorilla/sessions v1.2.1
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/rs/cors v1.7.0
 	github.com/stretchr/objx v0.2.0 // indirect
