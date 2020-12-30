@@ -10,6 +10,8 @@ import (
 	"time"
 )
 
+const datastoreDelayMs = 500
+
 func TestNewUserDataRepositoryInstantiate(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping test which requires more setup.")
@@ -303,18 +305,18 @@ func TestNewUserDataRepositoryStoreAndDeleteStatsForSection(t *testing.T) {
 	userId := createGoogleUserInStore(t, c, userDataClient)
 
 	// This seems to be necessary for the datastore emulator to let us read the data back reliably.
-	time.Sleep(time.Millisecond * 500)
+	time.Sleep(time.Millisecond * datastoreDelayMs)
 
 	stats := storeUserStatsInStore(t, c, userDataClient, userId)
 
 	// This seems to be necessary for the datastore emulator to let us read the data back reliably.
-	time.Sleep(time.Millisecond * 500)
+	time.Sleep(time.Millisecond * datastoreDelayMs)
 
 	err = userDataClient.DeleteUserStatsForQuiz(c, userId, stats.QuizId)
 	assert.Nil(t, err)
 
 	// This seems to be necessary for the datastore emulator to let us read the data back reliably.
-	time.Sleep(time.Millisecond * 500)
+	time.Sleep(time.Millisecond * datastoreDelayMs)
 
 	result, err := userDataClient.GetUserStatsForSection(c, userId, stats.QuizId, stats.SectionId)
 	assert.Nil(t, err)
@@ -347,7 +349,7 @@ func TestNewUserDataRepositoryUpdateStatsCorrectly(t *testing.T) {
 	assert.Nil(t, err)
 
 	// This seems to be necessary for the datastore emulator to let us read the data back reliably.
-	time.Sleep(time.Millisecond * 500)
+	time.Sleep(time.Millisecond * datastoreDelayMs)
 
 	result, err := userDataClient.GetUserStatsForSection(c, userId, quizId, sectionId)
 	assert.Nil(t, err)
@@ -367,7 +369,7 @@ func TestNewUserDataRepositoryUpdateStatsCorrectly(t *testing.T) {
 	assert.Nil(t, err)
 
 	// This seems to be necessary for the datastore emulator to let us read the data back reliably.
-	time.Sleep(time.Millisecond * 500)
+	time.Sleep(time.Millisecond * datastoreDelayMs)
 
 	result, err = userDataClient.GetUserStatsForSection(c, userId, quizId, sectionId)
 	assert.Nil(t, err)
