@@ -1,0 +1,43 @@
+on:
+  workflow_dispatch
+
+name: Deploy to Google App Engine (Production)
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Write secret config files, for use during the build/deploy, retrieving
+      # them from the GitHub Secrets system.
+      - name: Get Config
+        id: get-config
+        run: |
+          echo ${{ secrets.CONFIG }} > config.json
+          echo ${{ secrets.CONFIG_OAUTH2_FACEBOOK }} > config_oauth2/facebook_credentials_secret.json
+          echo ${{ secrets.CONFIG_OAUTH2_GITHUB }} > config_oauth2/github_credentials_secret.json
+          echo ${{ secrets.CONFIG_OAUTH2_GOOGLE }} > config_oauth2/github_credentials_secret.json
+
+      - name: Deploy to App Engine
+        id: deploy
+        uses: google-github-actions/deploy-appengine@v0.2.0
+        with:
+          deliverables: app.yaml
+          project_id: bigoquiz
+
+          # This key is stored in GitHub Secrets
+          #
+          # after generating it like so:
+          # (see https://cloud.google.com/iam/docs/creating-managing-service-account-keys
+          # and https://github.com/google-github-actions/deploy-appengine/blob/main/README.md#authorization )
+          # $ gcloud iam service-accounts keys create ~/key.json --iam-account github-deploy-actions@bigoquiz.iam.gserviceaccount.com
+          # $ gcloud projects add-iam-policy-binding bigoquiz --member='serviceAccount:github-deploy-actions@bigoquiz.iam.gserviceaccount.com' --role='roles/appengine.appAdmin'
+          # $ gcloud projects add-iam-policy-binding bigoquiz --member='serviceAccount:github-deploy-actions@bigoquiz.iam.gserviceaccount.com' --role='roles/compute.storageAdmin'
+          # $ gcloud projects add-iam-policy-binding bigoquiz --member='serviceAccount:github-deploy-actions@bigoquiz.iam.gserviceaccount.com' --role='roles/iam.serviceAccountUser'
+          # $ gcloud projects add-iam-policy-binding bigoquiz --member='serviceAccount:github-deploy-actions@bigoquiz.iam.gserviceaccount.com' --role='roles/cloudbuild.builds.editor'
+          credentials: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Show Output
+        run: echo ${{ steps.deploy.outputs.url }}
