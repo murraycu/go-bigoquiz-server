@@ -43,6 +43,9 @@ jobs:
           # $ gcloud projects add-iam-policy-binding bigoquiz --member='serviceAccount:github-deploy-actions@bigoquiz.iam.gserviceaccount.com' --role='roles/compute.storageAdmin'
           # $ gcloud projects add-iam-policy-binding bigoquiz --member='serviceAccount:github-deploy-actions@bigoquiz.iam.gserviceaccount.com' --role='roles/iam.serviceAccountUser'
           # $ gcloud projects add-iam-policy-binding bigoquiz --member='serviceAccount:github-deploy-actions@bigoquiz.iam.gserviceaccount.com' --role='roles/cloudbuild.builds.editor'
+          #
+          # and (see https://github.com/google-github-actions/deploy-appengine/pull/18 )
+          # $ gcloud projects add-iam-policy-binding bigoquiz --member='serviceAccount:github-deploy-actions@bigoquiz.iam.gserviceaccount.com' --role='roles/storage.objectAdmin'
           credentials: ${{ secrets.GCP_SA_KEY }}
 
       - name: Show Output
