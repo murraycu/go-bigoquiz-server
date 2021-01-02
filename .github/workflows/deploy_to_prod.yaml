@@ -21,7 +21,7 @@ jobs:
           echo "$SECRET_CONFIG" > config.json
           echo "$SECRET_CONFIG_OAUTH2_FACEBOOK" > config_oauth2/facebook_credentials_secret.json
           echo "$SECRET_CONFIG_OAUTH2_GITHUB" > config_oauth2/github_credentials_secret.json
-          echo "$SECRET_CONFIG_OAUTH2_GOOGLE" > config_oauth2/github_credentials_secret.json
+          echo "$SECRET_CONFIG_OAUTH2_GOOGLE" > config_oauth2/google_credentials_secret.json
         env:
           SECRET_CONFIG: ${{ secrets.CONFIG }}
           SECRET_CONFIG_OAUTH2_FACEBOOK: ${{secrets.CONFIG_OAUTH2_FACEBOOK }}
