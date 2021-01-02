@@ -5,6 +5,8 @@ name: Deploy to Google App Engine (Production)
 
 jobs:
   deploy:
+    # This gives this GitHub Action access to the GitHub Secrets in this environment.
+    environment: production
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
