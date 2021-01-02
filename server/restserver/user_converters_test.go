@@ -276,7 +276,8 @@ func TestConvertDomainStatsToRestStatsPerSectionForRealQuiz(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, quizCache)
 
-	fillRestQuizExtrasFromQuizCache(quiz, quizCache)
+	err = fillRestQuizExtrasFromQuizCache(quiz, quizCache)
+	assert.Nil(t, err)
 
 	obj := domainuser.Stats{
 		QuizId:                     quiz.Id,
