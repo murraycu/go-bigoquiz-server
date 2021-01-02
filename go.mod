@@ -5,13 +5,12 @@ go 1.12
 require (
 	cloud.google.com/go v0.74.0 // indirect
 	cloud.google.com/go/datastore v1.3.0
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/gorilla/sessions v1.2.1
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/rs/cors v1.7.0
-	github.com/stretchr/objx v0.2.0 // indirect
 	github.com/stretchr/testify v1.6.0
-	golang.org/x/exp v0.0.0-20200513190911-00229845015e // indirect
-	golang.org/x/net v0.0.0-20201224014010-6772e930b67b
+	golang.org/x/net v0.0.0-20201224014010-6772e930b67b // indirect
 	golang.org/x/oauth2 v0.0.0-20201208152858-08078c50e5b5
 	golang.org/x/sys v0.0.0-20201223074533-0d417f636930 // indirect
 	golang.org/x/tools v0.0.0-20201230163300-2152f4ed8ce7 // indirect
