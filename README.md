@@ -30,7 +30,7 @@ This is the go-based backend server implementation for bigoquiz.com.
       (Don't git push this)
 
     Then start the local server:
-    $ dev_appserver.py .
+    $ make local_run
 
 [1]: https://developers.google.com/appengine
 [2]: https://golang.org
