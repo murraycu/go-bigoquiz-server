@@ -19,9 +19,14 @@ jobs:
     - name: Build
       run: make
 
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v3'
+      with:
+        version: '>= 363.0.0'
+        install_components: 'alpha,cloud-datastore-emulator'
+
     - name: Test
       run: |
-        sudo apt-get install google-cloud-sdk-datastore-emulator
         make full-test
 
     - name: Store test coverage report as artifact
