@@ -2,8 +2,9 @@ package restserver
 
 import (
 	"fmt"
-	restquiz "github.com/murraycu/go-bigoquiz-server/server/restserver/quiz"
 	"math/rand"
+
+	restquiz "github.com/murraycu/go-bigoquiz-server/server/restserver/quiz"
 )
 
 type restQuestionAndAnswerArray []*restquiz.QuestionAndAnswer
