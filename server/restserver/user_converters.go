@@ -2,6 +2,7 @@ package restserver
 
 import (
 	"fmt"
+
 	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
 	restquiz "github.com/murraycu/go-bigoquiz-server/server/restserver/quiz"
 	restuser "github.com/murraycu/go-bigoquiz-server/server/restserver/user"

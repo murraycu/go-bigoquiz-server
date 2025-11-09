@@ -1,12 +1,13 @@
 package restserver
 
 import (
-	"github.com/murraycu/go-bigoquiz-server/repositories/quizzes"
-	"github.com/murraycu/go-bigoquiz-server/server/usersessionstore"
-	"github.com/stretchr/testify/assert"
 	"log"
 	"path/filepath"
 	"testing"
+
+	"github.com/murraycu/go-bigoquiz-server/repositories/quizzes"
+	"github.com/murraycu/go-bigoquiz-server/server/usersessionstore"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewRestServer(t *testing.T) {

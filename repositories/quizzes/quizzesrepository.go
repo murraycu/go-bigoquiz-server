@@ -2,11 +2,12 @@ package quizzes
 
 import (
 	"fmt"
-	domainquiz "github.com/murraycu/go-bigoquiz-server/domain/quiz"
-	dtoquiz "github.com/murraycu/go-bigoquiz-server/repositories/quizzes/dtos/quiz"
 	"io/ioutil"
 	"path/filepath"
 	"strings"
+
+	domainquiz "github.com/murraycu/go-bigoquiz-server/domain/quiz"
+	dtoquiz "github.com/murraycu/go-bigoquiz-server/repositories/quizzes/dtos/quiz"
 )
 
 type QuizzesRepository struct {

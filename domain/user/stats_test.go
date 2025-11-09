@@ -1,8 +1,9 @@
 package user
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 const TEST_QUESTION_ID = "test-question-id"

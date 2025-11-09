@@ -1,10 +1,11 @@
 package restserver
 
 import (
-	"github.com/julienschmidt/httprouter"
-	restquiz "github.com/murraycu/go-bigoquiz-server/server/restserver/quiz"
 	"net/http"
 	"strconv"
+
+	"github.com/julienschmidt/httprouter"
+	restquiz "github.com/murraycu/go-bigoquiz-server/server/restserver/quiz"
 )
 
 func (s *RestServer) HandleQuizAll(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {

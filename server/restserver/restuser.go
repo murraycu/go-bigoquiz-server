@@ -2,10 +2,11 @@ package restserver
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/julienschmidt/httprouter"
 	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
 	restuser "github.com/murraycu/go-bigoquiz-server/server/restserver/user"
-	"net/http"
 )
 
 func (s *RestServer) HandleUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
