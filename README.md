@@ -15,13 +15,26 @@ This is the go-based backend server implementation for bigoquiz.com.
 - [NDB Datastore API][3]
 - [Users API][4]
 
-## Build / Deploy
+## Build
 
     $ git clone git@github.com:murraycu/go-bigoquiz-server.git
     $ cd go-bigoquiz-server
     $ go build
 
+Also available via "make build".
+
+## Deploy
+
     $ gcloud app deploy .
+
+Also available via "make deploy".
+
+But prefer the [GitHub Deployment
+workflow](https://github.com/murraycu/go-bigoquiz-server/actions/workflows/deploy_to_prod.yaml),
+via the GitHub "Actions" tab.
+
+Then see the [deployed versions in
+AppEngine](https://console.cloud.google.com/appengine/versions?serviceId=api&project=bigoquiz).
 
 ### Running locally
 

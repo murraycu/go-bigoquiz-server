@@ -24,6 +24,9 @@ full-test:
 clean:
 	go clean
 
+e But prefer the GitHub Deployment workflow,
+# via the GitHub "Actions" tab:
+# https://github.com/murraycu/go-bigoquiz-server/actions/workflows/deploy_to_prod.yaml
 deploy:
 	gcloud app deploy .
 
