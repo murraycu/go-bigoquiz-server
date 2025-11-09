@@ -4,14 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/julienschmidt/httprouter"
-	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
-	restquiz "github.com/murraycu/go-bigoquiz-server/server/restserver/quiz"
-	restuser "github.com/murraycu/go-bigoquiz-server/server/restserver/user"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"sort"
+
+	"github.com/julienschmidt/httprouter"
+	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
+	restquiz "github.com/murraycu/go-bigoquiz-server/server/restserver/quiz"
+	restuser "github.com/murraycu/go-bigoquiz-server/server/restserver/user"
 )
 
 // See https://gobyexample.com/sorting-by-functions
@@ -248,8 +249,7 @@ func (s *RestServer) HandleUserHistoryResetSections(w http.ResponseWriter, r *ht
 			return
 		}
 
-		msg := fmt.Sprintf("not logged in. loginInfo=%v", loginInfo)
-		handleErrorAsHttpError(w, http.StatusForbidden, msg)
+		handleErrorAsHttpError(w, http.StatusForbidden, "not logged in. loginInfo=%v", loginInfo)
 		return
 	}
 
