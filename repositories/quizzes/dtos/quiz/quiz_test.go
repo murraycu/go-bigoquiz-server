@@ -1,9 +1,10 @@
 package quiz
 
 import (
-	"github.com/stretchr/testify/assert"
 	"path/filepath"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func getQuestionAndAnswer(q *Quiz, questionId string) *QuestionAndAnswer {

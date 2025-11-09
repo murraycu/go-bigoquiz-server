@@ -1,9 +1,10 @@
 package quizzes
 
 import (
+	"testing"
+
 	dtoquiz "github.com/murraycu/go-bigoquiz-server/repositories/quizzes/dtos/quiz"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestConvertDtoHasIdAndTitleToDomainHasIdAndTitle(t *testing.T) {

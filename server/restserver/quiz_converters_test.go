@@ -2,9 +2,10 @@ package restserver
 
 import (
 	"fmt"
+	"testing"
+
 	domainquiz "github.com/murraycu/go-bigoquiz-server/domain/quiz"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestConvertDomainHasIdAndTitleToRestHasIdAndTitle(t *testing.T) {

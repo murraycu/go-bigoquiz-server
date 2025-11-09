@@ -2,12 +2,13 @@ package db
 
 import (
 	"context"
+	"testing"
+	"time"
+
 	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
 	"github.com/murraycu/go-bigoquiz-server/server/loginserver/oauthparsers"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/oauth2"
-	"testing"
-	"time"
 )
 
 const datastoreDelayMs = 500

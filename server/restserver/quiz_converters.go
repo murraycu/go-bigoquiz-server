@@ -2,10 +2,11 @@ package restserver
 
 import (
 	"fmt"
-	domainquiz "github.com/murraycu/go-bigoquiz-server/domain/quiz"
-	restquiz "github.com/murraycu/go-bigoquiz-server/server/restserver/quiz"
 	"math/rand"
 	"time"
+
+	domainquiz "github.com/murraycu/go-bigoquiz-server/domain/quiz"
+	restquiz "github.com/murraycu/go-bigoquiz-server/server/restserver/quiz"
 )
 
 type restQuizMap map[string]*restquiz.Quiz

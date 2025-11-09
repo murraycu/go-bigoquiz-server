@@ -1,11 +1,12 @@
 package usersessionstore
 
 import (
-	"cloud.google.com/go/datastore"
 	"fmt"
+	"net/http"
+
+	"cloud.google.com/go/datastore"
 	"github.com/gorilla/sessions"
 	"golang.org/x/oauth2"
-	"net/http"
 )
 
 const OAuthTokenSessionKey = "oauth_token"
