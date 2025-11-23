@@ -1,11 +1,12 @@
 package usersessionstore
 
 import (
-	"cloud.google.com/go/datastore"
 	"fmt"
+	"net/http"
+
+	"cloud.google.com/go/datastore"
 	"github.com/gorilla/sessions"
 	"golang.org/x/oauth2"
-	"net/http"
 )
 
 const OAuthTokenSessionKey = "oauth_token"
@@ -30,9 +31,9 @@ func NewUserSessionStore(cookieKey string) (*UserSessionStore, error) {
 }
 
 func (s *UserSessionStore) GetSession(r *http.Request) (*sessions.Session, error) {
-	result, err := s.store.New(r, DefaultSessionID)
+	result, err := s.store.Get(r, DefaultSessionID)
 	if err != nil {
-		return nil, fmt.Errorf("store.New() failed: %v", err)
+		return nil, fmt.Errorf("store.Get() failed: %v", err)
 	}
 
 	return result, nil
