@@ -1,10 +1,11 @@
 package quizzes
 
 import (
-	domainquiz "github.com/murraycu/go-bigoquiz-server/domain/quiz"
-	"github.com/stretchr/testify/assert"
 	"path/filepath"
 	"testing"
+
+	domainquiz "github.com/murraycu/go-bigoquiz-server/domain/quiz"
+	"github.com/stretchr/testify/assert"
 )
 
 // TODO: Add tests that don't use the real quizzes.
@@ -18,7 +19,7 @@ func loadRealQuizzes(t *testing.T) MapQuizzes {
 	assert.Nil(t, err)
 	assert.NotNil(t, quizzesStore)
 
-	quizzes, err := quizzesStore.LoadQuizzes()
+	quizzes, err := quizzesStore.LoadQuizzes( /*asJson*/ false /*addReverses*/, true)
 	assert.Nil(t, err)
 	assert.NotNil(t, quizzes)
 

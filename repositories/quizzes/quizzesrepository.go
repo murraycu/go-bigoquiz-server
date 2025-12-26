@@ -53,19 +53,24 @@ func filesWithExtension(dirPath string, ext string) ([]string, error) {
 	return result, nil
 }
 
-func loadQuizAsDto(directoryFilepath string, id string) (*dtoquiz.Quiz, error) {
-	fullPath := filepath.Join(directoryFilepath, id+".xml")
+func loadQuizAsDto(directoryFilepath string, asJson bool, addReverses bool, id string) (*dtoquiz.Quiz, error) {
+	ext := ".xml"
+	if asJson {
+		ext = ".json"
+	}
+
+	fullPath := filepath.Join(directoryFilepath, id+ext)
 	absFilePath, err := filepath.Abs(fullPath)
 	if err != nil {
 		return nil, err
 	}
 
-	return dtoquiz.LoadQuiz(absFilePath, id)
+	return dtoquiz.LoadQuiz(absFilePath, asJson, addReverses, id)
 }
 
 type MapDtoQuizzes map[string]*dtoquiz.Quiz
 
-func loadQuizzesAsDto(directoryFilepath string) (MapDtoQuizzes, error) {
+func LoadQuizzesAsDto(directoryFilepath string, asJson bool, addReverses bool) (MapDtoQuizzes, error) {
 	quizzes := make(MapDtoQuizzes, 0)
 
 	quizNames, err := filesWithExtension(directoryFilepath, "xml")
@@ -75,7 +80,7 @@ func loadQuizzesAsDto(directoryFilepath string) (MapDtoQuizzes, error) {
 	}
 
 	for _, name := range quizNames {
-		q, err := loadQuizAsDto(directoryFilepath, name)
+		q, err := loadQuizAsDto(directoryFilepath, asJson, addReverses, name)
 		if err != nil {
 			fmt.Println(err)
 			return quizzes, err
@@ -87,8 +92,8 @@ func loadQuizzesAsDto(directoryFilepath string) (MapDtoQuizzes, error) {
 	return quizzes, nil
 }
 
-func (q *QuizzesRepository) LoadQuizzes() (MapQuizzes, error) {
-	quizzes, err := loadQuizzesAsDto(q.directoryPath)
+func (q *QuizzesRepository) LoadQuizzes(asJson bool, addReverses bool) (MapQuizzes, error) {
+	quizzes, err := LoadQuizzesAsDto(q.directoryPath, asJson, addReverses)
 	if err != nil {
 		return nil, fmt.Errorf("could not load quiz files: %v", err)
 	}

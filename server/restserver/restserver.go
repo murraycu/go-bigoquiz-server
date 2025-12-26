@@ -3,13 +3,14 @@ package restserver
 import (
 	"encoding/json"
 	"fmt"
+	"log"
+	"net/http"
+	"sort"
+
 	"github.com/murraycu/go-bigoquiz-server/repositories/db"
 	"github.com/murraycu/go-bigoquiz-server/repositories/quizzes"
 	restquiz "github.com/murraycu/go-bigoquiz-server/server/restserver/quiz"
 	"github.com/murraycu/go-bigoquiz-server/server/usersessionstore"
-	"log"
-	"net/http"
-	"sort"
 )
 
 const QUERY_PARAM_QUIZ_ID = "quiz-id"
@@ -48,7 +49,7 @@ func NewRestServer(quizzesStore *quizzes.QuizzesRepository, userSessionStore *us
 		return nil, fmt.Errorf("NewUserDataRepository() failed: %v", err)
 	}
 
-	quizzes, err := quizzesStore.LoadQuizzes()
+	quizzes, err := quizzesStore.LoadQuizzes( /*asJson=*/ false /*addReverses=*/, true)
 	if err != nil {
 		return nil, fmt.Errorf("LoadQuizzes() failed: %v", err)
 	}
