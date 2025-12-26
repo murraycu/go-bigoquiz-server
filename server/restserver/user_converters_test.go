@@ -1,10 +1,11 @@
 package restserver
 
 import (
+	"testing"
+
 	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
 	restquiz "github.com/murraycu/go-bigoquiz-server/server/restserver/quiz"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func testRestQuestions(prefix string) []*restquiz.QuestionAndAnswer {

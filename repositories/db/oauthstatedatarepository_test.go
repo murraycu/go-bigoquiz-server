@@ -2,8 +2,9 @@ package db
 
 import (
 	"context"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewOAuthStateDataRepository(t *testing.T) {

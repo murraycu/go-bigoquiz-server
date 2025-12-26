@@ -1,10 +1,11 @@
 package db
 
 import (
+	"testing"
+
 	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
 	dtouser "github.com/murraycu/go-bigoquiz-server/repositories/db/dtos/user"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestConvertDtoQuestionHistoryToDomainQuestionHistory(t *testing.T) {

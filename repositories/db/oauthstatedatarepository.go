@@ -1,10 +1,11 @@
 package db
 
 import (
-	"cloud.google.com/go/datastore"
 	"context"
 	"fmt"
 	"time"
+
+	"cloud.google.com/go/datastore"
 )
 
 type OAuthStateDataRepository struct {
