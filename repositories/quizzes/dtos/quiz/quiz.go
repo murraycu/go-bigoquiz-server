@@ -1,6 +1,7 @@
 package quiz
 
 import (
+	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"io/ioutil"
@@ -18,7 +19,7 @@ type Quiz struct {
 	UsesMathML bool `xml:"uses_mathml,attr" json:"usesMathML,omitempty"`
 }
 
-func LoadQuiz(absFilePath string, id string) (*Quiz, error) {
+func LoadQuiz(absFilePath string, asJson bool, addReverses bool, id string) (*Quiz, error) {
 	var q Quiz
 
 	file, err := os.Open(absFilePath)
@@ -40,7 +41,12 @@ func LoadQuiz(absFilePath string, id string) (*Quiz, error) {
 		return nil, err
 	}
 
-	err = xml.Unmarshal(data, &q)
+	if asJson {
+		err = json.Unmarshal(data, &q)
+	} else {
+		err = xml.Unmarshal(data, &q)
+	}
+
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
@@ -63,7 +69,9 @@ func LoadQuiz(absFilePath string, id string) (*Quiz, error) {
 		q.Sections = append(q.Sections, &section)
 	}
 
-	q.addReverseSections()
+	if addReverses {
+		q.addReverseSections()
+	}
 
 	return &q, nil
 }
