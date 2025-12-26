@@ -5,13 +5,20 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+
+    # Add "id-token" with the intended permissions.
+    # (Needed by google-github-actions/auth step.)
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
     steps:
 
     - name: Set up Go
+      id: setup-go
       uses: actions/setup-go@v5
       with:
         go-version: 1.24
-      id: go
 
     - name: Check out
       uses: actions/checkout@v5
@@ -19,11 +26,27 @@ jobs:
     - name: Build
       run: make
 
-    - name: 'Set up Cloud SDK'
+    # The Google Cloud datastore emulator, used in the Test step, needs Java 21
+    # or later.
+    - name: Set up Java
+      id: setup-java
+      uses: actions/setup-java@v5
+      with:
+        java-version: 21
+        distribution: 'temurin'
+
+    - name: 'Google Cloud Auth'
+      id: 'google-cloud-auth'
+      uses: 'google-github-actions/auth@v3'
+      with:
+        project_id: 'bigoquiz'
+        workload_identity_provider: 'projects/710014864852/locations/global/workloadIdentityPools/github/providers/my-repo'
+
+    - name: 'Set up Google Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v3'
       with:
         version: '>= 363.0.0'
-        install_components: 'alpha,cloud-datastore-emulator'
+        install_components: 'alpha,beta,cloud-datastore-emulator'
 
     - name: Test
       run: |
