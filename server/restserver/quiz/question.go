@@ -8,13 +8,13 @@ type Question struct {
 
 	Text Text `json:"text,omitempty"`
 
-	// These are not in the XML.
+	// These are not in the data files.
 	SectionId    string `json:"sectionId,omitempty"`
 	SubSectionId string `json:"subSectionId,omitempty"`
 
 	QuizUsesMathML bool `json:"quizUsesMathML"`
 
-	// These are not in the XML or domain structure.
+	// These are not in the data files or domain structure.
 	// But we want to show them in the JSON.
 	// We don't use the Section and SubSection types here,
 	// because we don't want to recurse infinitely into questions and
@@ -23,7 +23,7 @@ type Question struct {
 	Section    *HasIdAndTitle `json:"section,omitempty"`
 	SubSection *HasIdAndTitle `json:"subSection,omitempty"`
 
-	// These are not in the XML.
+	// These are not in the data files.
 	// But we want to show them in the JSON.
 	Choices []*Text `json:"choices,omitempty"`
 }

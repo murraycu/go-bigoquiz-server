@@ -21,8 +21,9 @@ type QuizzesAndCaches struct {
 	Quizzes MapQuizzes
 }
 
-/** directoryPath is the path to a directory containing quizzes in XML files.
- */
+// NewQuizzesRepository creates a new quizzes repository.
+//
+// directoryPath is the path to a directory containing quizzes in JSON files.
 func NewQuizzesRepository(directoryPath string) (*QuizzesRepository, error) {
 	result := &QuizzesRepository{}
 	result.directoryPath = directoryPath
@@ -54,7 +55,7 @@ func filesWithExtension(dirPath string, ext string) ([]string, error) {
 }
 
 func loadQuizAsDto(directoryFilepath string, id string) (*dtoquiz.Quiz, error) {
-	fullPath := filepath.Join(directoryFilepath, id+".xml")
+	fullPath := filepath.Join(directoryFilepath, id+".json")
 	absFilePath, err := filepath.Abs(fullPath)
 	if err != nil {
 		return nil, err
@@ -68,7 +69,7 @@ type MapDtoQuizzes map[string]*dtoquiz.Quiz
 func loadQuizzesAsDto(directoryFilepath string) (MapDtoQuizzes, error) {
 	quizzes := make(MapDtoQuizzes, 0)
 
-	quizNames, err := filesWithExtension(directoryFilepath, "xml")
+	quizNames, err := filesWithExtension(directoryFilepath, "json")
 	if err != nil {
 		fmt.Println(err)
 		return quizzes, err

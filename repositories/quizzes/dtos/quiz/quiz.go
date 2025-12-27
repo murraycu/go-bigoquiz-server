@@ -1,7 +1,7 @@
 package quiz
 
 import (
-	"encoding/xml"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -40,7 +40,7 @@ func LoadQuiz(absFilePath string, id string) (*Quiz, error) {
 		return nil, err
 	}
 
-	err = xml.Unmarshal(data, &q)
+	err = json.Unmarshal(data, &q)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
