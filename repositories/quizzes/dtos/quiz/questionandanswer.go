@@ -2,7 +2,14 @@ package quiz
 
 type QuestionAndAnswer struct {
 	Question
-	AnswerDetail Text `xml:"answerdetail" json:"answerdetail"`
+
+	// AnswerDetail is an alternative to AnswerSimple.
+	// Only one of these should be set.
+	AnswerDetail Text `xml:"answer" json:"answerDetail,omitempty,omitzero"`
+
+	// AnswerSimple is an alternative to AnswerDetail.
+	// Only one of these should be set.
+	AnswerSimple string `json:"answer,omitempty"`
 }
 
 func (self *QuestionAndAnswer) createReverse() *QuestionAndAnswer {
@@ -10,6 +17,14 @@ func (self *QuestionAndAnswer) createReverse() *QuestionAndAnswer {
 	result.Id = "reverse-" + self.Id
 	result.TextDetail = self.AnswerDetail
 
+	// Copy the answer to the question.
+	if self.AnswerSimple != "" {
+		result.TextDetail.Text = self.AnswerSimple
+	} else {
+		result.TextDetail = self.AnswerDetail
+	}
+
+	// Copy the question to the answer.
 	if self.TextSimple != "" {
 		result.AnswerDetail.Text = self.TextSimple
 	} else {
