@@ -71,6 +71,13 @@ func loadQuiz(t *testing.T, quizId string) *Quiz {
 func TestLoadQuiz(t *testing.T) {
 	q := loadQuiz(t, "bigo")
 
+	assert.NotNil(t, q)
+}
+
+func TestLoadQuizHasSection(t *testing.T) {
+	q := loadQuiz(t, "bigo")
+	assert.NotNil(t, q)
+
 	assert.NotNil(t, q.Sections)
 
 	const SECTION_ID = "data-structure-operations"
@@ -80,6 +87,11 @@ func TestLoadQuiz(t *testing.T) {
 	assert.Equal(t, SECTION_ID, section.Id)
 	assert.Equal(t, "Data Structure Operations", section.Title)
 	assert.Equal(t, "", section.Link)
+}
+
+func TestLoadQuizHasQuestion(t *testing.T) {
+	q := loadQuiz(t, "bigo")
+	assert.NotNil(t, q)
 
 	const QUESTION_ID = "b-tree-search-worst"
 	qa := getQuestionAndAnswer(q, QUESTION_ID) // (Gets it from a sub-section)
@@ -94,6 +106,35 @@ func TestLoadQuiz(t *testing.T) {
 	assert.Equal(t, "O(log(n))", qa.AnswerSimple)
 	assert.Equal(t, "", qa.AnswerDetail.Text)
 	assert.Equal(t, false, qa.AnswerDetail.IsHtml)
+}
+
+func TestLoadQuizHasHtmlQuestion(t *testing.T) {
+	q := loadQuiz(t, "math")
+	assert.NotNil(t, q)
+
+	const QUESTION_ID = "log-identities-logb1"
+	qa := getQuestionAndAnswer(q, QUESTION_ID) // (Gets it from a sub-section)
+	assert.NotNil(t, qa)
+
+	assert.Equal(t, QUESTION_ID, qa.Id)
+
+	assert.Equal(t, "", qa.TextSimple)
+	assert.Contains(t, qa.TextDetail.Text, "MathML")
+	assert.Equal(t, true, qa.TextDetail.IsHtml)
+}
+
+func TestLoadQuizHasHtmlAnswer(t *testing.T) {
+	q := loadQuiz(t, "book_stepanov_fmtgp")
+	assert.NotNil(t, q)
+
+	const QUESTION_ID = "fmtgp-number-theorems-eulers"
+	qa := getQuestionAndAnswer(q, QUESTION_ID) // (Gets it from a sub-section)
+	assert.NotNil(t, qa)
+
+	assert.Equal(t, QUESTION_ID, qa.Id)
+	assert.Equal(t, "", qa.AnswerSimple)
+	assert.Contains(t, qa.AnswerDetail.Text, "If n and a are coprime positive integers")
+	assert.Equal(t, true, qa.AnswerDetail.IsHtml)
 }
 
 func TestLoadQuizWithReverseSection(t *testing.T) {
