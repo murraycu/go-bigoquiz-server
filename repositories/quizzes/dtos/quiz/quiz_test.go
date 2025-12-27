@@ -87,10 +87,13 @@ func TestLoadQuiz(t *testing.T) {
 
 	assert.Equal(t, QUESTION_ID, qa.Id)
 
-	assert.Equal(t, "Search (Worst)", qa.TextDetail.Text)
+	assert.Equal(t, "Search (Worst)", qa.TextSimple)
+	assert.Equal(t, "", qa.TextDetail.Text)
 	assert.Equal(t, false, qa.TextDetail.IsHtml)
 
-	assert.Equal(t, "O(log(n))", qa.AnswerDetail.Text)
+	assert.Equal(t, "O(log(n))", qa.AnswerSimple)
+	assert.Equal(t, "", qa.AnswerDetail.Text)
+	assert.Equal(t, false, qa.AnswerDetail.IsHtml)
 }
 
 func TestLoadQuizWithReverseSection(t *testing.T) {
