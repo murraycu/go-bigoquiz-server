@@ -18,7 +18,7 @@ full-test:
 	gcloud config set project bigoquiz ; \
 	(gcloud beta emulators datastore start --no-store-on-disk & ) ; \
 	export DATASTORE_EMULATOR_HOST="localhost:8081" ; \
-	go test ./... -coverprofile=coverage.out ; \
+	go test ./... -coverprofile=coverage.out
 	go tool cover -html=coverage.out -o coverage.html
 
 clean:
