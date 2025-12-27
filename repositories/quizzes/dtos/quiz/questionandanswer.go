@@ -2,7 +2,7 @@ package quiz
 
 type QuestionAndAnswer struct {
 	Question
-	Answer Text `xml:"answer"`
+	Answer Text `xml:"answer" json:"answer"`
 }
 
 func (self *QuestionAndAnswer) createReverse() *QuestionAndAnswer {

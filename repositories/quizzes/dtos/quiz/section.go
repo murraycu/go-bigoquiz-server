@@ -2,15 +2,15 @@ package quiz
 
 type Section struct {
 	HasIdAndTitle
-	Questions   []*QuestionAndAnswer `xml:"question"`
-	SubSections []*SubSection        `xml:"subsection"`
+	Questions   []*QuestionAndAnswer `xml:"question" json:"questions,omitempty"`
+	SubSections []*SubSection        `xml:"subsection" json:"subsections,omitempty"`
 
-	DefaultChoices   []*Text `xml:"default_choices"`
-	AnswersAsChoices bool    `xml:"answers_as_choices,attr"`
+	DefaultChoices   []*Text `xml:"default_choices" json:"defaultChoices,omitempty"`
+	AnswersAsChoices bool    `xml:"answers_as_choices,attr" json:"answersAsChoices,omitempty"`
 
 	// Whether the quiz should contain an extra generated section,
 	// with the answers as questions, and the questions as the answers.
-	AndReverse bool `xml:"and_reverse,attr"`
+	AndReverse bool `xml:"and_reverse,attr" json:"andReverse,omitempty"`
 }
 
 func (self *Section) createReverse() *Section {
