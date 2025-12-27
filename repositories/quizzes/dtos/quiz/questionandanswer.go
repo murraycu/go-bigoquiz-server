@@ -15,7 +15,6 @@ type QuestionAndAnswer struct {
 func (self *QuestionAndAnswer) createReverse() *QuestionAndAnswer {
 	var result QuestionAndAnswer
 	result.Id = "reverse-" + self.Id
-	result.TextDetail = self.AnswerDetail
 
 	// Copy the answer to the question.
 	if self.AnswerSimple != "" {
