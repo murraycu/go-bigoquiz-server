@@ -40,7 +40,7 @@ func TestConvertDtoQuestionToDomainQuestion(t *testing.T) {
 	dto := dtoquiz.Question{
 		Id:   "some-id",
 		Link: "some-link",
-		Text: dtoquiz.Text{
+		TextDetail: dtoquiz.Text{
 			Text:   "some-text",
 			IsHtml: true,
 		},
@@ -52,8 +52,8 @@ func TestConvertDtoQuestionToDomainQuestion(t *testing.T) {
 
 	assert.Equal(t, dto.Id, result.Id)
 	assert.Equal(t, dto.Link, result.Link)
-	assert.Equal(t, dto.Text.Text, result.Text.Text)
-	assert.Equal(t, dto.Text.IsHtml, result.Text.IsHtml)
+	assert.Equal(t, dto.TextDetail.Text, result.Text.Text)
+	assert.Equal(t, dto.TextDetail.IsHtml, result.Text.IsHtml)
 }
 
 func TestConvertDtoQAToDomainQA(t *testing.T) {
@@ -61,7 +61,7 @@ func TestConvertDtoQAToDomainQA(t *testing.T) {
 		Question: dtoquiz.Question{
 			Id:   "some-id",
 			Link: "some-link",
-			Text: dtoquiz.Text{
+			TextDetail: dtoquiz.Text{
 				Text:   "some-text",
 				IsHtml: true,
 			},
@@ -78,8 +78,8 @@ func TestConvertDtoQAToDomainQA(t *testing.T) {
 
 	assert.Equal(t, dto.Question.Id, result.Question.Id)
 	assert.Equal(t, dto.Question.Link, result.Question.Link)
-	assert.Equal(t, dto.Question.Text.Text, result.Question.Text.Text)
-	assert.Equal(t, dto.Question.Text.IsHtml, result.Question.Text.IsHtml)
+	assert.Equal(t, dto.Question.TextDetail.Text, result.Question.Text.Text)
+	assert.Equal(t, dto.Question.TextDetail.IsHtml, result.Question.Text.IsHtml)
 	assert.Equal(t, dto.Answer.Text, result.Answer.Text)
 	assert.Equal(t, dto.Answer.IsHtml, result.Answer.IsHtml)
 }
@@ -100,7 +100,7 @@ func testQuestion(prefix string) *dtoquiz.QuestionAndAnswer {
 		Question: dtoquiz.Question{
 			Id:   subPrefix + "some-question-id",
 			Link: subPrefix + "some-question-link",
-			Text: dtoquiz.Text{
+			TextDetail: dtoquiz.Text{
 				Text:   subPrefix + "some-question-text",
 				IsHtml: true,
 			},
