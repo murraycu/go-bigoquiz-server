@@ -9,13 +9,13 @@ import (
 
 type Quiz struct {
 	HasIdAndTitle
-	IsPrivate        bool `xml:"is_private,attr"`
-	AnswersAsChoices bool `xml:"answers_as_choices,attr"`
+	IsPrivate        bool `xml:"is_private,attr" json:"isPrivate,omitempty"`
+	AnswersAsChoices bool `xml:"answers_as_choices,attr" json:"answersAsChoices,omitempty"`
 
-	Sections  []*Section           `xml:"section"`
-	Questions []*QuestionAndAnswer `xml:"question"`
+	Sections  []*Section           `xml:"section" json:"sections,omitempty"`
+	Questions []*QuestionAndAnswer `xml:"question" json:"questions,omitempty"`
 
-	UsesMathML bool `xml:"uses_mathml,attr"`
+	UsesMathML bool `xml:"uses_mathml,attr" json:"usesMathML,omitempty"`
 }
 
 func LoadQuiz(absFilePath string, id string) (*Quiz, error) {
