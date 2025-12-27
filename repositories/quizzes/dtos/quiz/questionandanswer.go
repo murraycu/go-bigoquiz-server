@@ -9,7 +9,13 @@ func (self *QuestionAndAnswer) createReverse() *QuestionAndAnswer {
 	var result QuestionAndAnswer
 	result.Id = "reverse-" + self.Id
 	result.TextDetail = self.Answer
-	result.Answer = self.TextDetail
+
+	if self.TextSimple != "" {
+		result.Answer.Text = self.TextSimple
+	} else {
+		result.Answer.Text = self.TextDetail.Text
+	}
+
 	result.Answer.IsHtml = false
 	return &result
 }

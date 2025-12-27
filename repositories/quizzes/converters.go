@@ -2,6 +2,7 @@ package quizzes
 
 import (
 	"fmt"
+
 	domainquiz "github.com/murraycu/go-bigoquiz-server/domain/quiz"
 	dtoquiz "github.com/murraycu/go-bigoquiz-server/repositories/quizzes/dtos/quiz"
 )
@@ -91,7 +92,15 @@ func convertDtoQuestionToDomainQuestion(dto *dtoquiz.Question) (*domainquiz.Ques
 	result.Id = dto.Id
 	result.Link = dto.Link
 
-	text, err := convertDtoTextToDomainText(&dto.TextDetail)
+	var text *domainquiz.Text
+	var err error
+	if dto.TextSimple != "" {
+		text = &domainquiz.Text{}
+		text.Text = dto.TextSimple
+	} else {
+		text, err = convertDtoTextToDomainText(&dto.TextDetail)
+	}
+
 	if err != nil {
 		return nil, fmt.Errorf("convertDtoTextToDomainText() failed: %v", err)
 	}
