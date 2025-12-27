@@ -125,7 +125,7 @@ func convertDtoQAToDomainQA(dto *dtoquiz.QuestionAndAnswer) (*domainquiz.Questio
 		answer = &domainquiz.Text{}
 		answer.Text = dto.AnswerSimple
 	} else {
-		answer, err = convertDtoTextToDomainText(&dto.TextDetail)
+		answer, err = convertDtoTextToDomainText(&dto.AnswerDetail)
 	}
 
 	if err != nil {
