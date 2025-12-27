@@ -1,9 +1,10 @@
 package quiz
 
 import (
-	"github.com/stretchr/testify/assert"
 	"path/filepath"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func getQuestionAndAnswer(q *Quiz, questionId string) *QuestionAndAnswer {
@@ -46,7 +47,7 @@ func getSection(q *Quiz, sectionId string) *Section {
 
 func TestLoadQuizWithBadFilepath(t *testing.T) {
 	id := "doesnotexist"
-	absFilePath, err := filepath.Abs("../../quizzes/" + id + ".xml")
+	absFilePath, err := filepath.Abs("../../quizzes/" + id + ".json")
 	assert.Nil(t, err)
 	assert.NotNil(t, absFilePath)
 
@@ -56,7 +57,7 @@ func TestLoadQuizWithBadFilepath(t *testing.T) {
 }
 
 func loadQuiz(t *testing.T, quizId string) *Quiz {
-	absFilePath, err := filepath.Abs("../../../../quizzes/" + quizId + ".xml")
+	absFilePath, err := filepath.Abs("../../../../quizzes/" + quizId + ".json")
 	assert.Nil(t, err)
 	assert.NotNil(t, absFilePath)
 
@@ -121,7 +122,7 @@ func TestLoadQuizWithNoSections(t *testing.T) {
 	q := loadQuiz(t, "bitwise")
 
 	// loadQuiz() creates a section for the top-level questions.
-	// (TODO: Just require this in the original .xml?)
+	// (TODO: Just require this in the original .json?)
 	assert.NotNil(t, q.Sections)
 
 	section := q.Sections[0]
