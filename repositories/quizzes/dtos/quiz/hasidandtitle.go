@@ -1,9 +1,9 @@
 package quiz
 
 type HasIdAndTitle struct {
-	Id    string `xml:"id,attr" json:"id,omitempty"`
-	Title string `xml:"title" json:"title,omitempty"`
+	Id    string `json:"id,omitempty"`
+	Title string `json:"title,omitempty"`
 
 	// A URL.
-	Link string `xml:"link" json:"link,omitempty"`
+	Link string `json:"link,omitempty"`
 }

@@ -1,8 +1,7 @@
 package quiz
 
 type Text struct {
-	// Note: using ',innerxml' instead of chardata would not unescape the text/xml.
-	Text string `xml:",chardata" json:"text,omitempty"`
+	Text string `json:"text,omitempty"`
 
-	IsHtml bool `xml:"is_html,attr" json:"isHtml,omitempty"`
+	IsHtml bool `json:"isHtml,omitempty"`
 }

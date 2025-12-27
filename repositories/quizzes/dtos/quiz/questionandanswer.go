@@ -2,7 +2,6 @@ package quiz
 
 type QuestionAndAnswer struct {
 	Question
-
 	// AnswerDetail is an alternative to AnswerSimple.
 	// Only one of these should be set.
 	AnswerDetail Text `xml:"answer" json:"answerDetail,omitempty,omitzero"`
