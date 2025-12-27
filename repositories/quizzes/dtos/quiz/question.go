@@ -6,5 +6,5 @@ type Question struct {
 	// A URL.
 	Link string `xml:"link" json:"link,omitempty"`
 
-	Text Text `xml:"text" json:"text,omitempty"`
+	TextDetail Text `xml:"text" json:"textDetail,omitempty"`
 }

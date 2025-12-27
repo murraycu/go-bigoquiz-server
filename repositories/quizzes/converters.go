@@ -91,7 +91,7 @@ func convertDtoQuestionToDomainQuestion(dto *dtoquiz.Question) (*domainquiz.Ques
 	result.Id = dto.Id
 	result.Link = dto.Link
 
-	text, err := convertDtoTextToDomainText(&dto.Text)
+	text, err := convertDtoTextToDomainText(&dto.TextDetail)
 	if err != nil {
 		return nil, fmt.Errorf("convertDtoTextToDomainText() failed: %v", err)
 	}

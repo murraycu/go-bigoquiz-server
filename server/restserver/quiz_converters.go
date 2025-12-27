@@ -80,7 +80,7 @@ func fillRestQuizExtrasFromQuizCache(quiz *restquiz.Quiz, quizCache *QuizCache) 
 
 const maxChoicesFromAnswers = 6
 
-/** Get the index of an item in the array by comparig only the strings in the Text struct.
+/** Get the index of an item in the array by comparig only the strings in the TextDetail struct.
  */
 func getIndexInArray(array []*restquiz.Text, str *restquiz.Text) (int, bool) {
 	for i, s := range array {
