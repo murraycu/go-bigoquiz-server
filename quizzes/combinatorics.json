@@ -1,0 +1,117 @@
+{
+  "id": "combinatorics",
+  "title": "Combinatorics",
+  "sections": [
+    {
+      "id": "definitions",
+      "title": "Definitions",
+      "questions": [
+        {
+          "id": "definition-permutation",
+          "link": "https://en.wikipedia.org/wiki/Permutation",
+          "text": "Permutation",
+          "answer": "Ordered selection"
+        },
+        {
+          "id": "definition-combination",
+          "link": "https://en.wikipedia.org/wiki/Combination",
+          "text": "Combination",
+          "answer": "Unordered selection"
+        },
+        {
+          "id": "definition-subsequence",
+          "link": "https://en.wikipedia.org/wiki/Combination",
+          "text": "Subsequence",
+          "answer": "Elements in sequence but not contiguous."
+        },
+        {
+          "id": "definition-subarray",
+          "link": "https://en.wikipedia.org/wiki/Combination",
+          "text": "Subarray / Substring",
+          "answer": "Elements in sequence and contiguous."
+        },
+        {
+          "id": "definition-subset",
+          "link": "https://en.wikipedia.org/wiki/Subset",
+          "text": "Subset",
+          "answer": "Elements must not be in sequence or contiguous."
+        },
+        {
+          "id": "definition-power-set",
+          "link": "https://en.wikipedia.org/wiki/Power_set",
+          "text": "Power Set",
+          "answer": "All (unordered) subsets, of any size, of n items. Including the empty subset."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "count",
+      "title": "Counts of Permutations, Combinations and Subsets",
+      "questions": [
+        {
+          "id": "count-permutations",
+          "link": "https://en.wikipedia.org/wiki/Permutation",
+          "text": "Number of permutations of n items.",
+          "answer": "n!"
+        },
+        {
+          "id": "count-k-permutations",
+          "link": "https://en.wikipedia.org/wiki/Permutation#k-permutations_of_n",
+          "text": "Number of ordered subset combinations (permutations) of k items from n items.",
+          "answer": "n! / (n - k)!"
+        },
+        {
+          "id": "count-subsets",
+          "link": "https://en.wikipedia.org/wiki/Power_set#Properties",
+          "text": "Number of ordered subset combinations (permutations) of any size from n items. (The power set.)",
+          "answer": "2 ^ n"
+        },
+        {
+          "id": "count-combinations-n-choose-k",
+          "link": "https://en.wikipedia.org/wiki/Permutation#k-permutations_of_n",
+          "text": "Number of unordered subset combinations of k items from n items (n choose k).",
+          "answer": "n! / ((n - k)! ⋅  k)"
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "algorithms",
+      "title": "Algorithms",
+      "questions": [
+        {
+          "id": "algorithms-gospers-hack",
+          "link": "http://read.seas.harvard.edu/cs207/2012/?p=64",
+          "text": "Gosper's Hack for iterating combinations.",
+          "answer": "y = x \u0026 -x;  c = x + y; x = (((x ^ c) \u003e\u003e 2) / y) | c;"
+        },
+        {
+          "id": "algorithms-next-lexicographical-permutation",
+          "link": "https://en.wikipedia.org/wiki/Permutation#Generation_in_lexicographic_order",
+          "text": "Next Lexicographical Permutation.",
+          "answer": "Find rightmost a[k] \u003c a[k+1]. Find rightmost a[l] \u003e  a[k] after k, Swap a[k] and a[l]. Reverse from a[k+1]."
+        },
+        {
+          "id": "algorithms-generate-all-permutations-recursive",
+          "text": "Generate all ordered subsets (permutations) of size n from n items.",
+          "answer": "Recursively pass the length of the solution so far. For each possible item, check if it has been used already in the solution, and if not use it and recurse. Use the subset when the index == number of items.  Alternatively, Recursively pass the index of the next possible item. For each item position from the index to the end, swap the position and the index position, and recurse. Use the subset when the index == number of items."
+        },
+        {
+          "id": "algorithms-generate-all-subsets-recursive",
+          "text": "Generate all possible unordered (combinations) subsets (The power set) recursively.",
+          "answer": "Recursively pass the index of the next possible item, and the prefix of the subset so far. Recurse once without appending the current item, and once with appending the current item. Use the subset when the index == number of possible items."
+        },
+        {
+          "id": "algorithms-generate-all-subsets-iterative",
+          "text": "Generate all possible unordered (combinations) subsets (The power set) iteratively. For small n.",
+          "answer": "Try all possible integer values from 0 to 2^n. If bit i is set then include item i in the subset."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    }
+  ]
+}

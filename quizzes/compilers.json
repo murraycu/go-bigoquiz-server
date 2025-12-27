@@ -1,0 +1,399 @@
+{
+  "id": "compilers",
+  "title": "Compilers",
+  "sections": [
+    {
+      "id": "compilers-structure",
+      "title": "Compiler Structure",
+      "questions": [
+        {
+          "id": "compilers-structure-front-end",
+          "link": "https://en.wikipedia.org/wiki/Compiler#Front_end",
+          "text": "Front End",
+          "answer": "Scanner (lexical analysis. Also known as lexer, or tokenizer), Parser (syntactic analysis), Elaboration. Understands form, syntax and meaning. Receives the expression (source code). Emits IR (Intermediate Representation)."
+        },
+        {
+          "id": "compilers-structure-optimizer",
+          "text": "Optimizer",
+          "answer": "Multiple optimizer steps. Receives IR (Intermediate Representation). Performs analysis and emits transformed IR."
+        },
+        {
+          "id": "compilers-structure-backend",
+          "text": "Backend",
+          "answer": "Instruction Selection, Instruction Scheduling, Register Allocation. Receives IR (Intermediate Representation) and emits code for the target machine."
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "compilers-scanners-regex",
+      "title": "Scanners: Regular Expressions: Syntax",
+      "link": "https://en.wikipedia.org/wiki/Regular_expression#Formal_definition",
+      "questions": [
+        {
+          "id": "compilers-scanners-regex-syntax-alternation",
+          "text": "Alternation",
+          "answer": "For instance, a|b"
+        },
+        {
+          "id": "compilers-scanners-regex-syntax-concatenation",
+          "text": "Concatenation",
+          "answer": "For instance, ab"
+        },
+        {
+          "id": "compilers-scanners-regex-syntax-keene-closure",
+          "text": "Keene Closure",
+          "answer": "a*"
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "compilers-scanners-automata",
+      "title": "Scanners: Finite State Automata",
+      "link": "https://en.wikipedia.org/wiki/Finite-state_machine",
+      "subsections": [
+        {
+          "id": "compilers-scanners-automata-5tuple",
+          "title": "5-Tuple",
+          "link": "https://en.wikipedia.org/wiki/Deterministic_finite_automaton#Formal_definition",
+          "question": [
+            {
+              "id": "compilers-scanners-automata-5tuple-s",
+              "text": "S",
+              "answer": "A set of states."
+            },
+            {
+              "id": "compilers-scanners-automata-5tuple-sigma",
+              "text": "Σ",
+              "answer": "A set of input symbols (the alphabet)."
+            },
+            {
+              "id": "compilers-scanners-automata-5tuple-delta",
+              "text": "δ",
+              "answer": "A transition function: δ(s, c)."
+            },
+            {
+              "id": "compilers-scanners-automata-5tuple-s0",
+              "text": "s₀",
+              "answer": "The start state."
+            },
+            {
+              "id": "compilers-scanners-automata-5tuple-sa",
+              "text": "sₐ",
+              "answer": "The set of accepting states."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "compilers-scanners-automata-types",
+          "title": "Types",
+          "question": [
+            {
+              "id": "compilers-scanners-automata-types-dfa",
+              "link": "https://en.wikipedia.org/wiki/Deterministic_finite_automaton",
+              "text": "DFA (Deterministic Finite State Automata)",
+              "answer": "Allows transitions on the empty string ε.   Allows states that have multiple transitions on the same character."
+            },
+            {
+              "id": "compilers-scanners-automata-types-nfa",
+              "link": "https://en.wikipedia.org/wiki/Nondeterministic_finite_automaton",
+              "text": "NFA (Non-deterministic Finite State Automata)",
+              "answer": "Transition function is single-valued. Does not allow transitions on the empty string ε."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "compilers-scanners-automata-construction",
+          "title": "Construction",
+          "question": [
+            {
+              "id": "compilers-scanners-automata-construction-thompsons",
+              "link": "https://en.wikipedia.org/wiki/Thompson%27s_construction",
+              "text": "Thompson's Construction",
+              "answer": "Constructs an NFA from a regular expression."
+            },
+            {
+              "id": "compilers-scanners-automata-construction-subset",
+              "link": "https://en.wikipedia.org/wiki/Powerset_construction",
+              "text": "Subset Construction",
+              "answer": "Constructs a DFA from an NFA."
+            },
+            {
+              "id": "compilers-scanners-automata-construction-dfa-minimization",
+              "link": "https://en.wikipedia.org/wiki/DFA_minimization#Hopcroft.27s_algorithm",
+              "text": "Hopcroft's Algorithm",
+              "answer": "Minimize a DFA."
+            }
+          ],
+          "answersAsChoices": true
+        }
+      ]
+    },
+    {
+      "id": "compilers-parsers",
+      "title": "Parsers",
+      "subsections": [
+        {
+          "id": "compilers-parsers-grammar-terminology",
+          "title": "Grammar: Terminology",
+          "question": [
+            {
+              "id": "compilers-parsers-grammar-cfg",
+              "text": "Context-free Grammar",
+              "answer": "Defines a set of strings that are valid sentences."
+            },
+            {
+              "id": "compilers-parsers-grammar-sentence",
+              "text": "Sentence",
+              "answer": "A string of symbols that can be derived from the rules of a grammar."
+            },
+            {
+              "id": "compilers-parsers-grammar-production",
+              "text": "Production",
+              "answer": "A rule in a CFG (Context-free Grammar)."
+            },
+            {
+              "id": "compilers-parsers-grammar-non-terminal-symbol",
+              "text": "Nonterminal Symbol",
+              "answer": "A syntactic variable used in a grammar's productions."
+            },
+            {
+              "id": "compilers-parsers-grammar-terminal-symbol",
+              "text": "Terminal Symbol",
+              "answer": "A word (actually, its syntactic category) that can appear in a sentence."
+            },
+            {
+              "id": "compilers-parsers-grammar-derivation",
+              "text": "Derivation",
+              "answer": "A sequence of rewriting steps that begins with the grammar's start symbol and ends with a sentence in the language."
+            },
+            {
+              "id": "compilers-parsers-grammar-sentential-form",
+              "text": "Sentential Form",
+              "answer": "A string of symbols that occurs as one step in a valid derivation."
+            },
+            {
+              "id": "compilers-parsers-grammar-rightmost-derivation",
+              "text": "Rightmost Derivation",
+              "answer": "A derivation that rewrites, at each step, the rightmost nonterminal."
+            },
+            {
+              "id": "compilers-parsers-grammar-leftmost-derivation",
+              "text": "Leftmost Derivation",
+              "answer": "A derivation that rewrites, at each step, the leftmost nonterminal."
+            },
+            {
+              "id": "compilers-parsers-grammar-left-recursive-rule",
+              "text": "Left Recursive Rule",
+              "answer": "A rule whose first symbol on the right-hand side (expansion) is the symbol on its left-hand side (direct), or can derive that symbol (indirect)."
+            },
+            {
+              "id": "compilers-parsers-grammar-backtrack-free-grammar",
+              "text": "Backtrack-free Grammar",
+              "answer": "A CFG for which a leftmost top-down parser can always predict the correct rule with lookahead of at most one word."
+            },
+            {
+              "id": "compilers-parsers-grammar-backtrack-left-factoring",
+              "text": "Left Factoring",
+              "answer": "The process of extracting and isolating common prefixes in a set of productions."
+            },
+            {
+              "id": "compilers-parsers-grammar-handle",
+              "text": "Handle",
+              "answer": "In an LR(1) parser, a pair A-\u003eB, k, such that B appears in the frontier with its right end at position k, so that replacing B with A (reducing B to A) is the next step in the parse."
+            },
+            {
+              "id": "compilers-parsers-grammar-reduction",
+              "text": "Reduction",
+              "answer": "In an LR(1) parser, use an A-\u003eB production to replace B with A in the frontier of the bottom-up parse."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "compilers-parsers-grammar-classes",
+          "title": "Grammar: Classes",
+          "question": [
+            {
+              "id": "compilers-parsers-grammar-classes-afg",
+              "text": "Arbitrary CFG Grammars",
+              "answer": "Require more time to parse than restricted LR(1) or LL(1) grammars."
+            },
+            {
+              "id": "compilers-parsers-grammar-classes-lr1",
+              "text": "LR(1) Grammars",
+              "answer": "A subset of Arbitrary CFS Grammars. Can be parsed bottom-up, scanning left to right, looking at most 1 word ahead."
+            },
+            {
+              "id": "compilers-parsers-grammar-classes-ll1",
+              "text": "LL(1) Grammars",
+              "answer": "A subset of LR(1) grammars. Can be parsed top-down, scanning from left to right, looking at most 1 word ahead."
+            },
+            {
+              "id": "compilers-parsers-grammar-classes-RG",
+              "text": "RG (Regular Grammars)",
+              "answer": "A subset of LL(1) grammars. Equivalent to regular expressions. Productions are restricted to either A -\u003e a, or A -\u003e aB, where A and B are nonterminal symbols, and a is a terminal symbol."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "compilers-parsers-grammar-sets",
+          "title": "Grammar: Sets",
+          "question": [
+            {
+              "id": "compilers-parsers-grammar-sets-first-symbol",
+              "text": "FIRST(symbol)",
+              "answer": "The set of terminals that can appear at the start of a sentence derived from the symbol."
+            },
+            {
+              "id": "compilers-parsers-grammar-sets-first-production",
+              "text": "FIRST(production: a -\u003e b1 b2 ... bk)",
+              "answer": "The set of terminals that can appear at the start of a sentence derived from this production. Union of FIRST(symbol) for b1 b2 ... bn, where bn is the first symbol whose FIRST(symbol) does not contain the empty symbol ε."
+            },
+            {
+              "id": "compilers-parsers-grammar-sets-follow",
+              "text": "FOLLOW(symbol)",
+              "answer": "The set of words that can occur immediately after the (nonterminal) symbol in a sentence."
+            },
+            {
+              "id": "compilers-parsers-grammar-sets-first-plus-production",
+              "text": "FIRST+(production: a -\u003e b1 b2 ... bk)",
+              "answer": "FIRST(production), if that does not contain the empty symbol ε. Otherwise, the union of FIRST(production) and FOLLOW(a)."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "compilers-parsers-types",
+          "title": "Parser Types",
+          "question": [
+            {
+              "id": "compilers-parsers-types-ll1",
+              "link": "https://en.wikipedia.org/wiki/LL_parser",
+              "text": "LL(1) Parser",
+              "answer": "Top-down predictive parser. A left-to-right scanning, leftmost derivation, parser with a 1 symbol lookahead.."
+            },
+            {
+              "id": "compilers-parsers-types-lr1",
+              "link": "https://en.wikipedia.org/wiki/LR_parser",
+              "text": "LR(1) Parser",
+              "answer": "Bottom-up parser. A left-to-right scanning, rightmost derivation in reverse, parser with a 1 symbol lookahead."
+            }
+          ],
+          "answersAsChoices": true
+        }
+      ]
+    },
+    {
+      "id": "compilers-context-sensitive-analysis",
+      "title": "Context Sensitive Analysis",
+      "subsections": [
+        {
+          "id": "compilers-context-sensitive-analysis-techniques",
+          "title": "Techniques",
+          "question": [
+            {
+              "id": "compilers-context-sensitive-analysis-techniques-attribute-grammar",
+              "link": "https://en.wikipedia.org/wiki/Attribute_grammar",
+              "text": "Attribute Grammar",
+              "answer": "A context-free grammar whose productions are augmented by rules that define one attribute value in terms of other attribute values."
+            },
+            {
+              "id": "compilers-context-sensitive-analysis-techniques-ad-hoc-syntax-directed",
+              "link": "https://en.wikipedia.org/wiki/Syntax-directed_translation",
+              "text": "Ad Hoc Syntax-Directed Translation",
+              "answer": "A context-free grammar whose productions are augmented by code snippets that define one attribute value in terms of other attribute values."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "compilers-context-sensitive-analysis-attributes",
+          "title": "Attributes",
+          "question": [
+            {
+              "id": "compilers-context-sensitive-analysis-techniques-attributes-synthesized",
+              "link": "https://en.wikipedia.org/wiki/Attribute_grammar#Synthesized_attributes",
+              "text": "Synthesized Attribute",
+              "answer": "Defined in terms of the attributes of the node, its children, and constants."
+            },
+            {
+              "id": "compilers-context-sensitive-analysis-techniques-attributes-inherited",
+              "link": "https://en.wikipedia.org/wiki/Attribute_grammar#Inherited_attributes",
+              "text": "Inherited Attribute",
+              "answer": "Defined in terms of the attributes of the node, its siblings, its parent, and constants."
+            }
+          ],
+          "answersAsChoices": true
+        }
+      ]
+    },
+    {
+      "id": "compilers-ir",
+      "title": "Intermediate Representation",
+      "link": "https://en.wikipedia.org/wiki/Intermediate_representation",
+      "subsections": [
+        {
+          "id": "compilers-ir-graphical",
+          "title": "Graphical",
+          "question": [
+            {
+              "id": "compilers-ir-graphical-ast",
+              "link": "https://en.wikipedia.org/wiki/Abstract_syntax_tree",
+              "text": "AST (Abstract Syntax Tree)",
+              "answer": "A contraction of the parse tree that omits most nonterminal nodes."
+            },
+            {
+              "id": "compilers-ir-graphical-dag",
+              "text": "DAG (Directed Acyclic Graph)",
+              "answer": "An AST whose nodes can share identical subtrees as children, avoiding repetition."
+            },
+            {
+              "id": "compilers-ir-graphical-cfg",
+              "link": "https://en.wikipedia.org/wiki/Control_flow_graph",
+              "text": "CFG (Control Flow Graph)",
+              "answer": "Has a node for every basic block and an edge for each possible control transfer between blocks."
+            },
+            {
+              "id": "compilers-ir-graphical-dependence-graph",
+              "link": "https://en.wikipedia.org/wiki/Dependency_graph",
+              "text": "Dependence Graph",
+              "answer": "Models the flow of values in a code fragment, from definitions to uses."
+            },
+            {
+              "id": "compilers-ir-graphical-call-graph",
+              "link": "https://en.wikipedia.org/wiki/Dependency_graph",
+              "text": "Call Graph",
+              "answer": "Models the calling relationships among the procedures in a program."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "compilers-ir-linear",
+          "title": "Linear",
+          "question": [
+            {
+              "id": "compilers-ir-linear-stack-machine-code",
+              "link": "https://en.wikipedia.org/wiki/Stack_machine",
+              "text": "Stack Machine Code",
+              "answer": "Operations pop their operands from the stack, apply the operator, and push the results back onto the stack."
+            },
+            {
+              "id": "compilers-ir-linear-three-address-code",
+              "link": "https://en.wikipedia.org/wiki/Three-address_code",
+              "text": "Three Address Code",
+              "answer": "Operations consist of an operator, operands, and a result."
+            }
+          ],
+          "answersAsChoices": true
+        }
+      ]
+    }
+  ]
+}

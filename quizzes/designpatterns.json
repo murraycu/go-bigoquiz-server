@@ -1,0 +1,160 @@
+{
+  "id": "designpatterns",
+  "title": "Design Patterns",
+  "sections": [
+    {
+      "id": "core-definitions",
+      "title": "Core Definitions",
+      "questions": [
+        {
+          "id": "definition-decorator",
+          "link": "https://en.wikipedia.org/wiki/Decorator_pattern",
+          "text": "Decorator",
+          "answer": "Wraps an object to provide new behavior."
+        },
+        {
+          "id": "definition-state",
+          "link": "https://en.wikipedia.org/wiki/State_pattern",
+          "text": "State",
+          "answer": "Encapsulates state-based behaviors and uses delegation to switch between behaviors."
+        },
+        {
+          "id": "definition-iterator",
+          "link": "https://en.wikipedia.org/wiki/Iterator_pattern",
+          "text": "Iterator",
+          "answer": "Lets you traverse a collection of objects without exposing its implementation."
+        },
+        {
+          "id": "definition-facade",
+          "link": "https://en.wikipedia.org/wiki/Facade_pattern",
+          "text": "Facade",
+          "answer": "Simplifies the interface of a set of classes."
+        },
+        {
+          "id": "definition-strategy",
+          "link": "https://en.wikipedia.org/wiki/Strategy_pattern",
+          "text": "Strategy",
+          "answer": "Encapsulates interchangeable behaviors and uses delegation to decide which one to use."
+        },
+        {
+          "id": "definition-proxy",
+          "link": "https://en.wikipedia.org/wiki/Proxy_pattern",
+          "text": "Proxy",
+          "answer": "Wraps an object to control access to it."
+        },
+        {
+          "id": "definition-factory-method",
+          "link": "https://en.wikipedia.org/wiki/Factory_method_pattern",
+          "text": "Factory Method",
+          "answer": "Subclasses decide which concrete classes to create."
+        },
+        {
+          "id": "definition-adapter",
+          "link": "https://en.wikipedia.org/wiki/Adapter_pattern",
+          "text": "Adapter",
+          "answer": "Wraps an object and provides a different interface to it."
+        },
+        {
+          "id": "definition-observer",
+          "link": "https://en.wikipedia.org/wiki/Observer_pattern",
+          "text": "Observer",
+          "answer": "Allows objects to be notified when state changes."
+        },
+        {
+          "id": "definition-template-method",
+          "link": "https://en.wikipedia.org/wiki/Template_method_pattern",
+          "text": "Template Method",
+          "answer": "Subclasses decide how to implement steps in an algorithm."
+        },
+        {
+          "id": "definition-composite",
+          "link": "https://en.wikipedia.org/wiki/Composite_pattern",
+          "text": "Composite",
+          "answer": "Clients treat collections of objects and individual objects uniformly."
+        },
+        {
+          "id": "definition-singleton",
+          "link": "https://en.wikipedia.org/wiki/Singleton_pattern",
+          "text": "Singleton",
+          "answer": "Ensures one and only one object is created."
+        },
+        {
+          "id": "definition-abstract-factory",
+          "link": "https://en.wikipedia.org/wiki/Abstract_factory_pattern",
+          "text": "Abstract Factory",
+          "answer": "Allows a client to create families of objects without specifying their concrete classes."
+        },
+        {
+          "id": "definition-command",
+          "link": "https://en.wikipedia.org/wiki/Command_pattern",
+          "text": "Command",
+          "answer": "Encapsulates a request as an object."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "extra-definitions",
+      "title": "Extra Definitions",
+      "questions": [
+        {
+          "id": "definition-bridge",
+          "link": "https://en.wikipedia.org/wiki/Bridge_pattern",
+          "text": "Bridge",
+          "answer": "Decouples an abstraction from its implementation so they can vary independently."
+        },
+        {
+          "id": "definition-builder",
+          "link": "https://en.wikipedia.org/wiki/Builder_pattern",
+          "text": "Builder",
+          "answer": "Allows constructing in steps."
+        },
+        {
+          "id": "definition-chain-of-responsibility",
+          "link": "https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern",
+          "text": "Chain of Responsibility",
+          "answer": "Gives more than one object a chance to handle a request."
+        },
+        {
+          "id": "definition-flyweight",
+          "link": "https://en.wikipedia.org/wiki/Flyweight_pattern",
+          "text": "Flyweight",
+          "answer": "Use one instance of a class to provide many virtual instances."
+        },
+        {
+          "id": "definition-interpreter",
+          "link": "https://en.wikipedia.org/wiki/Interpreter_pattern",
+          "text": "Interpreter",
+          "answer": "Evaluates sentences in a language."
+        },
+        {
+          "id": "definition-mediator",
+          "link": "https://en.wikipedia.org/wiki/Mediator_pattern",
+          "text": "Mediator",
+          "answer": "Encapsulates how a set of objects interact."
+        },
+        {
+          "id": "definition-memento",
+          "link": "https://en.wikipedia.org/wiki/Memento_pattern",
+          "text": "Memento",
+          "answer": "Provides the ability to restore an object to its previous state."
+        },
+        {
+          "id": "definition-prototype",
+          "link": "https://en.wikipedia.org/wiki/Prototype_pattern",
+          "text": "Prototype",
+          "answer": "Create objects from prototypical existing instances."
+        },
+        {
+          "id": "definition-visitor",
+          "link": "https://en.wikipedia.org/wiki/Visitor_pattern",
+          "text": "Visitor",
+          "answer": "Allows the definition of new operations on objects without changing their structures."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    }
+  ]
+}

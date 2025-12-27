@@ -1,0 +1,225 @@
+{
+  "id": "string_algorithms",
+  "title": "String Algorithms",
+  "sections": [
+    {
+      "id": "string-algorithms-substring-search",
+      "title": "Substring Search Algorithms",
+      "link": "https://en.wikipedia.org/wiki/String_searching_algorithm",
+      "subsections": [
+        {
+          "id": "string-algorithms-substring-search-description",
+          "title": "Description",
+          "question": [
+            {
+              "id": "string-algorithms-substring-search-description-z-algorithm",
+              "link": "http://www.geeksforgeeks.org/z-algorithm-linear-time-pattern-searching-algorithm/",
+              "text": "Z Algorithm",
+              "answer": "Concatenate the pattern, a special character, and the text. For each index, calculate the prefix length, if any, that starts at that position. After finding a prefix, subsequently reuse previously calculated values from the prefix itself."
+            },
+            {
+              "id": "string-algorithms-substring-search-description-kmp",
+              "link": "https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm",
+              "text": "Knuth-Morris-Pratt (KMP)",
+              "answer": "Pre-calculate a Deterministic Finite Automata (DFA), (also known as \"partial match table\" or \"failure function\") that tells us, for each mismatch, where in the pattern we would need to start comparing characters again. For instance, this avoids re-comparing a prefix of the pattern that is identical to a suffix of the part of the pattern compared so far."
+            },
+            {
+              "id": "string-algorithms-substring-search-description-boyer-moore",
+              "link": "https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_string_search_algorithm",
+              "text": "Boyer-Moore",
+              "answer": "Pre-calculate the right-most position of each character in the pattern. When there is a mismatch, skip ahead that much and compare again from the start of the pattern."
+            },
+            {
+              "id": "string-algorithms-substring-search-description-rabin-karp",
+              "link": "https://en.wikipedia.org/wiki/Rabin%E2%80%93Karp_algorithm",
+              "text": "Rabin-Karp",
+              "answer": "Compare hashes of the substrings, generating the next hash based on the previous hash."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "string-algorithms-substring-search-preprocessing",
+          "title": "Preprocessing",
+          "question": [
+            {
+              "id": "string-algorithms-substring-search-preprocessing-z-algorithm",
+              "link": "http://www.geeksforgeeks.org/z-algorithm-linear-time-pattern-searching-algorithm/",
+              "text": "Z Algorithm",
+              "answer": "Build an array of length pattern + $ + text. For each index, calculate the prefix length, if any, that starts at that position. After finding a prefix (a Z box), reuse previous Z values from the start. But if the previous Z value is as large as the remaining Z box, continue checking for the rest of a matching prefix after the Z box."
+            },
+            {
+              "id": "string-algorithms-substring-search-preprocessing-kmp-with-dfa",
+              "link": "https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm",
+              "text": "Knuth-Morris-Pratt (KMP) with a DFA",
+              "answer": "Build a 2D array of pattern-size * alphabet-size. With x initially 0, set all dfa[pattern-pos][] to the values at dfa[x], then set dfa[pattern-pos][character-code] = pattern-pos + 1, update x to this value, and move to the next pattern position. "
+            },
+            {
+              "id": "string-algorithms-substring-search-preprocessing-kmp-with-prefix-array",
+              "link": "https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm",
+              "text": "Knuth-Morris-Pratt (KMP) with a Prefix Array",
+              "answer": "Build an array the same length as the pattern. With x initially 0 and i initially 1, if pattern[i] == pattern[x] then pa[i] = x + 1 and increment x and i, else x = pa[x-1] and try again. pa[pos] is then the number of characters at and before pos  (the suffix) that match the characters from position 0 (the prefix)."
+            },
+            {
+              "id": "string-algorithms-substring-search-preprocessing-boyer-moore",
+              "link": "https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_string_search_algorithm",
+              "text": "Boyer-Moore",
+              "answer": "Build an array of alphabet-size. Iterate over the pattern, from left to right, marking the (rightmost so far) position of the character in the array."
+            },
+            {
+              "id": "string-algorithms-substring-search-preprocessing-rabin-karp",
+              "link": "https://en.wikipedia.org/wiki/Rabin%E2%80%93Karp_algorithm",
+              "text": "Rabin-Karp",
+              "answer": "Generate a hash of the pattern."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "string-algorithms-substring-search-time-complexity",
+          "title": "Time Complexity",
+          "question": [
+            {
+              "id": "string-algorithms-substring-search-time-kmp",
+              "link": "https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm",
+              "text": "Knuth-Morris-Pratt (KMP)",
+              "answer": "O(2N), typically 1.1N"
+            },
+            {
+              "id": "string-algorithms-substring-search-time-boyer-moore",
+              "link": "https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_string_search_algorithm",
+              "text": "Boyer-Moore",
+              "answer": "O(3N), typically N/M"
+            },
+            {
+              "id": "string-algorithms-substring-search-time-rabin-karp",
+              "link": "https://en.wikipedia.org/wiki/Rabin%E2%80%93Karp_algorithm",
+              "text": "Rabin-Karp",
+              "answer": "O(7N), typically 7N"
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "string-algorithms-substring-search-extra-space",
+          "title": "Extra space",
+          "question": [
+            {
+              "id": "string-algorithms-substring-search-extra-space-z-algorithm",
+              "link": "http://www.geeksforgeeks.org/z-algorithm-linear-time-pattern-searching-algorithm/",
+              "text": "Z Algorithm",
+              "answer": "O(M + N) (substring length + text length)"
+            },
+            {
+              "id": "string-algorithms-substring-search-extra-space-kmp",
+              "link": "https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm",
+              "text": "Knuth-Morris-Pratt (KMP)",
+              "answer": "O(MR) (substring length * alphabet size)"
+            },
+            {
+              "id": "string-algorithms-substring-search-extra-space-boyer-moore",
+              "link": "https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_string_search_algorithm",
+              "text": "Boyer-Moore",
+              "answer": "O(R) (alphabet size)"
+            },
+            {
+              "id": "string-algorithms-substring-search-extra-space-rabin-karp",
+              "link": "https://en.wikipedia.org/wiki/Rabin%E2%80%93Karp_algorithm",
+              "text": "Rabin-Karp",
+              "answer": "O(1)"
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "string-algorithms-substring-search-backtracking",
+          "title": "Backup in input?",
+          "question": [
+            {
+              "id": "string-algorithms-substring-search-backtracking-z-algorithm",
+              "link": "http://www.geeksforgeeks.org/z-algorithm-linear-time-pattern-searching-algorithm/",
+              "text": "Z Algorithm",
+              "answer": "No backup required"
+            },
+            {
+              "id": "string-algorithms-substring-search-backtracking-kmp",
+              "link": "https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm",
+              "text": "Knuth-Morris-Pratt (KMP)",
+              "answer": "No backup required"
+            },
+            {
+              "id": "string-algorithms-substring-search-backtracking-boyer-moore",
+              "link": "https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_string_search_algorithm",
+              "text": "Boyer-Moore",
+              "answer": "Backup required"
+            },
+            {
+              "id": "string-algorithms-substring-search-backtracking-rabin-karp",
+              "link": "https://en.wikipedia.org/wiki/Rabin%E2%80%93Karp_algorithm",
+              "text": "Rabin-Karp",
+              "answer": "No backup required"
+            }
+          ],
+          "answersAsChoices": true
+        }
+      ]
+    },
+    {
+      "id": "string-algorithms-similarity",
+      "title": "Similarity",
+      "link": "https://en.wikipedia.org/wiki/Category:String_similarity_measures",
+      "subsections": [
+        {
+          "id": "string-algorithms-similarity-description",
+          "title": "Description",
+          "question": [
+            {
+              "id": "string-algorithms-similarity-description-needleman-wunsch",
+              "link": "https://en.wikipedia.org/wiki/Needleman%E2%80%93Wunsch_algorithm",
+              "text": "Needleman-Wunsch Sequence Algorithm",
+              "answer": "Align two strings by inserting as few spaces as possible so that characters match."
+            },
+            {
+              "id": "string-algorithms-similarity-description-levenshtein-distance",
+              "link": "https://en.wikipedia.org/wiki/Levenshtein_distance",
+              "text": "Levenshtein Distance",
+              "answer": "Count the number of character edits (removal, insertion, or substitution) needed to make two strings identical."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "string-algorithms-similarity-implementation",
+          "title": "Implementation",
+          "question": [
+            {
+              "id": "string-algorithms-similarity-implementation-needleman-wunsch",
+              "link": "https://en.wikipedia.org/wiki/Needleman%E2%80%93Wunsch_algorithm",
+              "text": "Needleman-Wunsch Sequence Algorithm",
+              "answer": "Dynamic Programming. Subproblem is score for matching i characters in a with j characters in b, which is the minimum cost of matching one less character from either a or b, or from both, matching, inserting, or deleting a character."
+            },
+            {
+              "id": "string-algorithms-similarity-implementation-levenshtein-distance",
+              "link": "https://en.wikipedia.org/wiki/Levenshtein_distance",
+              "text": "Levenshtein Distance",
+              "answer": "Dynamic Programming. Subproblem is score for aligning i characters in a with j characters in b, which is the minimum cost of using one less character from either a or b, or from both, adding a space or mismatch if necessary."
+            }
+          ],
+          "answersAsChoices": true
+        }
+      ]
+    },
+    {
+      "id": "string-algorithms-misc",
+      "title": "Miscellaneous",
+      "questions": [
+        {
+          "id": "string-algorithms-misc-manachers-algorithm",
+          "link": "https://en.wikipedia.org/wiki/Longest_palindromic_substring#Manacher.27s_algorithm",
+          "text": "Manacher's Algorithm",
+          "answer": "Longest Palindromic Substring"
+        }
+      ]
+    }
+  ]
+}

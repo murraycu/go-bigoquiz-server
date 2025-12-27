@@ -1,0 +1,685 @@
+{
+  "id": "numbers",
+  "title": "Numbers (Magnitudes, Powers, etc)",
+  "sections": [
+    {
+      "id": "2-to-the-n",
+      "title": "2 to the n",
+      "questions": [
+        {
+          "id": "2-to-the-1",
+          "text": "2^1",
+          "answer": "2"
+        },
+        {
+          "id": "2-to-the-2",
+          "text": "2^2",
+          "answer": "4"
+        },
+        {
+          "id": "2-to-the-3",
+          "text": "2^3",
+          "answer": "8"
+        },
+        {
+          "id": "2-to-the-4",
+          "text": "2^4",
+          "answer": "16"
+        },
+        {
+          "id": "2-to-the-5",
+          "text": "2^5",
+          "answer": "32"
+        },
+        {
+          "id": "2-to-the-6",
+          "text": "2^6",
+          "answer": "64"
+        },
+        {
+          "id": "2-to-the-7",
+          "text": "2^7",
+          "answer": "128"
+        },
+        {
+          "id": "2-to-the-8",
+          "text": "2^8",
+          "answer": "256"
+        },
+        {
+          "id": "2-to-the-9",
+          "text": "2^9",
+          "answer": "512"
+        },
+        {
+          "id": "2-to-the-10",
+          "text": "2^10",
+          "answer": "1024"
+        },
+        {
+          "id": "2-to-the-11",
+          "text": "2^11",
+          "answer": "2048"
+        },
+        {
+          "id": "2-to-the-12",
+          "text": "2^12",
+          "answer": "4096"
+        },
+        {
+          "id": "2-to-the-13",
+          "text": "2^13",
+          "answer": "8192"
+        },
+        {
+          "id": "2-to-the-14",
+          "text": "2^14",
+          "answer": "16384"
+        },
+        {
+          "id": "2-to-the-15",
+          "text": "2^15",
+          "answer": "32768"
+        },
+        {
+          "id": "2-to-the-16",
+          "text": "2^16",
+          "answer": "65536"
+        },
+        {
+          "id": "2-to-the-32",
+          "text": "2^16",
+          "answer": "4294967296"
+        },
+        {
+          "id": "2-to-the-48",
+          "text": "2^16",
+          "answer": "281474976710656"
+        },
+        {
+          "id": "2-to-the-64",
+          "text": "2^64",
+          "answer": "18446744073709551616"
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "2-to-the-n-magnitude",
+      "title": "2 to the n: Less than power of 10",
+      "questions": [
+        {
+          "id": "2-to-the-n-magnitude-1",
+          "text": "2^1",
+          "answer": "10^1"
+        },
+        {
+          "id": "2-to-the-n-magnitude-2",
+          "text": "2^2",
+          "answer": "10^1"
+        },
+        {
+          "id": "2-to-the-n-magnitude-3",
+          "text": "2^3",
+          "answer": "10^1"
+        },
+        {
+          "id": "2-to-the-n-magnitude-4",
+          "text": "2^4",
+          "answer": "10^2"
+        },
+        {
+          "id": "2-to-the-n-magnitude-5",
+          "text": "2^5",
+          "answer": "10^2"
+        },
+        {
+          "id": "2-to-the-n-magnitude-6",
+          "text": "2^6",
+          "answer": "10^2"
+        },
+        {
+          "id": "2-to-the-n-magnitude-7",
+          "text": "2^7",
+          "answer": "10^3"
+        },
+        {
+          "id": "2-to-the-n-magnitude-8",
+          "text": "2^8",
+          "answer": "10^3"
+        },
+        {
+          "id": "2-to-the-n-magnitude-9",
+          "text": "2^9",
+          "answer": "10^3"
+        },
+        {
+          "id": "2-to-the-n-magnitude-10",
+          "text": "2^10",
+          "answer": "10^4"
+        },
+        {
+          "id": "2-to-the-n-magnitude-11",
+          "text": "2^11",
+          "answer": "10^4"
+        },
+        {
+          "id": "2-to-the-n-magnitude-12",
+          "text": "2^12",
+          "answer": "10^4"
+        },
+        {
+          "id": "2-to-the-n-magnitude-13",
+          "text": "2^13",
+          "answer": "10^4"
+        },
+        {
+          "id": "2-to-the-n-magnitude-14",
+          "text": "2^14",
+          "answer": "10^5"
+        },
+        {
+          "id": "2-to-the-n-magnitude-15",
+          "text": "2^15",
+          "answer": "10^5"
+        },
+        {
+          "id": "2-to-the-n-magnitude-16",
+          "text": "2^16",
+          "answer": "10^5"
+        },
+        {
+          "id": "2-to-the-n-magnitude-32",
+          "text": "2^32",
+          "answer": "10^10"
+        },
+        {
+          "id": "2-to-the-n-magnitude-48",
+          "text": "2^48",
+          "answer": "10^15"
+        },
+        {
+          "id": "2-to-the-n-magnitude-64",
+          "text": "2^64",
+          "answer": "10^20"
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "10-to-the-n-as-2-to-the-n",
+      "title": "10 to the n: Less than power of 2",
+      "questions": [
+        {
+          "id": "10-to-the-n-as-to-the-n-1",
+          "text": "10^1",
+          "answer": "2^4"
+        },
+        {
+          "id": "10-to-the-n-as-to-the-n-2",
+          "text": "10^2",
+          "answer": "2^7"
+        },
+        {
+          "id": "10-to-the-n-as-to-the-n-3",
+          "text": "10^3",
+          "answer": "2^10"
+        },
+        {
+          "id": "10-to-the-n-as-to-the-n-4",
+          "text": "10^4",
+          "answer": "2^14"
+        },
+        {
+          "id": "10-to-the-n-as-to-the-n-5",
+          "text": "10^5",
+          "answer": "2^17"
+        },
+        {
+          "id": "10-to-the-n-as-to-the-n-6",
+          "text": "10^6",
+          "answer": "2^20"
+        },
+        {
+          "id": "10-to-the-n-as-to-the-n-7",
+          "text": "10^7",
+          "answer": "2^24"
+        },
+        {
+          "id": "10-to-the-n-as-to-the-n-8",
+          "text": "10^8",
+          "answer": "2^27"
+        },
+        {
+          "id": "10-to-the-n-as-to-the-n-9",
+          "text": "10^9",
+          "answer": "2^30"
+        },
+        {
+          "id": "10-to-the-n-as-to-the-n-10",
+          "text": "10^10",
+          "answer": "2^34"
+        },
+        {
+          "id": "10-to-the-n-as-to-the-n-11",
+          "text": "10^11",
+          "answer": "2^37"
+        },
+        {
+          "id": "10-to-the-n-as-to-the-n-12",
+          "text": "10^12",
+          "answer": "2^40"
+        },
+        {
+          "id": "10-to-the-n-as-to-the-n-13",
+          "text": "10^13",
+          "answer": "2^44"
+        },
+        {
+          "id": "10-to-the-n-as-to-the-n-14",
+          "text": "10^14",
+          "answer": "2^47"
+        },
+        {
+          "id": "10-to-the-n-as-to-the-n-15",
+          "text": "10^15",
+          "answer": "2^50"
+        },
+        {
+          "id": "10-to-the-n-as-to-the-n-16",
+          "text": "10^16",
+          "answer": "2^54"
+        },
+        {
+          "id": "10-to-the-n-as-to-the-n-17",
+          "text": "10^17",
+          "answer": "2^57"
+        },
+        {
+          "id": "10-to-the-n-as-to-the-n-18",
+          "text": "10^18",
+          "answer": "2^60"
+        },
+        {
+          "id": "10-to-the-n-as-to-the-n-19",
+          "text": "10^19",
+          "answer": "2^63"
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "units-bits",
+      "title": "Bytes, Words, Integers",
+      "questions": [
+        {
+          "id": "units-bits-byte",
+          "link": "https://en.wikipedia.org/wiki/Integer_%28computer_science%29#Bytes_and_octets",
+          "text": "Byte",
+          "answer": "8 bits"
+        },
+        {
+          "id": "units-bits-word",
+          "link": "https://en.wikipedia.org/wiki/Integer_%28computer_science%29#Words",
+          "text": "Word",
+          "answer": "8/16/32/64 bits (depending on CPU)"
+        },
+        {
+          "id": "units-bits-short-integer",
+          "link": "https://en.wikipedia.org/wiki/Integer_%28computer_science%29#Short_integer",
+          "text": "Short Integer",
+          "answer": "At least 16 bits"
+        },
+        {
+          "id": "units-bits-long-integer",
+          "link": "https://en.wikipedia.org/wiki/Integer_%28computer_science%29#Long_integer",
+          "text": "Long Integer",
+          "answer": "32 or 64 bits"
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "bitcounts",
+      "title": "Bit Counts",
+      "questions": [
+        {
+          "id": "bitcounts-byte",
+          "link": "https://en.wikipedia.org/wiki/Integer_%28computer_science%29#Bytes_and_octets",
+          "text": "Byte",
+          "answer": "8 bits"
+        },
+        {
+          "id": "bitcounts-kb",
+          "link": "https://en.wikipedia.org/wiki/Integer_%28computer_science%29#Bytes_and_octets",
+          "text": "Kilobyte (Kb)",
+          "answer": "8192 bits (8 * 1024)"
+        },
+        {
+          "id": "bitcounts-mb",
+          "link": "https://en.wikipedia.org/wiki/Integer_%28computer_science%29#Bytes_and_octets",
+          "text": "Megabyte (Mb)",
+          "answer": "8,388,608 bits (8 * 1024 * 1024)"
+        },
+        {
+          "id": "bitcounts-gb",
+          "link": "https://en.wikipedia.org/wiki/Integer_%28computer_science%29#Bytes_and_octets",
+          "text": "Gigabyte (Mb)",
+          "answer": "8,589,934,592 bits (8 * 1024 * 1024 * 1024)"
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "bitcounts-approx",
+      "title": "Approximate Bit Counts",
+      "questions": [
+        {
+          "id": "bitcounts-approx-byte",
+          "link": "https://en.wikipedia.org/wiki/Integer_%28computer_science%29#Bytes_and_octets",
+          "text": "Byte",
+          "answer": "8 bits"
+        },
+        {
+          "id": "bitcounts-approx-kb",
+          "link": "https://en.wikipedia.org/wiki/Integer_%28computer_science%29#Bytes_and_octets",
+          "text": "Kilobyte (Kb)",
+          "answer": "8 thousand bits"
+        },
+        {
+          "id": "bitcounts-approx-mb",
+          "link": "https://en.wikipedia.org/wiki/Integer_%28computer_science%29#Bytes_and_octets",
+          "text": "Megabyte (Mb)",
+          "answer": "8 million bits"
+        },
+        {
+          "id": "bitcounts-approx-gb",
+          "link": "https://en.wikipedia.org/wiki/Integer_%28computer_science%29#Bytes_and_octets",
+          "text": "Gigabyte (Mb)",
+          "answer": "8 billion bits"
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "unit-prefixes",
+      "title": "Unit Prefixes",
+      "questions": [
+        {
+          "id": "unit-prefixes-nano",
+          "link": "https://en.wikipedia.org/wiki/Nano-",
+          "text": "n (nano)",
+          "answer": "10^-9 (billionth)"
+        },
+        {
+          "id": "unit-prefixes-micro",
+          "link": "https://en.wikipedia.org/wiki/Micro-",
+          "text": "μ (micro)",
+          "answer": "10^-6 (millionth)"
+        },
+        {
+          "id": "unit-prefixes-milli",
+          "link": "https://en.wikipedia.org/wiki/Milli-",
+          "text": "m (milli)",
+          "answer": "10^-3 (thousandth)"
+        },
+        {
+          "id": "unit-prefixes-kilo",
+          "link": "https://en.wikipedia.org/wiki/Kilo-",
+          "text": "K (Kilo)",
+          "answer": "10^3 (Thousand)"
+        },
+        {
+          "id": "unit-prefixes-mega",
+          "link": "https://en.wikipedia.org/wiki/Mega-",
+          "text": "M (Mega)",
+          "answer": "10^6 (Million)"
+        },
+        {
+          "id": "unit-prefixes-giga",
+          "link": "https://en.wikipedia.org/wiki/Giga-",
+          "text": "G (Giga)",
+          "answer": "10^9 (Billion)"
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "latency",
+      "title": "Latency (slightly outdated)",
+      "link": "https://gist.github.com/jboner/2841832",
+      "questions": [
+        {
+          "id": "latency-l1-cache-reference",
+          "text": "L1 cache reference",
+          "answer": "0.5 ns"
+        },
+        {
+          "id": "latency-branch-misdirect",
+          "text": "Branch misdirect",
+          "answer": "5 ns"
+        },
+        {
+          "id": "latency-l2-cache-reference",
+          "text": "L2 cache reference",
+          "answer": "7 ns"
+        },
+        {
+          "id": "latency-mutex-lock-or-unlock",
+          "text": "Mutex lock or unlock",
+          "answer": "25 ns"
+        },
+        {
+          "id": "latency-main-memory-reference",
+          "text": "Main memory reference",
+          "answer": "100 ns"
+        },
+        {
+          "id": "latency-send-1k-over-1Gbps-network",
+          "text": "Send 1K bytes over 1 Gbps network",
+          "answer": "10,000 ns (10 μs)"
+        },
+        {
+          "id": "latency-read-4k-from-ssd",
+          "text": "Read 4K from SSD",
+          "answer": "150,000 ns (150 μs)"
+        },
+        {
+          "id": "latency-read-1mb-from-memory",
+          "text": "Read 1Mb from memory",
+          "answer": "250,000 ns (250 μs)"
+        },
+        {
+          "id": "latency-round-trip-in-datacenter",
+          "text": "Round trip in datacenter",
+          "answer": "500,000 ns (500 μs, 0.5 ms)"
+        },
+        {
+          "id": "latency-read-1mb-from-ssd",
+          "text": "Read 1Mb from SSD",
+          "answer": "1,000,000 ns (1000 μs, 1ms)"
+        },
+        {
+          "id": "latency-disk-seek",
+          "text": "Disk Seek",
+          "answer": "10,000,000 ns (10,000 μs, 10ms)"
+        },
+        {
+          "id": "latency-read-1mb-from-disk",
+          "text": "Read 1Mb from Disk",
+          "answer": "20,000,000 ns (20,000 μs, 20 ms)"
+        },
+        {
+          "id": "latency-send-packet-ca-netherlands-ca",
+          "text": "Send packet CA-\u003eNetherlands-\u003eCA",
+          "answer": "150,000,000 ns (150,000 μs, 150 ms)"
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "factorials",
+      "title": "Factorials",
+      "questions": [
+        {
+          "id": "factorials-0",
+          "text": "0!",
+          "answer": "1"
+        },
+        {
+          "id": "factorials-1",
+          "text": "1!",
+          "answer": "1"
+        },
+        {
+          "id": "factorials-2",
+          "text": "2!",
+          "answer": "2"
+        },
+        {
+          "id": "factorials-3",
+          "text": "3!",
+          "answer": "6"
+        },
+        {
+          "id": "factorials-4",
+          "text": "4!",
+          "answer": "24"
+        },
+        {
+          "id": "factorials-5",
+          "text": "5!",
+          "answer": "120"
+        },
+        {
+          "id": "factorials-6",
+          "text": "6!",
+          "answer": "720"
+        },
+        {
+          "id": "factorials-7",
+          "text": "7!",
+          "answer": "5040"
+        },
+        {
+          "id": "factorials-10",
+          "text": "10!",
+          "answer": "3,628,800"
+        },
+        {
+          "id": "factorials-20",
+          "text": "20!",
+          "answer": "2,432,902,008,176,640,000"
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "time",
+      "title": "Time",
+      "questions": [
+        {
+          "id": "time-seconds-hour",
+          "text": "Seconds in an hour",
+          "answer": "3,600"
+        },
+        {
+          "id": "time-seconds-day",
+          "text": "Seconds in a day",
+          "answer": "86,400"
+        },
+        {
+          "id": "time-minutes-day",
+          "text": "Minutes in a day",
+          "answer": "1,440"
+        },
+        {
+          "id": "time-seconds-week",
+          "text": "Seconds in a week",
+          "answer": "604,800"
+        },
+        {
+          "id": "time-minutes-week",
+          "text": "Minutes in a week",
+          "answer": "10,080"
+        },
+        {
+          "id": "time-hours-week",
+          "text": "Hours in a week",
+          "answer": "168"
+        },
+        {
+          "id": "time-seconds-month",
+          "text": "Seconds in a (typical) month",
+          "answer": "259,2000"
+        },
+        {
+          "id": "time-minutes-month",
+          "text": "Minutes in a (typical) month",
+          "answer": "43,200"
+        },
+        {
+          "id": "time-hours-month",
+          "text": "Hours in a (typical) month",
+          "answer": "720"
+        },
+        {
+          "id": "time-seconds-year",
+          "text": "Seconds in a (typical) year",
+          "answer": "31,536,000"
+        },
+        {
+          "id": "time-minutes-year",
+          "text": "Minutes in a year",
+          "answer": "525,600"
+        },
+        {
+          "id": "time-hours-year",
+          "text": "Hours in a year",
+          "answer": "8,760"
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "availability-nines",
+      "title": "Nines of Availability: Downtime per year",
+      "link": "https://en.wikipedia.org/wiki/High_availability#Percentage_calculation",
+      "questions": [
+        {
+          "id": "availability-nines-1",
+          "text": "1 nine (90% availability)",
+          "answer": "36.5 days (2.4 hours per day)"
+        },
+        {
+          "id": "availability-nines-2",
+          "text": "2 nines (99% availability)",
+          "answer": "3.65 days (14.4 minutes per day)"
+        },
+        {
+          "id": "availability-nines-3",
+          "text": "3 nines (99.9% availability)",
+          "answer": "8.76 hours (1.44 minutes per day)"
+        },
+        {
+          "id": "availability-nines-4",
+          "text": "4 nines (99.99% availability)",
+          "answer": "52.56 minutes (8.66 seconds per day)"
+        },
+        {
+          "id": "availability-nines-5",
+          "text": "5 nines (99.999% availability)",
+          "answer": "5.26 minutes (864.3 milliseconds per day)"
+        }
+      ],
+      "answersAsChoices": true
+    }
+  ]
+}

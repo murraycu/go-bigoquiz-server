@@ -1,0 +1,493 @@
+{
+  "id": "book_stepanov_fmtgp",
+  "title": "Book: Alexander Stepanov's From Mathematics To Generic Programming",
+  "link": "http://amzn.to/2iXit1Q",
+  "sections": [
+    {
+      "id": "fmtgp-numbers",
+      "title": "Numbers",
+      "questions": [
+        {
+          "id": "fmtgp-numbers-proper-divisor",
+          "link": "https://en.wikipedia.org/wiki/Divisor",
+          "text": "Proper Divisor",
+          "answer": "A divisor of n other than n itself."
+        },
+        {
+          "id": "fmtgp-numbers-aliquot-sum",
+          "link": "https://en.wikipedia.org/wiki/Aliquot_sum",
+          "text": "Aliquot Sum",
+          "answer": "The sum of all proper divisors of n."
+        },
+        {
+          "id": "fmtgp-numbers-perfect",
+          "link": "https://en.wikipedia.org/wiki/Perfect_number",
+          "text": "Perfect Number",
+          "answer": "A number that is the sum of its proper divisors."
+        },
+        {
+          "id": "fmtgp-triangular-number",
+          "link": "https://en.wikipedia.org/wiki/Triangular_number",
+          "text": "Triangular Number",
+          "answer": "Sum of the first n positive integers."
+        },
+        {
+          "id": "fmtgp-numbers-prime-number",
+          "link": "https://en.wikipedia.org/wiki/Prime_number",
+          "text": "Prime Number",
+          "answer": "A number greater than 1 that has no positive divisors other than 1 and itself."
+        },
+        {
+          "id": "fmtgp-numbers-composite-number",
+          "link": "https://en.wikipedia.org/wiki/Composite_number",
+          "text": "Composite Number",
+          "answer": "A number that has positive divisors other than 1 and itself."
+        },
+        {
+          "id": "fmtgp-numbers-mersenne-prime",
+          "link": "https://en.wikipedia.org/wiki/Mersenne_prime",
+          "text": "Mersenne Prime",
+          "answer": "A prime number that is one less than a power of two."
+        },
+        {
+          "id": "fmtgp-numbers-fermat-prime",
+          "link": "https://en.wikipedia.org/wiki/Fermat_number#Generalized_Fermat_primes",
+          "text": "Fermat Prime",
+          "answer": "A prime number that is one more than a power of two."
+        },
+        {
+          "id": "fmtgp-numbers-coprime",
+          "link": "https://en.wikipedia.org/wiki/Coprime_integers",
+          "text": "Coprime Number",
+          "answer": "Two numbers that have no common divisors greater than 1."
+        },
+        {
+          "id": "fmtgp-numbers-totient",
+          "link": "https://en.wikipedia.org/wiki/Euler's_totient_function",
+          "text": "Totient",
+          "answer": "The number of positive integers less than n that are coprime with n."
+        },
+        {
+          "id": "fmtgp-numbers-carmichael",
+          "link": "https://en.wikipedia.org/wiki/Carmichael_number",
+          "text": "Carmichael Numbers",
+          "answer": "Composite number n, greater than 1, whose coprimes up to n satisfy b^(n-1) == 1 mod n."
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "fmtgp-number-theorems",
+      "title": "Number Theorems",
+      "questions": [
+        {
+          "id": "fmtgp-number-theorems-eulers",
+          "link": "https://en.wikipedia.org/wiki/Euler's_theorem",
+          "text": "Euler's Theorem",
+          "answerDetail": {
+            "text": "If n and a are coprime positive integers, then \u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\"\u003e\n                \u003csemantics\u003e\n                \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                \u003cmstyle displaystyle=\"true\" scriptlevel=\"0\"\u003e\n                \u003cmsup\u003e\n                \u003cmi\u003ea\u003c/mi\u003e\n                \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                \u003cmi\u003eφ\u003c!-- φ --\u003e\u003c/mi\u003e\n                \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                \u003cmi\u003en\u003c/mi\u003e\n                \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                \u003c/mrow\u003e\n                \u003c/msup\u003e\n                \u003cmo\u003e≡\u003c!-- ≡ --\u003e\u003c/mo\u003e\n                \u003cmn\u003e1\u003c/mn\u003e\n                \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                \u003cmspace width=\"1em\"\u003e\u003c/mspace\u003e\n                \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                \u003cmi\u003emod\u003c/mi\u003e\n                \u003cmspace width=\"0.333em\"\u003e\u003c/mspace\u003e\n                \u003cmi\u003en\u003c/mi\u003e\n                \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                \u003c/mrow\u003e\n                \u003c/mstyle\u003e\n                \u003c/mrow\u003e\n                \u003c/semantics\u003e\n                \u003c/math\u003e",
+            "isHtml": true
+          }
+        },
+        {
+          "id": "fmtgp-number-theorems-fermats-little",
+          "link": "https://en.wikipedia.org/wiki/Fermat%27s_little_theorem",
+          "text": "Fermat's Little Theorem",
+          "answerDetail": {
+            "text": "If p is a prime number, then for any integer a, \u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\"\u003e\n                \u003csemantics\u003e\n                \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                \u003cmstyle displaystyle=\"true\" scriptlevel=\"0\"\u003e\n                \u003cmsup\u003e\n                \u003cmi\u003ea\u003c/mi\u003e\n                \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                \u003cmi\u003ep\u003c/mi\u003e\n                \u003c/mrow\u003e\n                \u003c/msup\u003e\n                \u003cmo\u003e≡\u003c!-- ≡ --\u003e\u003c/mo\u003e\n                \u003cmi\u003ea\u003c/mi\u003e\n                \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                \u003cmspace width=\"1em\"\u003e\u003c/mspace\u003e\n                \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                \u003cmi\u003emod\u003c/mi\u003e\n                \u003cmspace width=\"0.333em\"\u003e\u003c/mspace\u003e\n                \u003cmi\u003ep\u003c/mi\u003e\n                \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                \u003c/mrow\u003e\n                \u003cmo\u003e.\u003c/mo\u003e\n                \u003c/mstyle\u003e\n                \u003c/mrow\u003e\n                \u003c/semantics\u003e\n                \u003c/math\u003e",
+            "isHtml": true
+          }
+        },
+        {
+          "id": "fmtgp-number-theorems-cancellation-law",
+          "text": "Cancellation Law",
+          "answer": "If p is prime, then for any 0 \u003c a \u003c p there is a number 0 \u003c b \u003c p such that ab = mp + 1, meaning a and b cancel modulo p."
+        },
+        {
+          "id": "fmtgp-number-theorems-self-canceling-law",
+          "text": "Self-Canceling Law",
+          "answer": "If p is prime, then for any 0 \u003c a \u003c p, a^2 = mp + 1, if a = 1 or a = p - 1."
+        },
+        {
+          "id": "fmtgp-number-theorems-wilsons",
+          "link": "https://en.wikipedia.org/wiki/Wilson's_theorem",
+          "text": "Wilson's Theorem",
+          "answerDetail": {
+            "text": "A natural number n \u003e 1 is a prime number if and only if \u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\"\u003e\n                \u003csemantics\u003e\n                \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                \u003cmstyle displaystyle=\"true\" scriptlevel=\"0\"\u003e\n                \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                \u003cmi\u003en\u003c/mi\u003e\n                \u003cmo\u003e−\u003c!-- − --\u003e\u003c/mo\u003e\n                \u003cmn\u003e1\u003c/mn\u003e\n                \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                \u003cmo\u003e!\u003c/mo\u003e\n                \u003cmtext\u003e \u003c/mtext\u003e\n                \u003cmo\u003e≡\u003c!-- ≡ --\u003e\u003c/mo\u003e\n                \u003cmtext\u003e \u003c/mtext\u003e\n                \u003cmo\u003e−\u003c!-- − --\u003e\u003c/mo\u003e\n                \u003cmn\u003e1\u003c/mn\u003e\n                \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                \u003cmspace width=\"1em\"\u003e\u003c/mspace\u003e\n                \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                \u003cmi\u003emod\u003c/mi\u003e\n                \u003cmspace width=\"0.333em\"\u003e\u003c/mspace\u003e\n                \u003cmi\u003en\u003c/mi\u003e\n                \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                \u003c/mrow\u003e\n                \u003c/mstyle\u003e\n                \u003c/mrow\u003e\n                \u003c/semantics\u003e\n                \u003c/math\u003e",
+            "isHtml": true
+          }
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "fmtgp-properties-of-operations",
+      "title": "Properties of Operations",
+      "questions": [
+        {
+          "id": "fmtgp-properties-of-operations-associative",
+          "link": "https://en.wikipedia.org/wiki/Associative_property",
+          "text": "Associative",
+          "answer": "Grouping can change. For instance, addition: (a + b) + c == a + (b + c)."
+        },
+        {
+          "id": "fmtgp-properties-of-operations-commutative",
+          "link": "https://en.wikipedia.org/wiki/Commutative_property",
+          "text": "Commutative",
+          "answer": "Order can change. For instance, addition: a + b == b + a. Matrix multiplication does not commute."
+        },
+        {
+          "id": "fmtgp-properties-of-operations-distributive",
+          "link": "https://en.wikipedia.org/wiki/Distributive_property",
+          "text": "Distributive",
+          "answer": "Operations can be applied to members of a group. For instance, multiplication over addition: a × (b + c)  =  a × b + a × c."
+        },
+        {
+          "id": "fmtgp-properties-of-operations-transitive",
+          "link": "https://en.wikipedia.org/wiki/Transitive_relation",
+          "text": "Transitive",
+          "answer": "a related to b and b related to c implies a related to c. For instance, less than: If a \u003c b and b \u003c c, then a \u003c c. Or, for instance, equality: If a == b and b == c, then a == c."
+        },
+        {
+          "id": "fmtgp-properties-of-operations-reflexive",
+          "link": "https://en.wikipedia.org/wiki/Reflexive_relation",
+          "text": "Reflexive",
+          "answer": "Related to itself. For instance, equality: a == a."
+        },
+        {
+          "id": "fmtgp-properties-of-operations-symmetric",
+          "link": "https://en.wikipedia.org/wiki/Symmetric_relation",
+          "text": "Symmetric",
+          "answer": "Related in both directions. For instance, equality: if a == b then b == a."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "fmtgp-operations",
+      "title": "Operations",
+      "questions": [
+        {
+          "id": "fmtgp-operations-additive",
+          "link": "https://en.wikipedia.org/wiki/Direct_sum",
+          "text": "Addition: ⊕",
+          "answer": "Associative, Commutative"
+        },
+        {
+          "id": "fmtgp-operations-multiplicative",
+          "link": "https://en.wikipedia.org/wiki/Tensor_product",
+          "text": "Multiplicative: ⊗",
+          "answer": "Associative, Commutative, Distributive (over addition)."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "fmtgp-groups",
+      "title": "Groups",
+      "questions": [
+        {
+          "id": "fmtgp-groups-group",
+          "link": "https://en.wikipedia.org/wiki/Group_(mathematics)",
+          "text": "Group",
+          "answer": "A set with an operation, an inverse operation, an identity constant e, and with associativity, identity and cancellation axioms."
+        },
+        {
+          "id": "fmtgp-groups-abelian",
+          "link": "https://en.wikipedia.org/wiki/Abelian_group",
+          "text": "Abelian Group",
+          "answer": "A group whose operation is commutative."
+        },
+        {
+          "id": "fmtgp-groups-additive",
+          "link": "https://en.wikipedia.org/wiki/Additive_group",
+          "text": "Additive Group",
+          "answer": "An abelian group whose operation is addition."
+        },
+        {
+          "id": "fmtgp-groups-multiplicative",
+          "link": "https://en.wikipedia.org/wiki/Multiplicative_group",
+          "text": "Multiplicative Group",
+          "answer": "An abelian group whose operation is multiplication."
+        },
+        {
+          "id": "fmtgp-groups-monoid",
+          "link": "https://en.wikipedia.org/wiki/Monoid",
+          "text": "Monoid",
+          "answer": "A set with an operation, an identity constant e, and with associativity and identity axioms."
+        },
+        {
+          "id": "fmtgp-groups-semigroup",
+          "link": "https://en.wikipedia.org/wiki/Semigroup",
+          "text": "Semigroup",
+          "answer": "A set with an operation, and with associativity."
+        },
+        {
+          "id": "fmtgp-groups-subgroup",
+          "link": "https://en.wikipedia.org/wiki/Subgroup",
+          "text": "Subgroup",
+          "answer": "A subset of a group that is itself a group."
+        },
+        {
+          "id": "fmtgp-groups-cyclic",
+          "link": "https://en.wikipedia.org/wiki/Cyclic_group",
+          "text": "Cyclic Group",
+          "answer": "A subset of a group that is itself a group."
+        },
+        {
+          "id": "fmtgp-groups-finite",
+          "link": "https://en.wikipedia.org/wiki/Finite_group",
+          "text": "Finite Group",
+          "answer": "A group with a finite number of elements."
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "fmtgp-group-theorems",
+      "title": "Group Theorems",
+      "questions": [
+        {
+          "id": "fmtgp-group-theorems-lagrange",
+          "link": "https://en.wikipedia.org/wiki/Lagrange's_theorem_(group_theory)",
+          "text": "Lagrange's Theorem",
+          "answer": "For any finite group G, the order (number of elements) of every subgroup H of G divides the order of G."
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "fmtgp-symbols",
+      "title": "Symbols",
+      "link": "https://en.wikipedia.org/wiki/List_of_mathematical_symbols",
+      "questions": [
+        {
+          "id": "fmtgp-symbols-integers",
+          "link": "https://en.wikipedia.org/wiki/Integer",
+          "text": "ℤ",
+          "answer": "Integers"
+        },
+        {
+          "id": "fmtgp-symbols-natural-numbers",
+          "link": "https://en.wikipedia.org/wiki/Natural_number",
+          "text": "ℕ",
+          "answer": "Natural Numbers"
+        },
+        {
+          "id": "fmtgp-symbols-real-numbers",
+          "link": "https://en.wikipedia.org/wiki/Real_number",
+          "text": "ℝ",
+          "answer": "Real Numbers"
+        },
+        {
+          "id": "fmtgp-symbols-rational-numbers",
+          "link": "https://en.wikipedia.org/wiki/Rational_number",
+          "text": "ℚ",
+          "answer": "Rational Numbers"
+        },
+        {
+          "id": "fmtgp-symbols-complex-numbers",
+          "link": "https://en.wikipedia.org/wiki/Complex_number",
+          "text": "ℂ",
+          "answer": "Complex Numbers"
+        },
+        {
+          "id": "fmtgp-symbols-prime-remainder-fields",
+          "link": "https://en.wikipedia.org/wiki/Complex_number",
+          "text": "ℤp",
+          "answer": "Prime Remainder Fields"
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "fmtgp-integers",
+      "title": "Integers",
+      "questions": [
+        {
+          "id": "fmtgp-integers-gaussian",
+          "link": "https://en.wikipedia.org/wiki/Gaussian_integer",
+          "text": "Gaussian Integer",
+          "answer": "A complex number whose real and imaginary parts are both integers."
+        },
+        {
+          "id": "fmtgp-integers-algebraic",
+          "link": "https://en.wikipedia.org/wiki/Algebraic_integer",
+          "text": "Algebraic Integer",
+          "answer": "A complex number that is a root of some monic polynomial with coefficients in the set of integers."
+        },
+        {
+          "id": "fmtgp-integers-guassian",
+          "link": "https://en.wikipedia.org/wiki/Gaussian_integer",
+          "text": "Guassian Integer",
+          "answer": "A complex number whose real and imaginary parts are both integers."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "fmtgp-rings",
+      "title": "Rings",
+      "questions": [
+        {
+          "id": "fmtgp-rings-ring",
+          "link": "https://en.wikipedia.org/wiki/Ring_(mathematics)",
+          "text": "Ring",
+          "answer": "A set with the addition and multiplication operations."
+        },
+        {
+          "id": "fmtgp-rings-commutative-ring",
+          "link": "https://en.wikipedia.org/wiki/Commutative_ring",
+          "text": "Commutative Ring",
+          "answer": "A ring for which xy = yx."
+        },
+        {
+          "id": "fmtgp-rings-euclidean-ring",
+          "link": "https://en.wikipedia.org/wiki/Euclidean_domain",
+          "text": "Euclidean Ring (Euclidean Domain)",
+          "answer": "A commutative ring that can be endowed with an Euclidean function."
+        },
+        {
+          "id": "fmtgp-rings-invertible-element",
+          "link": "https://en.wikipedia.org/wiki/Unit_(ring_theory)",
+          "text": "Invertible element (unit) of a ring",
+          "answer": "A element of a ring, for which there is a xn X^-1 such that x(x^-1) = (x^-1)x = 1. For instance, 1 and -1 in the ring of integers."
+        },
+        {
+          "id": "fmtgp-rings-zero-divisor",
+          "link": "https://en.wikipedia.org/wiki/Zero_divisor",
+          "text": "Zero divisor of a ring",
+          "answer": "A element x of a ring, which is not = 0, and for which there is a y, also not = 0, for which xy = 0. For example in the ring of remainders modulo 6, the zero divisors are 2 and 3."
+        },
+        {
+          "id": "fmtgp-rings-integral-domain",
+          "link": "https://en.wikipedia.org/wiki/Integral_domain",
+          "text": "Integral Domain",
+          "answer": "A commutative ring that has no zero divisors."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "fmtgp-norm",
+      "title": "Norm",
+      "link": "https://en.wikipedia.org/wiki/Norm_(mathematics)",
+      "questions": [
+        {
+          "id": "fmtgp-others-norm-integers",
+          "text": "Integers",
+          "answer": "Absolute value"
+        },
+        {
+          "id": "fmtgp-others-norm-polynomials",
+          "text": "Polynomials",
+          "answer": "The degree"
+        },
+        {
+          "id": "fmtgp-others-norm-guassian-integers",
+          "text": "Gaussian Integers",
+          "answer": "The complex norm"
+        },
+        {
+          "id": "fmtgp-others-norm-complex-number",
+          "text": "Complex Number",
+          "answer": "x^2 + y^2"
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "fmtgp-others",
+      "title": "Others",
+      "questions": [
+        {
+          "id": "fmtgp-others-monic-polynomial",
+          "link": "https://en.wikipedia.org/wiki/Monic_polynomial",
+          "text": "Monic Polynomial",
+          "answer": "A polynomial where the coefficient of the highest order term is 1."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "fmtgp-fields",
+      "title": "Fields",
+      "questions": [
+        {
+          "id": "fmtgp-fields-field",
+          "link": "https://en.wikipedia.org/wiki/Field_(mathematics)",
+          "text": "Field",
+          "answer": "An integral domain where every nonzero element is invertible."
+        },
+        {
+          "id": "fmtgp-fields-subfield",
+          "text": "Subfield",
+          "answer": "A subset of a field that is itself a field."
+        },
+        {
+          "id": "fmtgp-fields-proper-subfield",
+          "text": "Proper subfield",
+          "answer": "A subfield different from itself."
+        },
+        {
+          "id": "fmtgp-fields-prime-field",
+          "text": "Prime Field",
+          "answer": "A field that does not have a proper subfield."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "fmtgp-canonical-example",
+      "title": "Canonical Example of",
+      "questions": [
+        {
+          "id": "fmtgp-canonical-example-ring",
+          "text": "Rings",
+          "answer": "Integers"
+        },
+        {
+          "id": "fmtgp-canonical-example-field",
+          "text": "Field",
+          "answer": "Rational Numbers"
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "fmtgp-proof-techniques",
+      "title": "Proof Techniques",
+      "questions": [
+        {
+          "id": "fmtgp-proof-techniques-proof-by-contradiction",
+          "link": "https://en.wikipedia.org/wiki/Proof_by_contradiction",
+          "text": "Proof by contradiction",
+          "answer": "Assume the opposite of the original conjecture and show that this would lead to a contradiction."
+        },
+        {
+          "id": "fmtgp-proof-techniques-proof-by-induction",
+          "link": "https://en.wikipedia.org/wiki/Mathematical_induction",
+          "text": "Proof by induction",
+          "answer": "Prove that it is true for the first element (basis) and prove that it is true for successors (inductive step)."
+        },
+        {
+          "id": "fmtgp-proof-techniques-pigeonhole-principle",
+          "link": "https://en.wikipedia.org/wiki/Pigeonhole_principle",
+          "text": "Pigeonhole Principle (Dirichlet Principle)",
+          "answer": "If n items are put into m containers, with n \u003e m \u003e 0, then at least one container must contain more than one item."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    }
+  ]
+}
