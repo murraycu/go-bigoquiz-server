@@ -1,10 +1,10 @@
 package quiz
 
 type Question struct {
-	Id string `xml:"id,attr" json:"id,omitempty"`
+	Id string `json:"id,omitempty"`
 
 	// A URL.
-	Link string `xml:"link" json:"link,omitempty"`
+	Link string `json:"link,omitempty"`
 
 	// TextDetail is an alternative to TextSimple.
 	// Only one of these should be set.
