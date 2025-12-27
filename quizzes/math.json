@@ -1,0 +1,254 @@
+{
+  "id": "math",
+  "title": "Mathematics",
+  "sections": [
+    {
+      "id": "log-identities",
+      "title": "Logarithm Identities",
+      "link": "https://en.wikipedia.org/wiki/List_of_logarithmic_identities",
+      "subsections": [
+        {
+          "id": "trivial-identities",
+          "title": "Trivial Identities",
+          "link": "https://en.wikipedia.org/wiki/List_of_logarithmic_identities#Trivial_identities",
+          "question": [
+            {
+              "id": "log-identities-logb1",
+              "textDetail": {
+                "text": "\u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\"\u003e\n                    \u003csemantics\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmstyle displaystyle=\"true\" scriptlevel=\"0\"\u003e\n                    \u003cmsub\u003e\n                    \u003cmi\u003elog\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmi\u003eb\u003c/mi\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msub\u003e\n                    \u003cmo\u003e⁡\u003c!-- ⁡ --\u003e\u003c/mo\u003e\n                    \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                    \u003cmn\u003e1\u003c/mn\u003e\n                    \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                    \u003c/mstyle\u003e\n                    \u003c/mrow\u003e\n                    \u003c/semantics\u003e\n                    \u003c/math\u003e",
+                "isHtml": true
+              },
+              "answer": "0"
+            },
+            {
+              "id": "log-identities-logbb",
+              "textDetail": {
+                "text": "\u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\"\u003e\n                    \u003csemantics\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmstyle displaystyle=\"true\" scriptlevel=\"0\"\u003e\n                    \u003cmsub\u003e\n                    \u003cmi\u003elog\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmi\u003eb\u003c/mi\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msub\u003e\n                    \u003cmo\u003e⁡\u003c!-- ⁡ --\u003e\u003c/mo\u003e\n                    \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                    \u003cmi\u003eb\u003c/mi\u003e\n                    \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                    \u003c/mstyle\u003e\n                    \u003c/mrow\u003e\n                    \u003c/semantics\u003e\n                    \u003c/math\u003e",
+                "isHtml": true
+              },
+              "answer": "1"
+            }
+          ]
+        },
+        {
+          "id": "canceling-exponentials",
+          "title": "Canceling Exponentials",
+          "link": "https://en.wikipedia.org/wiki/List_of_logarithmic_identities#Trivial_identities",
+          "question": [
+            {
+              "id": "log-identities-canceling-exponentials-blogbx",
+              "textDetail": {
+                "text": "\u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\"\u003e\n                    \u003csemantics\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmstyle displaystyle=\"true\" scriptlevel=\"0\"\u003e\n                    \u003cmsup\u003e\n                    \u003cmi\u003eb\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmsub\u003e\n                    \u003cmi\u003elog\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmi\u003eb\u003c/mi\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msub\u003e\n                    \u003cmo\u003e⁡\u003c!-- ⁡ --\u003e\u003c/mo\u003e\n                    \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                    \u003cmi\u003ex\u003c/mi\u003e\n                    \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msup\u003e\n                    \u003c/mstyle\u003e\n                    \u003c/mrow\u003e\n                    \u003c/semantics\u003e\n                    \u003c/math\u003e",
+                "isHtml": true
+              },
+              "answer": "x"
+            },
+            {
+              "id": "log-identities-canceling-exponentials-logbbx",
+              "textDetail": {
+                "text": "\u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\"\u003e\n                    \u003csemantics\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmstyle displaystyle=\"true\" scriptlevel=\"0\"\u003e\n                    \u003cmsub\u003e\n                    \u003cmi\u003elog\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmi\u003eb\u003c/mi\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msub\u003e\n                    \u003cmo\u003e⁡\u003c!-- ⁡ --\u003e\u003c/mo\u003e\n                    \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                    \u003cmsup\u003e\n                    \u003cmi\u003eb\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmi\u003ex\u003c/mi\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msup\u003e\n                    \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                    \u003c/mstyle\u003e\n                    \u003c/mrow\u003e\n                    \u003c/semantics\u003e\n                    \u003c/math\u003e",
+                "isHtml": true
+              },
+              "answer": "x"
+            }
+          ]
+        },
+        {
+          "id": "operations",
+          "title": "Operations",
+          "link": "https://en.wikipedia.org/wiki/List_of_logarithmic_identities#Using_simpler_operations",
+          "question": [
+            {
+              "id": "log-operations-multiply",
+              "textDetail": {
+                "text": "\u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\"\u003e\n                    \u003csemantics\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmstyle displaystyle=\"true\" scriptlevel=\"0\"\u003e\n                    \u003cmsub\u003e\n                    \u003cmi\u003elog\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmi\u003eb\u003c/mi\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msub\u003e\n                    \u003cmo\u003e⁡\u003c!-- ⁡ --\u003e\u003c/mo\u003e\n                    \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                    \u003cmi\u003ex\u003c/mi\u003e\n                    \u003cmi\u003ey\u003c/mi\u003e\n                    \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                    \u003c/mstyle\u003e\n                    \u003c/mrow\u003e\n                    \u003c/semantics\u003e\n                    \u003c/math\u003e",
+                "isHtml": true
+              },
+              "answerDetail": {
+                "text": "\u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\"\u003e\n                    \u003csemantics\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmstyle displaystyle=\"true\" scriptlevel=\"0\"\u003e\n                    \u003cmsub\u003e\n                    \u003cmi\u003elog\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmi\u003eb\u003c/mi\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msub\u003e\n                    \u003cmo\u003e⁡\u003c!-- ⁡ --\u003e\u003c/mo\u003e\n                    \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                    \u003cmi\u003ex\u003c/mi\u003e\n                    \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                    \u003cmo\u003e+\u003c/mo\u003e\n                    \u003cmsub\u003e\n                    \u003cmi\u003elog\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmi\u003eb\u003c/mi\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msub\u003e\n                    \u003cmo\u003e⁡\u003c!-- ⁡ --\u003e\u003c/mo\u003e\n                    \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                    \u003cmi\u003ey\u003c/mi\u003e\n                    \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                    \u003c/mstyle\u003e\n                    \u003c/mrow\u003e\n                    \u003c/semantics\u003e\n                    \u003c/math\u003e",
+                "isHtml": true
+              }
+            },
+            {
+              "id": "log-operations-divide",
+              "textDetail": {
+                "text": "\u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\"\u003e\n                    \u003csemantics\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmstyle displaystyle=\"true\" scriptlevel=\"0\"\u003e\n                    \u003cmsub\u003e\n                    \u003cmi\u003elog\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmi\u003eb\u003c/mi\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msub\u003e\n                    \u003cmo\u003e⁡\u003c!-- ⁡ --\u003e\u003c/mo\u003e\n                    \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmstyle displaystyle=\"false\" scriptlevel=\"0\"\u003e\n                    \u003cmfrac\u003e\n                    \u003cmi\u003ex\u003c/mi\u003e\n                    \u003cmi\u003ey\u003c/mi\u003e\n                    \u003c/mfrac\u003e\n                    \u003c/mstyle\u003e\n                    \u003c/mrow\u003e\n                    \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                    \u003c/mstyle\u003e\n                    \u003c/mrow\u003e\n                    \u003c/semantics\u003e\n                    \u003c/math\u003e",
+                "isHtml": true
+              },
+              "answerDetail": {
+                "text": "\u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\"\u003e\n                    \u003csemantics\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmstyle displaystyle=\"true\" scriptlevel=\"0\"\u003e\n                    \u003cmsub\u003e\n                    \u003cmi\u003elog\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmi\u003eb\u003c/mi\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msub\u003e\n                    \u003cmo\u003e⁡\u003c!-- ⁡ --\u003e\u003c/mo\u003e\n                    \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                    \u003cmi\u003ex\u003c/mi\u003e\n                    \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                    \u003cmo\u003e−\u003c!-- − --\u003e\u003c/mo\u003e\n                    \u003cmsub\u003e\n                    \u003cmi\u003elog\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmi\u003eb\u003c/mi\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msub\u003e\n                    \u003cmo\u003e⁡\u003c!-- ⁡ --\u003e\u003c/mo\u003e\n                    \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                    \u003cmi\u003ey\u003c/mi\u003e\n                    \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                    \u003c/mstyle\u003e\n                    \u003c/mrow\u003e\n                    \u003c/semantics\u003e\n                    \u003c/math\u003e",
+                "isHtml": true
+              }
+            },
+            {
+              "id": "log-operations-power",
+              "textDetail": {
+                "text": "\u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\"\u003e\n                    \u003csemantics\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmstyle displaystyle=\"true\" scriptlevel=\"0\"\u003e\n                    \u003cmsub\u003e\n                    \u003cmi\u003elog\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmi\u003eb\u003c/mi\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msub\u003e\n                    \u003cmo\u003e⁡\u003c!-- ⁡ --\u003e\u003c/mo\u003e\n                    \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                    \u003cmsup\u003e\n                    \u003cmi\u003ex\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmi\u003ed\u003c/mi\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msup\u003e\n                    \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                    \u003c/mstyle\u003e\n                    \u003c/mrow\u003e\n                    \u003c/semantics\u003e\n                    \u003c/math\u003e",
+                "isHtml": true
+              },
+              "answerDetail": {
+                "text": "\u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\"\u003e\n                    \u003csemantics\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmstyle displaystyle=\"true\" scriptlevel=\"0\"\u003e\n                    \u003cmi\u003ed\u003c/mi\u003e\n                    \u003cmsub\u003e\n                    \u003cmi\u003elog\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmi\u003eb\u003c/mi\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msub\u003e\n                    \u003cmo\u003e⁡\u003c!-- ⁡ --\u003e\u003c/mo\u003e\n                    \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                    \u003cmi\u003ex\u003c/mi\u003e\n                    \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                    \u003c/mstyle\u003e\n                    \u003c/mrow\u003e\n                    \u003c/semantics\u003e\n                    \u003c/math\u003e",
+                "isHtml": true
+              }
+            },
+            {
+              "id": "log-operations-root",
+              "textDetail": {
+                "text": "\u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\"\u003e\n                    \u003csemantics\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmstyle displaystyle=\"true\" scriptlevel=\"0\"\u003e\n                    \u003cmsub\u003e\n                    \u003cmi\u003elog\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmi\u003eb\u003c/mi\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msub\u003e\n                    \u003cmo\u003e⁡\u003c!-- ⁡ --\u003e\u003c/mo\u003e\n                    \u003cmrow\u003e\n                    \u003cmo\u003e(\u003c/mo\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmroot\u003e\n                    \u003cmi\u003ex\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmi\u003ey\u003c/mi\u003e\n                    \u003c/mrow\u003e\n                    \u003c/mroot\u003e\n                    \u003c/mrow\u003e\n                    \u003cmo\u003e)\u003c/mo\u003e\n                    \u003c/mrow\u003e\n                    \u003c/mstyle\u003e\n                    \u003c/mrow\u003e\n                    \u003c/semantics\u003e\n                    \u003c/math\u003e",
+                "isHtml": true
+              },
+              "answerDetail": {
+                "text": "\u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\"\u003e\n                    \u003csemantics\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmstyle displaystyle=\"true\" scriptlevel=\"0\"\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmfrac\u003e\n                    \u003cmrow\u003e\n                    \u003cmsub\u003e\n                    \u003cmi\u003elog\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmi\u003eb\u003c/mi\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msub\u003e\n                    \u003cmo\u003e⁡\u003c!-- ⁡ --\u003e\u003c/mo\u003e\n                    \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                    \u003cmi\u003ex\u003c/mi\u003e\n                    \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                    \u003c/mrow\u003e\n                    \u003cmi\u003ey\u003c/mi\u003e\n                    \u003c/mfrac\u003e\n                    \u003c/mrow\u003e\n                    \u003c/mstyle\u003e\n                    \u003c/mrow\u003e\n                    \u003c/semantics\u003e\n                    \u003c/math\u003e",
+                "isHtml": true
+              }
+            },
+            {
+              "id": "log-operations-log-power",
+              "textDetail": {
+                "text": "\u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\"\u003e\n                    \u003csemantics\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmstyle displaystyle=\"true\" scriptlevel=\"0\"\u003e\n                    \u003cmsup\u003e\n                    \u003cmi\u003ex\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmsub\u003e\n                    \u003cmi\u003elog\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmi\u003eb\u003c/mi\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msub\u003e\n                    \u003cmo\u003e⁡\u003c!-- ⁡ --\u003e\u003c/mo\u003e\n                    \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                    \u003cmi\u003ey\u003c/mi\u003e\n                    \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msup\u003e\n                    \u003c/mstyle\u003e\n                    \u003c/mrow\u003e\n                    \u003c/semantics\u003e\n                    \u003c/math\u003e",
+                "isHtml": true
+              },
+              "answerDetail": {
+                "text": "\u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\"\u003e\n                    \u003csemantics\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmstyle displaystyle=\"true\" scriptlevel=\"0\"\u003e\n                    \u003cmsup\u003e\n                    \u003cmi\u003ey\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmsub\u003e\n                    \u003cmi\u003elog\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmi\u003eb\u003c/mi\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msub\u003e\n                    \u003cmo\u003e⁡\u003c!-- ⁡ --\u003e\u003c/mo\u003e\n                    \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                    \u003cmi\u003ex\u003c/mi\u003e\n                    \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msup\u003e\n                    \u003c/mstyle\u003e\n                    \u003c/mrow\u003e\n                    \u003c/semantics\u003e\n                    \u003c/math\u003e",
+                "isHtml": true
+              }
+            },
+            {
+              "id": "log-operations-log-change-base",
+              "link": "https://en.wikipedia.org/wiki/List_of_logarithmic_identities#Changing_the_base",
+              "textDetail": {
+                "text": "\u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\"\u003e\n                    \u003csemantics\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmstyle displaystyle=\"true\" scriptlevel=\"0\"\u003e\n                    \u003cmsub\u003e\n                    \u003cmi\u003elog\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmi\u003eb\u003c/mi\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msub\u003e\n                    \u003cmo\u003e⁡\u003c!-- ⁡ --\u003e\u003c/mo\u003e\n                    \u003cmi\u003ea\u003c/mi\u003e\n                    \u003c/mstyle\u003e\n                    \u003c/mrow\u003e\n                    \u003c/semantics\u003e\n                    \u003c/math\u003e",
+                "isHtml": true
+              },
+              "answerDetail": {
+                "text": "\u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\"\u003e\n                    \u003csemantics\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmstyle displaystyle=\"true\" scriptlevel=\"0\"\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmfrac\u003e\n                    \u003cmrow\u003e\n                    \u003cmsub\u003e\n                    \u003cmi\u003elog\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmi\u003ed\u003c/mi\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msub\u003e\n                    \u003cmo\u003e⁡\u003c!-- ⁡ --\u003e\u003c/mo\u003e\n                    \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                    \u003cmi\u003ea\u003c/mi\u003e\n                    \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                    \u003c/mrow\u003e\n                    \u003cmrow\u003e\n                    \u003cmsub\u003e\n                    \u003cmi\u003elog\u003c/mi\u003e\n                    \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                    \u003cmi\u003ed\u003c/mi\u003e\n                    \u003c/mrow\u003e\n                    \u003c/msub\u003e\n                    \u003cmo\u003e⁡\u003c!-- ⁡ --\u003e\u003c/mo\u003e\n                    \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                    \u003cmi\u003eb\u003c/mi\u003e\n                    \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                    \u003c/mrow\u003e\n                    \u003c/mfrac\u003e\n                    \u003c/mrow\u003e\n                    \u003c/mstyle\u003e\n                    \u003c/mrow\u003e\n                    \u003c/semantics\u003e\n                    \u003c/math\u003e",
+                "isHtml": true
+              }
+            }
+          ]
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "series-approximations",
+      "title": "Series: Approximations",
+      "questions": [
+        {
+          "id": "series-harmonic-sum",
+          "link": "https://en.wikipedia.org/wiki/Harmonic_number",
+          "textDetail": {
+            "text": "Harmonic Sum: H(n): \u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"\u003e\n                \u003cmtable displaystyle=\"true\"\u003e\n                \u003cmtr\u003e\n                \u003cmtd\u003e\n                \u003cmn\u003e1\u003c/mn\u003e\n                \u003cmo\u003e+\u003c/mo\u003e\n                \u003cmfrac\u003e\n                \u003cmn\u003e1\u003c/mn\u003e\n                \u003cmn\u003e2\u003c/mn\u003e\n                \u003c/mfrac\u003e\n                \u003cmo\u003e+\u003c/mo\u003e\n                \u003cmfrac\u003e\n                \u003cmn\u003e1\u003c/mn\u003e\n                \u003cmn\u003e3\u003c/mn\u003e\n                \u003c/mfrac\u003e\n                \u003cmo\u003e+\u003c/mo\u003e\n                \u003cmfrac\u003e\n                \u003cmn\u003e1\u003c/mn\u003e\n                \u003cmn\u003e4\u003c/mn\u003e\n                \u003c/mfrac\u003e\n                \u003cmo\u003e+\u003c/mo\u003e\n                \u003cmo\u003e\u0026#x22EF;\u003c/mo\u003e\n                \u003cmo\u003e+\u003c/mo\u003e\n                \u003cmfrac\u003e\n                \u003cmn\u003e1\u003c/mn\u003e\n                \u003cmi\u003en\u003c/mi\u003e\n                \u003c/mfrac\u003e\n                \u003c/mtd\u003e\n                \u003c/mtr\u003e\n                \u003c/mtable\u003e\n                \u003c/math\u003e",
+            "isHtml": true
+          },
+          "answerDetail": {
+            "text": "\u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"\u003e\n                \u003cmrow\u003e\n                \u003cmi\u003eln\u003c/mi\u003e\n                \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                \u003cmi\u003en\u003c/mi\u003e\n                \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                \u003c/mrow\n                \u003c/math\u003e",
+            "isHtml": true
+          }
+        },
+        {
+          "id": "series-triangular-sum",
+          "link": "https://en.wikipedia.org/wiki/Triangular_number",
+          "textDetail": {
+            "text": "Triangular Sum: \u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"\u003e\n                \u003cmtable displaystyle=\"true\"\u003e\n                \u003cmtr\u003e\n                \u003cmtd\u003e\n                \u003cmn\u003e1\u003c/mn\u003e\n                \u003cmo\u003e+\u003c/mo\u003e\n                \u003cmn\u003e2\u003c/mn\u003e\n                \u003cmo\u003e+\u003c/mo\u003e\n                \u003cmn\u003e3\u003c/mn\u003e\n                \u003cmo\u003e+\u003c/mo\u003e\n                \u003cmn\u003e4\u003c/mn\u003e\n                \u003cmo\u003e+\u003c/mo\u003e\n                \u003cmo\u003e\u0026#x22EF;\u003c/mo\u003e\n                \u003cmo\u003e+\u003c/mo\u003e\n                \u003cmi\u003en\u003c/mi\u003e\n                \u003cmo\u003e=\u003c/mo\u003e\n                \u003cmfrac\u003e\n                \u003cmrow\u003e\n                \u003cmo stretchy=\"false\"\u003e\u003c/mo\u003e\n                \u003cmi\u003en\u003c/mi\u003e\n                \u003cmo\u003e\u0026#x2062;\u003c/mo\u003e\n                \u003cmrow\u003e\n                \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                \u003cmrow\u003e\n                \u003cmi\u003en\u003c/mi\u003e\n                \u003cmo\u003e+\u003c/mo\u003e\n                \u003cmn\u003e1\u003c/mn\u003e\n                \u003c/mrow\u003e\n                \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                \u003c/mrow\u003e\n                \u003c/mrow\u003e\n                \u003cmi\u003e2\u003c/mi\u003e\n                \u003c/mfrac\u003e\n                \u003c/mtd\u003e\n                \u003c/mtr\u003e\n                \u003c/mtable\u003e\n                \u003c/math\u003e",
+            "isHtml": true
+          },
+          "answerDetail": {
+            "text": "\u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"\u003e\n                \u003cmrow\u003e\n                \u003cmsup\u003e\n                \u003cmi\u003en\u003c/mi\u003e\n                \u003cmn\u003e2\u003c/mn\u003e\n                \u003c/msup\u003e\n                \u003c/mrow\n                \u003c/math\u003e",
+            "isHtml": true
+          }
+        },
+        {
+          "id": "series-geometric-sum",
+          "link": "https://en.wikipedia.org/wiki/Geometric_series#Formula",
+          "textDetail": {
+            "text": "Geometric Sum: \u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"\u003e\n                \u003cmtable displaystyle=\"true\"\u003e\n                \u003cmtr\u003e\n                \u003cmtd\u003e\n                \u003cmn\u003e1\u003c/mn\u003e\n                \u003cmo\u003e+\u003c/mo\u003e\n                \u003cmn\u003e2\u003c/mn\u003e\n                \u003cmo\u003e+\u003c/mo\u003e\n                \u003cmn\u003e4\u003c/mn\u003e\n                \u003cmo\u003e+\u003c/mo\u003e\n                \u003cmn\u003e8\u003c/mn\u003e\n                \u003cmo\u003e+\u003c/mo\u003e\n                \u003cmo\u003e\u0026#x22EF;\u003c/mo\u003e\n                \u003cmo\u003e+\u003c/mo\u003e\n                \u003cmi\u003en\u003c/mi\u003e\n                \u003cmo\u003e=\u003c/mo\u003e\n                \u003cmn\u003e2\u003c/mn\u003e\n                \u003cmo\u003e\u0026#x2062;\u003c/mo\u003e\n                \u003cmi\u003en\u003c/mi\u003e\n                \u003cmo\u003e-\u003c/mo\u003e\n                \u003cmn\u003e1\u003c/mn\u003e\n                \u003c/mtd\u003e\n                \u003c/mtr\u003e\n                \u003c/mtable\u003e\n                \u003c/math\u003e",
+            "isHtml": true
+          },
+          "answerDetail": {
+            "text": "\u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"\u003e\n                \u003cmrow\u003e\n                \u003cmn\u003e2\u003c/mn\u003e\n                \u003cmo\u003e\u0026#x2062;\u003c/mo\u003e\n                \u003cmi\u003en\u003c/mi\u003e\n                \u003c/mrow\n                \u003c/math\u003e",
+            "isHtml": true
+          }
+        },
+        {
+          "id": "series-stirlings-approximation",
+          "link": "https://en.wikipedia.org/wiki/Stirling%27s_approximation",
+          "textDetail": {
+            "text": "Stirling's Approximation: \u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"\u003e\n                \u003cmtable displaystyle=\"true\"\u003e\n                \u003cmtr\u003e\n                \u003cmtd\u003e\n                \u003cmi\u003elg\u003c/mi\u003e\n                \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                \u003cmi\u003en!\u003c/mi\u003e\n                \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                \u003cmo\u003e=\u003c/mo\u003e\n                \u003cmi\u003elg\u003c/mi\u003e\n                \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                \u003cmn\u003e1\u003c/mn\u003e\n                \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                \u003cmo\u003e+\u003c/mo\u003e\n                \u003cmi\u003elg\u003c/mi\u003e\n                \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                \u003cmn\u003e2\u003c/mn\u003e\n                \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                \u003cmo\u003e+\u003c/mo\u003e\n                \u003cmi\u003elg\u003c/mi\u003e\n                \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                \u003cmn\u003e3\u003c/mn\u003e\n                \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                \u003cmo\u003e+\u003c/mo\u003e\n                \u003cmi\u003elg\u003c/mi\u003e\n                \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                \u003cmn\u003e4\u003c/mn\u003e\n                \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                \u003cmo\u003e+\u003c/mo\u003e\n                \u003cmo\u003e\u0026#x22EF;\u003c!-- ⋯ --\u003e\u003c/mo\u003e\n                \u003cmo\u003e+\u003c/mo\u003e\n                \u003cmi\u003elg\u003c/mi\u003e\n                \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                \u003cmi\u003en\u003c/mi\u003e\n                \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                \u003c/mtd\u003e\n                \u003c/mtr\u003e\n                \u003c/mtable\u003e\n                \u003c/math\u003e",
+            "isHtml": true
+          },
+          "answerDetail": {
+            "text": "\u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"\u003e\n                \u003cmrow\u003e\n                \u003cmi\u003en\u003c/mi\u003e\n                \u003cmo\u003e\u0026#x2062;\u003c/mo\u003e\n                \u003cmi\u003elg\u003c/mi\u003e\n                \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                \u003cmi\u003en\u003c/mi\u003e\n                \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                \u003c/mrow\n                \u003c/math\u003e",
+            "isHtml": true
+          }
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "terminology",
+      "title": "Terminology",
+      "questions": [
+        {
+          "id": "terminology-rules-of-replacement-associative",
+          "link": "https://en.wikipedia.org/wiki/Associative_property",
+          "text": "Associative",
+          "answer": "Grouping can change. For instance, addition: (a + b) + c == a + (b + c)."
+        },
+        {
+          "id": "terminology-rules-of-replacement-commutative",
+          "link": "https://en.wikipedia.org/wiki/Commutative_property",
+          "text": "Commutative",
+          "answer": "Order can change. For instance, addition: a + b == b + a."
+        },
+        {
+          "id": "terminology-rules-of-replacement-distributive",
+          "link": "https://en.wikipedia.org/wiki/Distributive_property",
+          "text": "Distributive",
+          "answer": "Operations can be applied to members of a group. For instance, multiplication over addition: a × (b + c)  =  a × b + a × c."
+        },
+        {
+          "id": "terminology-transitive",
+          "link": "https://en.wikipedia.org/wiki/Transitive_relation",
+          "text": "Transitive",
+          "answer": "a related to b and b related to c implies a related to c. For instance, less than: If a \u003c b and b \u003c c, then a \u003c c."
+        },
+        {
+          "id": "terminology-reflexive",
+          "link": "https://en.wikipedia.org/wiki/Reflexive_relation",
+          "text": "Reflexive",
+          "answer": "Related to itself. For instance, equality: a == a."
+        },
+        {
+          "id": "terminology-symmetric",
+          "link": "https://en.wikipedia.org/wiki/Symmetric_relation",
+          "text": "Symmetric",
+          "answer": "Related in both directions. For instance, equality: if a == b then b == a."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "modulo",
+      "title": "Modulo Equivalencies",
+      "questions": [
+        {
+          "id": "modulo-distibutive-with-multiplication",
+          "link": "https://en.wikipedia.org/wiki/Modulo_operation#Equivalencies",
+          "text": "xy % d",
+          "answer": "((x % d) * (y % d)) % d"
+        },
+        {
+          "id": "modulo-distibutive-with-addition",
+          "link": "https://en.wikipedia.org/wiki/Modulo_operation#Equivalencies",
+          "text": "(x + y) % d",
+          "answer": "((x % d) + (y % d)) % d"
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    }
+  ],
+  "usesMathML": true
+}

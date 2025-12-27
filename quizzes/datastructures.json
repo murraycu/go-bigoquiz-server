@@ -1,0 +1,1210 @@
+{
+  "id": "datastructures",
+  "title": "Data Structures",
+  "sections": [
+    {
+      "id": "datastructures-abstract-data-types",
+      "title": "Abstract Data Types",
+      "link": "https://en.wikipedia.org/wiki/Abstract_data_type",
+      "questions": [
+        {
+          "id": "datastructures-abstract-container",
+          "link": "https://en.wikipedia.org/wiki/Container_(abstract_data_type)",
+          "text": "Container",
+          "answer": "Abstract data type with a collection of objects."
+        },
+        {
+          "id": "datastructures-abstract-list",
+          "link": "https://en.wikipedia.org/wiki/List_(abstract_data_type)",
+          "text": "List",
+          "answer": "Abstract data type with an ordered sequence of values."
+        },
+        {
+          "id": "datastructures-abstract-set",
+          "link": "https://en.wikipedia.org/wiki/Set_(abstract_data_type)",
+          "text": "Set",
+          "answer": "Abstract data type with an unordered sequence of values without repeated values."
+        },
+        {
+          "id": "datastructures-abstract-multi set",
+          "link": "https://en.wikipedia.org/wiki/Set_(abstract_data_type)#Multiset",
+          "text": "Multiset",
+          "answer": "A set that allows repeated values or duplicates."
+        },
+        {
+          "id": "datastructures-abstract-multimap",
+          "link": "https://en.wikipedia.org/wiki/Associative_array",
+          "text": "Map",
+          "answer": "Abstract data type with a collection of keys and associated values."
+        },
+        {
+          "id": "datastructures-abstract-graph",
+          "link": "https://en.wikipedia.org/wiki/Graph_(abstract_data_type)",
+          "text": "Graph",
+          "answer": "Abstract data type with vertices and edges."
+        },
+        {
+          "id": "datastructures-abstract-stack",
+          "link": "https://en.wikipedia.org/wiki/Stack_(abstract_data_type)",
+          "text": "Stack",
+          "answer": "Abstract data type with push and pop in last-in-first-out (LIFO) order."
+        },
+        {
+          "id": "datastructures-abstract-queue",
+          "link": "https://en.wikipedia.org/wiki/Queue_(abstract_data_type)",
+          "text": "Queue",
+          "answer": "Abstract data type with push and pop in first-in-first-out (FIFO) order."
+        },
+        {
+          "id": "datastructures-abstract-priority-queue",
+          "link": "https://en.wikipedia.org/wiki/Heap_(data_structure)",
+          "text": "Priority Queue",
+          "answer": "Abstract data type that allows fast min (or max) retrieval. Usually implemented with a heap."
+        },
+        {
+          "id": "datastructures-abstract-double-ended-queue",
+          "link": "https://en.wikipedia.org/wiki/Double-ended_queue",
+          "text": "Double-Ended Queue (Dequeue, Deque)",
+          "answer": "A queue allowing addition or removal from either end."
+        },
+        {
+          "id": "datastructures-abstract-double-ended-priority-queue",
+          "link": "https://en.wikipedia.org/wiki/Double-ended_priority_queue",
+          "text": "Double-Ended Priority Queue (DEPQ)",
+          "answer": "A priority queue allowing removal of both the min and max."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "datastructures-description",
+      "title": "Descriptions of Data Structures",
+      "subsections": [
+        {
+          "id": "datastructures-description-trees",
+          "title": "Trees",
+          "question": [
+            {
+              "id": "datastructures-description-tree",
+              "link": "https://en.wikipedia.org/wiki/Tree_(data_structure)",
+              "text": "Tree",
+              "answer": "Allows traversal of a tree of nodes."
+            },
+            {
+              "id": "datastructures-description-binary-search-tree",
+              "link": "https://en.wikipedia.org/wiki/Binary_search_tree",
+              "text": "Binary Search Tree",
+              "answer": "A tree whose child nodes are in sorted order, allowing binary search of the whole tree."
+            },
+            {
+              "id": "datastructures-description-self-balancing-binary-search-tree",
+              "link": "https://en.wikipedia.org/wiki/Self-balancing_binary_search_tree",
+              "text": "Self-Balancing Binary Search Tree (Balanced Binary Search Tree)",
+              "answer": "A binary search tree that keeps its height small."
+            },
+            {
+              "id": "datastructures-description-optimal-binary-search-tree",
+              "link": "https://en.wikipedia.org/wiki/Optimal_binary_search_tree",
+              "text": "Optimal Binary Search Tree",
+              "answer": "A binary search tree with the smallest possible search time for certain queries."
+            },
+            {
+              "id": "datastructures-description-binary-tree",
+              "link": "https://en.wikipedia.org/wiki/Binary_tree",
+              "text": "Binary Tree",
+              "answer": "A tree whose nodes have no more than 2 children."
+            },
+            {
+              "id": "datastructures-description-threaded-binary-tree",
+              "link": "https://en.wikipedia.org/wiki/Threaded_binary_tree",
+              "text": "Threaded Binary Tree",
+              "answer": "A binary tree in which normally-null left and right pointers lead to predecessors and successors."
+            },
+            {
+              "id": "datastructures-description-binomial-tree",
+              "link": "https://en.wikipedia.org/wiki/Binomial_heap#Binomial_heap",
+              "text": "Binomial Tree",
+              "answer": "A tree in which a node of order k has children who are roots of trees of order k, k-1, ... 0. So each child's tree is deeper than its sibling child's tree. Permits easy merging of trees."
+            },
+            {
+              "id": "datastructures-description-b-tree",
+              "link": "https://en.wikipedia.org/wiki/Binary_tree",
+              "text": "B-Tree",
+              "answer": "A self-balancing tree in which each node can have multiple keys, separating multiple child nodes."
+            },
+            {
+              "id": "datastructures-description-2-3-tree",
+              "link": "https://en.wikipedia.org/wiki/2%E2%80%933_tree",
+              "text": "2-3 Tree",
+              "answer": "B-Tree of order 3."
+            },
+            {
+              "id": "datastructures-description-2-3-4-tree",
+              "link": "https://en.wikipedia.org/wiki/2%E2%80%933%E2%80%934_tree",
+              "text": "2-3-4 Tree",
+              "answer": "B-Tree of order 4."
+            },
+            {
+              "id": "datastructures-description-avl-tree",
+              "link": "https://en.wikipedia.org/wiki/AVL_tree",
+              "text": "AVL Tree",
+              "answer": "A self-balancing binary search tree that, after an insert or deletion, rotates the lowest node whose child nodes' heights differ by more than 1."
+            },
+            {
+              "id": "datastructures-description-red-black-tree",
+              "link": "https://en.wikipedia.org/wiki/Red%E2%80%93black_tree",
+              "text": "Red-Black Tree",
+              "answer": "A self-balancing binary search tree that, after an insert or deletion, rotates the lowest nodes that do not satisfy the coloring constraints: Root is black. All leaves are black. All children of red nodes are black. All paths to leaves contain the same number of black nodes."
+            },
+            {
+              "id": "datastructures-description-cartesian-tree",
+              "link": "https://en.wikipedia.org/wiki/Cartesian_tree",
+              "text": "Cartesian Tree",
+              "answer": "A heap-ordered tree whose in-order traversal recreates the original sequence."
+            },
+            {
+              "id": "datastructures-description-trie",
+              "link": "https://en.wikipedia.org/wiki/Trie",
+              "text": "Trie (Digital Tree, Prefix Tree)",
+              "answer": "Stores all k prefixes of n strings."
+            },
+            {
+              "id": "datastructures-description-ternary-search-tree",
+              "link": "https://en.wikipedia.org/wiki/Ternary_search_tree",
+              "text": "Ternary Search Tree",
+              "answer": "A trie that uses less space by having 3 BST-like branches at each node."
+            },
+            {
+              "id": "datastructures-description-radix-tree",
+              "link": "https://en.wikipedia.org/wiki/Radix_tree",
+              "text": "Radix Tree (Radix Trie, Compact Prefix Tree, Patricia Trie)",
+              "answer": "Space-optimized trie."
+            },
+            {
+              "id": "datastructures-description-suffix-tree",
+              "link": "https://en.wikipedia.org/wiki/Suffix_tree",
+              "text": "Suffix Tree",
+              "answer": "Stores all k suffixes of n strings, allowing searches for all substrings."
+            },
+            {
+              "id": "datastructures-description-van-emde-boas-tree",
+              "link": "https://en.wikipedia.org/wiki/Van_Emde_Boas_tree",
+              "text": "Van Emde Boas Tree",
+              "answer": "Associative array allowing fast O(lg lg N) successor/predecessor, and O(1) max/min, on keys of limited range N. by using a hierarchy of clusters, each with a min and max."
+            },
+            {
+              "id": "datastructures-description-binary-indexed-tree",
+              "link": "https://en.wikipedia.org/wiki/Fenwick_tree",
+              "text": "Binary Indexed Tree (Fenwick Tree)",
+              "answer": "Stores prefix sums (running totals). Has O(n log(n)) construction time, O(log(n)) update time, and O(log(n)) retrieval time."
+            },
+            {
+              "id": "datastructures-description-segment-tree",
+              "link": "https://en.wikipedia.org/wiki/Segment_tree",
+              "text": "Segment Tree",
+              "answer": "Stores intervals or segments and allows efficient searching for intervals that contain a certain point, or to query for a range sum or range minimum."
+            },
+            {
+              "id": "datastructures-description-interval-tree",
+              "link": "https://en.wikipedia.org/wiki/Interval_tree",
+              "text": "Interval Tree",
+              "answer": "Stores intervals or segments and allows efficient searching for intervals that overlap a certain interval."
+            },
+            {
+              "id": "datastructures-description-range-tree",
+              "link": "https://en.wikipedia.org/wiki/Range_tree",
+              "text": "Range Tree",
+              "answer": "Allows efficient O((log n)^d + k) time searching for points that are within a certain interval. (Orthogonal Range Search). Particularly for searching in multiple dimensions. Using O(n(log n)^d-1) space."
+            },
+            {
+              "id": "datastructures-description-order-statistic-tree",
+              "link": "https://en.wikipedia.org/wiki/Order_statistic_tree",
+              "text": "Order Statistic Tree",
+              "answer": "Supports rank() and select() in O(log n) time."
+            },
+            {
+              "id": "datastructures-description-finger-search-tree",
+              "link": "https://en.wikipedia.org/wiki/Finger_search_tree",
+              "text": "Finger Search Tree",
+              "answer": "Allows fast search to nearby keys, in O(log(rank(x) - rank(y))) time."
+            }
+          ]
+        },
+        {
+          "id": "datastructures-description-heaps",
+          "title": "Heaps",
+          "question": [
+            {
+              "id": "datastructures-description-heap",
+              "link": "https://en.wikipedia.org/wiki/Heap_(data_structure)",
+              "text": "Heap",
+              "answer": "A tree-based structure whose parent nodes are less (for a min heap) or greater (for a max heap) than their children, allowing fast min (or max) retrieval."
+            },
+            {
+              "id": "datastructures-description-binary-heap",
+              "link": "https://en.wikipedia.org/wiki/Binary_heap",
+              "text": "Binary Heap",
+              "answer": "A heap implemented with a binary tree, which is complete (all levels are filled, apart from leaves, which are filled from left to right.)"
+            },
+            {
+              "id": "datastructures-description-binomial-heap",
+              "link": "https://en.wikipedia.org/wiki/Binomial_heap",
+              "text": "Binomial Heap",
+              "answer": "A mergeable heap, implemented as a collection of binomial trees."
+            },
+            {
+              "id": "datastructures-description-fibonacci-heap",
+              "link": "https://en.wikipedia.org/wiki/Fibonacci_heap",
+              "text": "Fibonacci Heap",
+              "answer": "A heap implemented as a collection of heaps, allowing fast decrease-key, delete, and merge."
+            },
+            {
+              "id": "datastructures-description-treap",
+              "link": "https://en.wikipedia.org/wiki/Treap",
+              "text": "Treap",
+              "answer": "A self-balancing binary search tree that is also a min (or max) heap in terms of a random weight for each node, resulting in a random binary search tree that is likely to be balanced."
+            }
+          ]
+        },
+        {
+          "id": "datastructures-description-others",
+          "title": "Others",
+          "question": [
+            {
+              "id": "datastructures-description-bloom-filter",
+              "link": "https://en.wikipedia.org/wiki/Bloom_filter",
+              "text": "Bloom Filter",
+              "answer": "Tests membership, with possibility of false positives."
+            },
+            {
+              "id": "datastructures-description-union-find",
+              "link": "https://en.wikipedia.org/wiki/Disjoint-set_data_structure",
+              "text": "Union Find (Disjoint Set)",
+              "answer": "Groups items into subsets."
+            },
+            {
+              "id": "datastructures-description-adjacency-list",
+              "link": "https://en.wikipedia.org/wiki/Adjacency_list",
+              "text": "Adjacency List",
+              "answer": "Lists nodes and their incident (often only outgoing) edges."
+            },
+            {
+              "id": "datastructures-description-adjacency-matrix",
+              "link": "https://en.wikipedia.org/wiki/Adjacency_matrix",
+              "text": "Adjacency Matrix",
+              "answer": "For any 2 nodes, provides the edge, if any, that connects them."
+            },
+            {
+              "id": "datastructures-description-singly-linked-list",
+              "link": "https://en.wikipedia.org/wiki/Linked_list#Singly_linked_list",
+              "text": "Singly Linked List",
+              "answer": "Allows forward traversal of the items in the list."
+            },
+            {
+              "id": "datastructures-description-doubly-linked-list",
+              "link": "https://en.wikipedia.org/wiki/Doubly_linked_list",
+              "text": "Doubly Linked List",
+              "answer": "Allows forward and backward traversal of the items in the list."
+            },
+            {
+              "id": "datastructures-description-hash-table",
+              "link": "https://en.wikipedia.org/wiki/Hash_table",
+              "text": "Hash Table",
+              "answer": "Maps keys to values using a hash function."
+            },
+            {
+              "id": "datastructures-description-skip-list",
+              "link": "https://en.wikipedia.org/wiki/Skip_list",
+              "text": "Skip List",
+              "answer": "A linked hierarchy of ordered elements, starting with the sparsest subsequence."
+            },
+            {
+              "id": "datastructures-description-splay-tree",
+              "link": "https://en.wikipedia.org/wiki/Splay_tree",
+              "text": "Splay Tree",
+              "answer": "Binary Search Tree that optimizes itself for recently accessed elements."
+            },
+            {
+              "id": "datastructures-description-k-d-tree",
+              "link": "https://en.wikipedia.org/wiki/K-d_tree",
+              "text": "k-d Tree",
+              "answer": "Allows proximity search in k-dimensional data by partitioning the space."
+            }
+          ]
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "datastructures-implementations",
+      "title": "Implementations of Data Structures",
+      "subsections": [
+        {
+          "id": "datastructures-implementations-trees",
+          "title": "Trees",
+          "question": [
+            {
+              "id": "datastructures-implementation-tree",
+              "link": "https://en.wikipedia.org/wiki/Tree_(data_structure)",
+              "text": "Tree",
+              "answer": "Nodes with a data field and pointers to child nodes."
+            },
+            {
+              "id": "datastructures-implementation-binary-search-tree",
+              "link": "https://en.wikipedia.org/wiki/Binary_search_tree",
+              "text": "Binary Search Tree",
+              "answer": "Array or tree structure."
+            },
+            {
+              "id": "datastructures-implementation-self-balancing-binary-search-tree",
+              "link": "https://en.wikipedia.org/wiki/Self-balancing_binary_search_tree",
+              "text": "Self-Balancing Binary Search Tree (Balanced Binary Search Tree)",
+              "answer": "Perform local rotation transformations after changes."
+            },
+            {
+              "id": "datastructures-implementation-optimal-binary-search-tree",
+              "link": "https://en.wikipedia.org/wiki/Optimal_binary_search_tree",
+              "text": "Optimal Binary Search Tree",
+              "answer": "Construct initially and prevent modification, using dynamic programming. Or balance optimally (theoretically) after each modification."
+            },
+            {
+              "id": "datastructures-implementation-binary-tree",
+              "link": "https://en.wikipedia.org/wiki/Binary_tree",
+              "text": "Binary Tree",
+              "answer": "Nodes with a data field and pointers to only 2 child nodes."
+            },
+            {
+              "id": "datastructures-implementation-binomial-tree",
+              "link": "https://en.wikipedia.org/wiki/Binomial_heap#Binomial_heap",
+              "text": "Binomial Tree",
+              "answer": "A tree in which a node of order k has children who are roots of trees of order k, k-1, ... 0. Construct by merging trees of same order, by adding the second tree as a child of the first tree's root."
+            },
+            {
+              "id": "datastructures-implementation-b-tree",
+              "link": "https://en.wikipedia.org/wiki/Binary_tree",
+              "text": "B-Tree",
+              "answer": "Nodes with multiple keys separating multiple child nodes. Nodes with d keys have d+1 child nodes."
+            },
+            {
+              "id": "datastructures-implementation-2-3-tree",
+              "link": "https://en.wikipedia.org/wiki/2%E2%80%933_tree",
+              "text": "2-3 Tree",
+              "answer": "B-Tree of order 3. Nodes with 1 or 2 keys separating 2 or 3 child nodes, respectively."
+            },
+            {
+              "id": "datastructures-implementation-2-3-4-tree",
+              "link": "https://en.wikipedia.org/wiki/2%E2%80%933%E2%80%934_tree",
+              "text": "2-3-4 Tree",
+              "answer": "B-Tree of order 4. Nodes with 1, 2, or 3 keys separating 2, 3 or 4 child nodes, respectively."
+            },
+            {
+              "id": "datastructures-implementation-avl-tree",
+              "link": "https://en.wikipedia.org/wiki/AVL_tree",
+              "text": "AVL Tree",
+              "answer": "After an insert or deletion, rotates the lowest node whose child nodes' heights differ by more than 1."
+            },
+            {
+              "id": "datastructures-implementation-red-black-tree",
+              "link": "https://en.wikipedia.org/wiki/Red%E2%80%93black_tree",
+              "text": "Red-Black Tree",
+              "answer": "After an insert or deletion, rotates the lowest nodes that do not satisfy the coloring constraints: Root is black. All leaves are black. All children of red nodes are black. All paths to leaves contain the same number of black nodes."
+            },
+            {
+              "id": "datastructures-implementation-cartesian-tree",
+              "link": "https://en.wikipedia.org/wiki/Cartesian_tree#Efficient_construction",
+              "text": "Cartesian Tree",
+              "answer": "Construct the tree in (amortized) O(n) time by adding each node to the previous node, walking up the tree and splitting an edge if necessary, making children into left nodes.  Alternatively, use a stack: Pop previous nodes with lesser values to make the oldest lesser node a left child. And chain later nodes with decreasing values, as right children."
+            },
+            {
+              "id": "datastructures-implementation-trie",
+              "link": "https://en.wikipedia.org/wiki/Trie",
+              "text": "Trie (Digital Tree, Prefix Tree)",
+              "answer": "Keys are defined by their position in the tree, with each edge being the next character (or bit) of the key, and with values associated with leaf nodes."
+            },
+            {
+              "id": "datastructures-implementation-ternary-search-tree",
+              "link": "https://en.wikipedia.org/wiki/Ternary_search_tree",
+              "text": "Ternary Search Tree",
+              "answer": "Keys are defined by their position in the tree, with each node having a character and three links to nodes for the subsequent character - either a lesser, greater, or equal character."
+            },
+            {
+              "id": "datastructures-implementation-radix-tree",
+              "link": "https://en.wikipedia.org/wiki/Radix_tree",
+              "text": "Radix Tree (Radix Trie, Compact Prefix Tree)",
+              "answer": "Keys are defined by their position in the tree, with each edge being the next chunk of the key, and with values associated with leaf nodes."
+            },
+            {
+              "id": "datastructures-implementation-suffix-tree",
+              "link": "https://en.wikipedia.org/wiki/Suffix_tree",
+              "text": "Suffix Tree",
+              "answer": "Compressed Trie, with text suffixes as keys and text positions as values."
+            },
+            {
+              "id": "datastructures-implementation-van-emde-boas-tree",
+              "link": "https://en.wikipedia.org/wiki/Van_Emde_Boas_tree",
+              "text": "Van Emde Boas Tree",
+              "answer": "A hierarchy of clusters that summarize less sparse clusters, each with a min and max."
+            },
+            {
+              "id": "datastructures-implementation-binary-indexed-tree",
+              "link": "https://en.wikipedia.org/wiki/Fenwick_tree",
+              "text": "Binary Indexed Tree (Fenwick Tree)",
+              "answer": "Array in which the index of child, parent, and next nodes are calculated using bitwise operations. The prefix sum is the sum of the node and its parent nodes."
+            },
+            {
+              "id": "datastructures-implementation-segment-tree",
+              "link": "https://en.wikipedia.org/wiki/Segment_tree",
+              "text": "Segment Tree",
+              "answer": "Store the node values as an array, as in a binary heap, using the start of the range as the node's key. Each node summarizes its child nodes."
+            },
+            {
+              "id": "datastructures-implementation-interval-tree",
+              "link": "https://en.wikipedia.org/wiki/Interval_tree",
+              "text": "Interval Tree",
+              "answer": "A ternary tree, in which each node has a center point and links to nodes whose intervals are completely before or completely after the interval, as well as lists of overlapping intervals, in order of their start, and in order of their end.\nOr alternatively, a (balanced) binary tree with intervals in each node, using the interval's start as the key. Each node is augmented with the maximum interval end for itself and its children."
+            },
+            {
+              "id": "datastructures-implementation-range-tree",
+              "link": "https://en.wikipedia.org/wiki/Range_tree",
+              "text": "Range Tree",
+              "answer": "A complete balanced binary tree with points in the nodes. Examine right parents of the start and left parents of the end, listing all the parent nodes, and their subtrees, to the right of the start and to the left of the end. Each subtree has a range tree of the points by another dimension."
+            },
+            {
+              "id": "datastructures-implementation-order-statistic-tree",
+              "link": "https://en.wikipedia.org/wiki/Order_statistic_tree",
+              "text": "Order Statistic Tree",
+              "answer": "Augment a (balanced) binary search tree, maintaining the size of each node's subtree in the node."
+            },
+            {
+              "id": "datastructures-implementation-finger-search-tree",
+              "link": "https://en.wikipedia.org/wiki/Finger_search_tree",
+              "text": "Finger Search Tree",
+              "answer": "A level-linked 2-3 tree in which each node has links to next and previous nodes on the same level, and each node maintains the min and max in its subtree."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "datastructures-implementations-others",
+          "title": "Others",
+          "question": [
+            {
+              "id": "datastructures-implementation-bloom-filter",
+              "link": "https://en.wikipedia.org/wiki/Bloom_filter",
+              "text": "Bloom Filter",
+              "answer": "A bit array and a set of hash functions to map keys to positions."
+            },
+            {
+              "id": "datastructures-implementation-union-find",
+              "link": "https://en.wikipedia.org/wiki/Disjoint-set_data_structure",
+              "text": "Union Find (Disjoint Set)",
+              "answer": "A tree-based data structure, for instance in an array. Each position's value is the position of its parent."
+            },
+            {
+              "id": "datastructures-implementation-adjacency-list",
+              "link": "https://en.wikipedia.org/wiki/Adjacency_list",
+              "text": "Adjacency List",
+              "answer": "A list of each node and its edges."
+            },
+            {
+              "id": "datastructures-implementation-adjacency-matrix",
+              "link": "https://en.wikipedia.org/wiki/Adjacency_matrix",
+              "text": "Adjacency Matrix",
+              "answer": "A 2-dimensional array of node connections."
+            },
+            {
+              "id": "datastructures-implementation-singly-linked-list",
+              "link": "https://en.wikipedia.org/wiki/Linked_list#Singly_linked_list",
+              "text": "Singly Linked List",
+              "answer": "Nodes with a data field and a pointer to the next node."
+            },
+            {
+              "id": "datastructures-implementation-doubly-linked-list",
+              "link": "https://en.wikipedia.org/wiki/Doubly_linked_list",
+              "text": "Doubly Linked List",
+              "answer": "Nodes with a data field and both a pointer to the next node and a pointer to the previous node."
+            },
+            {
+              "id": "datastructures-implementation-hash-table",
+              "link": "https://en.wikipedia.org/wiki/Hash_table",
+              "text": "Hash Table",
+              "answer": "A hash function that maps keys to buckets in an array, resolving collisions either by Separate Chaining (linked list of items in each bucket) or Open Addressing (items stored in next available bucket)."
+            },
+            {
+              "id": "datastructures-implementation-skip-list",
+              "link": "https://en.wikipedia.org/wiki/Skip_list",
+              "text": "Skip List",
+              "answer": "A linked hierarchy of ordered elements, starting with the sparsest subsequence."
+            },
+            {
+              "id": "datastructures-implementation-splay-tree",
+              "link": "https://en.wikipedia.org/wiki/Splay_tree",
+              "text": "Splay Tree",
+              "answer": "A binary search tree. After insertion, deletion, or searching, the node is rotated to become the root."
+            },
+            {
+              "id": "datastructures-implementation-k-d-tree",
+              "link": "https://en.wikipedia.org/wiki/K-d_tree",
+              "text": "k-d Tree",
+              "answer": "A binary tree. Each node defines a hyperplane and its left and right children are either side of that hyperplane. Typically the hyperplane will be chosen by cycling through the axes as we move down the tree. Each node is the median of the points in its subtree."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "datastructures-implementations-heaps",
+          "title": "Heaps",
+          "question": [
+            {
+              "id": "datastructures-implementation-heap",
+              "link": "https://en.wikipedia.org/wiki/Heap_(data_structure)",
+              "text": "Heap",
+              "answer": "Usually implemented with an array. The K children of position i are from Ki+1 to Ki+K."
+            },
+            {
+              "id": "datastructures-implementation-binary-heap",
+              "link": "https://en.wikipedia.org/wiki/Binary_heap",
+              "text": "Binary Heap",
+              "answer": "Usually implemented with an array. The children of position i are at 2i+1 and 2i+2."
+            },
+            {
+              "id": "datastructures-implementation-binomial-heap",
+              "link": "https://en.wikipedia.org/wiki/Binomial_heap",
+              "text": "Binomial Heap",
+              "answer": "Store the roots of the binomial trees in an ordered list. Find minimum by finding the minimum root. Merge trees by making the larger root a child of the smaller root."
+            },
+            {
+              "id": "datastructures-implementation-fibonacci-heap",
+              "link": "https://en.wikipedia.org/wiki/Fibonacci_heap",
+              "text": "Fibonacci Heap",
+              "answer": "A collection of heap-ordered trees, which are like binomial trees, but do not need to be restructured upon node removal. Each node has a doubly-linked list of its children. The roots of the trees are in a circular doubly-linked list. Nodes are marked when restructuring is necessary but that cleanup operations are deferred."
+            },
+            {
+              "id": "datastructures-implementation-treap",
+              "link": "https://en.wikipedia.org/wiki/Treap",
+              "text": "Treap",
+              "answer": "A cartesian tree that satisfies the heap property for random weights. Insert as per node value order and then rotate to maintain heap property for the random weight."
+            }
+          ],
+          "answersAsChoices": true
+        }
+      ],
+      "andReverse": true
+    },
+    {
+      "id": "datastructures-uses",
+      "title": "Uses of Data Structures",
+      "questions": [
+        {
+          "id": "datastructures-uses-queue",
+          "link": "https://en.wikipedia.org/wiki/Queue_(abstract_data_type)",
+          "text": "Queue",
+          "answer": "Breadth First Search"
+        },
+        {
+          "id": "datastructures-uses-stack",
+          "link": "https://en.wikipedia.org/wiki/Stack_(abstract_data_type)",
+          "text": "Stack",
+          "answer": "Depth First Search. Expression parsing. Backtracking."
+        },
+        {
+          "id": "datastructures-uses-self-balancing-binary-search-tree",
+          "link": "https://en.wikipedia.org/wiki/Self-balancing_binary_search_tree",
+          "text": "Self-Balancing Binary Search Tree (Balanced Binary Search Tree)",
+          "answer": "Key-value association. std::map."
+        },
+        {
+          "id": "datastructures-uses-optimal-binary-search-tree",
+          "link": "https://en.wikipedia.org/wiki/Optimal_binary_search_tree",
+          "text": "Optimal Binary Search Tree",
+          "answer": "Optimal searching of a static set of data."
+        },
+        {
+          "id": "datastructures-uses-b-tree",
+          "link": "https://en.wikipedia.org/wiki/Binary_tree",
+          "text": "B-Tree",
+          "answer": "On-disk databases."
+        },
+        {
+          "id": "datastructures-uses-suffix-tree",
+          "link": "https://en.wikipedia.org/wiki/Suffix_tree",
+          "text": "Suffix Tree",
+          "answer": "Full text search. Matching genes in DNA. Longest Repeated Substring. Longest Common Substring."
+        },
+        {
+          "id": "datastructures-uses-binary-indexed-tree",
+          "link": "https://en.wikipedia.org/wiki/Fenwick_tree",
+          "text": "Binary Indexed Tree (Fenwick Tree)",
+          "answer": "Arithmetic coding algorithm. Maintaining a cumulative sum (prefix sums)."
+        },
+        {
+          "id": "datastructures-uses-heap",
+          "link": "https://en.wikipedia.org/wiki/Heap_(data_structure)",
+          "text": "Heap",
+          "answer": "Dijkstra's shortest-path algorithm. Prim's minimum spanning tree algorithm. Running Median."
+        },
+        {
+          "id": "datastructures-uses-fibonacci-heap",
+          "link": "https://en.wikipedia.org/wiki/Fibonacci_heap",
+          "text": "Fibonacci Heap",
+          "answer": "Dijkstra's shortest-path algorithm."
+        },
+        {
+          "id": "datastructures-uses-bloom-filter",
+          "link": "https://en.wikipedia.org/wiki/Bloom_filter",
+          "text": "Bloom Filter",
+          "answer": "Quick filtering where false positives are acceptable. For instance, web cache filtering."
+        },
+        {
+          "id": "datastructures-uses-union-find",
+          "link": "https://en.wikipedia.org/wiki/Disjoint-set_data_structure",
+          "text": "Union Find (Disjoint Set)",
+          "answer": "Kruskal's minimum spanning tree algorithm. Connected-component Labeling. Detecting a cycle in an undirected graph."
+        },
+        {
+          "id": "datastructures-uses-singly-linked-list",
+          "link": "https://en.wikipedia.org/wiki/Linked_list#Singly_linked_list",
+          "text": "Singly Linked List",
+          "answer": "Buckets in a separate chaining hash table."
+        },
+        {
+          "id": "datastructures-uses-doubly-linked-list",
+          "link": "https://en.wikipedia.org/wiki/Doubly_linked_list",
+          "text": "Doubly Linked List",
+          "answer": "An LRU cache. Implement the cache with a doubly-linked list as a queue, and store pointers to the nodes in the hash table. Old items can be removed from the end of the queue, or items can be moved to the head of the queue, via that node pointer"
+        },
+        {
+          "id": "datastructures-uses-hash-table",
+          "link": "https://en.wikipedia.org/wiki/Hash_table",
+          "text": "Hash Table",
+          "answer": "The 2-sum and 3-sum problems. std::unordered_map."
+        },
+        {
+          "id": "datastructures-uses-skip-list",
+          "link": "https://en.wikipedia.org/wiki/Skip_list",
+          "text": "Skip List",
+          "answer": "Database indexing."
+        },
+        {
+          "id": "datastructures-uses-bst",
+          "link": "https://en.wikipedia.org/wiki/Binary_search_tree",
+          "text": "Binary Search Tree",
+          "answer": "Range search over points. For instance, finding points in a line that are in a range."
+        },
+        {
+          "id": "datastructures-uses-k-d-tree",
+          "link": "https://en.wikipedia.org/wiki/K-d_tree",
+          "text": "k-d Tree",
+          "answer": "Find points in a plane that are contained by a rectangular range."
+        },
+        {
+          "id": "datastructures-uses-interval-tree",
+          "link": "https://en.wikipedia.org/wiki/Interval_tree",
+          "text": "Interval Tree",
+          "answer": "Intersection search over intervals. For instance, finding lines in a line that intersect with a range."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "datastructures-linked-list-operations",
+      "title": "Linked List Operations",
+      "questions": [
+        {
+          "id": "datastructures-linked-list-operations-sort-",
+          "text": "Best sort algorithm",
+          "answer": "Mergesort"
+        }
+      ]
+    },
+    {
+      "id": "datastructures-tree-operations",
+      "title": "Tree Operations",
+      "subsections": [
+        {
+          "id": "datastructures-tree-operations-bst-traversal",
+          "title": "Traversal",
+          "link": "https://en.wikipedia.org/wiki/Tree_traversal",
+          "question": [
+            {
+              "id": "datastructures-tree-operations-pre-order-traversal",
+              "link": "https://en.wikipedia.org/wiki/Tree_traversal#Pre-order",
+              "text": "Pre-Order Traversal",
+              "answer": "List the nodes first from the root down the left to the leaf, then back up from left to right."
+            },
+            {
+              "id": "datastructures-tree-operations-in-order-traversal",
+              "link": "https://en.wikipedia.org/wiki/Tree_traversal#In-order",
+              "text": "In-Order Traversal",
+              "answer": "Lists the items in sorted order (for a BST)."
+            },
+            {
+              "id": "datastructures-tree-operations-post-order-traversal",
+              "link": "https://en.wikipedia.org/wiki/Tree_traversal#Post-order",
+              "text": "Post-Order Traversal",
+              "answer": "List the nodes from the bottom of each path up to the root, listing shared nodes last, from left to right."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "datastructures-tree-operations-traversal-roots-position",
+          "title": "Traversal: Positions of roots",
+          "link": "https://en.wikipedia.org/wiki/Binary_search_tree#Operations",
+          "question": [
+            {
+              "id": "datastructures-tree-operations-pre-order-traversal-roots-position",
+              "link": "https://en.wikipedia.org/wiki/Tree_traversal#Pre-order",
+              "text": "Pre-Order Traversal",
+              "answer": "Roots appear first."
+            },
+            {
+              "id": "datastructures-tree-operations-in-order-traversal-roots-position",
+              "link": "https://en.wikipedia.org/wiki/Tree_traversal#In-order",
+              "text": "In-Order Traversal",
+              "answer": "Roots appear in order (for a BST)."
+            },
+            {
+              "id": "datastructures-tree-operations-post-order-traversal-roots-position",
+              "link": "https://en.wikipedia.org/wiki/Tree_traversal#Post-order",
+              "text": "Post-Order Traversal",
+              "answer": "Roots appear last."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "datastructures-tree-operations-construction-from-traversal",
+          "title": "Construction from traversals (generic trees, not BSTs), assuming distinct keys.",
+          "question": [
+            {
+              "id": "datastructures-tree-operations-construction-from-preorder-and-inorder",
+              "link": "http://www.geeksforgeeks.org/construct-tree-from-given-inorder-and-preorder-traversal/",
+              "text": "From a pre-order traversal and an inorder traversal.",
+              "answer": "Build a hash table mapping values to their positions in the inorder traversal. Recurse, passing the full range for both inorder and preorder traversals. Use the first preorder item as the root. Find that value's position in the inorder traversal, which lets us discover the sizes of the left and right trees to either side of it in the range. The same values are in the preorder after the root item: first the left items and then the right items. Build the left and right trees by recursing, passing these new ranges for inorder and postorder."
+            },
+            {
+              "id": "datastructures-tree-operations-construction-from-postorder-and-inorder",
+              "link": "http://www.geeksforgeeks.org/construct-a-binary-tree-from-postorder-and-inorder/",
+              "text": "From a post-order traversal and an in-order traversal.",
+              "answer": "Build a hash table mapping values to their positions in the inorder traversal. Recurse, passing the full range for both inorder and postorder traversals. Use the last postorder item as the root. Find that value's position in the inorder traversal, which lets us discover the sizes of the left and right trees to either side of it in the range. The same values are in the postorder before the root item: first the left items and then the right items. Build the left and right trees by recursing, passing these new ranges for inorder and postorder."
+            },
+            {
+              "id": "datastructures-tree-operations-construction-from-inorder-of-cartesian-tree",
+              "text": "From an in-order traversal of a cartesian tree.",
+              "answer": "Build a hash table mapping values to their positions in the inorder traversal. Recurse, passing the full range. Use the item with the maximum value as the root. Find that value's position in the inorder traversal, which lets us discover the sizes of the left and right trees to either side of it in the range. Build the left and right trees by recursing, passing these new ranges."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "datastructures-tree-operations-bst-construction-from-traversal",
+          "title": "Binary Search Tree: Construction from traversals in linear time.",
+          "question": [
+            {
+              "id": "datastructures-tree-operations-bst-construction-from-preorder",
+              "link": "http://www.geeksforgeeks.org/construct-bst-from-given-preorder-traversa/",
+              "text": "From a pre-order traversal.",
+              "answer": "Recursively build. Use the first item as the root if it is within the expected min/max (and advance), then build the left tree, using the root to specify its min/max (and advance), then build the right tree, using the root to specify its min/max (and advance)."
+            },
+            {
+              "id": "datastructures-tree-operations-bst-construction-from-inorder",
+              "link": "https://en.wikipedia.org/wiki/Tree_traversal#In-order",
+              "text": "From an in-order traversal.",
+              "answer": "Discover the overall count. Then recursively build the left tree (and advance), then the root (and advance), then the right tree (and advance). By halving the count each time, and subtracting 1 for the root."
+            },
+            {
+              "id": "datastructures-tree-operations-bst-construction-from-postorder",
+              "link": "http://www.geeksforgeeks.org/construct-a-binary-search-tree-from-given-postorder/",
+              "text": "From a post-order traversal.",
+              "answer": "Discover the overall count. Recursively build. Use the last item as the root (and advance the root pointer backwards), then build the left tree, using the root to specify its min/max (and advance the main pointer forwards), then build the right tree, using the root to specify its min/max (and advance the main pointer forwards)."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "datastructures-tree-operations-bst-others",
+          "title": "Binary Search Tree: Others",
+          "link": "https://en.wikipedia.org/wiki/Binary_search_tree#Operations",
+          "question": [
+            {
+              "id": "datastructures-tree-operations-bst-search",
+              "link": "https://en.wikipedia.org/wiki/Binary_search_tree#Searching",
+              "text": "Search",
+              "answer": "Find the node by comparing its key."
+            },
+            {
+              "id": "datastructures-tree-operations-bst-successor",
+              "link": "https://en.wikipedia.org/wiki/Binary_search_tree#Searching",
+              "text": "Successor",
+              "answer": "Find the node with the next key in order."
+            },
+            {
+              "id": "datastructures-tree-operations-bst-predecessor",
+              "link": "https://en.wikipedia.org/wiki/Binary_search_tree",
+              "text": "Predecessor",
+              "answer": "Find the node with the previous key in order."
+            },
+            {
+              "id": "datastructures-tree-operations-bst-insert",
+              "link": "https://en.wikipedia.org/wiki/Binary_search_tree#Insertion",
+              "text": "Insert",
+              "answer": "Add a node with the specified key."
+            },
+            {
+              "id": "datastructures-tree-operations-bst-delete",
+              "link": "https://en.wikipedia.org/wiki/Binary_search_tree#Deletion",
+              "text": "Delete",
+              "answer": "Remove a node with the specified key."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "datastructures-tree-implementation-bst-traversal",
+          "title": "Binary Search Tree: Implementations: Traversal",
+          "link": "https://en.wikipedia.org/wiki/Binary_search_tree#Operations",
+          "question": [
+            {
+              "id": "datastructures-tree-implementation-bst-pre-order-traversal-recursive",
+              "link": "https://en.wikipedia.org/wiki/Tree_traversal#Pre-order",
+              "text": "Pre-Order Traversal (Recursive)",
+              "answer": "Use the current node, recurse into left tree, recurse into right tree."
+            },
+            {
+              "id": "datastructures-tree-implementation-bst-pre-order-traversal-iterative",
+              "link": "https://en.wikipedia.org/wiki/Tree_traversal#Pre-order",
+              "text": "Pre-Order Traversal (Iterative)",
+              "answer": "Put root on stack. while(stack not empty), take from stack, use current node, put right then left on stack."
+            },
+            {
+              "id": "datastructures-tree-implementation-bst-pre-order-traversal-morris",
+              "link": "https://en.wikipedia.org/wiki/Tree_traversal#Morris_in-order_traversal_using_threading",
+              "text": "Pre-Order Traversal (Morris Traversal)",
+              "answer": "If there is no left child, use the current node and go right (possibly using a temporary right link to reach an ancestor successor). If there is a left child, find the predecessor (left child's rightmost node). Set a temporary right link from that predecessor to the current node (its successor), use the current node, and go left. But if the temporary link already exists, clear it and go right."
+            },
+            {
+              "id": "datastructures-tree-implementation-bst-in-order-traversal-recursive",
+              "link": "https://en.wikipedia.org/wiki/Tree_traversal#In-order",
+              "text": "In-Order Traversal (Recursive)",
+              "answer": "Recurse into left tree, use the current node, recurse into right tree."
+            },
+            {
+              "id": "datastructures-tree-implementation-bst-in-order-traversal-iterative",
+              "link": "https://en.wikipedia.org/wiki/Tree_traversal#In-order",
+              "text": "In-Order Traversal (Iterative)",
+              "answer": "While(stack not empty), while(current is null), travel leftwards, adding nodes to the stack. Pop and use the left-most node. Put the right node on the stack and set it as current."
+            },
+            {
+              "id": "datastructures-tree-implementation-bst-in-order-traversal-morris",
+              "link": "https://en.wikipedia.org/wiki/Tree_traversal#Morris_in-order_traversal_using_threading",
+              "text": "In-Order Traversal (Morris Traversal)",
+              "answer": "If there is no left child, use the current node and go right (possibly using a temporary right link to reach an ancestor successor). If there is a left child, find the predecessor (left child's rightmost node). Set a temporary right link from that predecessor to the current node (its successor) and go left. But if the temporary link already exists, clear it, use the current node, and go right."
+            },
+            {
+              "id": "datastructures-tree-implementation-bst-post-order-traversal-recursive",
+              "link": "https://en.wikipedia.org/wiki/Tree_traversal#Post-order",
+              "text": "Post-Order Traversal (Recursive)",
+              "answer": "Recurse into left tree, recurse into right tree, use the current node."
+            },
+            {
+              "id": "datastructures-tree-implementation-bst-post-order-traversal-iterative",
+              "link": "https://en.wikipedia.org/wiki/Tree_traversal#Post-order",
+              "text": "Post-Order Traversal (Iterative)",
+              "answer": "Use 2 stacks. Put root on stack1. while(stack1 not empty), take from stack1, put on stack2, put left and right on stack1. while(stack2 not empty), take from stack and use.  Alternatively, modify the pre-order algorithm, to reverse the order of putting the children on the stack, then reverse the whole result at the end."
+            },
+            {
+              "id": "datastructures-tree-implementation-bst-level-order-traversal-iterative",
+              "link": "https://en.wikipedia.org/wiki/Tree_traversal#Breadth-first_search_2",
+              "text": "Level-Order Traversal (BFS) (Iterative)",
+              "answer": "Add root to a queue. While(queue not empty), pop a node from the queue, use it, add left to the queue, add right to the queue."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "datastructures-tree-implementation-bst-others",
+          "title": "Binary Search Tree: Implementations: Other",
+          "link": "https://en.wikipedia.org/wiki/Binary_search_tree#Operations",
+          "question": [
+            {
+              "id": "datastructures-tree-implementation-bst-search",
+              "link": "https://en.wikipedia.org/wiki/Binary_search_tree#Searching",
+              "text": "Search",
+              "answer": "Compare with root's key and then search in the left or right subtree, comparing each node's key and then going left or right."
+            },
+            {
+              "id": "datastructures-tree-implementation-bst-successor",
+              "link": "https://en.wikipedia.org/wiki/Binary_search_tree#Searching",
+              "text": "Successor",
+              "answer": "Find left-most child of right child. Or if there is no right child, find the nearest ancestor that is an ancestor's left child."
+            },
+            {
+              "id": "datastructures-tree-implementation-bst-predecessor",
+              "link": "https://en.wikipedia.org/wiki/Binary_search_tree",
+              "text": "Predecessor",
+              "answer": "Find right-most child of left child. Or if there is no left child, find the nearest ancestor that is an ancestor's right child."
+            },
+            {
+              "id": "datastructures-tree-implementation-bst-insert",
+              "link": "https://en.wikipedia.org/wiki/Binary_search_tree#Insertion",
+              "text": "Insert",
+              "answer": "Search for the node's key until we find a null child. Put the node in that position."
+            },
+            {
+              "id": "datastructures-tree-implementation-bst-delete",
+              "link": "https://en.wikipedia.org/wiki/Binary_search_tree#Deletion",
+              "text": "Delete",
+              "answer": "If there are 2 child nodes: Find the successor. If there is no successor then there is no right child, so replace the node with the left child. If there is a successor, replace the node with the successor, making the node's left child be the successor's left node, making the successor's original parent be the successor's right child and making the successor's original right child be the successor's original parent's left child."
+            },
+            {
+              "id": "datastructures-tree-implementation-bst-left-rotation",
+              "link": "https://en.wikipedia.org/wiki/Tree_rotation",
+              "text": "Left Rotation",
+              "answer": "The node's right child becomes its parent, with the node as the left child. The right child's left child becomes the node's right child."
+            },
+            {
+              "id": "datastructures-tree-implementation-bst-right-rotation",
+              "link": "https://en.wikipedia.org/wiki/Tree_rotation",
+              "text": "Right Rotation",
+              "answer": "The node's left child becomes its parent, with the node as the right child. The left child's right child becomes the node's left child."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "datastructures-tree-operations-uses-bst-traversal",
+          "title": "Binary Search Tree: Traversal Uses",
+          "link": "https://en.wikipedia.org/wiki/Binary_search_tree#Operations",
+          "question": [
+            {
+              "id": "datastructures-tree-operations-bst-pre-order-traversal",
+              "link": "https://en.wikipedia.org/wiki/Tree_traversal#Pre-order",
+              "text": "Pre-Order Traversal",
+              "answer": "Duplicate the tree. Generate a prefix representation of an expression tree."
+            },
+            {
+              "id": "datastructures-tree-operations-bst-in-order-traversal",
+              "link": "https://en.wikipedia.org/wiki/Tree_traversal#In-order",
+              "text": "In-Order Traversal",
+              "answer": "List the nodes in order."
+            },
+            {
+              "id": "datastructures-tree-operations-bst-post-order-traversal",
+              "link": "https://en.wikipedia.org/wiki/Tree_traversal#Post-order",
+              "text": "Post-Order Traversal",
+              "answer": "Delete the entire tree, by deleting children before parents. Generate a postfix representation of an expression tree."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "datastructures-tree-lca-and-rmq",
+          "title": "LCA (Lowest Common Ancestor) and RMQ (Range Minimum Query) Reduction",
+          "link": "https://www.topcoder.com/community/data-science/data-science-tutorials/range-minimum-query-and-lowest-common-ancestor/",
+          "question": [
+            {
+              "id": "datastructures-tree-lca-and-rmq-lca",
+              "link": "https://www.topcoder.com/community/data-science/data-science-tutorials/range-minimum-query-and-lowest-common-ancestor/#Reduction%20from%20LCA%20to%20RMQ",
+              "text": "LCA via RMQ",
+              "answer": "Build the Euler tour of the tree, storing the level of each node visited and storing the first occurrence of each node. Do RMQ on the levels array in the range defined by the first appearances of each node. Then use the index of the RMQ to find the node in the Euler tour."
+            },
+            {
+              "id": "datastructures-tree-lca-and-lca-rmq",
+              "link": "https://www.topcoder.com/community/data-science/data-science-tutorials/range-minimum-query-and-lowest-common-ancestor/#From%20RMQ%20to%20LCA",
+              "text": "RMQ via LCA",
+              "answer": "Build a Cartesian Tree of the array. The LCA of nodes in this tree is the RMQ of the values in the array."
+            }
+          ],
+          "answersAsChoices": true
+        }
+      ],
+      "andReverse": true
+    },
+    {
+      "id": "datastructures-hash-tables",
+      "title": "Hash Tables",
+      "link": "https://en.wikipedia.org/wiki/Hash_table",
+      "subsections": [
+        {
+          "id": "datastructures-hash-tables-collision-resolution",
+          "title": "Collision Resolution",
+          "link": "https://en.wikipedia.org/wiki/Hash_table#Collision_resolution",
+          "question": [
+            {
+              "id": "datastructures-hash-tables-collision-resolution-chaining",
+              "link": "https://en.wikipedia.org/wiki/Hash_table#Separate_chaining",
+              "text": "Separate chaining (open hashing)",
+              "answer": "Each bucket is independent, and has a list of entries with the same index."
+            },
+            {
+              "id": "datastructures-hash-tables-collision-resolution-open-addressing",
+              "link": "https://en.wikipedia.org/wiki/Hash_table#Open_addressing",
+              "text": "Open addressing (closed hashing)",
+              "answer": "All entry records are stored in the bucket array itself. Lookups may examine a series of buckets."
+            },
+            {
+              "id": "datastructures-hash-tables-collision-resolution-robin-hood-hashing",
+              "link": "https://en.wikipedia.org/wiki/Hash_table#Robin_Hood_hashing",
+              "text": "Robin Hood hashing",
+              "answer": "A key will be relocated if its probe count is higher than for the new key."
+            },
+            {
+              "id": "datastructures-hash-tables-collision-resolution-2-choice-hashing",
+              "link": "https://en.wikipedia.org/wiki/2-choice_hashing",
+              "text": "2-choice hashing",
+              "answer": "2 hash functions provide 2 potential positions for a key. The key is placed where there would be fewer collisions."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "datastructures-hash-tables-collision-resolution-advantages",
+          "title": "Collision Resolution: Advantages/Disadvantages",
+          "link": "https://en.wikipedia.org/wiki/Hash_table#Collision_resolution",
+          "question": [
+            {
+              "id": "datastructures-hash-tables-collision-resolution-advantages-chaining",
+              "link": "https://en.wikipedia.org/wiki/Hash_table#Separate_chaining",
+              "text": "Separate chaining (open hashing)",
+              "answer": "Advantages: Simple implementation. Avoids rehashing. Each list can have its own lock in a concurrent hash table. Disadvantage: Pointer chasing causes cache misses. Extra space."
+            },
+            {
+              "id": "datastructures-hash-tables-collision-resolution-advantages-open-addressing",
+              "link": "https://en.wikipedia.org/wiki/Hash_table#Open_addressing",
+              "text": "Open addressing (closed hashing)",
+              "answer": "Advantage: Data locality gives good cache performance. Disadvantage: Requires reallocation and rehashing."
+            },
+            {
+              "id": "datastructures-hash-tables-collision-resolution-advantages-robin-hood-hashing",
+              "link": "https://en.wikipedia.org/wiki/Hash_table#Robin_Hood_hashing",
+              "text": "Robin Hood hashing",
+              "answer": "Advantage: Reduces worst case search times."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "datastructures-hash-tables-open-addressing-strategies",
+          "title": "Open addressing strategies",
+          "link": "https://en.wikipedia.org/wiki/Open_addressing",
+          "question": [
+            {
+              "id": "datastructures-hash-tables-open-addressing-strategy-probe-sequence",
+              "link": "https://en.wikipedia.org/wiki/Open_addressing",
+              "text": "Probe sequence",
+              "answer": "The buckets are examined, starting with the hashed-to slot and proceeding in some probe sequence, until an unoccupied slot is found."
+            },
+            {
+              "id": "datastructures-hash-tables-open-addressing-strategy-coalesced-hashing",
+              "link": "https://en.wikipedia.org/wiki/Coalesced_hashing",
+              "text": "Coalesced hashing",
+              "answer": "Hybrid of separate chaining and open addressing, chaining from filled buckets to unused buckets."
+            },
+            {
+              "id": "datastructures-hash-tables-open-addressing-strategy-cuckoo-hashing",
+              "link": "https://en.wikipedia.org/wiki/Cuckoo_hashing",
+              "text": "Cuckoo hashing",
+              "answer": "The key is re-hashed with other hash functions to find an empty bucket. (All hashes may be tried during lookup.) If all collide, the existing key is re-hashed, possibly causing further re-hashing. If this eventually fails, the table is resized."
+            },
+            {
+              "id": "datastructures-hash-tables-open-addressing-strategy-hopscotch-hashing",
+              "link": "https://en.wikipedia.org/wiki/Hopscotch_hashing",
+              "text": "Hopscotch hashing",
+              "answer": "The key is always in the neighborhood of the original bucket. If necessary, existing items are moved, though without moving them outside of their neighbourhoods."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "datastructures-hash-tables-open-addressing-strategies-advantages",
+          "title": "Open addressing strategies: Advantages",
+          "link": "https://en.wikipedia.org/wiki/Open_addressing",
+          "question": [
+            {
+              "id": "datastructures-hash-tables-open-addressing-strategy-advantage-probe-sequence",
+              "link": "https://en.wikipedia.org/wiki/Open_addressing",
+              "text": "Probe sequence",
+              "answer": "Fast insertion and fast search."
+            },
+            {
+              "id": "datastructures-hash-tables-open-addressing-strategy-advantage-coalesced-hashing",
+              "link": "https://en.wikipedia.org/wiki/Coalesced_hashing",
+              "text": "Coalesced hashing",
+              "answer": "No clustering effects; in fact, the table can be efficiently filled to a high density."
+            },
+            {
+              "id": "datastructures-hash-tables-open-addressing-strategy-advantage-cuckoo-hashing",
+              "link": "https://en.wikipedia.org/wiki/Cuckoo_hashing",
+              "text": "Cuckoo hashing",
+              "answer": "Constant lookup time in the worst case, and constant amortized time for insertions and deletions."
+            },
+            {
+              "id": "datastructures-hash-tables-open-addressing-strategy-advantage-hopscotch-hashing",
+              "link": "https://en.wikipedia.org/wiki/Hopscotch_hashing",
+              "text": "Hopscotch hashing",
+              "answer": "Works well even when the load factor grows beyond 0.9. Allows use of simple hash function. Neighbourhoods can be locked separately in a concurrent hash table."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "datastructures-hash-tables-open-addressing-probing",
+          "title": "Open addressing probe sequences: Description",
+          "link": "https://en.wikipedia.org/wiki/Open_addressing",
+          "question": [
+            {
+              "id": "datastructures-hash-tables-open-addressing-probing-linear-probing",
+              "link": "https://en.wikipedia.org/wiki/Linear_probing",
+              "text": "Linear probing",
+              "answer": "The interval between probes is fixed — often at 1."
+            },
+            {
+              "id": "datastructures-hash-tables-open-addressing-probing-quadratic-probing",
+              "link": "https://en.wikipedia.org/wiki/Quadratic_probing",
+              "text": "Quadratic probing",
+              "answer": "The interval between probes increases linearly (the indices are described by a quadratic function)."
+            },
+            {
+              "id": "datastructures-hash-tables-open-addressing-probing-double-hashing",
+              "link": "https://en.wikipedia.org/wiki/Double_hashing",
+              "text": "Double hashing",
+              "answer": "The interval between probes is computed by another hash function."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "datastructures-hash-tables-open-addressing-probing-advantages",
+          "title": "Open addressing probe sequences: Advantages/Disadvantages",
+          "link": "https://en.wikipedia.org/wiki/Open_addressing",
+          "question": [
+            {
+              "id": "datastructures-hash-tables-open-addressing-probing-advantage-linear-probing",
+              "link": "https://en.wikipedia.org/wiki/Linear_probing",
+              "text": "Linear probing",
+              "answer": "Advantage: best cache performance. Disadvantage: worst clustering."
+            },
+            {
+              "id": "datastructures-hash-tables-open-addressing-probing-advantage-quadratic-probing",
+              "link": "https://en.wikipedia.org/wiki/Quadratic_probing",
+              "text": "Quadratic probing",
+              "answer": "Advantage: good cache performance and minimal clustering."
+            },
+            {
+              "id": "datastructures-hash-tables-open-addressing-probing-advantage-double-hashing",
+              "link": "https://en.wikipedia.org/wiki/Double_hashing",
+              "text": "Double hashing",
+              "answer": "Advantage: no clustering. Disadvantage: worst cache performance."
+            }
+          ],
+          "answersAsChoices": true
+        }
+      ],
+      "andReverse": true
+    }
+  ]
+}

@@ -1,0 +1,417 @@
+{
+  "id": "algorithms_analysis",
+  "title": "Algorithms Analysis",
+  "sections": [
+    {
+      "id": "master-theorem",
+      "title": "Master Theorem",
+      "subsections": [
+        {
+          "id": "master-theorem-using",
+          "title": "Using: T(n) = a T(n / b) + f(n)",
+          "link": "https://en.wikipedia.org/wiki/Master_theorem",
+          "question": [
+            {
+              "id": "master-theorem-using-parts-less-than",
+              "text": "If f(n) ∈ O(n ^ c) where c \u003c logb(a)",
+              "answer": "Case 1: T(n) ∈ Θ(n ^ logb(a))"
+            },
+            {
+              "id": "master-theorem-using-parts-equal",
+              "text": "If f(n) ∈ Θ(n ^ c ⋅ (log(n))^k where c = logb(a)",
+              "answer": "Case 2: T(n) ∈ Θ(n ^ c ⋅ (log(n))^(k+1))"
+            },
+            {
+              "id": "master-theorem-using-parts-greater-than",
+              "text": "If f(n) ∈ Ω(n ^ c) where c \u003e logb(a)",
+              "answer": "Case 3: T(n) ∈ Θ(f(n))"
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "master-theorem-intuition",
+          "title": "Intuition: T(n) = a T(n / b) + f(n), c \u003c/=/\u003e logb(a)",
+          "link": "https://en.wikipedia.org/wiki/Master_theorem",
+          "question": [
+            {
+              "id": "master-theorem-intuition-parts-less-than",
+              "text": "Case 1: T(n) ∈ Θ(n ^ logb(a))",
+              "answer": "Cost increases geometrically. Recursive work dominates. The bottom-most level has a constant fraction of the cost."
+            },
+            {
+              "id": "master-theorem-intuition-parts-equal",
+              "text": "Case 2: T(n) ∈ Θ(n ^ c ⋅ (log(n))^(k+1))",
+              "answer": "Cost is approximately the same on each level. Total cost is number of levels times first level's cost."
+            },
+            {
+              "id": "master-theorem-intuition-parts-greater-than",
+              "text": "Case 3: T(n) ∈ Θ(f(n))",
+              "answer": "Cost decreases geometrically. Non-recursive work dominates. The top-most level has a constant fraction of the work."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "master-theorem-parts",
+          "title": "Parts: T(n) \u003c= a T(n / b) + f(n)",
+          "link": "https://en.wikipedia.org/wiki/Master_theorem",
+          "question": [
+            {
+              "id": "parts-a",
+              "text": "a",
+              "answer": "Number of recursive calls"
+            },
+            {
+              "id": "parts-b",
+              "text": "b",
+              "answer": "Input size shrinkage factor"
+            },
+            {
+              "id": "parts-d",
+              "text": "f(n)",
+              "answer": "Cost of non-recursive work (divide and combine)"
+            }
+          ],
+          "answersAsChoices": true
+        }
+      ]
+    },
+    {
+      "id": "simplified-master-theorem",
+      "title": "Simplified Master Theorem",
+      "subsections": [
+        {
+          "id": "simplified-master-theorem-using",
+          "title": "Using: T(n) = a T(n / b) + f(n)",
+          "link": "https://en.wikipedia.org/wiki/Master_theorem",
+          "question": [
+            {
+              "id": "simplified-parts-equal",
+              "text": "a == bᵈ",
+              "answer": "O(nᵈ log(n))"
+            },
+            {
+              "id": "simplified-parts-less-than",
+              "text": "a \u003c bᵈ",
+              "answer": "O(nᵈ)"
+            },
+            {
+              "id": "simplified-parts-greater-than",
+              "text": "a \u003e bᵈ",
+              "answer": "O(n ^ logb(a))"
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "simplified-master-theorem-parts",
+          "title": "Parts: T(n) \u003c= a T(n / b) + O(nᵈ)",
+          "link": "https://en.wikipedia.org/wiki/Master_theorem",
+          "question": [
+            {
+              "id": "simplified-parts-a",
+              "text": "a",
+              "answer": "Number of recursive calls"
+            },
+            {
+              "id": "simplified-parts-b",
+              "text": "b",
+              "answer": "Input size shrinkage factor"
+            },
+            {
+              "id": "simplified-parts-d",
+              "text": "d",
+              "answer": "Exponent in running time of non-recursive work (divide and combine)"
+            }
+          ],
+          "answersAsChoices": true
+        }
+      ]
+    },
+    {
+      "id": "amortized-analysis",
+      "title": "Amortized Analysis",
+      "link": "https://en.wikipedia.org/wiki/Amortized_analysis",
+      "questions": [
+        {
+          "id": "amortized-analysis-aggregate-analysis",
+          "link": "https://en.wikipedia.org/wiki/Aggregate_analysis",
+          "text": "Aggregate Analysis",
+          "answer": "Determines an average worst case time for each operation based on the worst case time for n operations of any type."
+        },
+        {
+          "id": "amortized-analysis-accounting-method",
+          "link": "https://en.wikipedia.org/wiki/Accounting_method",
+          "text": "Accounting Method",
+          "answer": "Assigns a cost for each operation that includes the cost of affected future operations. For instance, the cost of each insert would include the cost of each subsequent delete."
+        },
+        {
+          "id": "amortized-analysis-potential-method",
+          "link": "https://en.wikipedia.org/wiki/Potential_method",
+          "text": "Potential Method",
+          "answer": "Chooses a potential function that associates a potential with each state of the data structure. The amortized cost of each operation is the actual cost plus the change in potential."
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "probabilistic-algorithms-types",
+      "title": "Types of probabilistic algorithms",
+      "link": "https://en.wikipedia.org/wiki/Randomized_algorithm",
+      "questions": [
+        {
+          "id": "probabilistic-algorithms-types-monte-carlo",
+          "link": "https://en.wikipedia.org/wiki/Monte_Carlo_algorithm",
+          "text": "Monte Carlo algorithms",
+          "answer": "Fast but only probably correct."
+        },
+        {
+          "id": "probabilistic-algorithms-types-las-vegas",
+          "link": "https://en.wikipedia.org/wiki/Las_Vegas_algorithm",
+          "text": "Las Vegas algorithms",
+          "answer": "Correct but only probably fast."
+        },
+        {
+          "id": "probabilistic-algorithms-types-atlantic-city",
+          "link": "https://en.wikipedia.org/wiki/Atlantic_City_algorithm",
+          "text": "Atlantic City algorithms",
+          "answer": "Probably correct and probably fast."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "probabilistic-algorithms-examples",
+      "title": "Examples of probabilistic algorithms",
+      "link": "https://en.wikipedia.org/wiki/Randomized_algorithm",
+      "questions": [
+        {
+          "id": "probabilistic-algorithms-examples-monte-carlo",
+          "link": "https://en.wikipedia.org/wiki/Monte_Carlo_algorithm",
+          "text": "Monte Carlo algorithms",
+          "answer": "Karger's Min-Cut Algorithm, Solovay–Strassen primality test, Baillie-PSW primality test, Miller–Rabin primality test."
+        },
+        {
+          "id": "probabilistic-algorithms-examples-las-vegas",
+          "link": "https://en.wikipedia.org/wiki/Las_Vegas_algorithm",
+          "text": "Las Vegas algorithms",
+          "answer": "Randomized Quicksort."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "greedy-v-dp",
+      "title": "Greedy versus Dynamic Programming",
+      "subsections": [
+        {
+          "id": "greedy-v-dp-properties",
+          "title": "Problem Properties",
+          "question": [
+            {
+              "id": "greedy-v-dp-properties-greedy",
+              "link": "https://en.wikipedia.org/wiki/Greedy_algorithm",
+              "text": "Greedy Algorithms",
+              "answer": "Have optimal substructure and can make locally optimal choices)."
+            },
+            {
+              "id": "greedy-v-dp-properties-dp",
+              "link": "https://en.wikipedia.org/wiki/Dynamic_programming",
+              "text": "Dynamic Programming Algorithms",
+              "answer": "Have optimal substructure but cannot make locally optimal choices."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "greedy-v-dp-subproblem-sequence",
+          "title": "Subproblem Sequence",
+          "question": [
+            {
+              "id": "greedy-v-dp-sequence-greedy",
+              "link": "https://en.wikipedia.org/wiki/Greedy_algorithm",
+              "text": "Greedy Algorithms",
+              "answer": "Choose a subproblem, solve it and then choose the next subproblem to solve, for which there is usually only one choice."
+            },
+            {
+              "id": "greedy-v-dp-sequence-dp",
+              "link": "https://en.wikipedia.org/wiki/Dynamic_programming",
+              "text": "Dynamic Programming Algorithms",
+              "answer": "Solve a subproblem by using the results of previously-computed subproblems."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "greedy-v-dp-recalculation",
+          "title": "Recalculation",
+          "question": [
+            {
+              "id": "greedy-v-dp-recalculation-greedy",
+              "link": "https://en.wikipedia.org/wiki/Greedy_algorithm",
+              "text": "Greedy Algorithms",
+              "answer": "Never reconsiders previously-calculated subproblems."
+            },
+            {
+              "id": "greedy-v-dp-recalculation-dp",
+              "link": "https://en.wikipedia.org/wiki/Dynamic_programming",
+              "text": "Dynamic Programming Algorithms",
+              "answer": "Reuses previously-calculated subproblems."
+            }
+          ],
+          "answersAsChoices": true
+        }
+      ],
+      "andReverse": true
+    },
+    {
+      "id": "p-np-etc",
+      "title": "P, NP, etc",
+      "questions": [
+        {
+          "id": "p-no-etc-p",
+          "text": "Definition: P (Polynomial)",
+          "answer": "Problems whose solutions can be found in polynomial time."
+        },
+        {
+          "id": "p-no-etc-np",
+          "text": "Definition: NP (Non-deterministic Polynomial)",
+          "answer": "Problems whose solutions can be verified in polynomial time."
+        },
+        {
+          "id": "p-no-etc-np-hard",
+          "text": "Definition: NP-hard",
+          "answer": "Problems at least as hard as any NP problem."
+        },
+        {
+          "id": "p-no-etc-np-complete",
+          "text": "Definition: NP-complete",
+          "answer": "Problems that are NP-hard and in NP."
+        },
+        {
+          "id": "p-no-etc-np-hard-not-complete",
+          "text": "Definition: NP-hard but not NP-complete",
+          "answer": "Problems that are NP-hard but not in NP."
+        },
+        {
+          "id": "p-no-etc-exp",
+          "text": "Definition: EXP (Exponential)",
+          "answer": "Problems whose solutions can be found in exponential time."
+        },
+        {
+          "id": "p-no-etc-exp-hard",
+          "text": "Definition: EXP-Hard",
+          "answer": "Problems at least as hard as any EXP problem."
+        },
+        {
+          "id": "p-no-etc-exp-complete",
+          "text": "Definition: EXP-Complete",
+          "answer": "Problems that are EXP-hard and in EXP."
+        },
+        {
+          "id": "p-no-etc-r",
+          "text": "Definition: R (Recursive)",
+          "answer": "Problems whose solutions can be found in finite time."
+        },
+        {
+          "id": "p-no-etc-space",
+          "text": "Definition: PSPACE (Polynomial Space)",
+          "answer": "Problems whose solutions can be found with polynomial space."
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "recurrence-examples",
+      "title": "Recurrence Relation Examples",
+      "questions": [
+        {
+          "id": "recurrence-example-n-log-n-case-2",
+          "text": "T(n) = 2 T(n/2) + O(n)",
+          "answer": "O(n log(n))"
+        },
+        {
+          "id": "recurrence-example-n-sq-log-n-case-2",
+          "text": "T(n) = 4 T(n/2) + O(n^2)",
+          "answer": "O(n^2 log(n))"
+        },
+        {
+          "id": "recurrence-example-n-squared-case-1a",
+          "text": "T(n) = T(n/2) + O(n^2)",
+          "answer": "O(n^2))"
+        },
+        {
+          "id": "recurrence-example-n-squared-case-2",
+          "text": "T(n) = 2 T(n/4) + O(sqrt(n))",
+          "answer": "O(sqrt(n) log(n))"
+        },
+        {
+          "id": "recurrence-example-n-to-log-case-3",
+          "text": "T(n) = 3 T(n/2) + O(n)",
+          "answer": "O(n^(log2(3)))"
+        },
+        {
+          "id": "recurrence-example-n-squared-case-1b",
+          "text": "T(n) = 2 T(n/2) + O(n^2)",
+          "answer": "O(n^2))"
+        },
+        {
+          "id": "recurrence-example-n-sq-to-n-cubed",
+          "text": "T(n) = T(n ^ 2) + O(1)",
+          "answer": "O(n^3)"
+        },
+        {
+          "id": "recurrence-example-n-cubed-case-3",
+          "text": "T(n) = 8 T(n/2) + O(n^2)",
+          "answer": "O(n^3)"
+        },
+        {
+          "id": "recurrence-example-n-cubed-case-1",
+          "text": "T(n) = 4 T(n/2) + O(n^3)",
+          "answer": "O(n^3)"
+        },
+        {
+          "id": "recurrence-example-sqrt-to-log-n",
+          "text": "T(n) = 2 T(sqrt(n)) + O(1)",
+          "answer": "O(log(n))"
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "time-complexity-code-examples",
+      "title": "Time Complexity: Code Examples",
+      "questions": [
+        {
+          "id": "time-complexity-code-example-log-n",
+          "text": "for (i = 1; i \u003c= n; i = i * 2) {\n  for (int j = 0; j \u003c n; j++) {\n    ... }\n}",
+          "answer": "O(n log(n))"
+        },
+        {
+          "id": "time-complexity-code-example-n-log-n",
+          "text": "for (i = 1; i \u003c= n; i = i * 2) {\n                ... }",
+          "answer": "O(log(n))"
+        },
+        {
+          "id": "time-complexity-code-example-n-via-geometric-sum",
+          "text": "for (i = 1; i \u003c= n; i = i * 2) {\n  for (int j = 0; j \u003c i; j++) {\n    ... }\n  }",
+          "answer": "O(n)"
+        },
+        {
+          "id": "time-complexity-code-example-n-sq",
+          "text": "for (i = 0; i \u003c n; ++i) {\n                for (int j = 0; j \u003c n; ++j) {\n                ... }\n                }",
+          "answer": "O(n ^ 2)"
+        },
+        {
+          "id": "time-complexity-code-example-n-sq-avoid-duplicates",
+          "text": "for (i = 0; i \u003c n; ++i) {\n                for (int j = i + 1; j \u003c n; ++j) {\n                ... }\n                }",
+          "answer": "O(n ^ 2)"
+        }
+      ],
+      "answersAsChoices": true
+    }
+  ]
+}

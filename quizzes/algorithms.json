@@ -1,0 +1,725 @@
+{
+  "id": "algorithms",
+  "title": "Algorithms",
+  "sections": [
+    {
+      "id": "algorithms-sort",
+      "title": "Sorting Algorithms",
+      "subsections": [
+        {
+          "id": "algorithms-sort-description",
+          "title": "Description",
+          "question": [
+            {
+              "id": "algorithms-sort-description-quicksort",
+              "link": "https://en.wikipedia.org/wiki/Quicksort",
+              "text": "Quicksort",
+              "answer": "Find partition and recurse."
+            },
+            {
+              "id": "algorithms-sort-description-3-way-quicksort",
+              "link": "https://en.wikipedia.org/wiki/Quicksort#Repeated_elementst",
+              "text": "3-Way Quicksort",
+              "answer": "Find partition and recurse, partitioning into less, equal, and greater than the pivot."
+            },
+            {
+              "id": "algorithms-sort-description-mergesort",
+              "link": "https://en.wikipedia.org/wiki/Merge_sort",
+              "text": "Mergesort",
+              "answer": "Divide, sort (recurse), merge."
+            },
+            {
+              "id": "algorithms-sort-description-heapsort",
+              "link": "https://en.wikipedia.org/wiki/Heapsort",
+              "text": "Heapsort",
+              "answer": "Like Selection Sort, but first heapifies the array and then chooses the largest values."
+            },
+            {
+              "id": "algorithms-sort-description-timsort",
+              "link": "https://en.wikipedia.org/wiki/Timsort",
+              "text": "Timsort",
+              "answer": "Hybrid of Mergesort and Insertion Sort. Finds ordered subsequences."
+            },
+            {
+              "id": "algorithms-sort-description-insertion-sort",
+              "link": "https://en.wikipedia.org/wiki/Insertion_sort",
+              "text": "Insertion Sort",
+              "answer": "Move each item, by neighbour swaps, to its location in the sorted list. Like sorting a hand of cards."
+            },
+            {
+              "id": "algorithms-sort-description-selection-sort",
+              "link": "https://en.wikipedia.org/wiki/Selection_sort",
+              "text": "Selection Sort",
+              "answer": "Repeatedly finds smallest item and moves it to the end of the sorted section at the start."
+            },
+            {
+              "id": "algorithms-sort-description-shell-sort",
+              "link": "https://en.wikipedia.org/wiki/Shellsort",
+              "text": "Shellsort",
+              "answer": "Like Insertion Sort, but considering every hth element, then again for lower h, until h is 1."
+            },
+            {
+              "id": "algorithms-sort-description-counting-sort",
+              "text": "Counting Sort",
+              "answer": "Count how often each value appears. Calculate the start index for each value. Copy each value to the start index in the output, decrementing the start index each time for each value."
+            },
+            {
+              "id": "algorithms-sort-description-radix-sort",
+              "link": "https://en.wikipedia.org/wiki/Radix_sort",
+              "text": "Radix Sort (LSD or MSD string sort)",
+              "answer": "Sort d times, each time examining just b bits, using counting sort or bucket sort."
+            },
+            {
+              "id": "algorithms-sort-description-bucket-sort",
+              "text": "Bucket Sort",
+              "answer": "Scatter items into buckets for ranges. Sort each bucket. Fill the array from the sorted buckets."
+            },
+            {
+              "id": "algorithms-sort-description-bubble-sort",
+              "text": "Bubble Sort",
+              "answer": "Compare and swap pairs until no more swaps are necessary."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "algorithms-sort-time",
+          "title": "Average Time",
+          "question": [
+            {
+              "id": "algorithms-sort-time-quicksort",
+              "link": "https://en.wikipedia.org/wiki/Quicksort",
+              "text": "Quicksort",
+              "answer": "O(n log(n))"
+            },
+            {
+              "id": "algorithms-sort-time-3-way-quicksort",
+              "link": "https://en.wikipedia.org/wiki/Quicksort#Repeated_elements",
+              "text": "3-Way Quicksort",
+              "answer": "O(n log(n))"
+            },
+            {
+              "id": "algorithms-sort-time-mergesort",
+              "link": "https://en.wikipedia.org/wiki/Merge_sort",
+              "text": "Mergesort",
+              "answer": "O(n log(n))"
+            },
+            {
+              "id": "algorithms-sort-time-heapsort",
+              "link": "https://en.wikipedia.org/wiki/Heapsort",
+              "text": "Heapsort",
+              "answer": "O(n log(n))"
+            },
+            {
+              "id": "algorithms-sort-time-timsort",
+              "link": "https://en.wikipedia.org/wiki/Timsort",
+              "text": "Timsort",
+              "answer": "O(n log(n))"
+            },
+            {
+              "id": "algorithms-sort-time-insertion-sort",
+              "link": "https://en.wikipedia.org/wiki/Insertion_sort",
+              "text": "Insertion Sort",
+              "answer": "O(n ^ 2)"
+            },
+            {
+              "id": "algorithms-sort-time-selection-sort",
+              "link": "https://en.wikipedia.org/wiki/Selection_sort",
+              "text": "Selection Sort",
+              "answer": "O(n ^ 2)"
+            },
+            {
+              "id": "algorithms-sort-time-shell-sort",
+              "link": "https://en.wikipedia.org/wiki/Shellsort",
+              "text": "Shellsort",
+              "answer": "O(n log(n)^2)"
+            },
+            {
+              "id": "algorithms-sort-time-counting-sort",
+              "text": "Counting Sort",
+              "answer": "O(n + k)"
+            },
+            {
+              "id": "algorithms-sort-time-radix-sort",
+              "link": "https://en.wikipedia.org/wiki/Radix_sort",
+              "text": "Radix Sort (LSD or MSD string sort)",
+              "answer": "O(nk)"
+            },
+            {
+              "id": "algorithms-sort-time-bucket-sort",
+              "text": "Bucket Sort",
+              "answer": "O(n + k)"
+            },
+            {
+              "id": "algorithms-sort-time-bubble-sort",
+              "text": "Bubble Sort",
+              "answer": "O(n ^ 2)"
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "algorithms-sort-advantages",
+          "title": "Advantages",
+          "question": [
+            {
+              "id": "algorithms-sort-advantages-quicksort",
+              "link": "https://en.wikipedia.org/wiki/Quicksort",
+              "text": "Quicksort",
+              "answer": "In-place (O(log(n)) space). Data Locality. Small coefficient of O(n log(n))."
+            },
+            {
+              "id": "algorithms-sort-advantages-3-way-quicksort",
+              "link": "https://en.wikipedia.org/wiki/Quicksort#Repeated_elements",
+              "text": "3-Way Quicksort",
+              "answer": "In-place (O(log(n)) space). Data Locality. Small coefficient of O(n log(n)). Linear on equal values."
+            },
+            {
+              "id": "algorithms-sort-advantages-mergesort",
+              "link": "https://en.wikipedia.org/wiki/Merge_sort",
+              "text": "Mergesort",
+              "answer": "O(n log(n)) worst case time. Stable. Data Locality. Parallelizable. Can be External."
+            },
+            {
+              "id": "algorithms-sort-advantages-heapsort",
+              "link": "https://en.wikipedia.org/wiki/Heapsort",
+              "text": "Heapsort",
+              "answer": "O(n log(n)) worst case time. O(1) space."
+            },
+            {
+              "id": "algorithms-sort-advantages-timsort",
+              "link": "https://en.wikipedia.org/wiki/Timsort",
+              "text": "Timsort",
+              "answer": "O(n) best case time."
+            },
+            {
+              "id": "algorithms-sort-advantages-insertion-sort",
+              "text": "Insertion Sort",
+              "answer": "Fast for small n, even though it has O(n^2) average time. Fast for nearly-sorted items. Online algorithm."
+            },
+            {
+              "id": "algorithms-sort-advantages-selection-sort",
+              "text": "Selection Sort",
+              "answer": "Minimal swaps."
+            },
+            {
+              "id": "algorithms-sort-advantages-counting-sort",
+              "link": "https://en.wikipedia.org/wiki/Counting_sort",
+              "text": "Counting Sort",
+              "answer": "O(n) time, but with O(m) space"
+            },
+            {
+              "id": "algorithms-sort-advantages-radix-sort",
+              "link": "https://en.wikipedia.org/wiki/Radix_sort",
+              "text": "Radix Sort (LSD or MSD string sort)",
+              "answer": "O(n) time. Minimal space."
+            },
+            {
+              "id": "algorithms-sort-advantages-bucket-sort",
+              "link": "https://en.wikipedia.org/wiki/Bucket_sort",
+              "text": "Bucket Sort",
+              "answer": "Like Counting Sort, but uses O(n) space instead of O(m) space."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "algorithms-sort-stability",
+          "title": "Sort Stability",
+          "link": "https://en.wikipedia.org/wiki/Stable_sort",
+          "question": [
+            {
+              "id": "algorithms-sort-stability-quicksort",
+              "link": "https://en.wikipedia.org/wiki/Quicksort",
+              "text": "Quicksort",
+              "answer": "Unstable"
+            },
+            {
+              "id": "algorithms-sort-stability-3-way-quicksort",
+              "link": "https://en.wikipedia.org/wiki/Quicksort#Repeated_elements",
+              "text": "3-Way Quicksort",
+              "answer": "Unstable"
+            },
+            {
+              "id": "algorithms-sort-stability-mergesort",
+              "link": "https://en.wikipedia.org/wiki/Merge_sort",
+              "text": "Mergesort",
+              "answer": "Stable"
+            },
+            {
+              "id": "algorithms-sort-stability-heapsort",
+              "link": "https://en.wikipedia.org/wiki/Heapsort",
+              "text": "Heapsort",
+              "answer": "Unstable"
+            },
+            {
+              "id": "algorithms-sort-stability-timsort",
+              "link": "https://en.wikipedia.org/wiki/Timsort",
+              "text": "Timsort",
+              "answer": "Stable"
+            },
+            {
+              "id": "algorithms-sort-stability-insertion-sort",
+              "link": "https://en.wikipedia.org/wiki/Insertion_sort",
+              "text": "Insertion Sort",
+              "answer": "Stable"
+            },
+            {
+              "id": "algorithms-sort-stability-selection-sort",
+              "link": "https://en.wikipedia.org/wiki/Selection_sort",
+              "text": "Selection Sort",
+              "answer": "Unstable"
+            },
+            {
+              "id": "algorithms-sort-stability-shellsort",
+              "link": "https://en.wikipedia.org/wiki/Shellsort",
+              "text": "Shellsort",
+              "answer": "Unstable"
+            },
+            {
+              "id": "algorithms-sort-stability-counting-sort",
+              "text": "Counting Sort",
+              "answer": "Stable"
+            },
+            {
+              "id": "algorithms-sort-stability-radix-sort",
+              "link": "https://en.wikipedia.org/wiki/Radix_sort",
+              "text": "Radix Sort (LSD or MSD string sort)",
+              "answer": "Stable"
+            },
+            {
+              "id": "algorithms-sort-stability-bucket-sort",
+              "text": "Bucket Sort",
+              "answer": "Stable"
+            },
+            {
+              "id": "algorithms-sort-stability-bubble-sort",
+              "text": "Bubble Sort",
+              "answer": "Stable"
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "algorithms-sort-inplace",
+          "title": "In Place or Not",
+          "link": "https://en.wikipedia.org/wiki/In-place_algorithm",
+          "question": [
+            {
+              "id": "algorithms-sort-inplace-quicksort",
+              "link": "https://en.wikipedia.org/wiki/Quicksort",
+              "text": "Quicksort",
+              "answer": "In-place (but small additional space needed)"
+            },
+            {
+              "id": "algorithms-sort-inplace-3-way-quicksort",
+              "link": "https://en.wikipedia.org/wiki/Quicksort#Repeated_elements",
+              "text": "3-Way Quicksort",
+              "answer": "In-place (but small additional space needed)"
+            },
+            {
+              "id": "algorithms-sort-inplace-mergesort",
+              "link": "https://en.wikipedia.org/wiki/Merge_sort",
+              "text": "Mergesort",
+              "answer": "Not in-place"
+            },
+            {
+              "id": "algorithms-sort-inplace-heapsort",
+              "link": "https://en.wikipedia.org/wiki/Heapsort",
+              "text": "Heapsort",
+              "answer": "In-place"
+            },
+            {
+              "id": "algorithms-sort-inplace-timsort",
+              "link": "https://en.wikipedia.org/wiki/Timsort",
+              "text": "Timsort",
+              "answer": "Not in-place"
+            },
+            {
+              "id": "algorithms-sort-inplace-insertion-sort",
+              "link": "https://en.wikipedia.org/wiki/Insertion_sort",
+              "text": "Insertion Sort",
+              "answer": "In-place"
+            },
+            {
+              "id": "algorithms-sort-inplace-selection-sort",
+              "link": "https://en.wikipedia.org/wiki/Selection_sort",
+              "text": "Selection Sort",
+              "answer": "In-place"
+            },
+            {
+              "id": "algorithms-sort-inplace-shellsort",
+              "link": "https://en.wikipedia.org/wiki/Shellsort",
+              "text": "Shellsort",
+              "answer": "In-place"
+            },
+            {
+              "id": "algorithms-sort-inplace-counting-sort",
+              "text": "Counting Sort",
+              "answer": "Not in-place"
+            },
+            {
+              "id": "algorithms-sort-inplace-radix-sort",
+              "link": "https://en.wikipedia.org/wiki/Radix_sort",
+              "text": "Radix Sort (LSD or MSD string sort)",
+              "answer": "Not in-place"
+            },
+            {
+              "id": "algorithms-sort-inplace-bucket-sort",
+              "text": "Bucket Sort",
+              "answer": "Not in-place"
+            },
+            {
+              "id": "algorithms-sort-inplace-bubble-sort",
+              "text": "Bubble Sort",
+              "answer": "In-place"
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "algorithms-sort-comparison",
+          "title": "Comparison or Non-Comparison",
+          "link": "https://en.wikipedia.org/wiki/Comparison_sort",
+          "question": [
+            {
+              "id": "algorithms-sort-comparison-quicksort",
+              "link": "https://en.wikipedia.org/wiki/Quicksort",
+              "text": "Quicksort",
+              "answer": "Comparison"
+            },
+            {
+              "id": "algorithms-sort-comparison-3-way-quicksort",
+              "link": "https://en.wikipedia.org/wiki/Quicksort#Repeated_elementst",
+              "text": "3-Way Quicksort",
+              "answer": "Comparison"
+            },
+            {
+              "id": "algorithms-sort-comparison-mergesort",
+              "link": "https://en.wikipedia.org/wiki/Merge_sort",
+              "text": "Mergesort",
+              "answer": "Comparison"
+            },
+            {
+              "id": "algorithms-sort-comparison-heapsort",
+              "link": "https://en.wikipedia.org/wiki/Heapsort",
+              "text": "Heapsort",
+              "answer": "Comparison"
+            },
+            {
+              "id": "algorithms-sort-comparison-timsort",
+              "link": "https://en.wikipedia.org/wiki/Timsort",
+              "text": "Timsort",
+              "answer": "Comparison"
+            },
+            {
+              "id": "algorithms-sort-comparison-insertion-sort",
+              "link": "https://en.wikipedia.org/wiki/Insertion_sort",
+              "text": "Insertion Sort",
+              "answer": "Comparison"
+            },
+            {
+              "id": "algorithms-sort-comparison-selection-sort",
+              "link": "https://en.wikipedia.org/wiki/Selection_sort",
+              "text": "Selection Sort",
+              "answer": "Comparison"
+            },
+            {
+              "id": "algorithms-sort-comparison-shellsort",
+              "link": "https://en.wikipedia.org/wiki/Shellsort",
+              "text": "Shellsort",
+              "answer": "Comparison"
+            },
+            {
+              "id": "algorithms-sort-comparison-counting-sort",
+              "text": "Counting Sort",
+              "answer": "Non-Comparison"
+            },
+            {
+              "id": "algorithms-sort-comparison-radix-sort",
+              "link": "https://en.wikipedia.org/wiki/Radix_sort",
+              "text": "Radix Sort (LSD or MSD string sort)",
+              "answer": "Non-Comparison"
+            },
+            {
+              "id": "algorithms-sort-comparison-bucket-sort",
+              "text": "Bucket Sort",
+              "answer": "Non-Comparison"
+            },
+            {
+              "id": "algorithms-sort-comparison-bubble-sort",
+              "text": "Bubble Sort",
+              "answer": "Comparison"
+            }
+          ],
+          "answersAsChoices": true
+        }
+      ]
+    },
+    {
+      "id": "polynomial-or-np-complete",
+      "title": "Polynomial or NP-complete",
+      "questions": [
+        {
+          "id": "polynomial-or-np-complete-2-sat",
+          "link": "https://en.wikipedia.org/wiki/2-satisfiability#Resolution_and_transitive_closure",
+          "text": "2-satisfiability (2-SAT)",
+          "answer": "Polynomial"
+        },
+        {
+          "id": "polynomial-or-np-complete-boolean-satisfiability",
+          "link": "https://en.wikipedia.org/wiki/Boolean_satisfiability_problem",
+          "text": "Boolean satisfiability",
+          "answer": "NP-Complete"
+        },
+        {
+          "id": "polynomial-or-np-complete-subset-sum",
+          "link": "https://en.wikipedia.org/wiki/Subset_sum_problem",
+          "text": "Subset Sum",
+          "answer": "NP-Complete"
+        },
+        {
+          "id": "polynomial-or-np-complete-bin-packing",
+          "link": "https://en.wikipedia.org/wiki/Bin_packing_problem",
+          "text": "Bin Packing",
+          "answer": "NP-Complete"
+        },
+        {
+          "id": "polynomial-or-np-complete-0-1-knapsack-problem",
+          "link": "https://en.wikipedia.org/wiki/Knapsack_problem",
+          "text": "(O-1) Knapsack Problem",
+          "answer": "NP-Complete"
+        },
+        {
+          "id": "polynomial-or-np-complete-fractional-knapsack-problem",
+          "link": "https://en.wikipedia.org/wiki/Continuous_knapsack_problem",
+          "text": "Fractional Knapsack Problem",
+          "answer": "Polynomial"
+        },
+        {
+          "id": "polynomial-or-np-complete-sorting",
+          "link": "https://en.wikipedia.org/wiki/Sorting_algorithm",
+          "text": "Sorting",
+          "answer": "Polynomial"
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "algorithms-types",
+      "title": "Types of Algorithms",
+      "questions": [
+        {
+          "id": "type-dijkstra",
+          "link": "https://en.wikipedia.org/wiki/Dijkstra's_algorithm",
+          "text": "Dijkstra's shortest path algorithm",
+          "answer": "Greedy"
+        },
+        {
+          "id": "type-huffman-codes",
+          "link": "https://en.wikipedia.org/wiki/Huffman_coding#Basic_technique",
+          "text": "Algorithm for building Huffman Codes",
+          "answer": "Greedy"
+        },
+        {
+          "id": "type-make-change-canonical",
+          "link": "https://en.wikipedia.org/wiki/Change-making_problem#Greedy_method",
+          "text": "Make change (with canonical coins)",
+          "answer": "Greedy"
+        },
+        {
+          "id": "type-prims",
+          "link": "https://en.wikipedia.org/wiki/Prim's_algorithm",
+          "text": "Prim's Algorithm for Minimum Spanning Tree",
+          "answer": "Greedy"
+        },
+        {
+          "id": "type-kruskals",
+          "link": "https://en.wikipedia.org/wiki/Kruskal's_algorithm",
+          "text": "Kruskal's Algorithm for Minimum Spanning Tree",
+          "answer": "Greedy"
+        },
+        {
+          "id": "type-binary-search",
+          "link": "https://en.wikipedia.org/wiki/Binary_search_algorithm",
+          "text": "Binary Search",
+          "answer": "Divide and Conquer"
+        },
+        {
+          "id": "type-quicksort",
+          "link": "https://en.wikipedia.org/wiki/Quicksort",
+          "text": "Quicksort",
+          "answer": "Divide and Conquer"
+        },
+        {
+          "id": "type-mergesort",
+          "link": "https://en.wikipedia.org/wiki/Merge_sort",
+          "text": "Mergesort",
+          "answer": "Divide and Conquer"
+        },
+        {
+          "id": "type-quickselect",
+          "link": "https://en.wikipedia.org/wiki/Quickselect",
+          "text": "QuickSelect",
+          "answer": "Divide and Conquer"
+        },
+        {
+          "id": "type-strassen",
+          "link": "https://en.wikipedia.org/wiki/Strassen_algorithm",
+          "text": "Strassen Matrix Multiplication",
+          "answer": "Divide and Conquer"
+        },
+        {
+          "id": "type-median-of-medians",
+          "link": "https://en.wikipedia.org/wiki/Strassen_algorithm",
+          "text": "Median of Medians",
+          "answer": "Divide and Conquer"
+        },
+        {
+          "id": "type-bellmann-ford",
+          "link": "https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm",
+          "text": "Bellmann-Ford Single-Source Shortest Path",
+          "answer": "Dynamic Programming"
+        },
+        {
+          "id": "type-floyd-warshall",
+          "link": "https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm",
+          "text": "Floyd Warshall Algorithm",
+          "answer": "Dynamic Programming"
+        },
+        {
+          "id": "type-make-change-non-canonical",
+          "text": "Make change (with non-canonical coins)",
+          "answer": "Dynamic Programming"
+        },
+        {
+          "id": "type-build-optimal-bst",
+          "link": "https://en.wikipedia.org/wiki/Optimal_binary_search_tree#Knuth.27s_dynamic_programming_algorithm",
+          "text": "Build an optimal binary search tree",
+          "answer": "Dynamic Programming"
+        },
+        {
+          "id": "type-boyer-moore-voting-algorithm",
+          "link": "https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_majority_vote_algorithm",
+          "text": "Boyer-Moore Voting Algorithm (Find majority element)",
+          "answer": "Greedy"
+        },
+        {
+          "id": "type-activity-selection-problem",
+          "link": "https://en.wikipedia.org/wiki/Activity_selection_problem",
+          "text": "Activity Selection Problem (Maximum number of activities with start and end times)",
+          "answer": "Greedy"
+        },
+        {
+          "id": "type-fft-cooley-tukey",
+          "link": "https://en.wikipedia.org/wiki/Fast_Fourier_transform#Algorithms",
+          "text": "Fast Fourier Transform (FFT) (Cooley-Tukey Algorithm)",
+          "answer": "Divide and Conquer"
+        },
+        {
+          "id": "type-closest-pair-of-points",
+          "link": "https://en.wikipedia.org/wiki/Closest_pair_of_points_problem#Planar_case",
+          "text": "Closest Pair of Points in a Plane",
+          "answer": "Divide and Conquer"
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "algorithms-on-arrays",
+      "title": "Algorithms on Arrays",
+      "questions": [
+        {
+          "id": "algorithms-on-arrays-max-subarray-with-empty",
+          "link": "https://en.wikipedia.org/wiki/Maximum_subarray_problem",
+          "text": "Maximum Subarray (allowing an empty subarray)",
+          "answer": "Calculate the sum so far, not allowing the sum to be less than 0. Maintain the maximum. (Kadane's Algorithm)"
+        },
+        {
+          "id": "algorithms-on-arrays-max-subarray-without-empty",
+          "text": "Maximum Subarray (not allowing an empty subarray)",
+          "answer": "Calculate the sum so far, not allowing the sum to be less than the current item. Maintain the maximum. (Kadane's Algorithm)"
+        },
+        {
+          "id": "algorithms-on-arrays-rmq",
+          "link": "https://www.topcoder.com/community/data-science/data-science-tutorials/range-minimum-query-and-lowest-common-ancestor/",
+          "text": "Smallest value in a range (RMQ, Range Minimum Query)",
+          "answer": "Use a segment tree augmented with minimums. Or do LCA on a cartesian tree built from the array."
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "algorithms-on-arrays-uses",
+      "title": "Algorithms on Arrays: Uses",
+      "questions": [
+        {
+          "id": "algorithms-on-arrays-uses-max-subarray-with-empty",
+          "text": "Maximum profit when buying and selling at prices changing over time.",
+          "answer": "Kadane's Maximum subarray (with empty sets) algorithm."
+        },
+        {
+          "id": "algorithms-on-arrays-uses-max-subarray-without-empty",
+          "link": "http://www.geeksforgeeks.org/dynamic-programming-set-27-max-sum-rectangle-in-a-2d-matrix/",
+          "text": "Maximum rectangular subarray.",
+          "answer": "Kadane's Maximum subarray (without empty sets) algorithm."
+        },
+        {
+          "id": "algorithms-on-arrays-uses-rmq",
+          "link": "https://www.topcoder.com/community/data-science/data-science-tutorials/range-minimum-query-and-lowest-common-ancestor/",
+          "text": "Smallest value in a range (RMQ, Range Minimum Query)",
+          "answer": "Find the LCA of 2 nodes in a tree, via an Euler Tour. Find the LCP (longest common prefix)."
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "algorithms-on-sorted-arrays",
+      "title": "Algorithms on Sorted Arrays",
+      "questions": [
+        {
+          "id": "algorithms-on-sorted-arrays-binary-search",
+          "link": "https://en.wikipedia.org/wiki/Binary_search_algorithm",
+          "text": "Binary Search for matching value",
+          "answer": "while (lo \u003c= hi) { Examine middle value, setting hi/lo 1 before or after it, or returning the index if mid is equal to the target value. }"
+        },
+        {
+          "id": "algorithms-on-sorted-arrays-binary-search-first",
+          "link": "https://en.wikipedia.org/wiki/Binary_search_algorithm",
+          "text": "Binary Search for first matching value",
+          "answer": "while (lo \u003c hi) { Examine middle value, setting lo to mid+1, or hi to mid. }. Check that the value at lo is equal to the target at the end, instead of checking for equality during the loop."
+        },
+        {
+          "id": "algorithms-on-sorted-arrays-binary-search-last",
+          "link": "https://en.wikipedia.org/wiki/Binary_search_algorithm",
+          "text": "Binary Search for last matching value",
+          "answer": "while (lo \u003c hi) { Examine middle value, setting lo to mid, or hi to mid-1. Round mid up by adding 1 before division. }. Check that the value at lo is equal to the target at the end, instead of checking for equality during the loop."
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "algorithms-on-linked-lists",
+      "title": "Algorithms on Linked Lists",
+      "questions": [
+        {
+          "id": "algorithms-on-linked-lists-reverse",
+          "text": "Reverse a linked list",
+          "answer": "while (node) { next = node-\u003enext; node-\u003enext = prev; prev = node; node = next; }"
+        },
+        {
+          "id": "algorithms-on-linked-lists-find-intersection",
+          "text": "Find where two lists intersect.",
+          "answer": "Discover the length of both lists. Use two pointers. Advance one by the difference. Step both forward until they match."
+        },
+        {
+          "id": "algorithms-on-linked-lists-find-cycle",
+          "link": "https://en.wikipedia.org/wiki/Cycle_detection#Tortoise_and_hare",
+          "text": "Find a Cycle",
+          "answer": "Use both slow and fast pointers - one stepping once each time, and one stepping twice each time. If they are ever equal then there is a cycle. To find the start of the cycle, move the fast pointer back to the start and move it slowly until fast and slow are equal again. Check for a match before moving, in case the cycle is at the start."
+        }
+      ],
+      "answersAsChoices": true
+    }
+  ]
+}

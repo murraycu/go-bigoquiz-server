@@ -1,0 +1,564 @@
+{
+  "id": "distributed_systems",
+  "title": "Distributed Systems",
+  "sections": [
+    {
+      "id": "theory",
+      "title": "Theory",
+      "questions": [
+        {
+          "id": "theory-cap",
+          "link": "https://en.wikipedia.org/wiki/CAP_theorem",
+          "text": "CAP Theorem (Brewer)",
+          "answer": "It is impossible for a distributed computer system to provide more than 2 of these guarantees: Consistency, Availability, and Partition Tolerance."
+        },
+        {
+          "id": "theory-flp-result",
+          "link": "https://en.wikipedia.org/wiki/CAP_theorem",
+          "text": "FLP Result (Fischer, Lynch, and Patterson)",
+          "answer": "Impossibility of distributed consensus with one faulty process."
+        },
+        {
+          "id": "theory-two-generals-problem",
+          "link": "https://en.wikipedia.org/wiki/Two_Generals'_Problem",
+          "text": "Two Generals Problem",
+          "answer": "Coordinating an action between two actors via an unreliable link. Proved unsolvable."
+        },
+        {
+          "id": "theory-byzantine-generals-problem",
+          "link": "https://en.wikipedia.org/wiki/Byzantine_fault_tolerance#Byzantine_Generals.27_Problem",
+          "text": "Byzantine Generals Problem (Lamport)",
+          "answer": "Coordinating an action via an unreliable link when the other actors may be unreliable or even traitorous."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "golden-signals",
+      "title": "Google SRE: Four Golden Signals",
+      "questions": [
+        {
+          "id": "golden-signals-latency",
+          "link": "https://en.wikipedia.org/wiki/Latency_(engineering)",
+          "text": "Latency",
+          "answer": "Time needed to service a request."
+        },
+        {
+          "id": "golden-signals-traffic",
+          "link": "https://en.wikipedia.org/wiki/Throughput",
+          "text": "Traffic (throughput)",
+          "answer": "Rate of requests."
+        },
+        {
+          "id": "golden-signals-errors",
+          "text": "Errors",
+          "answer": "Rate of failing requests."
+        },
+        {
+          "id": "golden-signals-saturation",
+          "text": "Saturation",
+          "answer": "How fully a system's resources are used."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "hierarchy-of-reliability",
+      "title": "Mikey Dickerson's Hierarchy of Reliability",
+      "link": "https://docs.google.com/drawings/d/1kshrK2RLkW-XV8enmWZxeRFRgADj6d4Ru_w5txz_k9I/edit",
+      "questions": [
+        {
+          "id": "hierarchy-of-reliability-order",
+          "text": "Most fundamental first",
+          "answer": "Monitoring, Incident Response, Postmortem/Root Cause Analysis, Testing \u0026 Release Procedures, Capacity Planning, Development, Product"
+        },
+        {
+          "id": "hierarchy-of-reliability-reverse-order",
+          "text": "Most dependent first",
+          "answer": "Product, Capacity Planning, Development, Testing \u0026 Release Procedures, Postmortem/Root Cause Analysis, Incident Response, Monitoring"
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "other-terminology",
+      "title": "Other Terminology",
+      "questions": [
+        {
+          "id": "terminology-slo",
+          "text": "SLO",
+          "answer": "Service Level Objective"
+        },
+        {
+          "id": "terminology-sla",
+          "text": "SLA",
+          "answer": "Service Level Agreement"
+        },
+        {
+          "id": "terminology-failure-modes",
+          "text": "Failure Modes",
+          "answer": "The various things that can go wrong and how the overall service will behave."
+        },
+        {
+          "id": "terminology-load-balancing",
+          "link": "https://en.wikipedia.org/wiki/Load_balancing_(computing)",
+          "text": "Load Balancing",
+          "answer": "Distributes incoming network traffic across several backend servers."
+        },
+        {
+          "id": "terminology-load-shedding",
+          "link": "https://en.wikipedia.org/wiki/Load_Shedding",
+          "text": "Load Shedding",
+          "answer": "Ignore some requests to reduce load on a server so it may serve at least some requests."
+        },
+        {
+          "id": "terminology-graceful-degradation",
+          "link": "https://en.wikipedia.org/w/index.php?title=Graceful_degradation",
+          "text": "Graceful Degradation",
+          "answer": "Reduce the amount of work to be performed for each request."
+        },
+        {
+          "id": "terminology-rate-limiting",
+          "link": "https://en.wikipedia.org/wiki/Rate_limiting",
+          "text": "Rate Limiting",
+          "answer": "Controls the rate of traffic."
+        },
+        {
+          "id": "terminology-sharding",
+          "text": "Sharding",
+          "answer": "Splitting databases across servers."
+        },
+        {
+          "id": "terminology-rollback",
+          "link": "https://en.wikipedia.org/wiki/Rollback_(data_management)",
+          "text": "Rollback",
+          "answer": "Returning data or software to previous states or versions."
+        },
+        {
+          "id": "terminology-exponential-backoff",
+          "link": "https://en.wikipedia.org/wiki/Exponential_backoff",
+          "text": "Exponential Backoff",
+          "answer": "Clients delay retries by increasing (by multiplication) intervals."
+        },
+        {
+          "id": "terminology-jitter",
+          "link": "https://www.awsarchitectureblog.com/2015/03/backoff.html",
+          "text": "Jitter",
+          "answer": "Adds randomness to retry delays to avoid clustering of requests."
+        },
+        {
+          "id": "terminology-vertical-scaling",
+          "link": "https://en.wikipedia.org/wiki/Scalability#Horizontal_and_vertical_scaling",
+          "text": "Vertical Scaling",
+          "answer": "Add resources (CPU, RAM, disk) to existing servers."
+        },
+        {
+          "id": "terminology-horizontal-scaling",
+          "link": "https://en.wikipedia.org/wiki/Scalability#Horizontal_and_vertical_scaling",
+          "text": "Horizontal Scaling",
+          "answer": "Add servers."
+        },
+        {
+          "id": "terminology-cascading-failure",
+          "link": "https://en.wikipedia.org/wiki/Cascading_failure",
+          "text": "Cascading Failure",
+          "answer": "When a failure triggers failures of successive parts of a system."
+        },
+        {
+          "id": "terminology-consistent-hashing",
+          "link": "https://en.wikipedia.org/wiki/Consistent_hashing",
+          "text": "Consistent Hashing",
+          "answer": "Allows sharding across servers, without needing rehashing and resharding when adding or removing a server."
+        },
+        {
+          "id": "terminology-eventual-consistency",
+          "link": "https://en.wikipedia.org/wiki/Eventual_consistency",
+          "text": "Eventual Consistency",
+          "answer": "Offers high availability by only ensuring that reads will all eventually return the latest value (converge), instead of guaranteeing consistency at all times."
+        },
+        {
+          "id": "terminology-read-replication",
+          "text": "Read Replication",
+          "answer": "Writes are propagated to multiple replicas which serve only reads."
+        },
+        {
+          "id": "terminology-consistent-scatter-gather",
+          "text": "Scatter/Gather",
+          "answer": "Request data from multiple servers, aggregate them on one server, and return an overall response."
+        },
+        {
+          "id": "terminology-map-reduce",
+          "link": "https://en.wikipedia.org/wiki/MapReduce",
+          "text": "MapReduce",
+          "answer": "Distributed batch processing of key/value pairs."
+        },
+        {
+          "id": "terminology-vector-clock",
+          "link": "https://en.wikipedia.org/wiki/Vector_clock",
+          "text": "Vector Clock",
+          "answer": "Discovers partial ordering of events and detects conflicts."
+        },
+        {
+          "id": "terminology-lamport-timestamp",
+          "link": "https://en.wikipedia.org/wiki/Lamport_timestamps",
+          "text": "Lamport Timestamp",
+          "answer": "Discovers partial ordering of events and detect conflicts (simple ordering)."
+        },
+        {
+          "id": "terminology-crdt",
+          "link": "https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type",
+          "text": "CRDT",
+          "answer": "Conflict-free Replicated Data Type (or Convergent Replicated Data Type)"
+        },
+        {
+          "id": "terminology-liveness",
+          "link": "https://en.wikipedia.org/wiki/Liveness",
+          "text": "Liveness",
+          "answer": "A promise that the system will continue to make progress toward a correct result during concurrent operations. (It will terminate successfully.)"
+        },
+        {
+          "id": "terminology-safety",
+          "link": "https://en.wikipedia.org/wiki/Safety_(distributed_computing)",
+          "text": "Safety",
+          "answer": "A promise that something unwanted will never happen. (Partial correctness.)"
+        },
+        {
+          "id": "definition-circuit-breaker",
+          "link": "https://en.wikipedia.org/wiki/Circuit_breaker_design_pattern",
+          "text": "Circuit Breaker",
+          "answer": "Interrupts calls that take too long, and prevents calls to failing servers."
+        },
+        {
+          "id": "definition-bulkhead",
+          "text": "Bulkhead",
+          "answer": "Isolates sets of calls to particular services, to stop slow calls affecting calls to healthy services."
+        },
+        {
+          "id": "definition-fallback",
+          "link": "https://en.wikipedia.org/wiki/Circuit_breaker_design_pattern",
+          "text": "Fallback",
+          "answer": "If the call to a service fails, use an alternative result, possibly from another service."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "load-balancing",
+      "title": "Load Balancing",
+      "link": "https://en.wikipedia.org/wiki/Load_balancing_(computing)",
+      "questions": [
+        {
+          "id": "load_balancing-round-robin-dns",
+          "link": "https://en.wikipedia.org/wiki/Round-robin_DNS",
+          "text": "Round Robin DNS",
+          "answer": "The DNS servers respond with different IP Addresses each time."
+        },
+        {
+          "id": "load_balancing-dns-delegation",
+          "link": "https://landing.google.com/sre/book/chapters/load-balancing-frontend.html",
+          "text": "Geographically-optimal DNS",
+          "answer": "The DNS servers respond with the IP address of a datacenter that is optimal for the user's location, based on the datacenter's location and capacity. Requires EDNS0."
+        },
+        {
+          "id": "load_balancing-virtual-ip-link-layer",
+          "link": "https://en.wikipedia.org/wiki/Virtual_IP_address",
+          "text": "Network Load Balancer: OSI Data Link layer / TCP/IP Link Layer",
+          "answer": "The DNS server responds with the \"virtual\" IP address of a network load balancer that forwards the traffic to several backend servers, by changing the destination MAC address of the frames."
+        },
+        {
+          "id": "load_balancing-virtual-ip-packet-encapsulation",
+          "link": "https://en.wikipedia.org/wiki/Virtual_IP_address",
+          "text": "Network Load Balancer: Packet Encapsulation",
+          "answer": "The DNS server responds with the \"virtual\" IP address of a network load balancer that forwards the traffic to several backend servers, by encapsulating the IP packets in an outer packet with a backend server's destination IP address."
+        },
+        {
+          "id": "load-balancing-flow-control",
+          "text": "Flow Control",
+          "answer": "The client tracks the number of its own active requests on each backend server."
+        },
+        {
+          "id": "load-balancing-lame-duck-state",
+          "text": "Lame Duck State",
+          "answer": "Backend servers can ask clients to stop sending requests."
+        },
+        {
+          "id": "load-balancing-subsetting",
+          "text": "Subsetting",
+          "answer": "Limits the set of backend servers used by each client."
+        },
+        {
+          "id": "load-balancing-round-robin",
+          "text": "Round Robin",
+          "answer": "The client sends requests to the next backend server in its subset that is not in a lame-duck state."
+        },
+        {
+          "id": "load-balancing-least-loaded-round-robin",
+          "text": "Least-Loaded Round Robin",
+          "answer": "The client tracks the number of its own active requests on each backend server, and sends requests to the next backend server in its subset that has a minimal number of active requests."
+        },
+        {
+          "id": "load-balancing-weighted-round-robin",
+          "text": "Weighted Round Robin",
+          "answer": "The clients tracks the capability of the backend servers in its subset, based on performance metrics returned by each backend server along with each response or health check. The client sends requests to the next backend server in its subset according to the distribution of backend server capability."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "cap",
+      "title": "CAP Theorem",
+      "link": "https://en.wikipedia.org/wiki/CAP_theorem",
+      "questions": [
+        {
+          "id": "cap-consistency",
+          "text": "Consistency",
+          "answer": "Every read receives the most recent write or an error."
+        },
+        {
+          "id": "cap-availability",
+          "text": "Availability",
+          "answer": "Every request receives a response, without guarantee that it contains the most recent version of the information."
+        },
+        {
+          "id": "cap-partition-tolerance",
+          "text": "Partition Tolerance",
+          "answer": "The system continues to operate despite an arbitrary number of messages being dropped by the network between nodes."
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "cap-protocols",
+      "title": "CAP Theorem: Example Protocols",
+      "link": "https://en.wikipedia.org/wiki/CAP_theorem",
+      "questions": [
+        {
+          "id": "cap-protocols-ca",
+          "text": "CA (Consistency + Availability)",
+          "answer": "2PC (Two Phase Commit)"
+        },
+        {
+          "id": "cap-protocols-cp",
+          "text": "CP (Consistency + Partition Tolerance)",
+          "answer": "Paxos"
+        },
+        {
+          "id": "cap-protocols-ap",
+          "text": "AP (Availability + Partition Tolerance)",
+          "answer": "Gossip"
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "consistency",
+      "title": "Consistency Models",
+      "link": "https://en.wikipedia.org/wiki/Consistency_model",
+      "subsections": [
+        {
+          "id": "consistency-strong-or-weak",
+          "title": "Strong or Weak",
+          "link": "http://book.mixu.net/distsys/abstractions.html#strong-consistency-vs-other-consistency-models",
+          "question": [
+            {
+              "id": "consistency-strong-or-weak-linearizable-consistency",
+              "text": "Linearizable Consistency",
+              "answer": "Strong"
+            },
+            {
+              "id": "consistency-strong-or-weak-sequential-consistency",
+              "text": "Sequential Consistency",
+              "answer": "Strong"
+            },
+            {
+              "id": "consistency-strong-or-weak-client-centric-consistency",
+              "text": "Client-centric Consistency",
+              "answer": "Weak"
+            },
+            {
+              "id": "consistency-strong-or-weak-causal-consistency",
+              "text": "Causal Consistency",
+              "answer": "Weak"
+            },
+            {
+              "id": "consistency-strong-or-weak-eventual-consistency",
+              "text": "Eventual Consistency",
+              "answer": "Weak"
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "consistency-strong-models",
+          "title": "Strong Consistency Models",
+          "link": "http://book.mixu.net/distsys/abstractions.html#strong-consistency-models",
+          "question": [
+            {
+              "id": "consistency-strong-models-linearizable",
+              "link": "https://en.wikipedia.org/wiki/Linearizability",
+              "text": "Linearizable Consistency (Atomic Consistency)",
+              "answer": "All operations appear to have executed atomically in an order that is consistent with the global real-time ordering. After a write, all later reads return that value or the value from a later write. After a read, all later reads return that value or the value from a later write."
+            },
+            {
+              "id": "consistency-strong-models-sequential",
+              "link": "https://en.wikipedia.org/wiki/Sequential_consistency",
+              "text": "Sequential Consistency (Serializability)",
+              "answer": "All operations appear to have executed atomically in some order that is consistent with the order seen at individual nodes. Writes may not be seen immediately but written values will always be read in the same order by all nodes."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "consistency-weak-models",
+          "title": "Weak Consistency Models",
+          "question": [
+            {
+              "id": "consistency-weak-models-client-centric",
+              "text": "Client-centric Consistency",
+              "answer": "For instance, a client caches a result, and uses it instead if a node returns an older value."
+            },
+            {
+              "id": "consistency-weak-eventual",
+              "link": "https://en.wikipedia.org/wiki/Eventual_consistency",
+              "text": "Eventual Consistency",
+              "answer": "Reads will all eventually return the latest value (converge), but consistency is not guaranteed at all times."
+            }
+          ],
+          "answersAsChoices": true
+        }
+      ]
+    },
+    {
+      "id": "acid",
+      "title": "ACID",
+      "link": "https://en.wikipedia.org/wiki/ACID",
+      "questions": [
+        {
+          "id": "acid-atomicity",
+          "link": "https://en.wikipedia.org/wiki/ACID#Atomicity",
+          "text": "Atomicity",
+          "answer": "Either all operations, or no operations, in a transaction succeed."
+        },
+        {
+          "id": "acid-consistency",
+          "link": "https://en.wikipedia.org/wiki/ACID#Consistency",
+          "text": "Consistency",
+          "answer": "Each transaction changes the state only to another valid state."
+        },
+        {
+          "id": "acid-isolation",
+          "link": "https://en.wikipedia.org/wiki/ACID#Isolation",
+          "text": "Isolation",
+          "answer": "Concurrent transaction execution results in the same state as if the transactions were executed serially."
+        },
+        {
+          "id": "acid-durability",
+          "link": "https://en.wikipedia.org/wiki/ACID#Durability",
+          "text": "Durability",
+          "answer": "Once a transaction is committed, the change of state will remain."
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "base",
+      "title": "BASE",
+      "link": "https://en.wikipedia.org/wiki/Eventual_consistency",
+      "questions": [
+        {
+          "id": "base-basically-available",
+          "text": "Basically Available",
+          "answer": "Requests will be served, but could return outdated values."
+        },
+        {
+          "id": "base-soft-state",
+          "text": "Soft State",
+          "answer": "The system may change state even without external writes. For instance, to achieve eventual consistency."
+        },
+        {
+          "id": "base-eventual-consistency",
+          "text": "Eventual Consistency",
+          "answer": "Reads will all eventually return the latest value (converge), but consistency is not guaranteed at all times."
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "projects",
+      "title": "Projects / Products",
+      "questions": [
+        {
+          "id": "projects-cassandra",
+          "link": "https://en.wikipedia.org/wiki/Apache_Cassandra",
+          "text": "Cassandra",
+          "answer": "Distributed Storage"
+        },
+        {
+          "id": "projects-redis",
+          "link": "https://en.wikipedia.org/wiki/Redis",
+          "text": "Redis",
+          "answer": "Distributed Storage"
+        },
+        {
+          "id": "projects-hadoop",
+          "link": "https://en.wikipedia.org/wiki/Apache_Hadoop",
+          "text": "Hadoop",
+          "answer": "Distributed Computation: Batch Processing (MapReduce)"
+        },
+        {
+          "id": "projects-spark",
+          "link": "https://en.wikipedia.org/wiki/Apache_Spark",
+          "text": "Spark",
+          "answer": "Distributed Computation: Batch Processing"
+        },
+        {
+          "id": "projects-storm",
+          "link": "https://en.wikipedia.org/wiki/Storm_(event_processor)",
+          "text": "Storm",
+          "answer": "Distributed Computation: Stream Processing"
+        },
+        {
+          "id": "projects-kafka",
+          "link": "https://en.wikipedia.org/wiki/Apache_Kafka",
+          "text": "Kafka",
+          "answer": "Distributed Message Queue"
+        },
+        {
+          "id": "projects-zookeeper",
+          "link": "https://en.wikipedia.org/wiki/Apache_ZooKeeper",
+          "text": "Zookeeper",
+          "answer": "Distributed Configuration and Coordination"
+        },
+        {
+          "id": "projects-ribbon",
+          "link": "https://github.com/Netflix/Ribbon",
+          "text": "Ribbon",
+          "answer": "Client-side load balancing library"
+        },
+        {
+          "id": "projects-hystrix",
+          "link": "https://github.com/Netflix/Hystrix",
+          "text": "Hystrix",
+          "answer": "Client-side fault tolerance"
+        },
+        {
+          "id": "projects-eureka",
+          "link": "https://github.com/Netflix/eureka",
+          "text": "Eureka",
+          "answer": "Service Discovery"
+        },
+        {
+          "id": "projects-zuul",
+          "link": "https://github.com/Netflix/zuul",
+          "text": "Zuul",
+          "answer": "Service Gateway (Edge Service)"
+        }
+      ],
+      "answersAsChoices": true
+    }
+  ]
+}

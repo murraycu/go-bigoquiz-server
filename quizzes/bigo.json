@@ -1,0 +1,1612 @@
+{
+  "id": "bigo",
+  "title": "Big-O of Algorithms and Data Structures",
+  "sections": [
+    {
+      "id": "data-structure-operations",
+      "title": "Data Structure Operations",
+      "subsections": [
+        {
+          "id": "array-unsorted",
+          "title": "Array (unsorted)",
+          "link": "http://en.wikipedia.org/wiki/Array_data_structure",
+          "question": [
+            {
+              "id": "array-unsorted-access-average",
+              "text": "Access (Average)",
+              "answer": "O(1)"
+            },
+            {
+              "id": "array-unsorted-search-average",
+              "text": "Search (Average)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "array-unsorted-insertion-average",
+              "text": "Insertion (Average)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "array-unsorted-deletion-average",
+              "text": "Deletion (Average)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "array-unsorted-access-worst",
+              "text": "Access (Worst)",
+              "answer": "O(1)"
+            },
+            {
+              "id": "array-unsorted-search-worst",
+              "text": "Search (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "array-unsorted-insertion-worst",
+              "text": "Insertion (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "array-unsorted-deletion-worst",
+              "text": "Deletion (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "array-unsorted-space",
+              "text": "Space Complexity",
+              "answer": "O(n)"
+            }
+          ]
+        },
+        {
+          "id": "array",
+          "title": "Array (sorted)",
+          "link": "http://en.wikipedia.org/wiki/Array_data_structure",
+          "question": [
+            {
+              "id": "array-sorted-access-average",
+              "text": "Access (Average)",
+              "answer": "O(1)"
+            },
+            {
+              "id": "array-sorted-search-average",
+              "text": "(Binary) Search (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "array-sorted-insertion-average",
+              "text": "Insertion (Average)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "array-sorted-deletion-average",
+              "text": "Deletion (Average)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "array-sorted-access-worst",
+              "text": "Access (Worst)",
+              "answer": "O(1)"
+            },
+            {
+              "id": "array-sorted-search-worst",
+              "text": "(Binary) Search (Worst)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "array-sorted-insertion-worst",
+              "text": "Insertion (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "array-sorted-deletion-worst",
+              "text": "Deletion (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "array-sorted-space",
+              "text": "Space Complexity",
+              "answer": "O(n)"
+            }
+          ]
+        },
+        {
+          "id": "stack",
+          "title": "Stack",
+          "link": "http://en.wikipedia.org/wiki/Stack_(abstract_data_type)",
+          "question": [
+            {
+              "id": "stack-access-average",
+              "text": "Access (Average)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "stack-search-average",
+              "text": "Search (Average)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "stack-insertion-average",
+              "text": "Insertion (Average)",
+              "answer": "O(1)"
+            },
+            {
+              "id": "stack-deletion-average",
+              "text": "Deletion (Average)",
+              "answer": "O(1)"
+            },
+            {
+              "id": "stack-access-worst",
+              "text": "Access (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "stack-search-worst",
+              "text": "Search (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "stack-insertion-worst",
+              "text": "Insertion (Worst)",
+              "answer": "O(1)"
+            },
+            {
+              "id": "stack-deletion-worst",
+              "text": "Deletion (Worst)",
+              "answer": "O(1)"
+            },
+            {
+              "id": "stack-space",
+              "text": "Space Complexity",
+              "answer": "O(n)"
+            }
+          ]
+        },
+        {
+          "id": "singly-linked-list",
+          "title": "Singly-Linked List",
+          "link": "http://en.wikipedia.org/wiki/Singly_linked_list#Singly_linked_lists",
+          "question": [
+            {
+              "id": "singly-linked-list-access-average",
+              "text": "Access (Average)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "singly-linked-list-search-average",
+              "text": "Search (Average)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "singly-linked-list-insertion-average",
+              "text": "Insertion (Average)",
+              "answer": "O(1)"
+            },
+            {
+              "id": "singly-linked-list-deletion-average",
+              "text": "Deletion (Average)",
+              "answer": "O(1)"
+            },
+            {
+              "id": "singly-linked-list-access-worst",
+              "text": "Access (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "singly-linked-list-search-worst",
+              "text": "Search (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "singly-linked-list-insertion-worst",
+              "text": "Insertion (Worst)",
+              "answer": "O(1)"
+            },
+            {
+              "id": "singly-linked-list-deletion-worst",
+              "text": "Deletion (Worst)",
+              "answer": "O(1)"
+            },
+            {
+              "id": "singly-linked-list-space",
+              "text": "Space Complexity",
+              "answer": "O(n)"
+            }
+          ]
+        },
+        {
+          "id": "doubly-linked-list",
+          "title": "Doubly-Linked List",
+          "link": "http://en.wikipedia.org/wiki/Doubly_linked_list",
+          "question": [
+            {
+              "id": "doubly-linked-list-access-average",
+              "text": "Access (Average)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "doubly-linked-list-search-average",
+              "text": "Search (Average)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "doubly-linked-list-insertion-average",
+              "text": "Insertion (Average)",
+              "answer": "O(1)"
+            },
+            {
+              "id": "doubly-linked-list-deletion-average",
+              "text": "Deletion (Average)",
+              "answer": "O(1)"
+            },
+            {
+              "id": "doubly-linked-list-access-worst",
+              "text": "Access (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "doubly-linked-list-search-worst",
+              "text": "Search (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "doubly-linked-list-insertion-worst",
+              "text": "Insertion (Worst)",
+              "answer": "O(1)"
+            },
+            {
+              "id": "doubly-linked-list-deletion-worst",
+              "text": "Deletion (Worst)",
+              "answer": "O(1)"
+            },
+            {
+              "id": "doubly-linked-list-space",
+              "text": "Space Complexity",
+              "answer": "O(n)"
+            }
+          ]
+        },
+        {
+          "id": "skip-list",
+          "title": "Skip List",
+          "link": "http://en.wikipedia.org/wiki/Skip_list",
+          "question": [
+            {
+              "id": "skip-list-access-average",
+              "text": "Access (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "skip-list-search-average",
+              "text": "Search (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "skip-list-insertion-average",
+              "text": "Insertion (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "skip-list-deletion-average",
+              "text": "Deletion (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "skip-list-access-worst",
+              "text": "Access (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "skip-list-search-worst",
+              "text": "Search (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "skip-list-insertion-worst",
+              "text": "Insertion (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "skip-list-deletion-worst",
+              "text": "Deletion (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "skip-list-space",
+              "text": "Space Complexity",
+              "answer": "O(n log(n))"
+            }
+          ]
+        },
+        {
+          "id": "hash-table",
+          "title": "Hash Table",
+          "link": "http://en.wikipedia.org/wiki/Hash_table",
+          "question": [
+            {
+              "id": "hash-table-search-average",
+              "text": "Search (Average)",
+              "answer": "O(1)"
+            },
+            {
+              "id": "hash-table-insertion-average",
+              "text": "Insertion (Average)",
+              "answer": "O(1)"
+            },
+            {
+              "id": "hash-table-deletion-average",
+              "text": "Deletion (Average)",
+              "answer": "O(1)"
+            },
+            {
+              "id": "hash-table-search-worst",
+              "text": "Search (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "hash-table-insertion-worst",
+              "text": "Insertion (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "hash-table-deletion-worst",
+              "text": "Deletion (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "hash-table-space",
+              "text": "Space Complexity",
+              "answer": "O(n)"
+            }
+          ]
+        },
+        {
+          "id": "binary-search-tree",
+          "title": "Binary Search Tree",
+          "link": "http://en.wikipedia.org/wiki/Binary_search_tree",
+          "question": [
+            {
+              "id": "binary-search-tree-access-average",
+              "text": "Access (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "binary-search-tree-search-average",
+              "text": "Search (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "binary-search-tree-insertion-average",
+              "text": "Insertion (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "binary-search-tree-deletion-average",
+              "text": "Deletion (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "binary-search-tree-access-worst",
+              "text": "Access (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "binary-search-tree-search-worst",
+              "text": "Search (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "binary-search-tree-insertion-worst",
+              "text": "Insertion (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "binary-search-tree-deletion-worst",
+              "text": "Deletion (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "binary-search-tree-space",
+              "text": "Space Complexity",
+              "answer": "O(n)"
+            }
+          ]
+        },
+        {
+          "id": "cartesian-tree",
+          "title": "Cartesian Tree",
+          "link": "https://en.wikipedia.org/wiki/Cartesian_tree",
+          "question": [
+            {
+              "id": "cartesian-tree-search-average",
+              "text": "Search (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "cartesian-tree-insertion-average",
+              "text": "Insertion (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "cartesian-tree-deletion-average",
+              "text": "Deletion (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "cartesian-tree-search-worst",
+              "text": "Search (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "cartesian-tree-insertion-worst",
+              "text": "Insertion (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "cartesian-tree-deletion-worst",
+              "text": "Deletion (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "cartesian-tree-space",
+              "text": "Space Complexity",
+              "answer": "O(n)"
+            }
+          ]
+        },
+        {
+          "id": "ternary-search-tree",
+          "title": "Ternary Search Tree",
+          "link": "https://en.wikipedia.org/wiki/B_tree",
+          "question": [
+            {
+              "id": "ternary-search-tree-search-average",
+              "text": "Search (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "ternary-search-tree-insertion-average",
+              "text": "Insertion (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "ternary-search-tree-deletion-average",
+              "text": "Deletion (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "ternary-search-tree-search-worst",
+              "text": "Search (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "ternary-search-tree-insertion-worst",
+              "text": "Insertion (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "ternary-search-tree-deletion-worst",
+              "text": "Deletion (Worst)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "ternary-search-tree-space",
+              "text": "Space Complexity",
+              "answer": "O(n)"
+            }
+          ]
+        },
+        {
+          "id": "b-tree",
+          "title": "B-Tree",
+          "link": "https://en.wikipedia.org/wiki/B_tree",
+          "question": [
+            {
+              "id": "b-tree-access-average",
+              "text": "Access (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "b-tree-search-average",
+              "text": "Search (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "b-tree-insertion-average",
+              "text": "Insertion (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "b-tree-deletion-average",
+              "text": "Deletion (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "b-tree-access-worst",
+              "text": "Access (Worst)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "b-tree-search-worst",
+              "text": "Search (Worst)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "b-tree-insertion-worst",
+              "text": "Insertion (Worst)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "b-tree-deletion-worst",
+              "text": "Deletion (Worst)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "b-tree-space",
+              "text": "Space Complexity",
+              "answer": "O(n)"
+            }
+          ]
+        },
+        {
+          "id": "red-black-tree",
+          "title": "Red Black Tree",
+          "link": "https://en.wikipedia.org/wiki/Red-black_tree",
+          "question": [
+            {
+              "id": "red-black-tree-access-average",
+              "text": "Access (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "red-black-tree-search-average",
+              "text": "Search (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "red-black-tree-insertion-average",
+              "text": "Insertion (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "red-black-tree-deletion-average",
+              "text": "Deletion (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "red-black-tree-access-worst",
+              "text": "Access (Worst)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "red-black-tree-search-worst",
+              "text": "Search (Worst)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "red-black-tree-insertion-worst",
+              "text": "Insertion (Worst)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "red-black-tree-deletion-worst",
+              "text": "Deletion (Worst)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "red-black-tree-space",
+              "text": "Space Complexity",
+              "answer": "O(n)"
+            }
+          ]
+        },
+        {
+          "id": "splay-tree",
+          "title": "Splay Tree",
+          "link": "https://en.wikipedia.org/wiki/Splay_tree",
+          "question": [
+            {
+              "id": "splay-tree-search-average",
+              "text": "Search (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "splay-tree-insertion-average",
+              "text": "Insertion (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "splay-tree-deletion-average",
+              "text": "Deletion (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "splay-tree-search-worst",
+              "text": "Search (Worst)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "splay-tree-insertion-worst",
+              "text": "Insertion (Worst)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "splay-tree-deletion-worst",
+              "text": "Deletion (Worst)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "splay-tree-space",
+              "text": "Space Complexity",
+              "answer": "O(n)"
+            }
+          ]
+        },
+        {
+          "id": "avl-tree",
+          "title": "AVL Tree",
+          "link": "https://en.wikipedia.org/wiki/AVL_tree",
+          "question": [
+            {
+              "id": "avl-tree-access-average",
+              "text": "Access (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "avl-tree-search-average",
+              "text": "Search (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "avl-tree-insertion-average",
+              "text": "Insertion (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "avl-tree-deletion-average",
+              "text": "Deletion (Average)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "avl-tree-access-worst",
+              "text": "Access (Worst)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "avl-tree-search-worst",
+              "text": "Search (Worst)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "avl-tree-insertion-worst",
+              "text": "Insertion (Worst)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "avl-tree-deletion-worst",
+              "text": "Deletion (Worst)",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "avl-tree-space",
+              "text": "Space Complexity",
+              "answer": "O(n)"
+            }
+          ]
+        },
+        {
+          "id": "trie",
+          "title": "Trie (Prefix Tree)",
+          "link": "https://en.wikipedia.org/wiki/Trie",
+          "question": [
+            {
+              "id": "trie-search-average",
+              "text": "Search (Average)",
+              "answer": "O(m)"
+            },
+            {
+              "id": "trie-insertion-average",
+              "text": "Insertion (Average)",
+              "answer": "O(m)"
+            },
+            {
+              "id": "trie-deletion-average",
+              "text": "Deletion (Average)",
+              "answer": "O(m)"
+            },
+            {
+              "id": "trie-search-worst",
+              "text": "Search (Worst)",
+              "answer": "O(m)"
+            },
+            {
+              "id": "trie-insertion-worst",
+              "text": "Insertion (Worst)",
+              "answer": "O(m)"
+            },
+            {
+              "id": "trie-deletion-worst",
+              "text": "Deletion (Worst)",
+              "answer": "O(m)"
+            },
+            {
+              "id": "trie-space",
+              "text": "Space Complexity",
+              "answer": "O(mn)"
+            }
+          ]
+        },
+        {
+          "id": "suffix-tree",
+          "title": "Suffix Tree (Compressed Trie)",
+          "link": "https://en.wikipedia.org/wiki/Suffix_tree",
+          "question": [
+            {
+              "id": "suffix-tree-search-average",
+              "text": "Search (Average)",
+              "answer": "O(m)"
+            },
+            {
+              "id": "suffix-tree-insertion-average",
+              "text": "Insertion (Average)",
+              "answer": "O(m)"
+            },
+            {
+              "id": "suffix-tree-deletion-average",
+              "text": "Deletion (Average)",
+              "answer": "O(m)"
+            },
+            {
+              "id": "suffix-tree-search-worst",
+              "text": "Search (Worst)",
+              "answer": "O(m)"
+            },
+            {
+              "id": "suffix-tree-insertion-worst",
+              "text": "Insertion (Worst)",
+              "answer": "O(m)"
+            },
+            {
+              "id": "suffix-tree-deletion-worst",
+              "text": "Deletion (Worst)",
+              "answer": "O(m)"
+            },
+            {
+              "id": "suffix-tree-space",
+              "text": "Space Complexity",
+              "answer": "O(mn)"
+            }
+          ]
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "array-sorting-algorithms",
+      "title": "Array Sorting Algorithms",
+      "subsections": [
+        {
+          "id": "quicksort",
+          "title": "Quicksort",
+          "link": "https://en.wikipedia.org/wiki/Quicksort",
+          "question": [
+            {
+              "id": "quicksort-time-best",
+              "text": "Time (Best)",
+              "answer": "O(n log(n))"
+            },
+            {
+              "id": "quicksort-time-average",
+              "text": "Time (Average)",
+              "answer": "O(n log(n))"
+            },
+            {
+              "id": "quicksort-time-worst",
+              "text": "Time (Worst)",
+              "answer": "O(n²)"
+            },
+            {
+              "id": "quicksort-space-worst",
+              "text": "Space (Worst)",
+              "answer": "O(log(n))"
+            }
+          ]
+        },
+        {
+          "id": "mergesort",
+          "title": "Mergesort",
+          "link": "https://en.wikipedia.org/wiki/Merge_sort",
+          "question": [
+            {
+              "id": "mergesort-time-best",
+              "text": "Time (Best)",
+              "answer": "O(n log(n))"
+            },
+            {
+              "id": "mergesort-time-average",
+              "text": "Time (Average)",
+              "answer": "O(n log(n))"
+            },
+            {
+              "id": "mergesort-time-worst",
+              "text": "Time (Worst)",
+              "answer": "O(n log(n))"
+            },
+            {
+              "id": "mergesort-space-worst",
+              "text": "Space (Worst)",
+              "answer": "O(n)"
+            }
+          ]
+        },
+        {
+          "id": "timsort",
+          "title": "Timsort",
+          "link": "https://en.wikipedia.org/wiki/Timsort",
+          "question": [
+            {
+              "id": "timsort-time-best",
+              "text": "Time (Best)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "timsort-time-average",
+              "text": "Time (Average)",
+              "answer": "O(n log(n))"
+            },
+            {
+              "id": "timsort-time-worst",
+              "text": "Time (Worst)",
+              "answer": "O(n log(n))"
+            },
+            {
+              "id": "timsort-space-worst",
+              "text": "Space (Worst)",
+              "answer": "O(n)"
+            }
+          ]
+        },
+        {
+          "id": "heapsort",
+          "title": "Heapsort",
+          "link": "https://en.wikipedia.org/wiki/Heapsort",
+          "question": [
+            {
+              "id": "heapsort-time-best",
+              "text": "Time (Best)",
+              "answer": "O(n log(n))"
+            },
+            {
+              "id": "heapsort-time-average",
+              "text": "Time (Average)",
+              "answer": "O(n log(n))"
+            },
+            {
+              "id": "heapsort-time-worst",
+              "text": "Time (Worst)",
+              "answer": "O(n log(n))"
+            },
+            {
+              "id": "heapsort-space-worst",
+              "text": "Space (Worst)",
+              "answer": "O(1)"
+            }
+          ]
+        },
+        {
+          "id": "bubble-sort",
+          "title": "Bubble Sort",
+          "link": "https://en.wikipedia.org/wiki/Bubble_sort",
+          "question": [
+            {
+              "id": "bubble-sort-time-best",
+              "text": "Time (Best)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "bubble-sort-time-average",
+              "text": "Time (Average)",
+              "answer": "O(n²)"
+            },
+            {
+              "id": "bubble-sort-time-worst",
+              "text": "Time (Worst)",
+              "answer": "O(n²)"
+            },
+            {
+              "id": "bubble-sort-space-worst",
+              "text": "Space (Worst)",
+              "answer": "O(1)"
+            }
+          ]
+        },
+        {
+          "id": "insertion-sort",
+          "title": "Insertion Sort",
+          "link": "https://en.wikipedia.org/wiki/Insertion_sort",
+          "question": [
+            {
+              "id": "insertion-sort-time-best",
+              "text": "Time (Best)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "insertion-sort-time-average",
+              "text": "Time (Average)",
+              "answer": "O(n²)"
+            },
+            {
+              "id": "insertion-sort-time-worst",
+              "text": "Time (Worst)",
+              "answer": "O(n²)"
+            },
+            {
+              "id": "insertion-sort-space-worst",
+              "text": "Space (Worst)",
+              "answer": "O(1)"
+            }
+          ]
+        },
+        {
+          "id": "selection-sort",
+          "title": "Selection Sort",
+          "link": "https://en.wikipedia.org/wiki/Selection_sort",
+          "question": [
+            {
+              "id": "selection-sort-time-best",
+              "text": "Time (Best)",
+              "answer": "O(n²)"
+            },
+            {
+              "id": "selection-sort-time-average",
+              "text": "Time (Average)",
+              "answer": "O(n²)"
+            },
+            {
+              "id": "selection-sort-time-worst",
+              "text": "Time (Worst)",
+              "answer": "O(n²)"
+            },
+            {
+              "id": "selection-sort-space-worst",
+              "text": "Space (Worst)",
+              "answer": "O(1)"
+            }
+          ]
+        },
+        {
+          "id": "shell-sort",
+          "title": "Shell Sort",
+          "link": "https://en.wikipedia.org/wiki/Shellsort",
+          "question": [
+            {
+              "id": "shell-sort-sort-time-best",
+              "text": "Time (Best)",
+              "answer": "O(n)"
+            },
+            {
+              "id": "shell-sort-sort-time-worst",
+              "text": "Time (Worst)",
+              "answer": "O(n²)"
+            },
+            {
+              "id": "shell-sort-sort-space-worst",
+              "text": "Space (Worst)",
+              "answer": "O(1)"
+            }
+          ]
+        },
+        {
+          "id": "bucket-sort",
+          "title": "Bucket Sort",
+          "link": "https://en.wikipedia.org/wiki/Bucket_sort",
+          "question": [
+            {
+              "id": "bucket-sort-sort-time-best",
+              "text": "Time (Best)",
+              "answer": "O(n + k)"
+            },
+            {
+              "id": "bucket-sort-sort-time-average",
+              "text": "Time (Average)",
+              "answer": "O(n + k)"
+            },
+            {
+              "id": "bucket-sort-sort-time-worst",
+              "text": "Time (Worst)",
+              "answer": "O(n²)"
+            },
+            {
+              "id": "bucket-sort-sort-space-worst",
+              "text": "Space (Worst)",
+              "answer": "O(nk)"
+            }
+          ]
+        },
+        {
+          "id": "radix-sort",
+          "title": "Radix Sort (LSD or MSD String Sort)",
+          "link": "https://en.wikipedia.org/wiki/Radix_sort",
+          "question": [
+            {
+              "id": "radix-sort-sort-time-best",
+              "text": "Time (Best)",
+              "answer": "O(nk)"
+            },
+            {
+              "id": "radix-sort-sort-time-average",
+              "text": "Time (Average)",
+              "answer": "O(nk)"
+            },
+            {
+              "id": "radix-sort-sort-time-worst",
+              "text": "Time (Worst)",
+              "answer": "O(nk)"
+            },
+            {
+              "id": "radix-sort-sort-space-worst",
+              "text": "Space (Worst)",
+              "answer": "O(n + k)"
+            }
+          ]
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "graph-operations",
+      "title": "Graph Operations",
+      "subsections": [
+        {
+          "id": "adjacency-list",
+          "title": "Adjacency List",
+          "link": "https://en.wikipedia.org/wiki/Adjacency_list",
+          "question": [
+            {
+              "id": "adjacency-list-storage",
+              "text": "Storage",
+              "answer": "O(|V| + |E|)"
+            },
+            {
+              "id": "adjacency-list-add-vertex",
+              "text": "Add Vertex",
+              "answer": "O(1)"
+            },
+            {
+              "id": "adjacency-list-add-edge",
+              "text": "Add Edge",
+              "answer": "O(1)"
+            },
+            {
+              "id": "adjacency-list-remove-vertex",
+              "text": "Remove Vertex",
+              "answer": "O(|V| + |E|)"
+            },
+            {
+              "id": "adjacency-list-remove-edge",
+              "text": "Remove Edge",
+              "answer": "O(|E|)"
+            },
+            {
+              "id": "adjacency-list-query",
+              "text": "Query",
+              "answer": "O(|V|)"
+            }
+          ]
+        },
+        {
+          "id": "incidence-list",
+          "title": "Incidence List",
+          "link": "https://en.wikipedia.org/wiki/Incidence_list",
+          "question": [
+            {
+              "id": "incidence-list-storage",
+              "text": "Storage",
+              "answer": "O(|V| + |E|)"
+            },
+            {
+              "id": "incidence-list-add-vertex",
+              "text": "Add Vertex",
+              "answer": "O(1)"
+            },
+            {
+              "id": "incidence-list-add-edge",
+              "text": "Add Edge",
+              "answer": "O(1)"
+            },
+            {
+              "id": "incidence-list-remove-vertex",
+              "text": "Remove Vertex",
+              "answer": "O(|E|)"
+            },
+            {
+              "id": "incidence-list-remove-edge",
+              "text": "Remove Edge",
+              "answer": "O(|E|)"
+            },
+            {
+              "id": "incidence-list-query",
+              "text": "Query",
+              "answer": "O(|E|)"
+            }
+          ]
+        },
+        {
+          "id": "adjacency-matrix",
+          "title": "Adjacency Matrix",
+          "link": "https://en.wikipedia.org/wiki/Adjacency_matrix",
+          "question": [
+            {
+              "id": "adjacency-matrix-storage",
+              "text": "Storage",
+              "answer": "O(|V|²)"
+            },
+            {
+              "id": "adjacency-matrix-add-vertex",
+              "text": "Add Vertex",
+              "answer": "O(|V|²)"
+            },
+            {
+              "id": "adjacency-matrix-add-edge",
+              "text": "Add Edge",
+              "answer": "O(1)"
+            },
+            {
+              "id": "adjacency-matrix-remove-vertex",
+              "text": "Remove Vertex",
+              "answer": "O(|V|²)"
+            },
+            {
+              "id": "adjacency-matrix-remove-edge",
+              "text": "Remove Edge",
+              "answer": "O(1)"
+            },
+            {
+              "id": "adjacency-matrix-query",
+              "text": "Query",
+              "answer": "O(1)"
+            }
+          ]
+        },
+        {
+          "id": "incidence-matrix",
+          "title": "Incidence Matrix",
+          "link": "https://en.wikipedia.org/wiki/Incidence_matrix",
+          "question": [
+            {
+              "id": "incidence-matrix-storage",
+              "text": "Storage",
+              "answer": "O(|V| ⋅ |E|)"
+            },
+            {
+              "id": "incidence-matrix-add-vertex",
+              "text": "Add Vertex",
+              "answer": "O(|V| ⋅ |E|)"
+            },
+            {
+              "id": "incidence-matrix-add-edge",
+              "text": "Add Edge",
+              "answer": "O(|V| ⋅ |E|)"
+            },
+            {
+              "id": "incidence-matrix-remove-vertex",
+              "text": "Remove Vertex",
+              "answer": "O(|V| ⋅ |E|)"
+            },
+            {
+              "id": "incidence-matrix-remove-edge",
+              "text": "Remove Edge",
+              "answer": "O(|V| ⋅ |E|)"
+            },
+            {
+              "id": "incidence-matrix-query",
+              "text": "Query",
+              "answer": "O(|E|)"
+            }
+          ]
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "graph-search",
+      "title": "Graph Search",
+      "subsections": [
+        {
+          "id": "depth-first-search",
+          "title": "Depth First Search (DFS)",
+          "link": "https://en.wikipedia.org/wiki/Depth-first_search",
+          "question": [
+            {
+              "id": "depth-first-search-time",
+              "text": "Time",
+              "answer": "O(|V| + |E|)"
+            },
+            {
+              "id": "depth-first-search-space",
+              "text": "Space (Worst)",
+              "answer": "O(|V|)"
+            }
+          ]
+        },
+        {
+          "id": "breadth-first-search",
+          "title": "Breadth First Search (BFS)",
+          "link": "https://en.wikipedia.org/wiki/Breadth-first_search",
+          "question": [
+            {
+              "id": "breadth-first-search-time",
+              "text": "Time",
+              "answer": "O(|V| + |E|)"
+            },
+            {
+              "id": "breadth-first-search-space",
+              "text": "Space (Worst)",
+              "answer": "O(|V|)"
+            }
+          ]
+        },
+        {
+          "id": "topological-sort-sp",
+          "title": "Topological sort based algorithm for shortest path on DAG (weighted, but without cycles)",
+          "link": "https://en.wikipedia.org/wiki/Topological_sorting#Application_to_shortest_path_finding",
+          "question": [
+            {
+              "id": "topological-sort-sp-time",
+              "text": "Time",
+              "answer": "O((|V|+|E|)"
+            },
+            {
+              "id": "topological-sort-sp-space",
+              "text": "Space (Worst)",
+              "answer": "O(|V|)"
+            }
+          ]
+        },
+        {
+          "id": "dijkstra-with-unsorted-array",
+          "title": "Dijkstra's Algorithm for Shortest Path (Unsorted array as priority queue)",
+          "link": "https://en.wikipedia.org/wiki/Dijkstra's_algorithm",
+          "question": [
+            {
+              "id": "dijkstra-with-unsorted-array-time",
+              "text": "Time",
+              "answer": "O(|V|²)"
+            },
+            {
+              "id": "dijkstra-with-unsorted-array-space",
+              "text": "Space (Worst)",
+              "answer": "O(|V|)"
+            }
+          ]
+        },
+        {
+          "id": "dijkstra-with-min-heap",
+          "title": "Dijkstra's Algorithm for Shortest Path (Min-heap as priority queue)",
+          "link": "https://en.wikipedia.org/wiki/Dijkstra's_algorithm",
+          "question": [
+            {
+              "id": "dijkstra-with-min-heap-time",
+              "text": "Time",
+              "answer": "O((|V|+|E|) log(|V|))"
+            },
+            {
+              "id": "dijkstra-with-min-heap-space",
+              "text": "Space (Worst)",
+              "answer": "O(|V|)"
+            }
+          ]
+        },
+        {
+          "id": "dijkstra-with-fibonacci-heap",
+          "title": "Dijkstra's Algorithm for Shortest Path (Fibonacci heap as priority queue)",
+          "link": "https://en.wikipedia.org/wiki/Dijkstra's_algorithm",
+          "question": [
+            {
+              "id": "dijkstra-with-fibonacci-time",
+              "text": "Time",
+              "answer": "O(|E| + |V| log(|V|))"
+            },
+            {
+              "id": "dijkstra-with-fibonacci-space",
+              "text": "Space (Worst)",
+              "answer": "O(|V|)"
+            }
+          ]
+        },
+        {
+          "id": "bellman-ford",
+          "title": "Bellman-Ford algorithm for Shortest Path",
+          "link": "https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm",
+          "question": [
+            {
+              "id": "bellman-ford-time",
+              "text": "Time",
+              "answer": "O(|V| ⋅ |E|)"
+            },
+            {
+              "id": "bellman-ford-space",
+              "text": "Space (Worst)",
+              "answer": "O(|V|)"
+            }
+          ]
+        },
+        {
+          "id": "kruskal-mst",
+          "title": "Kruskal's Minimum Spanning Tree",
+          "link": "https://en.wikipedia.org/wiki/Kruskal's_algorithm",
+          "question": [
+            {
+              "id": "kruskal-mst-time",
+              "text": "Time",
+              "answer": "O(|E| log(|E|))"
+            }
+          ]
+        },
+        {
+          "id": "prims-mst",
+          "title": "Prim's Minimum Spanning Tree",
+          "link": "https://en.wikipedia.org/wiki/Prim's_algorithm",
+          "question": [
+            {
+              "id": "prims-mst-time",
+              "text": "Time",
+              "answer": "O(|E| log(|V|))"
+            }
+          ]
+        },
+        {
+          "id": "floyd-warshall-apsp",
+          "title": "Floyd–Warshall All Pairs Shortest Path",
+          "link": "https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm",
+          "question": [
+            {
+              "id": "floyd-warshall-apsp-time",
+              "text": "Time",
+              "answer": "O(|V|³)"
+            },
+            {
+              "id": "floyd-warshall-apsp-space",
+              "text": "Space (Worst)",
+              "answer": "O(|V|²)"
+            }
+          ]
+        },
+        {
+          "id": "johnson-apsp",
+          "title": "Johnson's All Pairs Shortest Path",
+          "link": "https://en.wikipedia.org/wiki/Johnson's_algorithm",
+          "question": [
+            {
+              "id": "johnson-apsp-time",
+              "text": "Time",
+              "answer": "O(|E| ⋅ |V| log(|V|))"
+            }
+          ]
+        },
+        {
+          "id": "edmonds-karp-max-flow",
+          "title": "Edmonds-Karp (Ford-Fulkerson) Max Flow",
+          "link": "https://en.wikipedia.org/wiki/Edmonds%E2%80%93Karp_algorithm",
+          "question": [
+            {
+              "id": "edmonds-karp-max_flow-time",
+              "text": "Time",
+              "answer": "O(V ⋅ |E|²)"
+            }
+          ]
+        },
+        {
+          "id": "push-relabel-max-flow",
+          "title": "Push-Relabel Max Flow",
+          "link": "https://en.wikipedia.org/wiki/Push%E2%80%93relabel_maximum_flow_algorithm",
+          "question": [
+            {
+              "id": "push-relabel-max_flow-time",
+              "text": "Time",
+              "answer": "O(|V|² ⋅ E)"
+            }
+          ]
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "heap-operations",
+      "title": "Heap Operations",
+      "subsections": [
+        {
+          "id": "linked-list-sorted",
+          "title": "Linked List (sorted)",
+          "link": "https://en.wikipedia.org/wiki/Linked_list",
+          "question": [
+            {
+              "id": "linked-list-sorted-find-max",
+              "text": "Find Max",
+              "answer": "O(1)"
+            },
+            {
+              "id": "linked-list-sorted-extract-max",
+              "text": "Extract Max",
+              "answer": "O(1)"
+            },
+            {
+              "id": "linked-list-sorted-increase-key",
+              "text": "Increase Key",
+              "answer": "O(n)"
+            },
+            {
+              "id": "linked-list-sorted-insert",
+              "text": "Insert",
+              "answer": "O(n)"
+            },
+            {
+              "id": "linked-list-sorted-delete",
+              "text": "Delete",
+              "answer": "O(1)"
+            },
+            {
+              "id": "linked-list-sorted-merge",
+              "text": "Merge",
+              "answer": "O(m + n)"
+            }
+          ]
+        },
+        {
+          "id": "linked-list-unsorted",
+          "title": "Linked List (unsorted)",
+          "link": "https://en.wikipedia.org/wiki/Linked_list",
+          "question": [
+            {
+              "id": "linked-list-unsorted-find-max",
+              "text": "Find Max",
+              "answer": "O(n)"
+            },
+            {
+              "id": "linked-list-unsorted-extract-max",
+              "text": "Extract Max",
+              "answer": "O(n)"
+            },
+            {
+              "id": "linked-list-unsorted-increase-key",
+              "text": "Increase Key",
+              "answer": "O(1)"
+            },
+            {
+              "id": "linked-list-unsorted-insert",
+              "text": "Insert",
+              "answer": "O(1)"
+            },
+            {
+              "id": "linked-list-unsorted-delete",
+              "text": "Delete",
+              "answer": "O(1)"
+            },
+            {
+              "id": "linked-list-unsorted-merge",
+              "text": "Merge",
+              "answer": "O(1)"
+            }
+          ]
+        },
+        {
+          "id": "binary-heap",
+          "title": "Binary Heap",
+          "link": "https://en.wikipedia.org/wiki/Binary_heap",
+          "question": [
+            {
+              "id": "binary-heap-heapify",
+              "text": "Heapify",
+              "answer": "O(n)"
+            },
+            {
+              "id": "binary-heap-find-max",
+              "text": "Find Max",
+              "answer": "O(1)"
+            },
+            {
+              "id": "binary-heap-extract-max",
+              "text": "Extract Max",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "binary-heap-increase-key",
+              "text": "Increase Key",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "binary-heap-insert",
+              "text": "Insert",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "binary-heap-delete",
+              "text": "Delete",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "binary-heap-merge",
+              "text": "Merge",
+              "answer": "O(m + n)"
+            }
+          ]
+        },
+        {
+          "id": "binomial-heap",
+          "title": "Binomial Heap",
+          "link": "https://en.wikipedia.org/wiki/Binomial_heap",
+          "question": [
+            {
+              "id": "binomial-heap-find-max",
+              "text": "Find Max",
+              "answer": "O(1)"
+            },
+            {
+              "id": "binomial-heap-extract-max",
+              "text": "Extract Max",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "binomial-heap-increase-key",
+              "text": "Increase Key",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "binomial-heap-insert",
+              "text": "Insert",
+              "answer": "O(1)"
+            },
+            {
+              "id": "binomial-heap-delete",
+              "text": "Delete",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "binomial-heap-merge",
+              "text": "Merge",
+              "answer": "O(log(n))"
+            }
+          ]
+        },
+        {
+          "id": "fibonacci-heap",
+          "title": "Fibonacci Heap",
+          "link": "https://en.wikipedia.org/wiki/Fibonacci_heap",
+          "question": [
+            {
+              "id": "fibonacci-heap-find-max",
+              "text": "Find Max",
+              "answer": "O(1)"
+            },
+            {
+              "id": "fibonacci-heap-extract-max",
+              "text": "Extract Max",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "fibonacci-heap-increase-key",
+              "text": "Increase Key",
+              "answer": "O(1)"
+            },
+            {
+              "id": "fibonacci-heap-insert",
+              "text": "Insert",
+              "answer": "O(1)"
+            },
+            {
+              "id": "fibonacci-heap-delete",
+              "text": "Delete",
+              "answer": "O(log(n))"
+            },
+            {
+              "id": "fibonacci-heap-merge",
+              "text": "Merge",
+              "answer": "O(1)"
+            }
+          ]
+        }
+      ],
+      "answersAsChoices": true
+    }
+  ]
+}

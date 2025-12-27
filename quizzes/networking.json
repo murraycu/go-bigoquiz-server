@@ -1,0 +1,444 @@
+{
+  "id": "networking",
+  "title": "Networking",
+  "sections": [
+    {
+      "id": "networking-osi-model",
+      "title": "OSI Model",
+      "subsections": [
+        {
+          "id": "networking-osi-model-layer-numbers",
+          "title": "Layer Numbers",
+          "link": "https://en.wikipedia.org/wiki/OSI_model",
+          "question": [
+            {
+              "id": "networking-osi-model-layer-numbers-1",
+              "link": "https://en.wikipedia.org/wiki/Physical_layer",
+              "text": "Layer 1",
+              "answer": "Physical layer"
+            },
+            {
+              "id": "networking-osi-model-layer-numbers-2",
+              "link": "https://en.wikipedia.org/wiki/Data_link_layer",
+              "text": "Layer 2",
+              "answer": "Data link layer"
+            },
+            {
+              "id": "networking-osi-model-layer-numbers-3",
+              "link": "https://en.wikipedia.org/wiki/Network_layer",
+              "text": "Layer 3",
+              "answer": "Network layer"
+            },
+            {
+              "id": "networking-osi-model-layer-numbers-4",
+              "link": "https://en.wikipedia.org/wiki/Transport_layer",
+              "text": "Layer 4",
+              "answer": "Transport layer"
+            },
+            {
+              "id": "networking-osi-model-layer-numbers-5",
+              "link": "https://en.wikipedia.org/wiki/Session_layer",
+              "text": "Layer 5",
+              "answer": "Session layer"
+            },
+            {
+              "id": "networking-osi-model-layer-numbers-6",
+              "link": "https://en.wikipedia.org/wiki/Presentation_layer",
+              "text": "Layer 6",
+              "answer": "Presentation layer"
+            },
+            {
+              "id": "networking-osi-model-layer-numbers-7",
+              "link": "https://en.wikipedia.org/wiki/Application_layer",
+              "text": "Layer 7",
+              "answer": "Application layer"
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "networking-osi-model-layer-descriptions",
+          "title": "Layer Descriptions",
+          "link": "https://en.wikipedia.org/wiki/OSI_model",
+          "question": [
+            {
+              "id": "networking-osi-model-layer-descriptions-physical",
+              "link": "https://en.wikipedia.org/wiki/Physical_layer",
+              "text": "Physical layer",
+              "answer": "Electrical and physical transfer of bits."
+            },
+            {
+              "id": "networking-osi-model-layer-descriptions-data-link",
+              "link": "https://en.wikipedia.org/wiki/Data_link_layer",
+              "text": "Data link layer",
+              "answer": "Node to node data transfer of \"frames\". Detects and corrects errors in physical layer. Nodes have addresses, which refer to local physical devices."
+            },
+            {
+              "id": "networking-osi-model-layer-descriptions-network",
+              "link": "https://en.wikipedia.org/wiki/Network_layer",
+              "text": "Network layer",
+              "answer": "Transfers variable length data sequences (\"datagrams\" or \"packets\") between nodes in the same network (routing). Nodes in the network have unique logical addresses, independent of particular hardware."
+            },
+            {
+              "id": "networking-osi-model-layer-descriptions-transport",
+              "link": "https://en.wikipedia.org/wiki/Transport_layer",
+              "text": "Transport layer",
+              "answer": "Transfers data between hosts, across multiple networks. Does error recovery and flow control."
+            },
+            {
+              "id": "networking-osi-model-layer-descriptions-session",
+              "link": "https://en.wikipedia.org/wiki/Session_layer",
+              "text": "Session layer",
+              "answer": "Establishes, manages and terminates connections between applications."
+            },
+            {
+              "id": "networking-osi-model-layer-descriptions-presentation",
+              "link": "https://en.wikipedia.org/wiki/Presentation_layer",
+              "text": "Presentation layer",
+              "answer": "Transforms between representations used by different computers on the network. Does translation, compression, or encryption, optionally."
+            },
+            {
+              "id": "networking-osi-model-layer-descriptions-application",
+              "link": "https://en.wikipedia.org/wiki/Application_layer",
+              "text": "Application layer",
+              "answer": "User interface responsible for displaying received information to the user."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "networking-osi-model-layer-examples",
+          "title": "Layer Examples",
+          "link": "https://en.wikipedia.org/wiki/OSI_model",
+          "question": [
+            {
+              "id": "networking-osi-model-layer-examples-physical",
+              "link": "https://en.wikipedia.org/wiki/Physical_layer",
+              "text": "Physical layer",
+              "answer": "Ethernet, ATM"
+            },
+            {
+              "id": "networking-osi-model-layer-examples-data-link",
+              "link": "https://en.wikipedia.org/wiki/Data_link_layer",
+              "text": "Data link layer",
+              "answer": "TCP/IP link layer, PPP."
+            },
+            {
+              "id": "networking-osi-model-layer-examples-network",
+              "link": "https://en.wikipedia.org/wiki/Network_layer",
+              "text": "Network layer",
+              "answer": "IPv4, IPv6, IPsec"
+            },
+            {
+              "id": "networking-osi-model-layer-examples-transport",
+              "link": "https://en.wikipedia.org/wiki/Transport_layer",
+              "text": "Transport layer",
+              "answer": "TCP, UDP"
+            },
+            {
+              "id": "networking-osi-model-layer-examples-session",
+              "link": "https://en.wikipedia.org/wiki/Session_layer",
+              "text": "Session layer",
+              "answer": "TCP/IP Sockets, NFS, NetBios, RPC, PPTP, RTCP, RTP"
+            },
+            {
+              "id": "networking-osi-model-layer-examples-presentation",
+              "link": "https://en.wikipedia.org/wiki/Presentation_layer",
+              "text": "Presentation layer",
+              "answer": "ASCII, JPEG, GIF, MPEG"
+            },
+            {
+              "id": "networking-osi-model-layer-examples-application",
+              "link": "https://en.wikipedia.org/wiki/Application_layer",
+              "text": "Application layer",
+              "answer": "DNS, HTTP, FTP, NFS, SMTP, SNMP, Telnet"
+            }
+          ],
+          "answersAsChoices": true
+        }
+      ]
+    },
+    {
+      "id": "networking-ip-suite",
+      "title": "IP Suite",
+      "subsections": [
+        {
+          "id": "networking-ip-suite-layer-descriptions",
+          "title": "Layers Descriptions",
+          "link": "https://en.wikipedia.org/wiki/Internet_protocol_suite#Abstraction_layers",
+          "question": [
+            {
+              "id": "networking-ip-suite-layer-descriptions-link",
+              "link": "https://en.wikipedia.org/wiki/Link_layer",
+              "text": "Link Layer",
+              "answer": "Physical and logical interconnection of hosts (nodes) in the same network."
+            },
+            {
+              "id": "networking-ip-suite-layer-descriptions-internet",
+              "link": "https://en.wikipedia.org/wiki/Internet_layer",
+              "text": "Internet Layer",
+              "answer": "Internetworking: Transports datagrams between hosts, even between networks. Hosts have IP addresses."
+            },
+            {
+              "id": "networking-ip-suite-layer-descriptions-transport",
+              "link": "https://en.wikipedia.org/wiki/Transport_layer",
+              "text": "Transport Layer",
+              "answer": "Communication between hosts, optionally with connections, data streams, reliability, flow control and multiplexing."
+            },
+            {
+              "id": "networking-ip-suite-layer-descriptions-application",
+              "link": "https://en.wikipedia.org/wiki/Application_layer",
+              "text": "Application Layer",
+              "answer": "Process-to-process communication between hosts."
+            }
+          ],
+          "answersAsChoices": true
+        },
+        {
+          "id": "networking-ip-suite-layer-examples",
+          "title": "Layer Examples",
+          "link": "https://en.wikipedia.org/wiki/Internet_protocol_suite#Abstraction_layers",
+          "question": [
+            {
+              "id": "networking-ip-suite-layer-examples-link",
+              "link": "https://en.wikipedia.org/wiki/Link_layer",
+              "text": "Link Layer",
+              "answer": "ARP, RARP, NDP"
+            },
+            {
+              "id": "networking-ip-suite-layer-examples-internet",
+              "link": "https://en.wikipedia.org/wiki/Internet_layer",
+              "text": "Internet Layer",
+              "answer": "IPv4, IPv6, ICMP, IPsec"
+            },
+            {
+              "id": "networking-ip-suite-layer-examples-transport",
+              "link": "https://en.wikipedia.org/wiki/Transport_layer",
+              "text": "Transport Layer",
+              "answer": "TCP, UDP"
+            },
+            {
+              "id": "networking-ip-suite-layer-examples-application",
+              "link": "https://en.wikipedia.org/wiki/Application_layer",
+              "text": "Application Layer",
+              "answer": "DNS, HTTP, FTP, NFS, SMTP, SNMP, Telnet"
+            }
+          ],
+          "answersAsChoices": true
+        }
+      ]
+    },
+    {
+      "id": "networking-terminology-messages",
+      "title": "Terminology: Messages",
+      "questions": [
+        {
+          "id": "networking-terminology-messages-packet",
+          "text": "Packet or Datagram",
+          "answer": "Sent by OSI Network Layer or IP Suite Internet Layer. For instance, IP Packets. Or by the IP Suite Transport layer, when using UDP (\"UDP Datagram\"). Often used vaguely to refer to IP Suite Transport layer messages - For instance, \"TCP packet\", which usually means \"TCP segment\"."
+        },
+        {
+          "id": "networking-terminology-messages-frame",
+          "text": "Frame",
+          "answer": "Message sent by OSI Data Link Layer or Physical layer. Puts a frame around higher-level packets by adding a header. For instance, Ethernet frames (OSI Physical layer)."
+        },
+        {
+          "id": "networking-terminology-messages-segment",
+          "text": "Segment",
+          "answer": "Message sent by IP Suite Transport Layer, when using TCP (\"TCP segment\")."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "networking-protocols-tcp-or-udp",
+      "title": "Application layer protocols: TCP or UDP",
+      "questions": [
+        {
+          "id": "networking-protocols-tcp-or-udp-http",
+          "link": "https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol",
+          "text": "HTTP",
+          "answer": "TCP"
+        },
+        {
+          "id": "networking-protocols-tcp-or-udp-ftp",
+          "link": "https://en.wikipedia.org/wiki/File_Transfer_Protocol",
+          "text": "FTP",
+          "answer": "TCP"
+        },
+        {
+          "id": "networking-protocols-tcp-or-udp-ssh",
+          "link": "https://en.wikipedia.org/wiki/Secure_Shell",
+          "text": "SSH",
+          "answer": "TCP"
+        },
+        {
+          "id": "networking-protocols-tcp-or-udp-smtp",
+          "link": "https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol",
+          "text": "SMTP",
+          "answer": "TCP"
+        },
+        {
+          "id": "networking-protocols-tcp-or-udp-imap",
+          "link": "https://en.wikipedia.org/wiki/Internet_Message_Access_Protocol",
+          "text": "IMAP",
+          "answer": "TCP"
+        },
+        {
+          "id": "networking-protocols-tcp-or-udp-tls",
+          "link": "https://en.wikipedia.org/wiki/Transport_Layer_Security",
+          "text": "TLS (SSL)",
+          "answer": "TCP or UDP"
+        },
+        {
+          "id": "networking-protocols-tcp-or-udp-ntp",
+          "link": "https://en.wikipedia.org/wiki/Network_Time_Protocol",
+          "text": "NTP",
+          "answer": "UDP"
+        },
+        {
+          "id": "networking-protocols-tcp-or-udp-dns",
+          "link": "https://en.wikipedia.org/wiki/Domain_Name_System",
+          "text": "DNS",
+          "answer": "TCP or UDP"
+        },
+        {
+          "id": "networking-protocols-tcp-or-udp-snmp",
+          "link": "https://en.wikipedia.org/wiki/Simple_Network_Management_Protocol",
+          "text": "SNMP",
+          "answer": "UDP"
+        },
+        {
+          "id": "networking-protocols-tcp-or-udp-dhcp",
+          "link": "https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol",
+          "text": "DHCP",
+          "answer": "UDP"
+        },
+        {
+          "id": "networking-protocols-tcp-or-udp-rtp",
+          "link": "https://en.wikipedia.org/wiki/Real-time_Transport_Protocol",
+          "text": "RTP",
+          "answer": "UDP"
+        },
+        {
+          "id": "networking-protocols-tcp-or-udp-sip",
+          "link": "https://en.wikipedia.org/wiki/Session_Initiation_Protocol",
+          "text": "SIP",
+          "answer": "TCP or UDP"
+        },
+        {
+          "id": "networking-protocols-tcp-or-udp-arp",
+          "link": "https://en.wikipedia.org/wiki/Address_Resolution_Protocol",
+          "text": "ARP",
+          "answer": "Neither"
+        },
+        {
+          "id": "networking-protocols-tcp-or-udp-ndp",
+          "link": "https://en.wikipedia.org/wiki/Neighbor_Discovery_Protocol",
+          "text": "NDP",
+          "answer": "Neither"
+        },
+        {
+          "id": "networking-protocols-tcp-or-udp-icmp",
+          "link": "https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol",
+          "text": "IMCP",
+          "answer": "Neither"
+        }
+      ],
+      "answersAsChoices": true
+    },
+    {
+      "id": "networking-protocols-descriptions",
+      "title": "Protocols: Descriptions",
+      "questions": [
+        {
+          "id": "networking-protocols-descriptions-http",
+          "link": "https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol",
+          "text": "HTTP",
+          "answer": "Transfers hypertext documents. A request-response protocol."
+        },
+        {
+          "id": "networking-protocols-descriptions-ftp",
+          "link": "https://en.wikipedia.org/wiki/File_Transfer_Protocol",
+          "text": "FTP",
+          "answer": "Transfers files from a server to a client. Uses a client-server model."
+        },
+        {
+          "id": "networking-protocols-descriptions-ssh",
+          "link": "https://en.wikipedia.org/wiki/Secure_Shell",
+          "text": "SSH",
+          "answer": "For operating network services securely over an unsecured network. For instance, to use shell accounts."
+        },
+        {
+          "id": "networking-protocols-descriptions-smtp",
+          "link": "https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol",
+          "text": "SMTP",
+          "answer": "Sends e-mail messages from clients to mail servers, or sends and receives e-mail messages between mail servers."
+        },
+        {
+          "id": "networking-protocols-descriptions-imap",
+          "link": "https://en.wikipedia.org/wiki/Internet_Message_Access_Protocol",
+          "text": "IMAP",
+          "answer": "Retrieves e-mail messages from a mail server."
+        },
+        {
+          "id": "networking-protocols-descriptions-tls",
+          "link": "https://en.wikipedia.org/wiki/Transport_Layer_Security",
+          "text": "TLS (SSL)",
+          "answer": "Provides secure communication over the network using symmetric cryptography."
+        },
+        {
+          "id": "networking-protocols-descriptions-ntp",
+          "link": "https://en.wikipedia.org/wiki/Network_Time_Protocol",
+          "text": "NTP",
+          "answer": "Synchronizes clocks between computers."
+        },
+        {
+          "id": "networking-protocols-descriptions-dns",
+          "link": "https://en.wikipedia.org/wiki/Domain_Name_System",
+          "text": "DNS",
+          "answer": "Decentralized naming system. Translates domain names and host names to IP addresses."
+        },
+        {
+          "id": "networking-protocols-descriptions-snmp",
+          "link": "https://en.wikipedia.org/wiki/Simple_Network_Management_Protocol",
+          "text": "SNMP",
+          "answer": "For collecting and organizing information about devices or to change device behavior."
+        },
+        {
+          "id": "networking-protocols-descriptions-dhcp",
+          "link": "https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol",
+          "text": "DHCP",
+          "answer": "Dynamically distributes network configuration parameters, such as IP addresses, at request."
+        },
+        {
+          "id": "networking-protocols-descriptions-rtp",
+          "link": "https://en.wikipedia.org/wiki/Real-time_Transport_Protocol",
+          "text": "RTP",
+          "answer": "Delivers streaming audio or video."
+        },
+        {
+          "id": "networking-protocols-descriptions-sip",
+          "link": "https://en.wikipedia.org/wiki/Session_Initiation_Protocol",
+          "text": "SIP",
+          "answer": "Used to set up and control voice and video calls."
+        },
+        {
+          "id": "networking-protocols-descriptions-arp",
+          "link": "https://en.wikipedia.org/wiki/Address_Resolution_Protocol",
+          "text": "ARP",
+          "answer": "Resolves Internet layer addresses (such as an IP addresses) into link layer addresses (such as a MAC address)."
+        },
+        {
+          "id": "networking-protocols-descriptions-ndp",
+          "link": "https://en.wikipedia.org/wiki/Neighbor_Discovery_Protocol",
+          "text": "NDP",
+          "answer": "Used for address autoconfiguration and to track and discover other hosts."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    }
+  ]
+}

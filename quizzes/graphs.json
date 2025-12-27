@@ -1,0 +1,964 @@
+{
+  "id": "graphs",
+  "title": "Graphs",
+  "sections": [
+    {
+      "id": "terminology",
+      "title": "Terminology",
+      "questions": [
+        {
+          "id": "terminology-undirected-graph",
+          "text": "Undirected Graph",
+          "answer": "A graph whose edges are all bidirectional."
+        },
+        {
+          "id": "terminology-directed-graph",
+          "link": "https://en.wikipedia.org/wiki/Directed_graph",
+          "text": "Directed Graph (Digraph)",
+          "answer": "A graph whose edges go only in one direction."
+        },
+        {
+          "id": "terminology-dag",
+          "link": "https://en.wikipedia.org/wiki/Directed_acyclic_graph",
+          "text": "Directed Acyclic Graph (DAG)",
+          "answer": "A directed graph with no cycles."
+        },
+        {
+          "id": "terminology-adjacent-vertices",
+          "text": "Adjacent vertices",
+          "answer": "Vertices joined by an edge."
+        },
+        {
+          "id": "terminology-incident-edges",
+          "text": "Incident edges",
+          "answer": "Edges that share a vertex."
+        },
+        {
+          "id": "terminology-incident-vertex-of-edge",
+          "text": "Incident vertex of an edge",
+          "answer": "A vertex connected by the edge."
+        },
+        {
+          "id": "terminology-incident-edge-of-vertex",
+          "text": "Incident edge of a vertex",
+          "answer": "An edge connected to the vertex."
+        },
+        {
+          "id": "terminology-degree-of-vertex",
+          "link": "https://en.wikipedia.org/wiki/Degree_(graph_theory)",
+          "text": "Degree of a vertex",
+          "answer": "The number of edges incident to the vertex."
+        },
+        {
+          "id": "terminology-t-indegree-of-vertex",
+          "link": "https://en.wikipedia.org/wiki/Degree_(graph_theory)",
+          "text": "Indegree of a vertex in a directed graph",
+          "answer": "The number of edges leading to the vertex."
+        },
+        {
+          "id": "terminology-outdegree-of-vertex",
+          "link": "https://en.wikipedia.org/wiki/Degree_(graph_theory)",
+          "text": "Outdegree of a vertex in a directed graph",
+          "answer": "The number of edges leading from the vertex."
+        },
+        {
+          "id": "terminology-leaf-vertex",
+          "link": "https://en.wikipedia.org/wiki/Vertex_(graph_theory)#Types_of_vertices",
+          "text": "Leaf Vertex (pendant vertex)",
+          "answer": "Vertex with degree 1."
+        },
+        {
+          "id": "terminology-source-vertex",
+          "link": "https://en.wikipedia.org/wiki/Vertex_(graph_theory)#Types_of_vertices",
+          "text": "Source Vertex",
+          "answer": "Vertex with in degree 0."
+        },
+        {
+          "id": "terminology-sink-vertex",
+          "link": "https://en.wikipedia.org/wiki/Vertex_(graph_theory)#Types_of_vertices",
+          "text": "Source Vertex",
+          "answer": "Vertex with out degree 0."
+        },
+        {
+          "id": "terminology-simplicial-vertex",
+          "link": "https://en.wikipedia.org/wiki/Vertex_(graph_theory)#Types_of_vertices",
+          "text": "Simplicial Vertex",
+          "answer": "Vertex whose neighbours form a clique."
+        },
+        {
+          "id": "terminology-universal-vertex",
+          "link": "https://en.wikipedia.org/wiki/Vertex_(graph_theory)#Types_of_vertices",
+          "text": "Universal Vertex",
+          "answer": "Vertex that is adjacent to every other vertex."
+        },
+        {
+          "id": "terminology-dfs",
+          "link": "https://en.wikipedia.org/wiki/Depth-first_search",
+          "text": "Depth First Search (DFS)",
+          "answer": "Examine unexplored child vertices first, before examining sibling vertices."
+        },
+        {
+          "id": "terminology-bfs",
+          "link": "https://en.wikipedia.org/wiki/Breadth-first_search",
+          "text": "Breadth First Search (BFS)",
+          "answer": "Examine unexplored sibling vertices first, before examining child vertices."
+        },
+        {
+          "id": "terminology-transpose-graph",
+          "link": "https://en.wikipedia.org/wiki/Transpose_graph",
+          "text": "Transpose Graph (Reverse Graph)",
+          "answer": "A version of a directed graph, with each edge reversed."
+        },
+        {
+          "id": "terminology-kernel-dag",
+          "text": "Kernel DAG (condensation digraph)",
+          "answer": "A directed graph in which the strongly connected components are contracted to become single vertices."
+        },
+        {
+          "id": "terminology-simple-path",
+          "text": "Simple Path",
+          "answer": "A path with no repeated vertices - therefore, with no cycle."
+        },
+        {
+          "id": "terminology-multigraph",
+          "link": "https://en.wikipedia.org/wiki/Multigraph",
+          "text": "Multigraph",
+          "answer": "A graph with parallel edges."
+        },
+        {
+          "id": "terminology-hypergraph",
+          "link": "https://en.wikipedia.org/wiki/Hypergraph",
+          "text": "Hypergraph",
+          "answer": "A graph whose edges can connect more than 2 nodes."
+        },
+        {
+          "id": "terminology-articulation-point",
+          "link": "https://en.wikipedia.org/wiki/Biconnected_component",
+          "text": "Articulation Point (Cut Vertex / Cut Point)",
+          "answer": "A vertex whose removal disconnects the graph."
+        },
+        {
+          "id": "terminology-bridge",
+          "link": "https://en.wikipedia.org/wiki/Bridge_(graph_theory)",
+          "text": "Bridge (Cut Edge / Cut Arc)",
+          "answer": "An edge whose removal disconnects the graph."
+        },
+        {
+          "id": "terminology-biconnected-graph",
+          "link": "https://en.wikipedia.org/wiki/Biconnected_graph",
+          "text": "Biconnected Graph (2-Connected Graph) ",
+          "answer": "A connected graph which will remain connected if any one vertex is removed."
+        },
+        {
+          "id": "terminology-k-connected-graph",
+          "link": "https://en.wikipedia.org/wiki/K-vertex-connected_graph",
+          "text": "K-Connected Graph (k-vertex-connected Graph) ",
+          "answer": "A connected graph which will remain connected if fewer than k vertices are removed."
+        },
+        {
+          "id": "terminology-biconnected-component",
+          "link": "https://en.wikipedia.org/wiki/Biconnected_component",
+          "text": "Biconnected Component",
+          "answer": "A maximal set of edges such that any two edges lie on a common simple cycle."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "polynomial-time-problems-definitions",
+      "title": "Definitions: Polynomial-Time Problems",
+      "questions": [
+        {
+          "id": "definition-connected-components",
+          "link": "https://en.wikipedia.org/wiki/Connected_component_%28graph_theory%29",
+          "text": "Connected Components",
+          "answer": "Subsets of the vertices in which every vertex is reachable from every other vertex and no other vertices are reachable."
+        },
+        {
+          "id": "definition-weakly-weakly-connected-components",
+          "link": "https://en.wikipedia.org/wiki/Connectivity_%28graph_theory%29",
+          "text": "Weakly Connected Components",
+          "answer": "Subsets of the vertices in a directed graph in which every vertex is reachable from every other vertex, if the edges are considered as undirected."
+        },
+        {
+          "id": "definition-strongly-strongly-connected-components",
+          "link": "https://en.wikipedia.org/wiki/Strongly_connected_component",
+          "text": "Strongly Connected Components",
+          "answer": "Subsets of the vertices in a directed graph in which every vertex is reachable from every other vertex."
+        },
+        {
+          "id": "definition-topological-sorting",
+          "link": "https://en.wikipedia.org/wiki/Topological_sorting",
+          "text": "Topological Sorting",
+          "answer": "An ordering of the vertices such that each edge leads only forwards."
+        },
+        {
+          "id": "definition-minimum-spanning-tree",
+          "link": "https://en.wikipedia.org/wiki/Minimum_spanning_tree",
+          "text": "Minimum Spanning Tree",
+          "answer": "A tree that connects each vertex in an undirected graph, using a subset of edges of the minimum weight."
+        },
+        {
+          "id": "definition-minimum-bottleneck-spanning-tree",
+          "link": "https://en.wikipedia.org/wiki/Minimum_bottleneck_spanning_tree",
+          "text": "Minimum Bottleneck Spanning Tree",
+          "answer": "A spanning tree whose most expensive edge is as cheap as possible."
+        },
+        {
+          "id": "definition-maximum-spanning-tree",
+          "link": "https://en.wikipedia.org/wiki/Minimum_spanning_tree",
+          "text": "Maximum Spanning Tree",
+          "answer": "A tree that connects each vertex in an undirected graph, using a subset of edges of the maximum weight."
+        },
+        {
+          "id": "definition-minimum-cost-arborescence",
+          "link": "https://en.wikipedia.org/wiki/Arborescence_(graph_theory)",
+          "text": "Minimum Cost Arborescence",
+          "answer": "A subgraph that has a directed path from a specific root to every other vertex, using a subset of edges of the minimum weight."
+        },
+        {
+          "id": "definition-shortest-path",
+          "link": "https://en.wikipedia.org/wiki/Shortest_path_problem",
+          "text": "Shortest Path",
+          "answer": "The shortest path between two specific vertices."
+        },
+        {
+          "id": "definition-transitive-closure",
+          "link": "https://en.wikipedia.org/wiki/Transitive_reduction",
+          "text": "Transitive Closure",
+          "answer": "Adds direct edges to each vertex, leading to all reachable nodes, to easily answer reachability questions."
+        },
+        {
+          "id": "definition-transitive-reduction",
+          "link": "https://en.wikipedia.org/wiki/Transitive_reduction",
+          "text": "Transitive Reduction",
+          "answer": "Removes as many edges as possible, optionally also adding edges, while maintaining the same reachability from each vertex to other vertices."
+        },
+        {
+          "id": "definition-bipartite-matching",
+          "link": "https://en.wikipedia.org/wiki/Matching_%28graph_theory%29",
+          "text": "Bipartite Matching",
+          "answer": "Finds two sets of vertices in which every edge is in both sets."
+        },
+        {
+          "id": "definition-matching",
+          "link": "https://en.wikipedia.org/wiki/Matching_%28graph_theory%29",
+          "text": "Matching",
+          "answer": "The largest subset of edges in which each vertex has at most one of the edges."
+        },
+        {
+          "id": "definition-eulerian-path",
+          "link": "https://en.wikipedia.org/wiki/Eulerian_path",
+          "text": "Eulerian Path",
+          "answer": "A tour that visits each edge at least once."
+        },
+        {
+          "id": "definition-eulerian-cycle",
+          "link": "https://en.wikipedia.org/wiki/Eulerian_path",
+          "text": "Eulerian Cycle (Euler Tour)",
+          "answer": "A tour that visits each edge only once, returning to the start."
+        },
+        {
+          "id": "definition-edge-connectivity",
+          "link": "https://en.wikipedia.org/wiki/Connectivity_%28graph_theory%29",
+          "text": "Edge Connectivity",
+          "answer": "The smallest subset of edges whose deletion will disconnect the graph."
+        },
+        {
+          "id": "definition-vertex-connectivity",
+          "link": "https://en.wikipedia.org/wiki/Connectivity_%28graph_theory%29",
+          "text": "Vertex Connectivity",
+          "answer": "The smallest subset of vertices whose deletion will disconnect the graph."
+        },
+        {
+          "id": "definition-max-flow",
+          "link": "https://en.wikipedia.org/wiki/Maximum_flow_problem",
+          "text": "Maximum Flow",
+          "answer": "The maximum flow which can be sent from one specific vertex to another while respecting the maximum capacity of each edge."
+        },
+        {
+          "id": "definition-planarity-detection",
+          "link": "https://en.wikipedia.org/wiki/Planarity_testing",
+          "text": "Planarity Detection and Embedding",
+          "answer": "Arrange the vertices so no edges cross."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "hard-problems-definitions",
+      "title": "Definitions: Hard Problems",
+      "questions": [
+        {
+          "id": "definition-clique",
+          "link": "https://en.wikipedia.org/wiki/Clique_%28graph_theory%29",
+          "text": "Clique",
+          "answer": "The largest subset of vertices that are all connected to each other by edges."
+        },
+        {
+          "id": "definition-independent-set",
+          "link": "https://en.wikipedia.org/wiki/Independent_set_%28graph_theory%29",
+          "text": "Independent Set",
+          "answer": "The largest subset of vertices for which, for each vertex, each edge leads to a vertex not in the subset."
+        },
+        {
+          "id": "definition-dominating-set",
+          "link": "https://en.wikipedia.org/wiki/Dominating_set",
+          "text": "Dominating Set",
+          "answer": "A subset of vertices for which every vertex not in the subset is adjacent to a vertex in the subset."
+        },
+        {
+          "id": "definition-vertex-cover",
+          "link": "https://en.wikipedia.org/wiki/Vertex_cover",
+          "text": "Vertex Cover",
+          "answer": "The smallest subset of vertices for which, for each vertex, each edge leads to at least one vertex of the subset."
+        },
+        {
+          "id": "definition-tsp",
+          "link": "https://en.wikipedia.org/wiki/Travelling_salesman_problem",
+          "text": "Traveling Salesman Problem",
+          "answer": "A cycle of minimum cost, visiting each vertex exactly once."
+        },
+        {
+          "id": "definition-hamiltonian-cycle",
+          "link": "https://en.wikipedia.org/wiki/Hamiltonian_path",
+          "text": "Hamiltonian Cycle",
+          "answer": "A tour that visits each vertex only once, returning to the start."
+        },
+        {
+          "id": "definition-hamiltonian-path",
+          "link": "https://en.wikipedia.org/wiki/Hamiltonian_path",
+          "text": "Hamiltonian Path",
+          "answer": "A tour that visits each vertex only once."
+        },
+        {
+          "id": "definition-graph-partition",
+          "link": "https://en.wikipedia.org/wiki/Graph_partition",
+          "text": "Graph Partition",
+          "answer": "A partition of the vertices into roughly equal-sized subsets with a certain maximum spanning edge cost."
+        },
+        {
+          "id": "definition-vertex-coloring",
+          "link": "https://en.wikipedia.org/wiki/Graph_partition",
+          "text": "Vertex Coloring",
+          "answer": "A coloring of each vertex in which no edge leads to the same color, using the minimum number of colors."
+        },
+        {
+          "id": "definition-edge-coloring",
+          "link": "https://en.wikipedia.org/wiki/Edge_coloring",
+          "text": "Edge Coloring",
+          "answer": "A coloring of each edge in which no vertex has an edge of the same color, using the minimum number of colors."
+        },
+        {
+          "id": "definition-graph-isomorphism",
+          "link": "https://en.wikipedia.org/wiki/Graph_isomorphism",
+          "text": "Graph Isomorphism",
+          "answer": "A mapping from one set of vertices to another, such that the sets are identical."
+        },
+        {
+          "id": "definition-steiner-tree",
+          "link": "https://en.wikipedia.org/wiki/Steiner_tree_problem",
+          "text": "Steiner Tree",
+          "answer": "The smallest tree connecting all vertices, adding intermediate vertices if necessary."
+        },
+        {
+          "id": "definition-feedback-edge-set",
+          "link": "https://en.wikipedia.org/wiki/Feedback_vertex_set",
+          "text": "Feedback Edge Set",
+          "answer": "The smallest set of edges whose removal results in no cycles existing."
+        },
+        {
+          "id": "definition-feedback-vertex-set",
+          "link": "https://en.wikipedia.org/wiki/Feedback_vertex_set",
+          "text": "Feedback Vertex Set",
+          "answer": "The smallest set of vertices whose removal results in no cycles existing."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "polynomial-or-np-complete",
+      "title": "Polynomial or NP-complete",
+      "questions": [
+        {
+          "id": "polynomial-or-np-complete-connected-components",
+          "link": "https://en.wikipedia.org/wiki/Connected_component_%28graph_theory%29",
+          "text": "Connected Components",
+          "answer": "Polynomial"
+        },
+        {
+          "id": "polynomial-or-np-complete-weakly-weakly-connected-components",
+          "link": "https://en.wikipedia.org/wiki/Connectivity_%28graph_theory%29",
+          "text": "Weakly Connected Components",
+          "answer": "Polynomial"
+        },
+        {
+          "id": "polynomial-or-np-complete-strongly-strongly-connected-components",
+          "link": "https://en.wikipedia.org/wiki/Strongly_connected_component",
+          "text": "Strongly Connected Components",
+          "answer": "Polynomial"
+        },
+        {
+          "id": "polynomial-or-np-complete-topological-sorting",
+          "link": "https://en.wikipedia.org/wiki/Topological_sorting",
+          "text": "Topological Sorting",
+          "answer": "Polynomial (linear)"
+        },
+        {
+          "id": "polynomial-or-np-complete-minimum-spanning-tree",
+          "link": "https://en.wikipedia.org/wiki/Minimum_spanning_tree",
+          "text": "Minimum Spanning Tree",
+          "answer": "Polynomial"
+        },
+        {
+          "id": "polynomial-or-np-complete-shortest-path",
+          "link": "https://en.wikipedia.org/wiki/Shortest_path_problem",
+          "text": "Shortest Path",
+          "answer": "Polynomial"
+        },
+        {
+          "id": "polynomial-or-np-complete-shortest-simple-path",
+          "text": "Shortest Simple Path avoiding negative cycles",
+          "answer": "NP-complete"
+        },
+        {
+          "id": "polynomial-or-np-complete-transitive-closure",
+          "link": "https://en.wikipedia.org/wiki/Transitive_reduction",
+          "text": "Transitive Closure",
+          "answer": "Polynomial"
+        },
+        {
+          "id": "polynomial-or-np-complete-transitive-reduction",
+          "link": "https://en.wikipedia.org/wiki/Transitive_reduction",
+          "text": "Transitive Reduction",
+          "answer": "Polynomial"
+        },
+        {
+          "id": "polynomial-or-np-complete-matching",
+          "link": "https://en.wikipedia.org/wiki/Matching_%28graph_theory%29",
+          "text": "Matching",
+          "answer": "Polynomial"
+        },
+        {
+          "id": "polynomial-or-np-complete-eulerian-path",
+          "link": "https://en.wikipedia.org/wiki/Eulerian_path",
+          "text": "Eulerian Path",
+          "answer": "Polynomial"
+        },
+        {
+          "id": "polynomial-or-np-complete-eulerian-cycle",
+          "link": "https://en.wikipedia.org/wiki/Eulerian_path",
+          "text": "Eulerian Cycle",
+          "answer": "Polynomial"
+        },
+        {
+          "id": "polynomial-or-np-complete-edge-connectivity",
+          "link": "https://en.wikipedia.org/wiki/Connectivity_%28graph_theory%29",
+          "text": "Edge Connectivity",
+          "answer": "Polynomial"
+        },
+        {
+          "id": "polynomial-or-np-complete-vertex-connectivity",
+          "link": "https://en.wikipedia.org/wiki/Connectivity_%28graph_theory%29",
+          "text": "Vertex Connectivity",
+          "answer": "Polynomial"
+        },
+        {
+          "id": "polynomial-or-np-complete-max-flow",
+          "link": "https://en.wikipedia.org/wiki/Maximum_flow_problem",
+          "text": "Maximum Flow",
+          "answer": "Polynomial"
+        },
+        {
+          "id": "polynomial-or-np-complete-planarity-detection",
+          "link": "https://en.wikipedia.org/wiki/Planarity_testing",
+          "text": "Planarity Detection and Embedding",
+          "answer": "Polynomial"
+        },
+        {
+          "id": "polynomial-or-np-complete-clique",
+          "link": "https://en.wikipedia.org/wiki/Clique_%28graph_theory%29",
+          "text": "Clique",
+          "answer": "NP-complete"
+        },
+        {
+          "id": "polynomial-or-np-complete-independent-set",
+          "link": "https://en.wikipedia.org/wiki/Independent_set_%28graph_theory%29",
+          "text": "Independent Set",
+          "answer": "NP-complete"
+        },
+        {
+          "id": "polynomial-or-np-complete-dominating-set",
+          "link": "https://en.wikipedia.org/wiki/Dominating_set",
+          "text": "Dominating Set",
+          "answer": "NP-complete"
+        },
+        {
+          "id": "polynomial-or-np-complete-vertex-cover",
+          "link": "https://en.wikipedia.org/wiki/Vertex_cover",
+          "text": "Vertex Cover",
+          "answer": "NP-complete"
+        },
+        {
+          "id": "polynomial-or-np-complete-tsp",
+          "link": "https://en.wikipedia.org/wiki/Travelling_salesman_problem",
+          "text": "Traveling Salesman Problem",
+          "answer": "NP-complete"
+        },
+        {
+          "id": "polynomial-or-np-complete-hamiltonian-cycle",
+          "link": "https://en.wikipedia.org/wiki/Hamiltonian_path",
+          "text": "Hamiltonian Cycle",
+          "answer": "NP-complete"
+        },
+        {
+          "id": "polynomial-or-np-complete-hamiltonian-path",
+          "link": "https://en.wikipedia.org/wiki/Hamiltonian_path",
+          "text": "Hamiltonian Path",
+          "answer": "NP-complete"
+        },
+        {
+          "id": "polynomial-or-np-complete-graph-partition",
+          "link": "https://en.wikipedia.org/wiki/Graph_partition",
+          "text": "Graph Partition",
+          "answer": "NP-complete"
+        },
+        {
+          "id": "polynomial-or-np-complete-vertex-coloring",
+          "link": "https://en.wikipedia.org/wiki/Graph_partition",
+          "text": "Vertex Coloring",
+          "answer": "NP-complete"
+        },
+        {
+          "id": "polynomial-or-np-complete-2-color-vertex-coloring",
+          "link": "https://en.wikipedia.org/wiki/Graph_coloring#Polynomial_time",
+          "text": "2-Color Vertex Coloring",
+          "answer": "Polynomial (linear)"
+        },
+        {
+          "id": "polynomial-or-np-complete-edge-coloring",
+          "link": "https://en.wikipedia.org/wiki/Edge_coloring",
+          "text": "Edge Coloring",
+          "answer": "NP-complete"
+        },
+        {
+          "id": "polynomial-or-np-complete-2-color-edge-coloring",
+          "link": "https://en.wikipedia.org/wiki/Graph_coloring#Polynomial_time",
+          "text": "2-Color Edge Coloring",
+          "answer": "Polynomial (linear)"
+        },
+        {
+          "id": "polynomial-or-np-complete-steiner-tree",
+          "link": "https://en.wikipedia.org/wiki/Steiner_tree_problem",
+          "text": "Steiner Tree",
+          "answer": "NP-complete"
+        },
+        {
+          "id": "polynomial-or-np-complete-feedback-edge",
+          "link": "https://en.wikipedia.org/wiki/Feedback_vertex_set",
+          "text": "Feedback Edge / Vertex Set",
+          "answer": "NP-complete"
+        },
+        {
+          "id": "polynomial-or-np-complete-longest-path",
+          "link": "https://en.wikipedia.org/wiki/Longest_path_problem",
+          "text": "Longest Path in a generic graph",
+          "answer": "NP-complete"
+        },
+        {
+          "id": "polynomial-or-np-complete-longest-path-in-dag",
+          "link": "https://en.wikipedia.org/wiki/Longest_path_problem#Acyclic_graphs_and_critical_paths",
+          "text": "Longest Path in a directed acyclic graph (DAG)",
+          "answer": "Polynomial (linear)"
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "graph-algorithm-purposes-shortest-path",
+      "title": "Graph Algorithm Purposes: Shortest Path",
+      "questions": [
+        {
+          "id": "purpose-bellman-ford",
+          "link": "https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm",
+          "text": "Bellman-Ford Algorithm",
+          "answer": "Single-Source Shortest Path (with negative edges)."
+        },
+        {
+          "id": "purpose-floyd-warshall",
+          "link": "https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm",
+          "text": "Floyd Warshall Algorithm",
+          "answer": "All Pairs Shortest Path, for dense graphs (with negative edges)."
+        },
+        {
+          "id": "purpose-johnsons",
+          "link": "https://en.wikipedia.org/wiki/Johnson's_algorithm",
+          "text": "Johnson's Algorithm",
+          "answer": "All Pairs Shortest Path, for sparse graphs (with negative edges)."
+        },
+        {
+          "id": "purpose-n-dijkstra",
+          "link": "https://en.wikipedia.org/wiki/Dijkstra's_algorithm",
+          "text": "n * Dijkstra's Algorithm",
+          "answer": "All Pairs Shortest Path, for sparse graphs (no negative edges)."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "graph-algorithm-purposes-others",
+      "title": "Graph Algorithm Purposes: Others",
+      "questions": [
+        {
+          "id": "purpose-prims",
+          "link": "https://en.wikipedia.org/wiki/Prim's_algorithm",
+          "text": "Prim's Algorithm",
+          "answer": "Minimum Spanning Tree, for dense graphs."
+        },
+        {
+          "id": "purpose-kruskals",
+          "link": "https://en.wikipedia.org/wiki/Kruskal's_algorithm",
+          "text": "Kruskal's Algorithm",
+          "answer": "Minimum Spanning Tree, for sparse graphs."
+        },
+        {
+          "id": "purpose-ford-fulkerson",
+          "link": "https://en.wikipedia.org/wiki/Ford%E2%80%93Fulkerson_algorithm",
+          "text": "Ford-Fulkerson (Edmonds-Karp) Algorithm",
+          "answer": "Maximum Flow (sparse graphs)."
+        },
+        {
+          "id": "purpose-dinic",
+          "link": "https://en.wikipedia.org/wiki/Dinic's_algorithm",
+          "text": "Dinic's Algorithm",
+          "answer": "Maximum Flow (sparse graphs)."
+        },
+        {
+          "id": "purpose-push-relabel",
+          "link": "https://en.wikipedia.org/wiki/Push%E2%80%93relabel_maximum_flow_algorithm",
+          "text": "Push-Relabel Algorithm (Preflow-Push)",
+          "answer": "Maximum Flow (dense graphs)."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "graph-algorithm-definitions-shortest-path",
+      "title": "Graph Algorithm Definitions: Shortest Path",
+      "link": "https://en.wikipedia.org/wiki/Shortest_path_problem",
+      "questions": [
+        {
+          "id": "definition-dijkstras",
+          "link": "https://en.wikipedia.org/wiki/Dijkstra's_algorithm",
+          "text": "Dijkstra's Algorithm for Shortest Path",
+          "answer": "Choose the outgoing edge with the least total path cost, starting with a zero-cost edge to the start vertex. Look at the edge's destination vertex and store the total path costs (and, optionally, the predecessor) for each outgoing edge's vertex. Repeat until we reach the destination. Use, and update, a min heap (priority queue) to choose the outgoing edge with the lowest total cost."
+        },
+        {
+          "id": "definition-bidirectional-dijkstra",
+          "link": "https://en.wikipedia.org/wiki/Bidirectional_search",
+          "text": "Dijkstra's Algorithm for Shortest Path (Bidirectional)",
+          "answer": "Alternate between forward search, from the source, and backward search from the destination. Terminate when the same vertex has been removed from the priority queue. Find the vertex with the minimum forward plus backward length."
+        },
+        {
+          "id": "definition-bellman-ford",
+          "link": "https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm",
+          "text": "Bellman-Ford Algorithm for Single-Source Shortest Path",
+          "answer": "Start with 0 cost for the source vertex, and infinity for all other vertices. Then, for each vertex, examine each edge, to calculate the total path cost (or infinity) to reach the adjacent vertices, reducing the stored cost if it is less. Repeat the examination of edges, and the recalculation, n-1 times, or until there is no change. Do 1 extra iteration to detect negative cycles."
+        },
+        {
+          "id": "definition-floyd-warshall",
+          "link": "https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm",
+          "text": "Floyd Warshall Algorithm for All Pairs Shortest Path",
+          "answer": "Examine every path from vertex i to vertex j, using at most k edges (using only vertices numbered from 1 to k), by examining i to j using k-1 edges (previously calculated) and examining i to k to j (i to k + k to j, both previously calculated) using at most k edges, passing through the additional kth vertex, using the minimum. To detect negative cycles, check for a negative cost from a node to itself."
+        },
+        {
+          "id": "definition-johnsons",
+          "link": "https://en.wikipedia.org/wiki/Johnson's_algorithm",
+          "text": "Johnson's Algorithm for All Pairs Shortest Path",
+          "answer": "Add one vertex to the graph, with zero-length edges to every other vertex. Run Bellman-Ford to get the shortest path from the new vertex to every other. Reweight the original graph's edges by adding the difference of the edge's start and end vertices' paths from s. Then call Dijkstra's algorithm for each pair of vertices, subtracting the reweighting difference from the result."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "graph-algorithm-definitions-mst",
+      "title": "Graph Algorithm Definitions: MST",
+      "questions": [
+        {
+          "id": "definition-prims",
+          "link": "https://en.wikipedia.org/wiki/Prim's_algorithm",
+          "text": "Prim's Algorithm for Minimum Spanning Tree",
+          "answer": "Start with an arbitrary vertex. Find the lowest-cost outgoing edge and add its destination to the tree. Repeat until all vertices are in the tree."
+        },
+        {
+          "id": "definition-kruskals",
+          "link": "https://en.wikipedia.org/wiki/Kruskal's_algorithm",
+          "text": "Kruskal's Algorithm for Minimum Spanning Tree",
+          "answer": "Iterate through all edges, in increasing order of their cost. Join each edge's vertices by adding them to a Union-Find (Disjoint Set), if they are not already joined, remembering the edges added."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "graph-algorithm-definitions-max-flow",
+      "title": "Graph Algorithm Definitions: Max Flow",
+      "questions": [
+        {
+          "id": "definition-ford-fulkerson",
+          "link": "https://en.wikipedia.org/wiki/Ford%E2%80%93Fulkerson_algorithm",
+          "text": "Ford-Fulkerson Algorithm for Maximum Flow",
+          "answer": "Define a residual graph with reverse edges. Find a path in that graph. Augment the path with its bottleneck capacity, decreasing capacity on used edges, increasing on reverse edges. Repeat until there is no path."
+        },
+        {
+          "id": "definition-dinic",
+          "link": "https://en.wikipedia.org/wiki/Dinic's_algorithm",
+          "text": "Dinic's Algorithm for Maximum Flow",
+          "answer": "Ford-Fulkerson using BFS to find the path in each iteration."
+        },
+        {
+          "id": "definition-push-relabel",
+          "link": "https://en.wikipedia.org/wiki/Push%E2%80%93relabel_maximum_flow_algorithm",
+          "text": "Push-Relabel Algorithm for Maximum Flow (Preflow-Push)",
+          "answer": "Define a residual graph with reverse edges. Define heights for all vertices, starting with n for the source and 0 for others. Define excesses for each vertex. Starting with the source, repeatedly find the highest vertex that has excess and push flow along its downhill edges, increasing the excess on the edges' destination vertices. Repeat until there are no vertices with excess."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "graph-algorithm-choice-shortest-path",
+      "title": "Graph Algorithms Choice: Shortest path",
+      "questions": [
+        {
+          "id": "algorithm-for-shortest-path-unweighted",
+          "link": "https://en.wikipedia.org/wiki/Shortest_path_problem#Unweighted_graphs",
+          "text": "Single Source Shortest Path (unweighted)",
+          "answer": "Breadth First Search"
+        },
+        {
+          "id": "algorithm-for-shortest-path-weighted-directed-acyclic",
+          "link": "https://en.wikipedia.org/wiki/Shortest_path_problem#Directed_acyclic_graphs",
+          "text": "Single Source Shortest Path (weighted, directed, acyclic - weighted DAG)",
+          "answer": "Topological sort. Then Find minimum distance to adjacent nodes by examining nodes in topological order, starting with source, until destination."
+        },
+        {
+          "id": "algorithm-for-shortest-path-weighted-directed-non-negative-weights",
+          "link": "https://en.wikipedia.org/wiki/Shortest_path_problem#Directed_graphs_with_nonnegative_weights",
+          "text": "Single Source Shortest Path (weighted, directed, with non-negative weights)",
+          "answer": "Dijkstra's algorithm"
+        },
+        {
+          "id": "algorithm-for-shortest-path-weighted-directed-with-negative-weights",
+          "link": "https://en.wikipedia.org/wiki/Shortest_path_problem#Directed_graphs_with_arbitrary_weights_without_negative_cycles",
+          "text": "Single Source Shortest Path (weighted, directed, with negative weights but no negative cycles)",
+          "answer": "Bellman-Ford algorithm"
+        },
+        {
+          "id": "algorithm-for-all-pairs-shortest-path-with-non-negative-weights",
+          "link": "https://en.wikipedia.org/wiki/Shortest_path_problem#All-pairs_shortest_paths",
+          "text": "All Pairs Shortest Path (with non-negative weights)",
+          "answer": "Floyd-Warshall (for dense graphs) or repeated Dijkstra's algorithm (for sparse graphs)."
+        },
+        {
+          "id": "algorithm-for-all-pairs-shortest-path-with-negative-weights",
+          "link": "https://en.wikipedia.org/wiki/Shortest_path_problem#All-pairs_shortest_paths",
+          "text": "All Pairs Shortest Path (with negative weights but no negative cycles)",
+          "answer": "Floyd-Warshall (for dense graphs) or Johnson's (for sparse graphs)."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "graph-algorithm-choice-connected-components",
+      "title": "Graph Algorithms Choice: Connected Components",
+      "questions": [
+        {
+          "id": "algorithm-for-connected-components",
+          "link": "https://en.wikipedia.org/wiki/Connected_component_%28graph_theory%29",
+          "text": "Connected Components in an undirected graph",
+          "answer": "Depth First Search or Breadth First Search."
+        },
+        {
+          "id": "algorithm-for-weakly-connected-components",
+          "link": "https://en.wikipedia.org/wiki/Connected_component_%28graph_theory%29",
+          "text": "Weakly Connected Components in a directed graph",
+          "answer": "Make edges undirected, then Depth First Search or Breadth First Search."
+        },
+        {
+          "id": "algorithm-for-stongly-connected-components",
+          "link": "https://en.wikipedia.org/wiki/Strongly_connected_component",
+          "text": "Strongly Connected Components",
+          "answer": "Kosaraju's Algorithm: Depth First Search on the reversed graph, to get a topological sort, then call DFS on each vertex in that order, assigning a new ID for each DFS call."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "graph-algorithm-choice-others",
+      "title": "Graph Algorithms Choice: Others",
+      "questions": [
+        {
+          "id": "algorithm-for-topological-sort",
+          "link": "https://en.wikipedia.org/wiki/Topological_sorting",
+          "text": "Topological Sort",
+          "answer": "Depth First Search to order vertices by their completion time, starting from each still unexplored vertex. Then reverse that order."
+        },
+        {
+          "id": "algorithm-for-minimum-spanning-tree",
+          "link": "https://en.wikipedia.org/wiki/Minimum_spanning_tree",
+          "text": "Minimum Spanning Tree",
+          "answer": "Kruskal's, Prim's, or Boruvka's algorithm"
+        },
+        {
+          "id": "algorithm-for-transitive-closure",
+          "link": "https://en.wikipedia.org/wiki/Transitive_reduction",
+          "text": "Transitive Closure",
+          "answer": "BFS or DFS, or modify Floyd-Warshall's algorithm to calculate only reachability."
+        },
+        {
+          "id": "algorithm-for-bipartite-matching-unweighted",
+          "link": "https://en.wikipedia.org/wiki/Matching_%28graph_theory%29#In_unweighted_bipartite_graphs",
+          "text": "Bipartite Matching (unweighted)",
+          "answer": "A Maximum Flow algorithm after adding source and sink vertices and setting all edge capacities to 1."
+        },
+        {
+          "id": "algorithm-for-bipartite-matching-weighted",
+          "link": "https://en.wikipedia.org/wiki/Matching_%28graph_theory%29#In_weighted_bipartite_graphs",
+          "text": "Bipartite Matching (weighted)",
+          "answer": "Hungarian Algorithm."
+        },
+        {
+          "id": "algorithm-for-maximum-flow",
+          "link": "https://en.wikipedia.org/wiki/Maximum_flow_problem",
+          "text": "Maximum Flow",
+          "answer": "Edmonds-Karp (Ford-Fulkerson), Dinic's, or Push-Relabel."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "graph-stack-or-queue",
+      "title": "Stack or Queue",
+      "questions": [
+        {
+          "id": "stack-or-queue-bfs",
+          "link": "https://en.wikipedia.org/wiki/Breadth-first_search",
+          "text": "Breadth First Search iterative implementation",
+          "answer": "Queue"
+        },
+        {
+          "id": "stack-or-queue-dfs",
+          "link": "https://en.wikipedia.org/wiki/Depth-first_search",
+          "text": "Depth First Search iterative implementation",
+          "answer": "Stack"
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "graph-directed-or-undirected",
+      "title": "For directed or undirected graphs",
+      "questions": [
+        {
+          "id": "directed-or-undirected-shortest-path",
+          "link": "https://en.wikipedia.org/wiki/Shortest_path_problem",
+          "text": "Shortest path (BFS, Dijkstra's, Bellman-Ford, Floyd Warshall, etc.)",
+          "answer": "Undirected or directed"
+        },
+        {
+          "id": "directed-or-undirected-msp",
+          "link": "https://en.wikipedia.org/wiki/Minimum_spanning_tree",
+          "text": "Minimum Spanning Tree (Prim's, Kruskal's, etc.)",
+          "answer": "Undirected"
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "graph-bfs-or-dfs",
+      "title": "Breadth First Search (BFS) or Depth First Search (DFS)",
+      "questions": [
+        {
+          "id": "bfs-or-dfs-shortest-path",
+          "link": "https://en.wikipedia.org/wiki/Shortest_path_problem#Unweighted_graphs",
+          "text": "Single Source Shortest Path (unweighted)",
+          "answer": "Breadth First Search"
+        },
+        {
+          "id": "bfs-or-dfs-topological-sort",
+          "link": "https://en.wikipedia.org/wiki/Topological_sorting",
+          "text": "Topological Sort",
+          "answer": "Depth First Search"
+        },
+        {
+          "id": "bfs-or-dfs-connected-components",
+          "link": "https://en.wikipedia.org/wiki/Connected_component_%28graph_theory%29",
+          "text": "Connected Components in an undirected graph",
+          "answer": "Depth First Search or Breadth First Search"
+        },
+        {
+          "id": "bfs-or-dfs-strongly-connected-components",
+          "link": "https://en.wikipedia.org/wiki/Strongly_connected_component#Algorithms",
+          "text": "Strongly Connected Components in a directed graph",
+          "answer": "Depth First Search"
+        },
+        {
+          "id": "bfs-or-dfs-level-order",
+          "link": "https://en.wikipedia.org/wiki/Tree_traversal#Breadth-first_search",
+          "text": "Level-Order Traversal",
+          "answer": "Breadth First Search"
+        },
+        {
+          "id": "bfs-or-dfs-testing-bipartiteness",
+          "link": "https://en.wikipedia.org/wiki/Bipartite_graph#Testing_bipartiteness",
+          "text": "Testing bipartiteness",
+          "answer": "Depth First Search or Breadth First Search"
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "graph-dfs-edge-classifications",
+      "title": "Depth First Search: Edge Classifications",
+      "link": "https://en.wikipedia.org/wiki/Depth-first_search#Output_of_a_depth-first_search",
+      "questions": [
+        {
+          "id": "graph-dfs-edge-classifications-tree",
+          "text": "Tree edge",
+          "answer": "An edge in the depth-first search, from a vertex to a later-discovered vertex."
+        },
+        {
+          "id": "graph-dfs-edge-classifications-back",
+          "text": "Back edge",
+          "answer": "A non-tree edge from a vertex to an ancestor."
+        },
+        {
+          "id": "graph-dfs-edge-classifications-forward",
+          "text": "Forward edge",
+          "answer": "A non-tree edge from a vertex to a descendant."
+        },
+        {
+          "id": "graph-dfs-edge-classifications-cross",
+          "text": "Cross edge",
+          "answer": "All other edges, such as edges between vertices that are neither descendants nor ancestors of each other."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    }
+  ]
+}

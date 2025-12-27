@@ -1,0 +1,618 @@
+{
+  "id": "cpp_std_algorithms",
+  "title": "C++ Standard Algorithms",
+  "sections": [
+    {
+      "id": "non-modifying-sequence-operations",
+      "title": "Non-Modifying Sequence Operations",
+      "link": "http://en.cppreference.com/w/cpp/algorithm#Non-modifying_sequence_operations",
+      "questions": [
+        {
+          "id": "non-modifying-all_of",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/all_any_none_of",
+          "text": "all_of(), any_of(), none_of()",
+          "answer": "Checks if a predicate is true for all, any or none of the elements in a range."
+        },
+        {
+          "id": "non-modifying-for_each",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/for_each",
+          "text": "for_each()",
+          "answer": "Applies a function to a range of elements."
+        },
+        {
+          "id": "non-modifying-for_each_n",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/for_each_n",
+          "text": "for_each_n()",
+          "answer": "Applies a function object to the first n elements of a sequence."
+        },
+        {
+          "id": "non-modifying-count",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/count",
+          "text": "count(), count_if()",
+          "answer": "Returns the number of elements satisfying specific criteria."
+        },
+        {
+          "id": "non-modifying-mismatch",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/mismatch",
+          "text": "mismatch()",
+          "answer": "Finds the first position where two ranges differ."
+        },
+        {
+          "id": "non-modifying-equal",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/equal",
+          "text": "equal()",
+          "answer": "Determines if two sets of elements are the same."
+        },
+        {
+          "id": "non-modifying-find",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/find",
+          "text": "find(), find_if(), find_if_not()",
+          "answer": "Finds the first element satisfying specific criteria."
+        },
+        {
+          "id": "non-modifying-find-end",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/find_end",
+          "text": "find_end()",
+          "answer": "Finds the last sequence of elements in a certain range."
+        },
+        {
+          "id": "non-modifying-find-first-of",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/find_first_of",
+          "text": "find_first_of()",
+          "answer": "Searches for any one of a set of elements."
+        },
+        {
+          "id": "non-modifying-adjacent_find",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/adjacent_find",
+          "text": "adjacent_find()",
+          "answer": "Finds the first two adjacent items that are equal (or satisfy a given predicate)."
+        },
+        {
+          "id": "non-modifying-search",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/search",
+          "text": "search()",
+          "answer": "Searches for a range of elements."
+        },
+        {
+          "id": "non-modifying-search-n",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/search_n",
+          "text": "search_n()",
+          "answer": "Searches for a number consecutive copies of an element in a range."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "modifying-sequence-operations",
+      "title": "Modifying Sequence Operations",
+      "link": "http://en.cppreference.com/w/cpp/algorithm#Modifying_sequence_operations",
+      "questions": [
+        {
+          "id": "modifying-copy",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/copy",
+          "text": "copy(), copy_if()",
+          "answer": "Copies a range of elements to a new location."
+        },
+        {
+          "id": "modifying-copy_n",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/copy_n",
+          "text": "copy_n()",
+          "answer": "Copies a number of elements to a new location."
+        },
+        {
+          "id": "modifying-copy_backward",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/copy_backward",
+          "text": "copy_backward()",
+          "answer": "Copies a range of elements in backwards order."
+        },
+        {
+          "id": "modifying-move",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/move",
+          "text": "copy_n()",
+          "answer": "Moves a range of elements to a new location."
+        },
+        {
+          "id": "modifying-move_backward",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/move_backward",
+          "text": "copy_backward()",
+          "answer": "Moves a range of elements to a new location in backwards order."
+        },
+        {
+          "id": "modifying-fill",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/fill",
+          "text": "fill()",
+          "answer": "Assigns a range of elements a certain value."
+        },
+        {
+          "id": "modifying-fill_n",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/fill",
+          "text": "fill_n()",
+          "answer": "Assigns a value to a number of elements."
+        },
+        {
+          "id": "modifying-transform",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/transform",
+          "text": "transform()",
+          "answer": "Applies a function to a range of elements."
+        },
+        {
+          "id": "modifying-generate",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/generate",
+          "text": "generate()",
+          "answer": "Saves the result of a function in a range."
+        },
+        {
+          "id": "modifying-generate_n",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/generate_n",
+          "text": "generate_n()",
+          "answer": "Saves the result of N applications of a function."
+        },
+        {
+          "id": "modifying-remove",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/remove",
+          "text": "remove(), remove_if()",
+          "answer": "Removes elements satisfying specific criteria."
+        },
+        {
+          "id": "modifying-remove_copy",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/remove_copy",
+          "text": "remove_copy(), remove_copy_if()",
+          "answer": "Copies a range of elements omitting those that satisfy specific criteria."
+        },
+        {
+          "id": "modifying-replace",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/replace",
+          "text": "replace(), replace_if()",
+          "answer": "Replaces all values satisfying specific criteria with another value."
+        },
+        {
+          "id": "modifying-replace_copy",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/remove_copy",
+          "text": "replace_copy(), replace_copy_if()",
+          "answer": "Copies a range, replacing elements satisfying specific criteria with another value."
+        },
+        {
+          "id": "modifying-swap",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/swap",
+          "text": "swap()",
+          "answer": "Swaps the values of two objects."
+        },
+        {
+          "id": "modifying-swap_ranges",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/swap_ranges",
+          "text": "swap()",
+          "answer": "Swaps two ranges of elements."
+        },
+        {
+          "id": "modifying-iter_swap",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/iter_swap",
+          "text": "iter_swap()",
+          "answer": "Swaps the elements pointed to by two iterators."
+        },
+        {
+          "id": "modifying-reverse",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/reverse",
+          "text": "reverse()",
+          "answer": "Reverses the order of elements in a range."
+        },
+        {
+          "id": "modifying-reverse_copy",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/reverse_copy",
+          "text": "reverse_copy()",
+          "answer": "Creates a copy of a range that is reversed."
+        },
+        {
+          "id": "modifying-rotate",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/rotate",
+          "text": "rotate()",
+          "answer": "Rotates the order of elements in a range."
+        },
+        {
+          "id": "modifying-rotate_copy",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/rotate_copy",
+          "text": "rotate_copy()",
+          "answer": "Copies and rotates a range of elements."
+        },
+        {
+          "id": "modifying-shuffle",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/random_shuffle",
+          "text": "shuffle()",
+          "answer": "Randomly re-orders elements in a range."
+        },
+        {
+          "id": "modifying-sample",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/sample",
+          "text": "sample()",
+          "answer": "Selects n random elements from a sequence."
+        },
+        {
+          "id": "modifying-unique",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/unique",
+          "text": "unique()",
+          "answer": "Removes consecutive duplicate elements in a range."
+        },
+        {
+          "id": "modifying-unique_copy",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/unique_copy",
+          "text": "unique_copy()",
+          "answer": "Creates a copy of some range of elements that contains no consecutive duplicates."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "partitioning",
+      "title": "Partitioning Operations",
+      "link": "http://en.cppreference.com/w/cpp/algorithm#Partitioning_operations",
+      "questions": [
+        {
+          "id": "partitioning-is_partitioned",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/is_partitioned",
+          "text": "is_partitioned()",
+          "answer": "Determines if the range is partitioned by the given predicate."
+        },
+        {
+          "id": "partitioning-partition",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/partition",
+          "text": "partition()",
+          "answer": "Divides a range of elements into two groups."
+        },
+        {
+          "id": "partitioning-partition_copy",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/partition_copy",
+          "text": "partition_copy()",
+          "answer": "Copies a range, dividing the elements into two groups."
+        },
+        {
+          "id": "partitioning-stable_partition",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/stable_partition",
+          "text": "stable_partition()",
+          "answer": "Divides elements into two groups while preserving their relative order."
+        },
+        {
+          "id": "partitioning-partition_point",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/stable_partition",
+          "text": "partition_point()",
+          "answer": "Locates the partition point of a partitioned range."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "sort",
+      "title": "Sorting Operations",
+      "link": "http://en.cppreference.com/w/cpp/algorithm#Sorting_operations",
+      "questions": [
+        {
+          "id": "sort-is_sorted",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/is_sorted",
+          "text": "is_sorted()",
+          "answer": "Checks whether a range is sorted into ascending order."
+        },
+        {
+          "id": "sort-is_sorted_until",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/is_sorted_until",
+          "text": "is_sorted_until()",
+          "answer": "Finds the largest sorted subrange."
+        },
+        {
+          "id": "sort-sort",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/sort",
+          "text": "sort()",
+          "answer": "Sorts a range into ascending order."
+        },
+        {
+          "id": "sort-partial_sort",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/partial_sort",
+          "text": "partial_sort()",
+          "answer": "Sorts the first N elements of a range."
+        },
+        {
+          "id": "sort-partial_sort_copy",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/partial_sort_copy",
+          "text": "partial_sort_copy()",
+          "answer": "Copies and partially sorts a range of elements."
+        },
+        {
+          "id": "sort-partial_stable_sort",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/stable_sort",
+          "text": "stable_sort()",
+          "answer": "Sorts a range of elements while preserving order between equal elements."
+        },
+        {
+          "id": "sort-nth_element",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/nth_element",
+          "text": "nth_element()",
+          "answer": "Partially sorts the given range making sure that it is partitioned by the given element."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "binary-search",
+      "title": "Binary Search Operations (on sorted ranges)",
+      "link": "http://en.cppreference.com/w/cpp/algorithm#Binary_search_operations_.28on_sorted_ranges.29",
+      "questions": [
+        {
+          "id": "binary-search-lower_bound",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/lower_bound",
+          "text": "lower_bound()",
+          "answer": "Returns an iterator to the first element not less than the given value."
+        },
+        {
+          "id": "binary-search-upper_bound",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/upper_bound",
+          "text": "upper_bound()",
+          "answer": "Returns an iterator to the first element greater than a certain value."
+        },
+        {
+          "id": "binary-search-binary_search",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/binary_search",
+          "text": "binary_search()",
+          "answer": "Determines if an element exists in a certain range."
+        },
+        {
+          "id": "binary-search-equal_range",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/equal_range",
+          "text": "equal_range()",
+          "answer": "Returns a range of elements matching a specific key."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "set-operations",
+      "title": "Set operations (on sorted ranges)",
+      "link": "http://en.cppreference.com/w/cpp/algorithm#Set_operations_.28on_sorted_ranges.29",
+      "questions": [
+        {
+          "id": "set-operations-merge",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/merge",
+          "text": "merge()",
+          "answer": "Merges two sorted ranges."
+        },
+        {
+          "id": "set-operations-inplace_merge",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/inplace_merge",
+          "text": "inplace_merge()",
+          "answer": "merges two ordered ranges in-place."
+        },
+        {
+          "id": "set-operations-includes",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/includes",
+          "text": "includes()",
+          "answer": "Returns true if one set is a subset of another."
+        },
+        {
+          "id": "set-operations-set_difference",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/set_difference",
+          "text": "set_difference()",
+          "answer": "Computes the difference between two sets."
+        },
+        {
+          "id": "set-operations-set_intersection",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/set_intersection",
+          "text": "set_intersection()",
+          "answer": "Computes the intersection of two sets."
+        },
+        {
+          "id": "set-operations-set_symmetric_difference",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/set_symmetric_difference",
+          "text": "set_symmetric_difference()",
+          "answer": "Computes the symmetric difference between two sets."
+        },
+        {
+          "id": "set-operations-set_union",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/set_union",
+          "text": "set_union()",
+          "answer": "Computes the union of two sets."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "heap-operations",
+      "title": "Heap Operations",
+      "link": "http://en.cppreference.com/w/cpp/algorithm#Heap_operations",
+      "questions": [
+        {
+          "id": "heap-operations-is_heap",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/is_heap",
+          "text": "is_heap()",
+          "answer": "Checks if the given range is a max heap."
+        },
+        {
+          "id": "heap-operations-is_heap_until",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/is_heap_until",
+          "text": "is_heap_until()",
+          "answer": "Finds the largest subrange that is a max heap."
+        },
+        {
+          "id": "heap-operations-make_heap",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/make_heap",
+          "text": "make_heap()",
+          "answer": "Creates a max heap out of a range of elements."
+        },
+        {
+          "id": "heap-operations-push_heap",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/push_heap",
+          "text": "push_heap()",
+          "answer": "Adds an element to a max heap."
+        },
+        {
+          "id": "heap-operations-pop_heap",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/pop_heap",
+          "text": "pop_heap()",
+          "answer": "Removes the largest element from a max heap."
+        },
+        {
+          "id": "heap-operations-sort_heap",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/sort_heap",
+          "text": "sort_heap()",
+          "answer": "Turns a max heap into a range of elements sorted in ascending order."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "min-max-operations",
+      "title": "Minimum/maximum operations",
+      "link": "http://en.cppreference.com/w/cpp/algorithm#Minimum.2Fmaximum_operations",
+      "questions": [
+        {
+          "id": "min-max-operations-max",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/max",
+          "text": "max()",
+          "answer": "Returns the greater of the given values."
+        },
+        {
+          "id": "min-max-operations-max_element",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/max_element",
+          "text": "max_element()",
+          "answer": "Returns the largest element in a range."
+        },
+        {
+          "id": "min-max-operations-min",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/min",
+          "text": "min()",
+          "answer": "Returns the smaller of the given values."
+        },
+        {
+          "id": "min-max-operations-min_element",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/min_element",
+          "text": "min_element()",
+          "answer": "Returns the smallest element in a range."
+        },
+        {
+          "id": "min-max-operations-minmax",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/minmax",
+          "text": "minmax()",
+          "answer": "Returns the smaller and larger of two elements."
+        },
+        {
+          "id": "min-max-operations-minmax_element",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/minmax_element",
+          "text": "minmax_element()",
+          "answer": "Returns the smallest and the largest elements in a range."
+        },
+        {
+          "id": "min-max-operations-clamp",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/clamp",
+          "text": "clamp()",
+          "answer": "Clamps a value between a pair of boundary values."
+        },
+        {
+          "id": "min-max-operations-lexicographical_compare",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/lexicographical_compare",
+          "text": "lexicographical_compare()",
+          "answer": "Returns true if one range is lexicographically less than another."
+        },
+        {
+          "id": "min-max-operations-is_permutation",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/is_permutation",
+          "text": "is_permutation()",
+          "answer": "Determines if a sequence is a permutation of another sequence."
+        },
+        {
+          "id": "min-max-operations-next_permutation",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/next_permutation",
+          "text": "next_permutation()",
+          "answer": "Generates the next greater lexicographic permutation of a range of elements."
+        },
+        {
+          "id": "min-max-operations-prev_permutation",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/prev_permutation",
+          "text": "prev_permutation()",
+          "answer": "Generates the next smaller lexicographic permutation of a range of elements."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "numeric-operations",
+      "title": "Numeric operations",
+      "link": "http://en.cppreference.com/w/cpp/algorithm#Numeric_operations",
+      "questions": [
+        {
+          "id": "numeric-operations-iota",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/iota",
+          "text": "iota()",
+          "answer": "Fills a range with successive increments of the starting value."
+        },
+        {
+          "id": "numeric-operations-accumulate",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/accumulate",
+          "text": "accumulate()",
+          "answer": "Sums up a range of elements."
+        },
+        {
+          "id": "numeric-operations-inner_product",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/inner_product",
+          "text": "inner_product()",
+          "answer": "Computes the inner product of two ranges of elements."
+        },
+        {
+          "id": "numeric-operations-adjacent_difference",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/adjacent_difference",
+          "text": "adjacent_difference()",
+          "answer": "Computes the differences between adjacent elements in a range."
+        },
+        {
+          "id": "numeric-operations-partial_sum",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/partial_sum",
+          "text": "partial_sum()",
+          "answer": "Computes the partial sum of a range of elements."
+        },
+        {
+          "id": "numeric-operations-reduce",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/reduce",
+          "text": "reduce()",
+          "answer": "Similar to std::accumulate(), except out of order."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "operations-on-uninitialized-memory",
+      "title": "Operations on uninitialized memory",
+      "link": "http://en.cppreference.com/w/cpp/algorithm#Operations_on_uninitialized_memory",
+      "questions": [
+        {
+          "id": "operations-on-uninitialized-memory-uninitialized_copy",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/uninitialized_copy",
+          "text": "uninitialized_copy()",
+          "answer": "Copies a range of objects to an uninitialized area of memory."
+        },
+        {
+          "id": "operations-on-uninitialized-memory-uninitialized_copy_n",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/uninitialized_copy_n",
+          "text": "uninitialized_copy_n()",
+          "answer": "Copies a number of objects to an uninitialized area of memory."
+        },
+        {
+          "id": "operations-on-uninitialized-memory-uninitialized_fill",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/uninitialized_fill",
+          "text": "uninitialized_fill()",
+          "answer": "Copies an object to an uninitialized area of memory, defined by a range."
+        },
+        {
+          "id": "operations-on-uninitialized-memory-uninitialized_fill_n",
+          "link": "http://en.cppreference.com/w/cpp/algorithm/uninitialized_fill",
+          "text": "uninitialized_fill_n()",
+          "answer": "Copies an object to an uninitialized area of memory, defined by a start and a count."
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    }
+  ]
+}

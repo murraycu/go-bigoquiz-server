@@ -1,0 +1,113 @@
+{
+  "id": "notation",
+  "title": "Notation",
+  "sections": [
+    {
+      "id": "asymptotic-notation",
+      "title": "Asymptotic Notation",
+      "questions": [
+        {
+          "id": "asymptotic-notation-big-theta",
+          "text": "Θ (Big Theta)",
+          "answer": "Tight bound (from above and below)"
+        },
+        {
+          "id": "asymptotic-notation-big-o",
+          "text": "O (Big O)",
+          "answer": "Upper bound"
+        },
+        {
+          "id": "asymptotic-notation-big-omega",
+          "text": "Ω (Big Omega)",
+          "answer": "Lower bound"
+        },
+        {
+          "id": "asymptotic-notation-little-o",
+          "text": "o (Little O)",
+          "answer": "Strict Upper bound"
+        },
+        {
+          "id": "asymptotic-notation-little-omega",
+          "text": "ω (Little Omega)",
+          "answer": "Strict Lower bound"
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    },
+    {
+      "id": "set-notation",
+      "title": "Set Notation",
+      "link": "https://www.mathsisfun.com/sets/symbols.html",
+      "questions": [
+        {
+          "id": "set-notation-union",
+          "text": "∪",
+          "answer": "Union"
+        },
+        {
+          "id": "set-notation-intersection",
+          "text": "∩",
+          "answer": "Intersection"
+        },
+        {
+          "id": "set-notation-has-some-or-all",
+          "text": "⊆",
+          "answer": "Has some or all of"
+        },
+        {
+          "id": "set-notation-has-some",
+          "text": "⊂",
+          "answer": "Has some of"
+        },
+        {
+          "id": "set-notation-not-a-subset",
+          "text": "⊄",
+          "answer": "Not a subset of"
+        },
+        {
+          "id": "set-notation-superset",
+          "text": "⊇",
+          "answer": "Superset"
+        },
+        {
+          "id": "set-notation-proper-superset",
+          "text": "⊃",
+          "answer": "Proper superset"
+        },
+        {
+          "id": "set-notation-not-a-superset",
+          "text": "⊅",
+          "answer": "Not a superset"
+        },
+        {
+          "id": "set-notation-difference",
+          "text": "−",
+          "answer": "Difference"
+        },
+        {
+          "id": "set-notation-element-of",
+          "text": "∈",
+          "answer": "Element of"
+        },
+        {
+          "id": "set-notation-not-element-of",
+          "text": "∉",
+          "answer": "Not element of"
+        },
+        {
+          "id": "set-notation-for-all",
+          "text": "∀",
+          "answer": "For all"
+        },
+        {
+          "id": "set-notation-there-exists",
+          "text": "∃",
+          "answer": "There exists"
+        }
+      ],
+      "answersAsChoices": true,
+      "andReverse": true
+    }
+  ]
+}
