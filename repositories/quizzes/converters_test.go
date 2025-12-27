@@ -66,7 +66,7 @@ func TestConvertDtoQAToDomainQA(t *testing.T) {
 				IsHtml: true,
 			},
 		},
-		Answer: dtoquiz.Text{
+		AnswerDetail: dtoquiz.Text{
 			Text:   "some-text",
 			IsHtml: true,
 		},
@@ -80,8 +80,8 @@ func TestConvertDtoQAToDomainQA(t *testing.T) {
 	assert.Equal(t, dto.Question.Link, result.Question.Link)
 	assert.Equal(t, dto.Question.TextDetail.Text, result.Question.Text.Text)
 	assert.Equal(t, dto.Question.TextDetail.IsHtml, result.Question.Text.IsHtml)
-	assert.Equal(t, dto.Answer.Text, result.Answer.Text)
-	assert.Equal(t, dto.Answer.IsHtml, result.Answer.IsHtml)
+	assert.Equal(t, dto.AnswerDetail.Text, result.Answer.Text)
+	assert.Equal(t, dto.AnswerDetail.IsHtml, result.Answer.IsHtml)
 }
 
 func testQuestions(prefix string) []*dtoquiz.QuestionAndAnswer {
@@ -105,7 +105,7 @@ func testQuestion(prefix string) *dtoquiz.QuestionAndAnswer {
 				IsHtml: true,
 			},
 		},
-		Answer: dtoquiz.Text{
+		AnswerDetail: dtoquiz.Text{
 			Text:   subPrefix + "some-answer-text",
 			IsHtml: true,
 		},
