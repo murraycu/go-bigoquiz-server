@@ -1,9 +1,10 @@
 package quizzes
 
 import (
+	"testing"
+
 	dtoquiz "github.com/murraycu/go-bigoquiz-server/repositories/quizzes/dtos/quiz"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestConvertDtoHasIdAndTitleToDomainHasIdAndTitle(t *testing.T) {
@@ -37,6 +38,23 @@ func TestConvertDtoTextToDomainText(t *testing.T) {
 }
 
 func TestConvertDtoQuestionToDomainQuestion(t *testing.T) {
+	dto := dtoquiz.Question{
+		Id:         "some-id",
+		Link:       "some-link",
+		TextSimple: "some-text",
+	}
+
+	result, err := convertDtoQuestionToDomainQuestion(&dto)
+	assert.Nil(t, err)
+	assert.NotNil(t, result)
+
+	assert.Equal(t, dto.Id, result.Id)
+	assert.Equal(t, dto.Link, result.Link)
+	assert.Equal(t, dto.TextSimple, result.Text.Text)
+	assert.Equal(t, false, result.Text.IsHtml)
+}
+
+func TestConvertDtoHtmlQuestionToDomainQuestion(t *testing.T) {
 	dto := dtoquiz.Question{
 		Id:   "some-id",
 		Link: "some-link",
