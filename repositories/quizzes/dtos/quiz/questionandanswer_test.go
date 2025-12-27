@@ -14,14 +14,14 @@ func TestCreateReverseWithTextDetail(t *testing.T) {
 	var qa QuestionAndAnswer
 	qa.Id = TEST_ID
 	qa.TextDetail.Text = TEST_QUESTION
-	qa.Answer.Text = TEST_ANSWER
+	qa.AnswerDetail.Text = TEST_ANSWER
 
 	reverse := qa.createReverse()
 	assert.NotNil(t, reverse)
 
 	assert.Equal(t, "reverse-"+TEST_ID, reverse.Id)
 	assert.Equal(t, TEST_ANSWER, reverse.TextDetail.Text)
-	assert.Equal(t, TEST_QUESTION, reverse.Answer.Text)
+	assert.Equal(t, TEST_QUESTION, reverse.AnswerDetail.Text)
 }
 
 func TestCreateReverseWithTextSimple(t *testing.T) {
@@ -32,12 +32,12 @@ func TestCreateReverseWithTextSimple(t *testing.T) {
 	var qa QuestionAndAnswer
 	qa.Id = TEST_ID
 	qa.TextSimple = TEST_QUESTION
-	qa.Answer.Text = TEST_ANSWER
+	qa.AnswerDetail.Text = TEST_ANSWER
 
 	reverse := qa.createReverse()
 	assert.NotNil(t, reverse)
 
 	assert.Equal(t, "reverse-"+TEST_ID, reverse.Id)
 	assert.Equal(t, TEST_ANSWER, reverse.TextDetail.Text)
-	assert.Equal(t, TEST_QUESTION, reverse.Answer.Text)
+	assert.Equal(t, TEST_QUESTION, reverse.AnswerDetail.Text)
 }

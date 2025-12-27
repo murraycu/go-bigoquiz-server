@@ -2,20 +2,20 @@ package quiz
 
 type QuestionAndAnswer struct {
 	Question
-	Answer Text `xml:"answer" json:"answer"`
+	AnswerDetail Text `xml:"answerdetail" json:"answerdetail"`
 }
 
 func (self *QuestionAndAnswer) createReverse() *QuestionAndAnswer {
 	var result QuestionAndAnswer
 	result.Id = "reverse-" + self.Id
-	result.TextDetail = self.Answer
+	result.TextDetail = self.AnswerDetail
 
 	if self.TextSimple != "" {
-		result.Answer.Text = self.TextSimple
+		result.AnswerDetail.Text = self.TextSimple
 	} else {
-		result.Answer.Text = self.TextDetail.Text
+		result.AnswerDetail.Text = self.TextDetail.Text
 	}
 
-	result.Answer.IsHtml = false
+	result.AnswerDetail.IsHtml = false
 	return &result
 }
