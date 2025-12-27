@@ -12,9 +12,24 @@ jobs:
     # AppEngine](https://console.cloud.google.com/appengine/versions?serviceId=api&project=bigoquiz).
     environment: production
     runs-on: ubuntu-latest
+
+    # Add "id-token" with the intended permissions.
+    # (Needed by google-github-actions/auth step.)
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+
+      - name: 'Google Cloud Auth'
+        id: 'google-cloud-auth'
+        uses: 'google-github-actions/auth@v3'
+        with:
+          project_id: 'bigoquiz'
+          workload_identity_provider: 'projects/710014864852/locations/global/workloadIdentityPools/github/providers/my-repo'
+          service_account: 'github-deploy-actions@bigoquiz.iam.gserviceaccount.com'
 
       # Write secret config files, for use during the build/deploy, retrieving
       # them from the GitHub Secrets system via environment variables that are
@@ -34,25 +49,10 @@ jobs:
 
       - name: Deploy to App Engine
         id: deploy
-        uses: google-github-actions/deploy-appengine@v0.8.1
+        uses: google-github-actions/deploy-appengine@v3.0.1
         with:
           deliverables: app.yaml
           project_id: bigoquiz
-
-          # This key is stored in GitHub Secrets
-          #
-          # after generating it like so:
-          # (see https://cloud.google.com/iam/docs/creating-managing-service-account-keys
-          # and https://github.com/google-github-actions/deploy-appengine/blob/main/README.md#authorization )
-          # $ gcloud iam service-accounts keys create ~/key.json --iam-account github-deploy-actions@bigoquiz.iam.gserviceaccount.com
-          # $ gcloud projects add-iam-policy-binding bigoquiz --member='serviceAccount:github-deploy-actions@bigoquiz.iam.gserviceaccount.com' --role='roles/appengine.appAdmin'
-          # $ gcloud projects add-iam-policy-binding bigoquiz --member='serviceAccount:github-deploy-actions@bigoquiz.iam.gserviceaccount.com' --role='roles/compute.storageAdmin'
-          # $ gcloud projects add-iam-policy-binding bigoquiz --member='serviceAccount:github-deploy-actions@bigoquiz.iam.gserviceaccount.com' --role='roles/iam.serviceAccountUser'
-          # $ gcloud projects add-iam-policy-binding bigoquiz --member='serviceAccount:github-deploy-actions@bigoquiz.iam.gserviceaccount.com' --role='roles/cloudbuild.builds.editor'
-          #
-          # and (see https://github.com/google-github-actions/deploy-appengine/pull/18 )
-          # $ gcloud projects add-iam-policy-binding bigoquiz --member='serviceAccount:github-deploy-actions@bigoquiz.iam.gserviceaccount.com' --role='roles/storage.objectAdmin'
-          credentials: ${{ secrets.GCP_SA_KEY }}
 
       - name: Show Output
         run: echo ${{ steps.deploy.outputs.url }}
