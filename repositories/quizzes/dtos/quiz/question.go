@@ -8,7 +8,7 @@ type Question struct {
 
 	// TextDetail is an alternative to TextSimple.
 	// Only one of these should be set.
-	TextDetail Text `xml:"text" json:"textDetail,omitempty"`
+	TextDetail Text `xml:"text" json:"textDetail,omitempty,omitzero"`
 
 	// TextSimple is an alternative to TextDetail.
 	// Only one of these should be set.
