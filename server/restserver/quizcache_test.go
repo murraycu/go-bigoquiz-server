@@ -1,12 +1,11 @@
 package restserver
 
 import (
-	"path/filepath"
-	"testing"
-
 	"github.com/murraycu/go-bigoquiz-server/repositories/quizzes"
 	"github.com/murraycu/go-bigoquiz-server/server/restserver/quiz"
 	"github.com/stretchr/testify/assert"
+	"path/filepath"
+	"testing"
 )
 
 func testQuizCache(t *testing.T) *QuizCache {
@@ -112,7 +111,7 @@ func loadRealRestQuizzes(t *testing.T) restQuizMap {
 	assert.Nil(t, err)
 	assert.NotNil(t, quizzesStore)
 
-	quizzes, err := quizzesStore.LoadQuizzes( /*asJson=*/ false /*addReverses=*/, true)
+	quizzes, err := quizzesStore.LoadQuizzes()
 	assert.Nil(t, err)
 	assert.NotNil(t, quizzes)
 

@@ -1,10 +1,9 @@
 package quiz
 
 import (
+	"github.com/stretchr/testify/assert"
 	"path/filepath"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func getQuestionAndAnswer(q *Quiz, questionId string) *QuestionAndAnswer {
@@ -51,7 +50,7 @@ func TestLoadQuizWithBadFilepath(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, absFilePath)
 
-	q, err := LoadQuiz(absFilePath /*asJson=*/, false /*addReverse=*/, true, id)
+	q, err := LoadQuiz(absFilePath, id)
 	assert.NotNil(t, err)
 	assert.Nil(t, q)
 }
@@ -61,7 +60,7 @@ func loadQuiz(t *testing.T, quizId string) *Quiz {
 	assert.Nil(t, err)
 	assert.NotNil(t, absFilePath)
 
-	q, err := LoadQuiz(absFilePath /*asJson=*/, false /*addReverses=*/, true, quizId)
+	q, err := LoadQuiz(absFilePath, quizId)
 	assert.Nil(t, err)
 	assert.NotNil(t, q)
 
