@@ -38,3 +38,6 @@ local_run: build
 	export DATASTORE_EMULATOR_HOST="localhost:8025" ; \
         go run .
 
+stop_datastore_emulator:
+	pkill -f cloud-datastore
+
