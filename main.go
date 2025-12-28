@@ -2,11 +2,13 @@ package main
 
 import (
 	"encoding/gob"
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
+	"slices"
 
 	"cloud.google.com/go/datastore"
 	"github.com/julienschmidt/httprouter"
@@ -21,7 +23,15 @@ import (
 )
 
 func main() {
-	conf, err := config.GenerateConfig()
+	allowedEnvs := []string{"prod", "local"}
+	env := flag.String("env", "prod", fmt.Sprintf("Environment to run in. Possible values: %v", allowedEnvs))
+	flag.Parse()
+	if !slices.Contains(allowedEnvs, *env) {
+		log.Fatalf("Invalid environment name: %v. Allowed values: %v", *env, allowedEnvs)
+		return
+	}
+
+	conf, err := config.GenerateConfig(*env)
 	if err != nil {
 		log.Fatalf("Could not load conf file: %v\n", err)
 		return
@@ -64,7 +74,7 @@ func main() {
 		return
 	}
 
-	loginServer, err := loginserver.NewLoginServer(userSessionStore)
+	loginServer, err := loginserver.NewLoginServer(userSessionStore, conf)
 	if err != nil {
 		log.Fatalf("NewLoginServer failed: %v\n", err)
 		return
@@ -97,7 +107,7 @@ func main() {
 	// Allow Javascript requests from some domains other than the one serving this API.
 	// The browser issue a CORS request before actually issuing the HTTP request.
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{config.BaseUrl},
+		AllowedOrigins:   []string{conf.BaseUrl},
 		AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
 		AllowCredentials: true, // Note: The client needs to specify this too, or cookies won't be sent.
 	})

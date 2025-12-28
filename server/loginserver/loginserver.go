@@ -28,10 +28,13 @@ type LoginServer struct {
 	confOAuthGoogle   *oauth2.Config
 	confOAuthGitHub   *oauth2.Config
 	confOAuthFacebook *oauth2.Config
+
+	config *config.Config
 }
 
-func NewLoginServer(userSessionStore usersessionstore.UserSessionStore) (*LoginServer, error) {
+func NewLoginServer(userSessionStore usersessionstore.UserSessionStore, conf *config.Config) (*LoginServer, error) {
 	result := &LoginServer{}
+	result.config = conf
 
 	var err error
 	result.userDataClient, err = db.NewUserDataRepository()
@@ -46,17 +49,17 @@ func NewLoginServer(userSessionStore usersessionstore.UserSessionStore) (*LoginS
 
 	result.userSessionStore = userSessionStore
 
-	result.confOAuthGoogle, err = config.GenerateGoogleOAuthConfig()
+	result.confOAuthGoogle, err = config.GenerateGoogleOAuthConfig(conf)
 	if err != nil {
 		log.Fatalf("Unable to generate Google OAuth config: %v", err)
 	}
 
-	result.confOAuthGitHub, err = config.GenerateGitHubOAuthConfig()
+	result.confOAuthGitHub, err = config.GenerateGitHubOAuthConfig(conf)
 	if err != nil {
 		log.Fatalf("Unable to generate GitHub OAuth config: %v", err)
 	}
 
-	result.confOAuthFacebook, err = config.GenerateFacebookOAuthConfig()
+	result.confOAuthFacebook, err = config.GenerateFacebookOAuthConfig(conf)
 	if err != nil {
 		log.Fatalf("Unable to generate Facebook OAuth config: %v", err)
 	}
@@ -179,51 +182,51 @@ func (s *LoginServer) checkStateAndGetBody(w http.ResponseWriter, r *http.Reques
 		return nil, nil, false
 	}
 
-	return exchangeAndGetUserBody(w, r, conf, code, url, c)
+	return s.exchangeAndGetUserBody(w, r, conf, code, url, c)
 }
 
-func exchangeAndGetUserBody(w http.ResponseWriter, r *http.Request, conf *oauth2.Config, code string, url string, c context.Context) (*oauth2.Token, []byte, bool) {
+func (s *LoginServer) exchangeAndGetUserBody(w http.ResponseWriter, r *http.Request, conf *oauth2.Config, code string, url string, c context.Context) (*oauth2.Token, []byte, bool) {
 	token, err := conf.Exchange(c, code)
 	if err != nil {
-		loginFailed("config.Exchange() failed", err, w, r)
+		s.loginFailed("config.Exchange() failed", err, w, r)
 		return nil, nil, false
 	}
 
 	if !token.Valid() {
-		loginFailed("loginFailedUrl.Exchange() returned an invalid token", err, w, r)
+		s.loginFailed("loginFailedUrl.Exchange() returned an invalid token", err, w, r)
 		return nil, nil, false
 	}
 
 	client := conf.Client(c, token)
 	infoResponse, err := client.Get(url)
 	if err != nil {
-		loginFailed("client.Get() failed", err, w, r)
+		s.loginFailed("client.Get() failed", err, w, r)
 		return nil, nil, false
 	}
 
 	defer func() {
 		err := infoResponse.Body.Close()
 		if err != nil {
-			loginFailed("Body.Close() failed", err, w, r)
+			s.loginFailed("Body.Close() failed", err, w, r)
 		}
 	}()
 
 	body, err := ioutil.ReadAll(infoResponse.Body)
 	if err != nil {
-		loginFailed("ReadAll(body) failed", err, w, r)
+		s.loginFailed("ReadAll(body) failed", err, w, r)
 		return nil, nil, false
 	}
 
 	return token, body, true
 }
 
-// Called after user info has been successful stored in the database.
+// Called after user info has been successfully stored in the database.
 func (s *LoginServer) storeCookieAndRedirect(r *http.Request, w http.ResponseWriter, c context.Context, strUserId string, token *oauth2.Token) {
 	// Store the token in the cookie
 	// so we can retrieve it from subsequent requests from the browser.
 	session, err := s.userSessionStore.GetSession(r)
 	if err != nil {
-		loginFailed("Could not create new session", err, w, r)
+		s.loginFailed("Could not create new session", err, w, r)
 		return
 	}
 
@@ -231,12 +234,12 @@ func (s *LoginServer) storeCookieAndRedirect(r *http.Request, w http.ResponseWri
 	session.Values[usersessionstore.UserIdSessionKey] = strUserId
 
 	if err := session.Save(r, w); err != nil {
-		loginFailed("Could not save session", err, w, r)
+		s.loginFailed("Could not save session", err, w, r)
 		return
 	}
 
 	// Redirect the user back to a page to show they are logged in:
-	var userProfileUrl = config.BaseUrl + "/user"
+	var userProfileUrl = s.config.BaseUrl + "/user"
 	http.Redirect(w, r, userProfileUrl, http.StatusFound)
 }
 
@@ -366,8 +369,8 @@ func (s *LoginServer) HandleFacebookCallback(w http.ResponseWriter, r *http.Requ
 	s.storeCookieAndRedirect(r, w, c, userId, token)
 }
 
-func loginFailed(message string, err error, w http.ResponseWriter, r *http.Request) {
-	var loginFailedUrl = config.BaseUrl + "/login?failed=true"
+func (s *LoginServer) loginFailed(message string, err error, w http.ResponseWriter, r *http.Request) {
+	var loginFailedUrl = s.config.BaseUrl + "/login?failed=true"
 
 	log.Printf(message+":'%v'\n", err)
 	http.Redirect(w, r, loginFailedUrl, http.StatusTemporaryRedirect)

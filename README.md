@@ -38,11 +38,7 @@ AppEngine](https://console.cloud.google.com/appengine/versions?serviceId=api&pro
 
 ### Running locally
 
-    Change the configuration by applying the patch:
-    $ patch -p1 < ./0001-debugging-Use-localhost.patch
-      (Don't git push this)
-
-    Then start the local server:
+    Start the local server:
     $ make local_run
 
 [1]: https://developers.google.com/appengine

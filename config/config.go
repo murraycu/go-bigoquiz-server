@@ -3,21 +3,16 @@ package config
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"path/filepath"
+
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/facebook"
 	"golang.org/x/oauth2/github"
 	"golang.org/x/oauth2/google"
-	"io/ioutil"
-	"path/filepath"
 )
 
 const (
-	BaseUrl = "https://bigoquiz.com"
-	// When running angular-bigoquiz-client with ng serve: BaseUrl = "http://localhost:4200"
-
-	BaseApiUrl = "https://api.bigoquiz.com"
-	// When running locally: BaseApuUrl = "http://localhost:8080
-
 	PART_URL_LOGIN_CALLBACK_GOOGLE   = "callback-google"
 	PART_URL_LOGIN_CALLBACK_GITHUB   = "callback-github"
 	PART_URL_LOGIN_CALLBACK_FACEBOOK = "callback-facebook"
@@ -55,9 +50,15 @@ const (
  */
 type Config struct {
 	CookieKey string
+
+	// BaseUrl will have a value based on the --env flag, unless it is specified here.
+	BaseUrl string
+
+	// BaseApiUrl will have a value based on the --env flag, unless it is specified here.
+	BaseApiUrl string
 }
 
-func GenerateConfig() (*Config, error) {
+func GenerateConfig(env string) (*Config, error) {
 	b, err := ioutil.ReadFile(configFilename)
 	if err != nil {
 		// log.Errorf("Unable to read config file (%s): %v", configFilename, err)
@@ -68,6 +69,14 @@ func GenerateConfig() (*Config, error) {
 	err = json.Unmarshal(b, &result)
 	if err != nil {
 		return nil, fmt.Errorf("json.Unmarshal failed: %v", err)
+	}
+
+	if env == "local" {
+		result.BaseUrl = "http://localhost:4200"
+		result.BaseApiUrl = "http://localhost:8080"
+	} else {
+		result.BaseUrl = "https://bigoquiz.com"
+		result.BaseApiUrl = "https://api.bigoquiz.com"
 	}
 
 	return &result, nil
@@ -118,12 +127,12 @@ func addSecretsToOAuthConfig(credentialsFilenamePrefix string, config oauth2.Con
 /** Get an oauth2 Config object based on the secret .json file.
  * See googleConfigCredentialsFilename.
  */
-func GenerateGoogleOAuthConfig() (*oauth2.Config, error) {
+func GenerateGoogleOAuthConfig(conf *Config) (*oauth2.Config, error) {
 	config := oauth2.Config{
 		ClientID:     "", // Filled in from secrets
 		ClientSecret: "", // Filled in from secrets
 		Endpoint:     google.Endpoint,
-		RedirectURL:  callbackUrl(PART_URL_LOGIN_CALLBACK_GOOGLE),
+		RedirectURL:  callbackUrl(conf, PART_URL_LOGIN_CALLBACK_GOOGLE),
 		Scopes:       []string{googleCredentialsScopeProfile, googleCredentialsScopeEmail},
 	}
 
@@ -135,19 +144,19 @@ func GenerateGoogleOAuthConfig() (*oauth2.Config, error) {
 	return result, nil
 }
 
-func callbackUrl(suffix string) string {
-	return BaseApiUrl + "/login/" + suffix
+func callbackUrl(conf *Config, suffix string) string {
+	return conf.BaseApiUrl + "/login/" + suffix
 }
 
 /** Get an oauth2 Config object based on the secret .json file.
  * See githubConfigCredentialsFilename.
  */
-func GenerateGitHubOAuthConfig() (*oauth2.Config, error) {
+func GenerateGitHubOAuthConfig(conf *Config) (*oauth2.Config, error) {
 	config := oauth2.Config{
 		ClientID:     "", // Filled in from secrets
 		ClientSecret: "", // Filled in from secrets
 		Endpoint:     github.Endpoint,
-		RedirectURL:  callbackUrl(PART_URL_LOGIN_CALLBACK_GITHUB),
+		RedirectURL:  callbackUrl(conf, PART_URL_LOGIN_CALLBACK_GITHUB),
 		Scopes:       []string{githubCredentialsScopeUser, githubCredentialsScopeEmail},
 	}
 
@@ -157,12 +166,12 @@ func GenerateGitHubOAuthConfig() (*oauth2.Config, error) {
 /** Get an oauth2 Config object based on the secret .json file.
  * See githubConfigCredentialsFilename.
  */
-func GenerateFacebookOAuthConfig() (*oauth2.Config, error) {
+func GenerateFacebookOAuthConfig(conf *Config) (*oauth2.Config, error) {
 	config := oauth2.Config{
 		ClientID:     "", // Filled in from secrets
 		ClientSecret: "", // Filled in from secrets
 		Endpoint:     facebook.Endpoint,
-		RedirectURL:  callbackUrl(PART_URL_LOGIN_CALLBACK_FACEBOOK),
+		RedirectURL:  callbackUrl(conf, PART_URL_LOGIN_CALLBACK_FACEBOOK),
 		Scopes:       []string{facebookCredentialsScopePublicProfile, facebookCredentialsScopeEmail},
 	}
 
