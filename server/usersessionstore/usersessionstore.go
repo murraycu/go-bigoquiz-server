@@ -13,13 +13,18 @@ const OAuthTokenSessionKey = "oauth_token"
 const DefaultSessionID = "default"
 const UserIdSessionKey = "id" // A generic user ID, not a google user ID.
 
-type UserSessionStore struct {
+type UserSessionStore interface {
+	GetSession(r *http.Request) (*sessions.Session, error)
+	GetProfileFromSession(r *http.Request) (string, *oauth2.Token, error)
+}
+
+type UserSessionStoreImpl struct {
 	// Session cookie store.
 	store *sessions.CookieStore
 }
 
-func NewUserSessionStore(cookieKey string) (*UserSessionStore, error) {
-	result := &UserSessionStore{}
+func NewUserSessionStore(cookieKey string) (UserSessionStore, error) {
+	result := &UserSessionStoreImpl{}
 
 	// Create the session cookie store,
 	// using the secret key from the configuration file.
@@ -30,7 +35,7 @@ func NewUserSessionStore(cookieKey string) (*UserSessionStore, error) {
 	return result, nil
 }
 
-func (s *UserSessionStore) GetSession(r *http.Request) (*sessions.Session, error) {
+func (s *UserSessionStoreImpl) GetSession(r *http.Request) (*sessions.Session, error) {
 	result, err := s.store.Get(r, DefaultSessionID)
 	if err != nil {
 		return nil, fmt.Errorf("store.Get() failed: %v", err)
@@ -39,7 +44,7 @@ func (s *UserSessionStore) GetSession(r *http.Request) (*sessions.Session, error
 	return result, nil
 }
 
-func (s *UserSessionStore) GetProfileFromSession(r *http.Request) (string, *oauth2.Token, error) {
+func (s *UserSessionStoreImpl) GetProfileFromSession(r *http.Request) (string, *oauth2.Token, error) {
 	session, err := s.GetSession(r)
 	if err != nil {
 		return "", nil, fmt.Errorf("GetProfileFromSession(): store.Get() failed: %v", err)

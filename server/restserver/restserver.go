@@ -37,10 +37,10 @@ type RestServer struct {
 	userDataClient db.UserDataRepository
 
 	// Session cookie store.
-	userSessionStore *usersessionstore.UserSessionStore
+	userSessionStore usersessionstore.UserSessionStore
 }
 
-func NewRestServer(quizzesStore *quizzes.QuizzesRepository, userSessionStore *usersessionstore.UserSessionStore) (*RestServer, error) {
+func NewRestServer(quizzesStore *quizzes.QuizzesRepository, userSessionStore usersessionstore.UserSessionStore) (*RestServer, error) {
 	result := &RestServer{}
 
 	var err error

@@ -23,14 +23,14 @@ type LoginServer struct {
 	oAuthStateClient *db.OAuthStateDataRepository
 
 	// Session cookie store.
-	userSessionStore *usersessionstore.UserSessionStore
+	userSessionStore usersessionstore.UserSessionStore
 
 	confOAuthGoogle   *oauth2.Config
 	confOAuthGitHub   *oauth2.Config
 	confOAuthFacebook *oauth2.Config
 }
 
-func NewLoginServer(userSessionStore *usersessionstore.UserSessionStore) (*LoginServer, error) {
+func NewLoginServer(userSessionStore usersessionstore.UserSessionStore) (*LoginServer, error) {
 	result := &LoginServer{}
 
 	var err error
