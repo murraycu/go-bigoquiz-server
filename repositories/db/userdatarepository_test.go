@@ -102,6 +102,9 @@ func storeUserStatsInStore(t *testing.T, c context.Context, userDataClient UserD
 	err := userDataClient.StoreUserStats(c, userId, &stats)
 	assert.Nil(t, err)
 
+	// This seems necessary for the datastore emulator to let us read the data back reliably.
+	time.Sleep(time.Millisecond * datastoreDelayMs)
+
 	return &stats
 }
 
@@ -122,6 +125,9 @@ func createGoogleUserInStore(t *testing.T, c context.Context, userDataClient Use
 	assert.Nil(t, err)
 	assert.NotNil(t, userId)
 
+	// This seems necessary for the datastore emulator to let us read the data back reliably.
+	time.Sleep(time.Millisecond * datastoreDelayMs)
+
 	return userId
 }
 
@@ -141,6 +147,9 @@ func createGitHubUserInStore(t *testing.T, c context.Context, userDataClient Use
 	assert.Nil(t, err)
 	assert.NotNil(t, userId)
 
+	// This seems necessary for the datastore emulator to let us read the data back reliably.
+	time.Sleep(time.Millisecond * datastoreDelayMs)
+
 	return userId
 }
 
@@ -159,6 +168,9 @@ func createFacebookUserInStore(t *testing.T, c context.Context, userDataClient U
 	userId, err := userDataClient.StoreFacebookLoginInUserProfile(c, userInfo, "", &token)
 	assert.Nil(t, err)
 	assert.NotNil(t, userId)
+
+	// This seems necessary for the datastore emulator to let us read the data back reliably.
+	time.Sleep(time.Millisecond * datastoreDelayMs)
 
 	return userId
 }
@@ -309,9 +321,6 @@ func TestNewUserDataRepositoryStoreAndDeleteStatsForSection(t *testing.T) {
 	time.Sleep(time.Millisecond * datastoreDelayMs)
 
 	stats := storeUserStatsInStore(t, c, userDataClient, userId)
-
-	// This seems necessary for the datastore emulator to let us read the data back reliably.
-	time.Sleep(time.Millisecond * datastoreDelayMs)
 
 	err = userDataClient.DeleteUserStatsForQuiz(c, userId, stats.QuizId)
 	assert.Nil(t, err)
