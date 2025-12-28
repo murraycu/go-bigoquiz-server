@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"github.com/murraycu/go-bigoquiz-server/config"
+	"github.com/murraycu/go-bigoquiz-server/repositories/db"
 	"github.com/murraycu/go-bigoquiz-server/repositories/quizzes"
 	"github.com/murraycu/go-bigoquiz-server/server/loginserver"
 	"github.com/murraycu/go-bigoquiz-server/server/restserver"

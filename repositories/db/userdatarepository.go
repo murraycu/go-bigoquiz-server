@@ -1,9 +1,10 @@
 package db
 
 import (
-	"cloud.google.com/go/datastore"
 	"context"
 	"fmt"
+
+	"cloud.google.com/go/datastore"
 	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
 	dtouser "github.com/murraycu/go-bigoquiz-server/repositories/db/dtos/user"
 	"github.com/murraycu/go-bigoquiz-server/server/loginserver/oauthparsers"
@@ -18,12 +19,24 @@ const (
 	DB_KIND_OAUTH_STATE = "OAuthState"
 )
 
-type UserDataRepository struct {
+type UserDataRepository interface {
+	GetUserProfileById(c context.Context, strUserId string) (*domainuser.Profile, error)
+	GetUserStats(c context.Context, strUserId string) (map[string]*domainuser.Stats, error)
+	GetUserStatsForQuiz(c context.Context, strUserId string, quizId string) (map[string]*domainuser.Stats, error)
+	GetUserStatsForSection(c context.Context, strUserId string, quizId string, sectionId string) (*domainuser.Stats, error)
+	StoreUserStats(c context.Context, userID string, stats *domainuser.Stats) error
+	DeleteUserStatsForQuiz(c context.Context, strUserId string, quizId string) error
+	StoreGoogleLoginInUserProfile(c context.Context, userInfo oauthparsers.GoogleUserInfo, strUserId string, token *oauth2.Token) (string, error)
+	StoreGitHubLoginInUserProfile(c context.Context, userInfo oauthparsers.GitHubUserInfo, strUserId string, token *oauth2.Token) (string, error)
+	StoreFacebookLoginInUserProfile(c context.Context, userInfo oauthparsers.FacebookUserInfo, strUserId string, token *oauth2.Token) (string, error)
+}
+
+type UserDataRepositoryImpl struct {
 	client *datastore.Client
 }
 
-func NewUserDataRepository() (*UserDataRepository, error) {
-	result := &UserDataRepository{}
+func NewUserDataRepository() (UserDataRepository, error) {
+	result := &UserDataRepositoryImpl{}
 
 	c := context.Background()
 	var err error
@@ -35,7 +48,7 @@ func NewUserDataRepository() (*UserDataRepository, error) {
 	return result, nil
 }
 
-func (db *UserDataRepository) getProfileFromDbQuery(c context.Context, q *datastore.Query) (*datastore.Key, *dtouser.Profile, error) {
+func (db *UserDataRepositoryImpl) getProfileFromDbQuery(c context.Context, q *datastore.Query) (*datastore.Key, *dtouser.Profile, error) {
 	iter := db.client.Run(c, q)
 	if iter == nil {
 		return nil, nil, fmt.Errorf("datastore query for googleId failed")
@@ -54,7 +67,7 @@ func (db *UserDataRepository) getProfileFromDbQuery(c context.Context, q *datast
 	return userId, &profile, nil
 }
 
-func (db *UserDataRepository) getProfileFromDbByGitHubID(c context.Context, id int) (*datastore.Key, *dtouser.Profile, error) {
+func (db *UserDataRepositoryImpl) getProfileFromDbByGitHubID(c context.Context, id int) (*datastore.Key, *dtouser.Profile, error) {
 	q := datastore.NewQuery(DB_KIND_PROFILE).
 		Filter("githubId =", id).
 		Limit(1)
@@ -64,7 +77,7 @@ func (db *UserDataRepository) getProfileFromDbByGitHubID(c context.Context, id i
 // Create, or update (if strUsedId is not empty) a user profile,
 // using the provided Google login data.
 // Returns the user ID.
-func (db *UserDataRepository) StoreGitHubLoginInUserProfile(c context.Context, userInfo oauthparsers.GitHubUserInfo, strUserId string, token *oauth2.Token) (string, error) {
+func (db *UserDataRepositoryImpl) StoreGitHubLoginInUserProfile(c context.Context, userInfo oauthparsers.GitHubUserInfo, strUserId string, token *oauth2.Token) (string, error) {
 	userIdFound, profile, err := db.getProfileFromDbByGitHubID(c, userInfo.Id)
 	if err != nil {
 		// An unexpected error.
@@ -114,7 +127,7 @@ func (db *UserDataRepository) StoreGitHubLoginInUserProfile(c context.Context, u
 	return userId.Encode(), nil
 }
 
-func (db *UserDataRepository) getProfileFromDbByFacebookID(c context.Context, id string) (*datastore.Key, *dtouser.Profile, error) {
+func (db *UserDataRepositoryImpl) getProfileFromDbByFacebookID(c context.Context, id string) (*datastore.Key, *dtouser.Profile, error) {
 	q := datastore.NewQuery(DB_KIND_PROFILE).
 		Filter("facebookId =", id).
 		Limit(1)
@@ -124,7 +137,7 @@ func (db *UserDataRepository) getProfileFromDbByFacebookID(c context.Context, id
 // Create, or update (if strUsedId is not empty) a user profile,
 // using the provided Facebook login data.
 // Returns the user ID.
-func (db *UserDataRepository) StoreFacebookLoginInUserProfile(c context.Context, userInfo oauthparsers.FacebookUserInfo, strUserId string, token *oauth2.Token) (string, error) {
+func (db *UserDataRepositoryImpl) StoreFacebookLoginInUserProfile(c context.Context, userInfo oauthparsers.FacebookUserInfo, strUserId string, token *oauth2.Token) (string, error) {
 	userIdFound, profile, err := db.getProfileFromDbByFacebookID(c, userInfo.Id)
 	if err != nil {
 		// An unexpected error.
@@ -174,14 +187,14 @@ func (db *UserDataRepository) StoreFacebookLoginInUserProfile(c context.Context,
 	return userId.Encode(), nil
 }
 
-func (db *UserDataRepository) getProfileFromDbByGoogleID(c context.Context, sub string) (*datastore.Key, *dtouser.Profile, error) {
+func (db *UserDataRepositoryImpl) getProfileFromDbByGoogleID(c context.Context, sub string) (*datastore.Key, *dtouser.Profile, error) {
 	q := datastore.NewQuery(DB_KIND_PROFILE).
 		Filter("googleId =", sub).
 		Limit(1)
 	return db.getProfileFromDbQuery(c, q)
 }
 
-func (db *UserDataRepository) getProfileFromDbByUserID(c context.Context, userId *datastore.Key) (*dtouser.Profile, error) {
+func (db *UserDataRepositoryImpl) getProfileFromDbByUserID(c context.Context, userId *datastore.Key) (*dtouser.Profile, error) {
 	var profile dtouser.Profile
 	err := db.client.Get(c, userId, &profile)
 	if err != nil {
@@ -199,7 +212,7 @@ func (db *UserDataRepository) getProfileFromDbByUserID(c context.Context, userId
 // TODO: Make this function generic, parameterizing on GoogleUserInfo/GithubUserInfo,
 // if Go ever has generics.
 // Get the UserProfile via the GoogleID, adding it if necessary.
-func (db *UserDataRepository) StoreGoogleLoginInUserProfile(c context.Context, userInfo oauthparsers.GoogleUserInfo, strUserId string, token *oauth2.Token) (string, error) {
+func (db *UserDataRepositoryImpl) StoreGoogleLoginInUserProfile(c context.Context, userInfo oauthparsers.GoogleUserInfo, strUserId string, token *oauth2.Token) (string, error) {
 	userIdFound, profile, err := db.getProfileFromDbByGoogleID(c, userInfo.Sub)
 	if err != nil {
 		// An unexpected error.
@@ -249,7 +262,7 @@ func (db *UserDataRepository) StoreGoogleLoginInUserProfile(c context.Context, u
 	return userId.Encode(), nil
 }
 
-func (db *UserDataRepository) GetUserProfileById(c context.Context, strUserId string) (*domainuser.Profile, error) {
+func (db *UserDataRepositoryImpl) GetUserProfileById(c context.Context, strUserId string) (*domainuser.Profile, error) {
 	userId, err := datastore.DecodeKey(strUserId)
 	if err != nil {
 		return nil, fmt.Errorf("datastore.DecodeKey() failed: %v", err)
@@ -302,7 +315,7 @@ func createCombinedUserStatsWithoutQuestionHistories(self *domainuser.Stats, sta
 /** Get a map of stats by quiz ID, for all quizzes that have ever been used, from the database.
  * userId may be nil.
  */
-func (db *UserDataRepository) GetUserStats(c context.Context, strUserId string) (map[string]*domainuser.Stats, error) {
+func (db *UserDataRepositoryImpl) GetUserStats(c context.Context, strUserId string) (map[string]*domainuser.Stats, error) {
 	userId, err := datastore.DecodeKey(strUserId)
 	if err != nil {
 		return nil, fmt.Errorf("datastore.DecodeKey() failed: %v", err)
@@ -363,7 +376,7 @@ func (db *UserDataRepository) GetUserStats(c context.Context, strUserId string) 
  * userId may be nil.
  * quizId may not be nil.
  */
-func (db *UserDataRepository) GetUserStatsForQuiz(c context.Context, strUserId string, quizId string) (map[string]*domainuser.Stats, error) {
+func (db *UserDataRepositoryImpl) GetUserStatsForQuiz(c context.Context, strUserId string, quizId string) (map[string]*domainuser.Stats, error) {
 	userId, err := datastore.DecodeKey(strUserId)
 	if err != nil {
 		return nil, fmt.Errorf("datastore.DecodeKey() failed: %v", err)
@@ -417,7 +430,7 @@ func (db *UserDataRepository) GetUserStatsForQuiz(c context.Context, strUserId s
 }
 
 // Get the stats for a specific section ID, from the database.
-func (db *UserDataRepository) GetUserStatsForSection(c context.Context, strUserId string, quizId string, sectionId string) (*domainuser.Stats, error) {
+func (db *UserDataRepositoryImpl) GetUserStatsForSection(c context.Context, strUserId string, quizId string, sectionId string) (*domainuser.Stats, error) {
 	stats, err := db.getUserStatsForSectionAsDto(c, quizId, sectionId, strUserId)
 	if err != nil {
 		return nil, fmt.Errorf("getUserStatsForSectionAsDto() failed: %v", err)
@@ -432,7 +445,7 @@ func (db *UserDataRepository) GetUserStatsForSection(c context.Context, strUserI
 	return convertDtoStatsToDomainStats(stats), nil
 }
 
-func (db *UserDataRepository) getUserStatsForSectionAsDto(c context.Context, quizId string, sectionId string, strUserId string) (*dtouser.Stats, error) {
+func (db *UserDataRepositoryImpl) getUserStatsForSectionAsDto(c context.Context, quizId string, sectionId string, strUserId string) (*dtouser.Stats, error) {
 	userId, err := datastore.DecodeKey(strUserId)
 	if err != nil {
 		return nil, fmt.Errorf("datastore.DecodeKey() failed: %v", err)
@@ -470,7 +483,7 @@ func (db *UserDataRepository) getUserStatsForSectionAsDto(c context.Context, qui
 	return &stats, nil
 }
 
-func (db *UserDataRepository) StoreUserStats(c context.Context, userID string, stats *domainuser.Stats) error {
+func (db *UserDataRepositoryImpl) StoreUserStats(c context.Context, userID string, stats *domainuser.Stats) error {
 	if len(stats.QuizId) == 0 {
 		return fmt.Errorf("StoreUserStats(): QuizId is empty")
 	}
@@ -518,17 +531,17 @@ func (db *UserDataRepository) StoreUserStats(c context.Context, userID string, s
 	return nil
 }
 
-func (db *UserDataRepository) getQueryForUserStats(userId *datastore.Key) *datastore.Query {
+func (db *UserDataRepositoryImpl) getQueryForUserStats(userId *datastore.Key) *datastore.Query {
 	return datastore.NewQuery(DB_KIND_USER_STATS).
 		Filter("userId =", userId)
 }
 
-func (db *UserDataRepository) getQueryForUserStatsForQuiz(userId *datastore.Key, quizId string) *datastore.Query {
+func (db *UserDataRepositoryImpl) getQueryForUserStatsForQuiz(userId *datastore.Key, quizId string) *datastore.Query {
 	return db.getQueryForUserStats(userId).
 		Filter("quizId = ", quizId)
 }
 
-func (db *UserDataRepository) DeleteUserStatsForQuiz(c context.Context, strUserId string, quizId string) error {
+func (db *UserDataRepositoryImpl) DeleteUserStatsForQuiz(c context.Context, strUserId string, quizId string) error {
 	userId, err := datastore.DecodeKey(strUserId)
 	if err != nil {
 		return fmt.Errorf("datastore.DecodeKey() failed: %v", err)
@@ -581,7 +594,7 @@ func (db *UserDataRepository) DeleteUserStatsForQuiz(c context.Context, strUserI
 	return nil
 }
 
-func (db *UserDataRepository) updateProfileFromGoogleUserInfo(profile *dtouser.Profile, userInfo *oauthparsers.GoogleUserInfo, token *oauth2.Token) error {
+func (db *UserDataRepositoryImpl) updateProfileFromGoogleUserInfo(profile *dtouser.Profile, userInfo *oauthparsers.GoogleUserInfo, token *oauth2.Token) error {
 	if profile == nil {
 		return fmt.Errorf("profile is nil")
 	}
@@ -607,7 +620,7 @@ func (db *UserDataRepository) updateProfileFromGoogleUserInfo(profile *dtouser.P
 	return nil
 }
 
-func (db *UserDataRepository) updateProfileFromGitHubUserInfo(profile *dtouser.Profile, userInfo *oauthparsers.GitHubUserInfo, token *oauth2.Token) error {
+func (db *UserDataRepositoryImpl) updateProfileFromGitHubUserInfo(profile *dtouser.Profile, userInfo *oauthparsers.GitHubUserInfo, token *oauth2.Token) error {
 	if profile == nil {
 		return fmt.Errorf("profile is nil")
 	}
@@ -629,7 +642,7 @@ func (db *UserDataRepository) updateProfileFromGitHubUserInfo(profile *dtouser.P
 	return nil
 }
 
-func (db *UserDataRepository) updateProfileFromFacebookUserInfo(profile *dtouser.Profile, userInfo *oauthparsers.FacebookUserInfo, token *oauth2.Token) error {
+func (db *UserDataRepositoryImpl) updateProfileFromFacebookUserInfo(profile *dtouser.Profile, userInfo *oauthparsers.FacebookUserInfo, token *oauth2.Token) error {
 	if profile == nil {
 		return fmt.Errorf("profile is nil")
 	}
