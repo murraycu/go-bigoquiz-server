@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/murraycu/go-bigoquiz-server/repositories/db"
 	"github.com/murraycu/go-bigoquiz-server/repositories/quizzes"
 	"github.com/murraycu/go-bigoquiz-server/server/usersessionstore"
 	"github.com/stretchr/testify/assert"
@@ -14,11 +15,14 @@ func TestNewRestServer(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping test which requires more setup.")
 	}
-
 	// TODO: Mock the UserSessionStore.
 	userSessionStore, err := usersessionstore.NewUserSessionStore("some-test-value")
 	assert.Nil(t, err)
 	assert.NotNil(t, userSessionStore)
+
+	userDataClient, err := db.NewUserDataRepository()
+	assert.Nil(t, err)
+	assert.NotNil(t, userDataClient)
 
 	// TODO: Mock the QuizzesRepository.
 	directoryFilepath, err := filepath.Abs("../../quizzes")
@@ -31,7 +35,7 @@ func TestNewRestServer(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, quizzesStore)
 
-	restServer, err := NewRestServer(quizzesStore, userSessionStore)
+	restServer, err := NewRestServer(quizzesStore, userSessionStore, userDataClient)
 	assert.Nil(t, err)
 	assert.NotNil(t, restServer)
 
