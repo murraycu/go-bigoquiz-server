@@ -11,7 +11,7 @@ import (
 	"golang.org/x/oauth2"
 )
 
-const datastoreDelayMs = 500
+const datastoreDelayMs = 1000
 
 func TestNewUserDataRepositoryInstantiate(t *testing.T) {
 	if testing.Short() {
@@ -305,18 +305,18 @@ func TestNewUserDataRepositoryStoreAndDeleteStatsForSection(t *testing.T) {
 
 	userId := createGoogleUserInStore(t, c, userDataClient)
 
-	// This seems to be necessary for the datastore emulator to let us read the data back reliably.
+	// This seems necessary for the datastore emulator to let us read the data back reliably.
 	time.Sleep(time.Millisecond * datastoreDelayMs)
 
 	stats := storeUserStatsInStore(t, c, userDataClient, userId)
 
-	// This seems to be necessary for the datastore emulator to let us read the data back reliably.
+	// This seems necessary for the datastore emulator to let us read the data back reliably.
 	time.Sleep(time.Millisecond * datastoreDelayMs)
 
 	err = userDataClient.DeleteUserStatsForQuiz(c, userId, stats.QuizId)
 	assert.Nil(t, err)
 
-	// This seems to be necessary for the datastore emulator to let us read the data back reliably.
+	// This seems necessary for the datastore emulator to let us read the data back reliably.
 	time.Sleep(time.Millisecond * datastoreDelayMs)
 
 	result, err := userDataClient.GetUserStatsForSection(c, userId, stats.QuizId, stats.SectionId)
@@ -349,7 +349,7 @@ func TestNewUserDataRepositoryUpdateStatsCorrectly(t *testing.T) {
 	err = userDataClient.StoreUserStats(c, userId, sectionStats)
 	assert.Nil(t, err)
 
-	// This seems to be necessary for the datastore emulator to let us read the data back reliably.
+	// This seems necessary for the datastore emulator to let us read the data back reliably.
 	time.Sleep(time.Millisecond * datastoreDelayMs)
 
 	result, err := userDataClient.GetUserStatsForSection(c, userId, quizId, sectionId)
@@ -369,7 +369,7 @@ func TestNewUserDataRepositoryUpdateStatsCorrectly(t *testing.T) {
 	err = userDataClient.StoreUserStats(c, userId, sectionStats)
 	assert.Nil(t, err)
 
-	// This seems to be necessary for the datastore emulator to let us read the data back reliably.
+	// This seems necessary for the datastore emulator to let us read the data back reliably.
 	time.Sleep(time.Millisecond * datastoreDelayMs)
 
 	result, err = userDataClient.GetUserStatsForSection(c, userId, quizId, sectionId)
