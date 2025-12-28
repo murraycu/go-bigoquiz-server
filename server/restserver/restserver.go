@@ -3,13 +3,14 @@ package restserver
 import (
 	"encoding/json"
 	"fmt"
+	"log"
+	"net/http"
+	"sort"
+
 	"github.com/murraycu/go-bigoquiz-server/repositories/db"
 	"github.com/murraycu/go-bigoquiz-server/repositories/quizzes"
 	restquiz "github.com/murraycu/go-bigoquiz-server/server/restserver/quiz"
 	"github.com/murraycu/go-bigoquiz-server/server/usersessionstore"
-	"log"
-	"net/http"
-	"sort"
 )
 
 const QUERY_PARAM_QUIZ_ID = "quiz-id"
@@ -33,7 +34,7 @@ type RestServer struct {
 	// Easier access to some quiz details.
 	quizCacheMap restQuizCacheMap
 
-	userDataClient *db.UserDataRepository
+	userDataClient db.UserDataRepository
 
 	// Session cookie store.
 	userSessionStore *usersessionstore.UserSessionStore

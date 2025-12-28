@@ -2,12 +2,13 @@ package db
 
 import (
 	"context"
+	"testing"
+	"time"
+
 	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
 	"github.com/murraycu/go-bigoquiz-server/server/loginserver/oauthparsers"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/oauth2"
-	"testing"
-	"time"
 )
 
 const datastoreDelayMs = 500
@@ -77,7 +78,7 @@ func TestNewUserDataRepositoryStoreAndGetUserProfileById(t *testing.T) {
 	assert.Equal(t, userInfo.Name, userProfile.Name)
 }
 
-func storeUserStatsInStore(t *testing.T, c context.Context, userDataClient *UserDataRepository, userId string) *domainuser.Stats {
+func storeUserStatsInStore(t *testing.T, c context.Context, userDataClient UserDataRepository, userId string) *domainuser.Stats {
 	stats := domainuser.Stats{
 		QuizId:    "some-quiz-id",
 		SectionId: "some-section-id",
@@ -105,7 +106,7 @@ func storeUserStatsInStore(t *testing.T, c context.Context, userDataClient *User
 }
 
 // Returns the user ID of the created user.
-func createGoogleUserInStore(t *testing.T, c context.Context, userDataClient *UserDataRepository) string {
+func createGoogleUserInStore(t *testing.T, c context.Context, userDataClient UserDataRepository) string {
 	userInfo := oauthparsers.GoogleUserInfo{
 		Sub:           "some-google-user-id",
 		Email:         "example@example.com",
@@ -125,7 +126,7 @@ func createGoogleUserInStore(t *testing.T, c context.Context, userDataClient *Us
 }
 
 // Returns the user ID of the created user.
-func createGitHubUserInStore(t *testing.T, c context.Context, userDataClient *UserDataRepository) string {
+func createGitHubUserInStore(t *testing.T, c context.Context, userDataClient UserDataRepository) string {
 	userInfo := oauthparsers.GitHubUserInfo{
 		Id:    1234,
 		Email: "example@example.com",
@@ -144,7 +145,7 @@ func createGitHubUserInStore(t *testing.T, c context.Context, userDataClient *Us
 }
 
 // Returns the user ID of the created user.
-func createFacebookUserInStore(t *testing.T, c context.Context, userDataClient *UserDataRepository) string {
+func createFacebookUserInStore(t *testing.T, c context.Context, userDataClient UserDataRepository) string {
 	userInfo := oauthparsers.FacebookUserInfo{
 		Id:    "1234",
 		Email: "example@example.com",

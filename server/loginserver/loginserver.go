@@ -4,21 +4,22 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"math/rand"
+	"net/http"
+	"strconv"
+
 	"github.com/julienschmidt/httprouter"
 	"github.com/murraycu/go-bigoquiz-server/config"
 	"github.com/murraycu/go-bigoquiz-server/repositories/db"
 	oauthparsers2 "github.com/murraycu/go-bigoquiz-server/server/loginserver/oauthparsers"
 	"github.com/murraycu/go-bigoquiz-server/server/usersessionstore"
 	"golang.org/x/oauth2"
-	"io/ioutil"
-	"log"
-	"math/rand"
-	"net/http"
-	"strconv"
 )
 
 type LoginServer struct {
-	userDataClient   *db.UserDataRepository
+	userDataClient   db.UserDataRepository
 	oAuthStateClient *db.OAuthStateDataRepository
 
 	// Session cookie store.
