@@ -1,7 +1,15 @@
 package restserver
 
 import (
+	"context"
+
+	"github.com/gorilla/sessions"
+	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
+	"github.com/murraycu/go-bigoquiz-server/server/loginserver/oauthparsers"
+	"golang.org/x/oauth2"
+
 	"log"
+	"net/http"
 	"path/filepath"
 	"testing"
 
@@ -11,11 +19,84 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+type MockUserSessionStore struct {
+}
+
+func (m MockUserSessionStore) GetSession(r *http.Request) (*sessions.Session, error) {
+	panic("Unimplemented")
+}
+
+func (m MockUserSessionStore) GetProfileFromSession(r *http.Request) (string, *oauth2.Token, error) {
+	panic("Unimplemented")
+}
+
+type MockUserDataRepository struct{}
+
+func (m MockUserDataRepository) GetUserProfileById(c context.Context, strUserId string) (*domainuser.Profile, error) {
+	panic("Unimplemented")
+}
+
+func (m MockUserDataRepository) GetUserStats(c context.Context, strUserId string) (map[string]*domainuser.Stats, error) {
+	panic("Unimplemented")
+}
+
+func (m MockUserDataRepository) GetUserStatsForQuiz(c context.Context, strUserId string, quizId string) (map[string]*domainuser.Stats, error) {
+	panic("Unimplemented")
+}
+
+func (m MockUserDataRepository) GetUserStatsForSection(c context.Context, strUserId string, quizId string, sectionId string) (*domainuser.Stats, error) {
+	panic("Unimplemented")
+}
+
+func (m MockUserDataRepository) StoreUserStats(c context.Context, userID string, stats *domainuser.Stats) error {
+	panic("Unimplemented")
+}
+
+func (m MockUserDataRepository) DeleteUserStatsForQuiz(c context.Context, strUserId string, quizId string) error {
+	panic("Unimplemented")
+}
+
+func (m MockUserDataRepository) StoreGoogleLoginInUserProfile(c context.Context, userInfo oauthparsers.GoogleUserInfo, strUserId string, token *oauth2.Token) (string, error) {
+	panic("Unimplemented")
+}
+
+func (m MockUserDataRepository) StoreGitHubLoginInUserProfile(c context.Context, userInfo oauthparsers.GitHubUserInfo, strUserId string, token *oauth2.Token) (string, error) {
+	panic("Unimplemented")
+}
+
+func (m MockUserDataRepository) StoreFacebookLoginInUserProfile(c context.Context, userInfo oauthparsers.FacebookUserInfo, strUserId string, token *oauth2.Token) (string, error) {
+	panic("Unimplemented")
+}
+
 func TestNewRestServer(t *testing.T) {
+	userSessionStore := &MockUserSessionStore{}
+	userDataRepository := &MockUserDataRepository{}
+
+	// TODO: Mock the QuizzesRepository.
+	directoryFilepath, err := filepath.Abs("../../quizzes")
+	if err != nil {
+		log.Fatalf("Couldn't get absolute filepath for quizzes: %v", err)
+		return
+	}
+
+	quizzesStore, err := quizzes.NewQuizzesRepository(directoryFilepath)
+	assert.Nil(t, err)
+	assert.NotNil(t, quizzesStore)
+
+	restServer, err := NewRestServer(quizzesStore, userSessionStore, userDataRepository)
+	assert.Nil(t, err)
+	assert.NotNil(t, restServer)
+
+	// TODO: Don't use private API.
+	assert.NotEmpty(t, restServer.quizzesListSimple)
+	assert.NotEmpty(t, restServer.quizzesListFull)
+}
+
+func TestNewRestServerWithDataStore(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping test which requires more setup.")
 	}
-	// TODO: Mock the UserSessionStore.
+
 	userSessionStore, err := usersessionstore.NewUserSessionStore("some-test-value")
 	assert.Nil(t, err)
 	assert.NotNil(t, userSessionStore)
