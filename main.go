@@ -1,9 +1,14 @@
 package main
 
 import (
-	"cloud.google.com/go/datastore"
 	"encoding/gob"
 	"fmt"
+	"log"
+	"net/http"
+	"os"
+	"path/filepath"
+
+	"cloud.google.com/go/datastore"
 	"github.com/julienschmidt/httprouter"
 	"github.com/murraycu/go-bigoquiz-server/config"
 	"github.com/murraycu/go-bigoquiz-server/repositories/db"
@@ -13,10 +18,6 @@ import (
 	"github.com/murraycu/go-bigoquiz-server/server/usersessionstore"
 	"github.com/rs/cors"
 	"golang.org/x/oauth2"
-	"log"
-	"net/http"
-	"os"
-	"path/filepath"
 )
 
 func main() {
@@ -52,7 +53,12 @@ func main() {
 		return
 	}
 
-	restServer, err := restserver.NewRestServer(quizzesStore, userSessionStore)
+	userDataClient, err := db.NewUserDataRepository()
+	if err != nil {
+		log.Fatalf("NewUserDataRepository() failed: %v", err)
+	}
+
+	restServer, err := restserver.NewRestServer(quizzesStore, userSessionStore, userDataClient)
 	if err != nil {
 		log.Fatalf("NewRestServer failed: %v\n", err)
 		return

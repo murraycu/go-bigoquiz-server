@@ -40,14 +40,9 @@ type RestServer struct {
 	userSessionStore usersessionstore.UserSessionStore
 }
 
-func NewRestServer(quizzesStore *quizzes.QuizzesRepository, userSessionStore usersessionstore.UserSessionStore) (*RestServer, error) {
+func NewRestServer(quizzesStore *quizzes.QuizzesRepository, userSessionStore usersessionstore.UserSessionStore, userDataRepository db.UserDataRepository) (*RestServer, error) {
 	result := &RestServer{}
-
-	var err error
-	result.userDataClient, err = db.NewUserDataRepository()
-	if err != nil {
-		return nil, fmt.Errorf("NewUserDataRepository() failed: %v", err)
-	}
+	result.userDataClient = userDataRepository
 
 	quizzes, err := quizzesStore.LoadQuizzes()
 	if err != nil {
