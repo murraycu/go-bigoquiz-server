@@ -2,15 +2,16 @@ package restserver
 
 import (
 	"context"
+	"log"
+	"path/filepath"
 
 	"github.com/gorilla/sessions"
+	domainquiz "github.com/murraycu/go-bigoquiz-server/domain/quiz"
 	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
 	"github.com/murraycu/go-bigoquiz-server/server/loginserver/oauthparsers"
 	"golang.org/x/oauth2"
 
-	"log"
 	"net/http"
-	"path/filepath"
 	"testing"
 
 	"github.com/murraycu/go-bigoquiz-server/repositories/db"
@@ -68,26 +69,33 @@ func (m MockUserDataRepository) StoreFacebookLoginInUserProfile(c context.Contex
 	panic("Unimplemented")
 }
 
+type MockQuizzesRepository struct{}
+
+func (m MockQuizzesRepository) LoadQuizzes() (quizzes.MapQuizzes, error) {
+	return map[string]*domainquiz.Quiz{
+		"id1": &domainquiz.Quiz{},
+		"id2": &domainquiz.Quiz{},
+	}, nil
+}
+
 func TestNewRestServer(t *testing.T) {
 	userSessionStore := &MockUserSessionStore{}
 	userDataRepository := &MockUserDataRepository{}
-
-	// TODO: Mock the QuizzesRepository.
-	directoryFilepath, err := filepath.Abs("../../quizzes")
-	if err != nil {
-		log.Fatalf("Couldn't get absolute filepath for quizzes: %v", err)
-		return
-	}
-
-	quizzesStore, err := quizzes.NewQuizzesRepository(directoryFilepath)
-	assert.Nil(t, err)
-	assert.NotNil(t, quizzesStore)
+	quizzesStore := &MockQuizzesRepository{}
 
 	restServer, err := NewRestServer(quizzesStore, userSessionStore, userDataRepository)
 	assert.Nil(t, err)
 	assert.NotNil(t, restServer)
+}
 
-	// TODO: Don't use private API.
+func TestHasQuizzes(t *testing.T) {
+	userSessionStore := &MockUserSessionStore{}
+	userDataRepository := &MockUserDataRepository{}
+	quizzesStore := &MockQuizzesRepository{}
+
+	restServer, err := NewRestServer(quizzesStore, userSessionStore, userDataRepository)
+	assert.Nil(t, err)
+
 	assert.NotEmpty(t, restServer.quizzesListSimple)
 	assert.NotEmpty(t, restServer.quizzesListFull)
 }
