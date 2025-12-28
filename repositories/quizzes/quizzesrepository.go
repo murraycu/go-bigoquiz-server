@@ -10,7 +10,11 @@ import (
 	dtoquiz "github.com/murraycu/go-bigoquiz-server/repositories/quizzes/dtos/quiz"
 )
 
-type QuizzesRepository struct {
+type QuizzesRepository interface {
+	LoadQuizzes() (MapQuizzes, error)
+}
+
+type quizzesRepositoryImpl struct {
 	directoryPath string
 }
 
@@ -24,8 +28,8 @@ type QuizzesAndCaches struct {
 // NewQuizzesRepository creates a new quizzes repository.
 //
 // directoryPath is the path to a directory containing quizzes in JSON files.
-func NewQuizzesRepository(directoryPath string) (*QuizzesRepository, error) {
-	result := &QuizzesRepository{}
+func NewQuizzesRepository(directoryPath string) (QuizzesRepository, error) {
+	result := &quizzesRepositoryImpl{}
 	result.directoryPath = directoryPath
 
 	return result, nil
@@ -88,7 +92,7 @@ func loadQuizzesAsDto(directoryFilepath string) (MapDtoQuizzes, error) {
 	return quizzes, nil
 }
 
-func (q *QuizzesRepository) LoadQuizzes() (MapQuizzes, error) {
+func (q *quizzesRepositoryImpl) LoadQuizzes() (MapQuizzes, error) {
 	quizzes, err := loadQuizzesAsDto(q.directoryPath)
 	if err != nil {
 		return nil, fmt.Errorf("could not load quiz files: %v", err)

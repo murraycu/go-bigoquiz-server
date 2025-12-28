@@ -40,7 +40,7 @@ type RestServer struct {
 	userSessionStore usersessionstore.UserSessionStore
 }
 
-func NewRestServer(quizzesStore *quizzes.QuizzesRepository, userSessionStore usersessionstore.UserSessionStore, userDataRepository db.UserDataRepository) (*RestServer, error) {
+func NewRestServer(quizzesStore quizzes.QuizzesRepository, userSessionStore usersessionstore.UserSessionStore, userDataRepository db.UserDataRepository) (*RestServer, error) {
 	result := &RestServer{}
 	result.userDataClient = userDataRepository
 
