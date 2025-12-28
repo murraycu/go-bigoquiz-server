@@ -1,15 +1,20 @@
 package restserver
 
 import (
-	"github.com/murraycu/go-bigoquiz-server/repositories/quizzes"
-	"github.com/murraycu/go-bigoquiz-server/server/usersessionstore"
-	"github.com/stretchr/testify/assert"
 	"log"
 	"path/filepath"
 	"testing"
+
+	"github.com/murraycu/go-bigoquiz-server/repositories/quizzes"
+	"github.com/murraycu/go-bigoquiz-server/server/usersessionstore"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewRestServer(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping test which requires more setup.")
+	}
+
 	// TODO: Mock the UserSessionStore.
 	userSessionStore, err := usersessionstore.NewUserSessionStore("some-test-value")
 	assert.Nil(t, err)
