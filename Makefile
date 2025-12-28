@@ -12,7 +12,6 @@ test:
 
 # This runs all tests,
 # including the ones that require more setup, such as the datastore emulator.)
-# TODO: Stop the datastore emulator after the tests have run.
 # This also outputs a coverage file and processes it to produce a coverage.html report.
 full-test:
 	gcloud config set project bigoquiz ; \
@@ -20,6 +19,7 @@ full-test:
 	export DATASTORE_EMULATOR_HOST="localhost:8081" ; \
 	go test ./... -coverprofile=coverage.out
 	go tool cover -html=coverage.out -o coverage.html
+	pkill -f cloud-datastore
 
 clean:
 	go clean
