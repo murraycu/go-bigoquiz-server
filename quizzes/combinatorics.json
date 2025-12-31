@@ -86,7 +86,7 @@
           "id": "algorithms-gospers-hack",
           "link": "http://read.seas.harvard.edu/cs207/2012/?p=64",
           "text": "Gosper's Hack for iterating combinations.",
-          "answer": "y = x \u0026 -x;  c = x + y; x = (((x ^ c) >> 2) / y) | c;"
+          "answer": "y = x & -x;  c = x + y; x = (((x ^ c) >> 2) / y) | c;"
         },
         {
           "id": "algorithms-next-lexicographical-permutation",

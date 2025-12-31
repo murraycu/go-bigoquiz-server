@@ -72,12 +72,12 @@
         {
           "id": "hierarchy-of-reliability-order",
           "text": "Most fundamental first",
-          "answer": "Monitoring, Incident Response, Postmortem/Root Cause Analysis, Testing \u0026 Release Procedures, Capacity Planning, Development, Product"
+          "answer": "Monitoring, Incident Response, Postmortem/Root Cause Analysis, Testing & Release Procedures, Capacity Planning, Development, Product"
         },
         {
           "id": "hierarchy-of-reliability-reverse-order",
           "text": "Most dependent first",
-          "answer": "Product, Capacity Planning, Development, Testing \u0026 Release Procedures, Postmortem/Root Cause Analysis, Incident Response, Monitoring"
+          "answer": "Product, Capacity Planning, Development, Testing & Release Procedures, Postmortem/Root Cause Analysis, Incident Response, Monitoring"
         }
       ],
       "answersAsChoices": true
