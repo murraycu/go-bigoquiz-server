@@ -138,7 +138,7 @@
           "id": "series-harmonic-sum",
           "link": "https://en.wikipedia.org/wiki/Harmonic_number",
           "textDetail": {
-            "text": "Harmonic Sum: H(n): <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mtable displaystyle=\"true\"><mtr><mtd><mn>1</mn><mo>+</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>+</mo><mfrac><mn>1</mn><mn>3</mn></mfrac><mo>+</mo><mfrac><mn>1</mn><mn>4</mn></mfrac><mo>+</mo><mo>\u0026#x22EF;</mo><mo>+</mo><mfrac><mn>1</mn><mi>n</mi></mfrac></mtd></mtr></mtable></math>",
+            "text": "Harmonic Sum: H(n): <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mtable displaystyle=\"true\"><mtr><mtd><mn>1</mn><mo>+</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>+</mo><mfrac><mn>1</mn><mn>3</mn></mfrac><mo>+</mo><mfrac><mn>1</mn><mn>4</mn></mfrac><mo>+</mo><mo>&#x22EF;</mo><mo>+</mo><mfrac><mn>1</mn><mi>n</mi></mfrac></mtd></mtr></mtable></math>",
             "isHtml": true
           },
           "answerDetail": {
@@ -150,7 +150,7 @@
           "id": "series-triangular-sum",
           "link": "https://en.wikipedia.org/wiki/Triangular_number",
           "textDetail": {
-            "text": "Triangular Sum: <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mtable displaystyle=\"true\"><mtr><mtd><mn>1</mn><mo>+</mo><mn>2</mn><mo>+</mo><mn>3</mn><mo>+</mo><mn>4</mn><mo>+</mo><mo>\u0026#x22EF;</mo><mo>+</mo><mi>n</mi><mo>=</mo><mfrac><mrow><mo stretchy=\"false\"></mo><mi>n</mi><mo>\u0026#x2062;</mo><mrow><mo stretchy=\"false\">(</mo><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow><mo stretchy=\"false\">)</mo></mrow></mrow><mi>2</mi></mfrac></mtd></mtr></mtable></math>",
+            "text": "Triangular Sum: <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mtable displaystyle=\"true\"><mtr><mtd><mn>1</mn><mo>+</mo><mn>2</mn><mo>+</mo><mn>3</mn><mo>+</mo><mn>4</mn><mo>+</mo><mo>&#x22EF;</mo><mo>+</mo><mi>n</mi><mo>=</mo><mfrac><mrow><mo stretchy=\"false\"></mo><mi>n</mi><mo>&#x2062;</mo><mrow><mo stretchy=\"false\">(</mo><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow><mo stretchy=\"false\">)</mo></mrow></mrow><mi>2</mi></mfrac></mtd></mtr></mtable></math>",
             "isHtml": true
           },
           "answerDetail": {
@@ -162,11 +162,11 @@
           "id": "series-geometric-sum",
           "link": "https://en.wikipedia.org/wiki/Geometric_series#Formula",
           "textDetail": {
-            "text": "Geometric Sum: <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mtable displaystyle=\"true\"><mtr><mtd><mn>1</mn><mo>+</mo><mn>2</mn><mo>+</mo><mn>4</mn><mo>+</mo><mn>8</mn><mo>+</mo><mo>\u0026#x22EF;</mo><mo>+</mo><mi>n</mi><mo>=</mo><mn>2</mn><mo>\u0026#x2062;</mo><mi>n</mi><mo>-</mo><mn>1</mn></mtd></mtr></mtable></math>",
+            "text": "Geometric Sum: <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mtable displaystyle=\"true\"><mtr><mtd><mn>1</mn><mo>+</mo><mn>2</mn><mo>+</mo><mn>4</mn><mo>+</mo><mn>8</mn><mo>+</mo><mo>&#x22EF;</mo><mo>+</mo><mi>n</mi><mo>=</mo><mn>2</mn><mo>&#x2062;</mo><mi>n</mi><mo>-</mo><mn>1</mn></mtd></mtr></mtable></math>",
             "isHtml": true
           },
           "answerDetail": {
-            "text": "<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mn>2</mn><mo>\u0026#x2062;</mo><mi>n</mi></mrow</math>",
+            "text": "<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mn>2</mn><mo>&#x2062;</mo><mi>n</mi></mrow</math>",
             "isHtml": true
           }
         },
@@ -174,11 +174,11 @@
           "id": "series-stirlings-approximation",
           "link": "https://en.wikipedia.org/wiki/Stirling%27s_approximation",
           "textDetail": {
-            "text": "Stirling's Approximation: <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mtable displaystyle=\"true\"><mtr><mtd><mi>lg</mi><mo stretchy=\"false\">(</mo><mi>n!</mi><mo stretchy=\"false\">)</mo><mo>=</mo><mi>lg</mi><mo stretchy=\"false\">(</mo><mn>1</mn><mo stretchy=\"false\">)</mo><mo>+</mo><mi>lg</mi><mo stretchy=\"false\">(</mo><mn>2</mn><mo stretchy=\"false\">)</mo><mo>+</mo><mi>lg</mi><mo stretchy=\"false\">(</mo><mn>3</mn><mo stretchy=\"false\">)</mo><mo>+</mo><mi>lg</mi><mo stretchy=\"false\">(</mo><mn>4</mn><mo stretchy=\"false\">)</mo><mo>+</mo><mo>\u0026#x22EF;<!-- ⋯ --></mo><mo>+</mo><mi>lg</mi><mo stretchy=\"false\">(</mo><mi>n</mi><mo stretchy=\"false\">)</mo></mtd></mtr></mtable></math>",
+            "text": "Stirling's Approximation: <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mtable displaystyle=\"true\"><mtr><mtd><mi>lg</mi><mo stretchy=\"false\">(</mo><mi>n!</mi><mo stretchy=\"false\">)</mo><mo>=</mo><mi>lg</mi><mo stretchy=\"false\">(</mo><mn>1</mn><mo stretchy=\"false\">)</mo><mo>+</mo><mi>lg</mi><mo stretchy=\"false\">(</mo><mn>2</mn><mo stretchy=\"false\">)</mo><mo>+</mo><mi>lg</mi><mo stretchy=\"false\">(</mo><mn>3</mn><mo stretchy=\"false\">)</mo><mo>+</mo><mi>lg</mi><mo stretchy=\"false\">(</mo><mn>4</mn><mo stretchy=\"false\">)</mo><mo>+</mo><mo>&#x22EF;<!-- ⋯ --></mo><mo>+</mo><mi>lg</mi><mo stretchy=\"false\">(</mo><mi>n</mi><mo stretchy=\"false\">)</mo></mtd></mtr></mtable></math>",
             "isHtml": true
           },
           "answerDetail": {
-            "text": "<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mi>n</mi><mo>\u0026#x2062;</mo><mi>lg</mi><mo stretchy=\"false\">(</mo><mi>n</mi><mo stretchy=\"false\">)</mo></mrow</math>",
+            "text": "<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mi>n</mi><mo>&#x2062;</mo><mi>lg</mi><mo stretchy=\"false\">(</mo><mi>n</mi><mo stretchy=\"false\">)</mo></mrow</math>",
             "isHtml": true
           }
         }

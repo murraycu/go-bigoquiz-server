@@ -25,17 +25,17 @@
         {
           "id": "bitwise-get-lower-8-bits",
           "text": "Get lower 8 bits",
-          "answer": "x \u0026 0xFF"
+          "answer": "x & 0xFF"
         },
         {
           "id": "bitwise-second-lowest-8-bits",
           "text": "Get second-lowest 8 bits",
-          "answer": "(x >> 8) \u0026 0xFF"
+          "answer": "(x >> 8) & 0xFF"
         },
         {
           "id": "bitwise-unset-least-significant-set-bit",
           "text": "Unset the least significant (lowest, rightmost) set bit",
-          "answer": "x \u0026 (x - 1)"
+          "answer": "x & (x - 1)"
         },
         {
           "id": "bitwise-set-least-significant-set-bit",
@@ -47,19 +47,19 @@
           "id": "bitwise-get-least-significant-set-bit",
           "link": "http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/#bithack7",
           "text": "Get the least significant (lowest, rightmost) set bit",
-          "answer": "x \u0026 (-x)"
+          "answer": "x & (-x)"
         },
         {
           "id": "bitwise-get-least-significant-unset-bit",
           "link": "http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/#bithack9",
           "text": "Get the least significant (lowest, rightmost) unset bit",
-          "answer": "~x \u0026 (x + 1)"
+          "answer": "~x & (x + 1)"
         },
         {
           "id": "bitwise-check-nth-bit-is-set",
           "link": "http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/#bithack2",
           "text": "Check if the nth bit is set",
-          "answer": "x \u0026 (1 << n)"
+          "answer": "x & (1 << n)"
         },
         {
           "id": "bitwise-set-nth-bit",
@@ -71,7 +71,7 @@
           "id": "bitwise-unset-nth-bit",
           "link": "http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/#bithack4",
           "text": "Unset the nth bit",
-          "answer": "x \u0026 ~(1 << n)"
+          "answer": "x & ~(1 << n)"
         },
         {
           "id": "bitwise-toggle-nth-bit",
@@ -83,13 +83,13 @@
           "id": "bitwise-count-first-24-bits",
           "link": "https://graphics.stanford.edu/~seander/bithacks.html#CountBitsSet64",
           "text": "Count the first 24 bits set (on a 64-bit system)",
-          "answer": "(x * 0x200040008001ULL \u0026 0x111111111111111ULL) % 0xFF"
+          "answer": "(x * 0x200040008001ULL & 0x111111111111111ULL) % 0xFF"
         },
         {
           "id": "bitwise-check-if-even",
           "link": "http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/#bithack1",
           "text": "Check if integer is even",
-          "answer": "x \u0026 1"
+          "answer": "x & 1"
         },
         {
           "id": "bitwise-set-rightmost-bits-after-set-bit",
