@@ -85,7 +85,7 @@
           "link": "https://en.wikipedia.org/wiki/Euler's_theorem",
           "text": "Euler's Theorem",
           "answerDetail": {
-            "text": "If n and a are coprime positive integers, then \u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\"\u003e\n                \u003csemantics\u003e\n                \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                \u003cmstyle displaystyle=\"true\" scriptlevel=\"0\"\u003e\n                \u003cmsup\u003e\n                \u003cmi\u003ea\u003c/mi\u003e\n                \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                \u003cmi\u003eφ\u003c!-- φ --\u003e\u003c/mi\u003e\n                \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                \u003cmi\u003en\u003c/mi\u003e\n                \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                \u003c/mrow\u003e\n                \u003c/msup\u003e\n                \u003cmo\u003e≡\u003c!-- ≡ --\u003e\u003c/mo\u003e\n                \u003cmn\u003e1\u003c/mn\u003e\n                \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                \u003cmspace width=\"1em\"\u003e\u003c/mspace\u003e\n                \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                \u003cmi\u003emod\u003c/mi\u003e\n                \u003cmspace width=\"0.333em\"\u003e\u003c/mspace\u003e\n                \u003cmi\u003en\u003c/mi\u003e\n                \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                \u003c/mrow\u003e\n                \u003c/mstyle\u003e\n                \u003c/mrow\u003e\n                \u003c/semantics\u003e\n                \u003c/math\u003e",
+            "text": "If n and a are coprime positive integers, then <math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow class=\"MJX-TeXAtom-ORD\"><mstyle displaystyle=\"true\" scriptlevel=\"0\"><msup><mi>a</mi><mrow class=\"MJX-TeXAtom-ORD\"><mi>φ<!-- φ --></mi><mo stretchy=\"false\">(</mo><mi>n</mi><mo stretchy=\"false\">)</mo></mrow></msup><mo>≡<!-- ≡ --></mo><mn>1</mn><mrow class=\"MJX-TeXAtom-ORD\"><mspace width=\"1em\"></mspace><mo stretchy=\"false\">(</mo><mi>mod</mi><mspace width=\"0.333em\"></mspace><mi>n</mi><mo stretchy=\"false\">)</mo></mrow></mstyle></mrow></semantics></math>",
             "isHtml": true
           }
         },
@@ -94,26 +94,26 @@
           "link": "https://en.wikipedia.org/wiki/Fermat%27s_little_theorem",
           "text": "Fermat's Little Theorem",
           "answerDetail": {
-            "text": "If p is a prime number, then for any integer a, \u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\"\u003e\n                \u003csemantics\u003e\n                \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                \u003cmstyle displaystyle=\"true\" scriptlevel=\"0\"\u003e\n                \u003cmsup\u003e\n                \u003cmi\u003ea\u003c/mi\u003e\n                \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                \u003cmi\u003ep\u003c/mi\u003e\n                \u003c/mrow\u003e\n                \u003c/msup\u003e\n                \u003cmo\u003e≡\u003c!-- ≡ --\u003e\u003c/mo\u003e\n                \u003cmi\u003ea\u003c/mi\u003e\n                \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                \u003cmspace width=\"1em\"\u003e\u003c/mspace\u003e\n                \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                \u003cmi\u003emod\u003c/mi\u003e\n                \u003cmspace width=\"0.333em\"\u003e\u003c/mspace\u003e\n                \u003cmi\u003ep\u003c/mi\u003e\n                \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                \u003c/mrow\u003e\n                \u003cmo\u003e.\u003c/mo\u003e\n                \u003c/mstyle\u003e\n                \u003c/mrow\u003e\n                \u003c/semantics\u003e\n                \u003c/math\u003e",
+            "text": "If p is a prime number, then for any integer a, <math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow class=\"MJX-TeXAtom-ORD\"><mstyle displaystyle=\"true\" scriptlevel=\"0\"><msup><mi>a</mi><mrow class=\"MJX-TeXAtom-ORD\"><mi>p</mi></mrow></msup><mo>≡<!-- ≡ --></mo><mi>a</mi><mrow class=\"MJX-TeXAtom-ORD\"><mspace width=\"1em\"></mspace><mo stretchy=\"false\">(</mo><mi>mod</mi><mspace width=\"0.333em\"></mspace><mi>p</mi><mo stretchy=\"false\">)</mo></mrow><mo>.</mo></mstyle></mrow></semantics></math>",
             "isHtml": true
           }
         },
         {
           "id": "fmtgp-number-theorems-cancellation-law",
           "text": "Cancellation Law",
-          "answer": "If p is prime, then for any 0 \u003c a \u003c p there is a number 0 \u003c b \u003c p such that ab = mp + 1, meaning a and b cancel modulo p."
+          "answer": "If p is prime, then for any 0 < a < p there is a number 0 < b < p such that ab = mp + 1, meaning a and b cancel modulo p."
         },
         {
           "id": "fmtgp-number-theorems-self-canceling-law",
           "text": "Self-Canceling Law",
-          "answer": "If p is prime, then for any 0 \u003c a \u003c p, a^2 = mp + 1, if a = 1 or a = p - 1."
+          "answer": "If p is prime, then for any 0 < a < p, a^2 = mp + 1, if a = 1 or a = p - 1."
         },
         {
           "id": "fmtgp-number-theorems-wilsons",
           "link": "https://en.wikipedia.org/wiki/Wilson's_theorem",
           "text": "Wilson's Theorem",
           "answerDetail": {
-            "text": "A natural number n \u003e 1 is a prime number if and only if \u003cmath xmlns=\"http://www.w3.org/1998/Math/MathML\"\u003e\n                \u003csemantics\u003e\n                \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                \u003cmstyle displaystyle=\"true\" scriptlevel=\"0\"\u003e\n                \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                \u003cmi\u003en\u003c/mi\u003e\n                \u003cmo\u003e−\u003c!-- − --\u003e\u003c/mo\u003e\n                \u003cmn\u003e1\u003c/mn\u003e\n                \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                \u003cmo\u003e!\u003c/mo\u003e\n                \u003cmtext\u003e \u003c/mtext\u003e\n                \u003cmo\u003e≡\u003c!-- ≡ --\u003e\u003c/mo\u003e\n                \u003cmtext\u003e \u003c/mtext\u003e\n                \u003cmo\u003e−\u003c!-- − --\u003e\u003c/mo\u003e\n                \u003cmn\u003e1\u003c/mn\u003e\n                \u003cmrow class=\"MJX-TeXAtom-ORD\"\u003e\n                \u003cmspace width=\"1em\"\u003e\u003c/mspace\u003e\n                \u003cmo stretchy=\"false\"\u003e(\u003c/mo\u003e\n                \u003cmi\u003emod\u003c/mi\u003e\n                \u003cmspace width=\"0.333em\"\u003e\u003c/mspace\u003e\n                \u003cmi\u003en\u003c/mi\u003e\n                \u003cmo stretchy=\"false\"\u003e)\u003c/mo\u003e\n                \u003c/mrow\u003e\n                \u003c/mstyle\u003e\n                \u003c/mrow\u003e\n                \u003c/semantics\u003e\n                \u003c/math\u003e",
+            "text": "A natural number n > 1 is a prime number if and only if <math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow class=\"MJX-TeXAtom-ORD\"><mstyle displaystyle=\"true\" scriptlevel=\"0\"><mo stretchy=\"false\">(</mo><mi>n</mi><mo>−<!-- − --></mo><mn>1</mn><mo stretchy=\"false\">)</mo><mo>!</mo><mtext> </mtext><mo>≡<!-- ≡ --></mo><mtext> </mtext><mo>−<!-- − --></mo><mn>1</mn><mrow class=\"MJX-TeXAtom-ORD\"><mspace width=\"1em\"></mspace><mo stretchy=\"false\">(</mo><mi>mod</mi><mspace width=\"0.333em\"></mspace><mi>n</mi><mo stretchy=\"false\">)</mo></mrow></mstyle></mrow></semantics></math>",
             "isHtml": true
           }
         }
@@ -146,7 +146,7 @@
           "id": "fmtgp-properties-of-operations-transitive",
           "link": "https://en.wikipedia.org/wiki/Transitive_relation",
           "text": "Transitive",
-          "answer": "a related to b and b related to c implies a related to c. For instance, less than: If a \u003c b and b \u003c c, then a \u003c c. Or, for instance, equality: If a == b and b == c, then a == c."
+          "answer": "a related to b and b related to c implies a related to c. For instance, less than: If a < b and b < c, then a < c. Or, for instance, equality: If a == b and b == c, then a == c."
         },
         {
           "id": "fmtgp-properties-of-operations-reflexive",
@@ -483,7 +483,7 @@
           "id": "fmtgp-proof-techniques-pigeonhole-principle",
           "link": "https://en.wikipedia.org/wiki/Pigeonhole_principle",
           "text": "Pigeonhole Principle (Dirichlet Principle)",
-          "answer": "If n items are put into m containers, with n \u003e m \u003e 0, then at least one container must contain more than one item."
+          "answer": "If n items are put into m containers, with n > m > 0, then at least one container must contain more than one item."
         }
       ],
       "answersAsChoices": true,

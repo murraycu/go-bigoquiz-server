@@ -86,13 +86,13 @@
           "id": "algorithms-gospers-hack",
           "link": "http://read.seas.harvard.edu/cs207/2012/?p=64",
           "text": "Gosper's Hack for iterating combinations.",
-          "answer": "y = x \u0026 -x;  c = x + y; x = (((x ^ c) \u003e\u003e 2) / y) | c;"
+          "answer": "y = x \u0026 -x;  c = x + y; x = (((x ^ c) >> 2) / y) | c;"
         },
         {
           "id": "algorithms-next-lexicographical-permutation",
           "link": "https://en.wikipedia.org/wiki/Permutation#Generation_in_lexicographic_order",
           "text": "Next Lexicographical Permutation.",
-          "answer": "Find rightmost a[k] \u003c a[k+1]. Find rightmost a[l] \u003e  a[k] after k, Swap a[k] and a[l]. Reverse from a[k+1]."
+          "answer": "Find rightmost a[k] < a[k+1]. Find rightmost a[l] >  a[k] after k, Swap a[k] and a[l]. Reverse from a[k+1]."
         },
         {
           "id": "algorithms-generate-all-permutations-recursive",

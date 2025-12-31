@@ -517,7 +517,7 @@
         },
         {
           "id": "latency-send-packet-ca-netherlands-ca",
-          "text": "Send packet CA-\u003eNetherlands-\u003eCA",
+          "text": "Send packet CA->Netherlands->CA",
           "answer": "150,000,000 ns (150,000 μs, 150 ms)"
         }
       ],
