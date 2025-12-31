@@ -204,12 +204,12 @@
             {
               "id": "compilers-parsers-grammar-handle",
               "text": "Handle",
-              "answer": "In an LR(1) parser, a pair A-\u003eB, k, such that B appears in the frontier with its right end at position k, so that replacing B with A (reducing B to A) is the next step in the parse."
+              "answer": "In an LR(1) parser, a pair A->B, k, such that B appears in the frontier with its right end at position k, so that replacing B with A (reducing B to A) is the next step in the parse."
             },
             {
               "id": "compilers-parsers-grammar-reduction",
               "text": "Reduction",
-              "answer": "In an LR(1) parser, use an A-\u003eB production to replace B with A in the frontier of the bottom-up parse."
+              "answer": "In an LR(1) parser, use an A->B production to replace B with A in the frontier of the bottom-up parse."
             }
           ],
           "answersAsChoices": true
@@ -236,7 +236,7 @@
             {
               "id": "compilers-parsers-grammar-classes-RG",
               "text": "RG (Regular Grammars)",
-              "answer": "A subset of LL(1) grammars. Equivalent to regular expressions. Productions are restricted to either A -\u003e a, or A -\u003e aB, where A and B are nonterminal symbols, and a is a terminal symbol."
+              "answer": "A subset of LL(1) grammars. Equivalent to regular expressions. Productions are restricted to either A -> a, or A -> aB, where A and B are nonterminal symbols, and a is a terminal symbol."
             }
           ],
           "answersAsChoices": true
@@ -252,7 +252,7 @@
             },
             {
               "id": "compilers-parsers-grammar-sets-first-production",
-              "text": "FIRST(production: a -\u003e b1 b2 ... bk)",
+              "text": "FIRST(production: a -> b1 b2 ... bk)",
               "answer": "The set of terminals that can appear at the start of a sentence derived from this production. Union of FIRST(symbol) for b1 b2 ... bn, where bn is the first symbol whose FIRST(symbol) does not contain the empty symbol ε."
             },
             {
@@ -262,7 +262,7 @@
             },
             {
               "id": "compilers-parsers-grammar-sets-first-plus-production",
-              "text": "FIRST+(production: a -\u003e b1 b2 ... bk)",
+              "text": "FIRST+(production: a -> b1 b2 ... bk)",
               "answer": "FIRST(production), if that does not contain the empty symbol ε. Otherwise, the union of FIRST(production) and FOLLOW(a)."
             }
           ],

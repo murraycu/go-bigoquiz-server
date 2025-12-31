@@ -681,19 +681,19 @@
           "id": "algorithms-on-sorted-arrays-binary-search",
           "link": "https://en.wikipedia.org/wiki/Binary_search_algorithm",
           "text": "Binary Search for matching value",
-          "answer": "while (lo \u003c= hi) { Examine middle value, setting hi/lo 1 before or after it, or returning the index if mid is equal to the target value. }"
+          "answer": "while (lo <= hi) { Examine middle value, setting hi/lo 1 before or after it, or returning the index if mid is equal to the target value. }"
         },
         {
           "id": "algorithms-on-sorted-arrays-binary-search-first",
           "link": "https://en.wikipedia.org/wiki/Binary_search_algorithm",
           "text": "Binary Search for first matching value",
-          "answer": "while (lo \u003c hi) { Examine middle value, setting lo to mid+1, or hi to mid. }. Check that the value at lo is equal to the target at the end, instead of checking for equality during the loop."
+          "answer": "while (lo < hi) { Examine middle value, setting lo to mid+1, or hi to mid. }. Check that the value at lo is equal to the target at the end, instead of checking for equality during the loop."
         },
         {
           "id": "algorithms-on-sorted-arrays-binary-search-last",
           "link": "https://en.wikipedia.org/wiki/Binary_search_algorithm",
           "text": "Binary Search for last matching value",
-          "answer": "while (lo \u003c hi) { Examine middle value, setting lo to mid, or hi to mid-1. Round mid up by adding 1 before division. }. Check that the value at lo is equal to the target at the end, instead of checking for equality during the loop."
+          "answer": "while (lo < hi) { Examine middle value, setting lo to mid, or hi to mid-1. Round mid up by adding 1 before division. }. Check that the value at lo is equal to the target at the end, instead of checking for equality during the loop."
         }
       ],
       "answersAsChoices": true
@@ -705,7 +705,7 @@
         {
           "id": "algorithms-on-linked-lists-reverse",
           "text": "Reverse a linked list",
-          "answer": "while (node) { next = node-\u003enext; node-\u003enext = prev; prev = node; node = next; }"
+          "answer": "while (node) { next = node->next; node->next = prev; prev = node; node = next; }"
         },
         {
           "id": "algorithms-on-linked-lists-find-intersection",

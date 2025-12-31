@@ -10,17 +10,17 @@
         {
           "id": "bitwise-multiply-by-2",
           "text": "Multiply by 2",
-          "answer": "x \u003c\u003c 1 (shift left)"
+          "answer": "x << 1 (shift left)"
         },
         {
           "id": "bitwise-divide-by-2",
           "text": "Divide by 2",
-          "answer": "x \u003e\u003e 1 (shift right)"
+          "answer": "x >> 1 (shift right)"
         },
         {
           "id": "bitwise-remove-lower-k-bits",
           "text": "Remove lower k bits",
-          "answer": "x \u003e\u003e k"
+          "answer": "x >> k"
         },
         {
           "id": "bitwise-get-lower-8-bits",
@@ -30,7 +30,7 @@
         {
           "id": "bitwise-second-lowest-8-bits",
           "text": "Get second-lowest 8 bits",
-          "answer": "(x \u003e\u003e 8) \u0026 0xFF"
+          "answer": "(x >> 8) \u0026 0xFF"
         },
         {
           "id": "bitwise-unset-least-significant-set-bit",
@@ -59,25 +59,25 @@
           "id": "bitwise-check-nth-bit-is-set",
           "link": "http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/#bithack2",
           "text": "Check if the nth bit is set",
-          "answer": "x \u0026 (1 \u003c\u003c n)"
+          "answer": "x \u0026 (1 << n)"
         },
         {
           "id": "bitwise-set-nth-bit",
           "link": "http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/#bithack3",
           "text": "Set the nth bit",
-          "answer": "x | (1 \u003c\u003c n)"
+          "answer": "x | (1 << n)"
         },
         {
           "id": "bitwise-unset-nth-bit",
           "link": "http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/#bithack4",
           "text": "Unset the nth bit",
-          "answer": "x \u0026 ~(1 \u003c\u003c n)"
+          "answer": "x \u0026 ~(1 << n)"
         },
         {
           "id": "bitwise-toggle-nth-bit",
           "link": "http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/#bithack5",
           "text": "Toggle the nth bit",
-          "answer": "x ^ (1 \u003c\u003c n)"
+          "answer": "x ^ (1 << n)"
         },
         {
           "id": "bitwise-count-first-24-bits",
