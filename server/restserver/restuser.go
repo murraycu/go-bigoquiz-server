@@ -2,6 +2,7 @@ package restserver
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
@@ -83,7 +84,21 @@ func (s *RestServer) getUserIdFromSessionAndDb(w http.ResponseWriter, r *http.Re
 	}
 
 	if !token.Valid() {
-		// TODO: Revalidate it.
+		// TODO: This fails due to CORS. For instance, we see this error in the browser console, even when adding localhost:4200 to
+		// the "Authorized JavaScript origins"" at
+		// https://console.cloud.google.com/auth/clients/710014864852-onic4bf37vaa0r4vsitpg6frhtqbi0k2.apps.googleusercontent.com?project=bigoquiz
+		// "
+		// Access to XMLHttpRequest at 'https://accounts.google.com/o/oauth2/auth?client_id=...'
+		// (redirected from 'http://localhost:8080/api/user') from origin 'http://localhost:4200' has been blocked by
+		// CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+		// "
+		//
+		// However, this would probably not work anyway, because we need the redirect to be followed by the browser
+		// window, but this would presumably just redirect the JavaScript call that's being done by the component.
+		// (The regular "Sign in With ..." buttons are links that the browser window follows, which are then
+		// redirected.)
+		log.Printf("Token is not valid. Attempting refresh")
+		s.oauthLogins.RedirectToGoogleLogin(w, r)
 
 		// This is not an error
 		// (it is normal for a token to expire.)

@@ -68,7 +68,7 @@ func main() {
 		log.Fatalf("NewUserDataRepository() failed: %v", err)
 	}
 
-	restServer, err := restserver.NewRestServer(quizzesStore, userSessionStore, userDataClient)
+	restServer, err := restserver.NewRestServer(quizzesStore, userSessionStore, userDataClient, conf)
 	if err != nil {
 		log.Fatalf("NewRestServer failed: %v\n", err)
 		return
