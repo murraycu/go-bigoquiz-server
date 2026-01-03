@@ -2,14 +2,15 @@ package restserver
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/julienschmidt/httprouter"
 	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
 	restuser "github.com/murraycu/go-bigoquiz-server/server/restserver/user"
-	"net/http"
 )
 
 func (s *RestServer) HandleUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	loginInfo, _, err := s.getLoginInfoFromSessionAndDb(r)
+	loginInfo, _, err := s.getLoginInfoFromSessionAndDb(w, r)
 	if err != nil {
 		handleErrorAsHttpError(w, http.StatusInternalServerError, "getLoginInfoFromSessionAndDb() failed: %v", err)
 		return
@@ -19,8 +20,8 @@ func (s *RestServer) HandleUser(w http.ResponseWriter, r *http.Request, ps httpr
 }
 
 // Returns the LoginInfo and the userID.
-func (s *RestServer) getProfileFromSessionAndDb(r *http.Request) (*domainuser.Profile, string, error) {
-	userId, err := s.getUserIdFromSessionAndDb(r)
+func (s *RestServer) getProfileFromSessionAndDb(w http.ResponseWriter, r *http.Request) (*domainuser.Profile, string, error) {
+	userId, err := s.getUserIdFromSessionAndDb(w, r)
 	if err != nil {
 		return nil, "", fmt.Errorf("getUserIdFromSessionAndDb() failed: %v", err)
 	}
@@ -41,10 +42,10 @@ func (s *RestServer) getProfileFromSessionAndDb(r *http.Request) (*domainuser.Pr
 }
 
 // Returns the LoginInfo and the userID.
-func (s *RestServer) getLoginInfoFromSessionAndDb(r *http.Request) (*restuser.LoginInfo, string, error) {
+func (s *RestServer) getLoginInfoFromSessionAndDb(w http.ResponseWriter, r *http.Request) (*restuser.LoginInfo, string, error) {
 	var loginInfo restuser.LoginInfo
 
-	profile, userId, err := s.getProfileFromSessionAndDb(r)
+	profile, userId, err := s.getProfileFromSessionAndDb(w, r)
 	if err != nil {
 		loginInfo.LoggedIn = false
 		loginInfo.ErrorMessage = fmt.Sprintf("not logged in (%v)", err)
@@ -75,7 +76,7 @@ func (s *RestServer) updateLoginInfoFromProfile(loginInfo *restuser.LoginInfo, p
 /** Get the user ID.
  * Returns an empty user ID, and a nil error, if the user is not logged in.
  */
-func (s *RestServer) getUserIdFromSessionAndDb(r *http.Request) (string, error) {
+func (s *RestServer) getUserIdFromSessionAndDb(w http.ResponseWriter, r *http.Request) (string, error) {
 	userId, token, err := s.userSessionStore.GetProfileFromSession(r)
 	if err != nil {
 		return "", fmt.Errorf("GetProfileFromSession() failed: %v", err)

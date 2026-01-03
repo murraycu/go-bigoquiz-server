@@ -4,14 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/julienschmidt/httprouter"
-	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
-	restquiz "github.com/murraycu/go-bigoquiz-server/server/restserver/quiz"
-	restuser "github.com/murraycu/go-bigoquiz-server/server/restserver/user"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"sort"
+
+	"github.com/julienschmidt/httprouter"
+	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
+	restquiz "github.com/murraycu/go-bigoquiz-server/server/restserver/quiz"
+	restuser "github.com/murraycu/go-bigoquiz-server/server/restserver/user"
 )
 
 // See https://gobyexample.com/sorting-by-functions
@@ -30,7 +31,7 @@ func (s StatsListByTitle) Less(i, j int) bool {
 }
 
 func (s *RestServer) HandleUserHistoryAll(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	loginInfo, userId, err := s.getLoginInfoFromSessionAndDb(r)
+	loginInfo, userId, err := s.getLoginInfoFromSessionAndDb(w, r)
 	if err != nil {
 		handleErrorAsHttpError(w, http.StatusInternalServerError, "getLoginInfoFromSessionAndDb() failed: %v", err)
 		return
@@ -97,7 +98,7 @@ func (s *RestServer) HandleUserHistoryByQuizId(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	loginInfo, userId, err := s.getLoginInfoFromSessionAndDb(r)
+	loginInfo, userId, err := s.getLoginInfoFromSessionAndDb(w, r)
 	if err != nil {
 		handleErrorAsHttpError(w, http.StatusInternalServerError, "getLoginInfoFromSessionAndDb() failed: %v", err)
 		return
@@ -163,7 +164,7 @@ func (s *RestServer) HandleUserHistorySubmitAnswer(w http.ResponseWriter, r *htt
 		return
 	}
 
-	userId, err := s.getUserIdFromSessionAndDb(r)
+	userId, err := s.getUserIdFromSessionAndDb(w, r)
 	if err != nil {
 		handleErrorAsHttpError(w, http.StatusInternalServerError, "getUserIdFromSessionAndDb() failed: %v", err)
 	}
@@ -201,7 +202,7 @@ func (s *RestServer) HandleUserHistorySubmitDontKnowAnswer(w http.ResponseWriter
 		return
 	}
 
-	userId, err := s.getUserIdFromSessionAndDb(r)
+	userId, err := s.getUserIdFromSessionAndDb(w, r)
 	if err != nil {
 		handleErrorAsHttpError(w, http.StatusInternalServerError, "getUserIdFromSessionAndDb() failed: %v", err)
 	}
@@ -235,14 +236,14 @@ func (s *RestServer) HandleUserHistoryResetSections(w http.ResponseWriter, r *ht
 		return
 	}
 
-	userId, err := s.getUserIdFromSessionAndDb(r)
+	userId, err := s.getUserIdFromSessionAndDb(w, r)
 	if err != nil {
 		handleErrorAsHttpError(w, http.StatusInternalServerError, "logged-in check failed. getUserIdFromSessionAndDb() failed: %v", err)
 		return
 	}
 
 	if len(userId) == 0 {
-		loginInfo, _, err := s.getLoginInfoFromSessionAndDb(r)
+		loginInfo, _, err := s.getLoginInfoFromSessionAndDb(w, r)
 		if err != nil {
 			handleErrorAsHttpError(w, http.StatusForbidden, "not logged in. getLoginInfoFromSessionAndDb() failed: %v", err)
 			return
