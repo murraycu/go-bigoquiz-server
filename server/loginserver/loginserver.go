@@ -81,6 +81,10 @@ func (s *LoginServer) generateOAuthUrl(r *http.Request, oauthConfig *oauth2.Conf
 }
 
 func (s *LoginServer) HandleGoogleLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	s.redirectToGoogleLogin(w, r)
+}
+
+func (s *LoginServer) redirectToGoogleLogin(w http.ResponseWriter, r *http.Request) {
 	// Redirect the user to the Google login page:
 	url, err := s.generateOAuthUrl(r, s.confOAuthGoogle)
 	if err != nil {
@@ -282,6 +286,10 @@ func (s *LoginServer) generateGitHubOAuthUrl(r *http.Request) string {
 }
 
 func (s *LoginServer) HandleGitHubLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	s.redirectToGitHubLogin(w, r)
+}
+
+func (s *LoginServer) redirectToGitHubLogin(w http.ResponseWriter, r *http.Request) {
 	// Redirect the user to the GitHub login page:
 	url, err := s.generateOAuthUrl(r, s.confOAuthGitHub)
 	if err != nil {
@@ -325,6 +333,10 @@ func (s *LoginServer) HandleGitHubCallback(w http.ResponseWriter, r *http.Reques
 }
 
 func (s *LoginServer) HandleFacebookLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	s.redirectToFacebookLogin(w, r)
+}
+
+func (s *LoginServer) redirectToFacebookLogin(w http.ResponseWriter, r *http.Request) {
 	// Redirect the user to the Facebook login page:
 	url, err := s.generateOAuthUrl(r, s.confOAuthFacebook)
 	if err != nil {
