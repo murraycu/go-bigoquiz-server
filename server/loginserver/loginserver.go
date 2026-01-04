@@ -153,7 +153,7 @@ func (s *LoginServer) HandleFacebookCallback(w http.ResponseWriter, r *http.Requ
 }
 
 // handleOAuthCallback handles the OAuth callback response, interpreting it as the specific OAuthUserInfo struct type.
-func handleOAuthCallback[OAuthUserInfo any](s *LoginServer, w http.ResponseWriter, r *http.Request, userInfoUrl string, conf *oauth2.Config, storeLogin func(context.Context, OAuthUserInfo, string, *oauth2.Token) (string, error), ) {
+func handleOAuthCallback[OAuthUserInfo any](s *LoginServer, w http.ResponseWriter, r *http.Request, userInfoUrl string, conf *oauth2.Config, storeLogin func(context.Context, OAuthUserInfo, string, *oauth2.Token) (string, error)) {
 	c := r.Context()
 
 	checkStateResult, err := s.checkOauthResponseStateAndGetBody(w, r, conf, userInfoUrl, c)

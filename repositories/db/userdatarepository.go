@@ -67,6 +67,67 @@ func (db *UserDataRepositoryImpl) getProfileFromDbQuery(c context.Context, q *da
 	return userId, &profile, nil
 }
 
+func (db *UserDataRepositoryImpl) StoreGitHubLoginInUserProfile(c context.Context, userInfo oauthparsers.GitHubUserInfo, strUserId string, token *oauth2.Token) (string, error) {
+	return storeOAuthLoginInUserProfile(db, c, userInfo, userInfo.Id, strUserId, token, db.getProfileFromDbByGitHubID, db.updateProfileFromGitHubUserInfo)
+}
+
+func (db *UserDataRepositoryImpl) StoreFacebookLoginInUserProfile(c context.Context, userInfo oauthparsers.FacebookUserInfo, strUserId string, token *oauth2.Token) (string, error) {
+	return storeOAuthLoginInUserProfile(db, c, userInfo, userInfo.Id, strUserId, token, db.getProfileFromDbByFacebookID, db.updateProfileFromFacebookUserInfo)
+}
+
+func (db *UserDataRepositoryImpl) StoreGoogleLoginInUserProfile(c context.Context, userInfo oauthparsers.GoogleUserInfo, strUserId string, token *oauth2.Token) (string, error) {
+	return storeOAuthLoginInUserProfile(db, c, userInfo, userInfo.Sub, strUserId, token, db.getProfileFromDbByGoogleID, db.updateProfileFromGoogleUserInfo)
+}
+
+func storeOAuthLoginInUserProfile[OAuthUserInfo any, ID any](db *UserDataRepositoryImpl, c context.Context, userInfo OAuthUserInfo, id ID, strUserId string, token *oauth2.Token, getProfileById func(context.Context, ID) (*datastore.Key, *dtouser.Profile, error), updateProfile func(*dtouser.Profile, *OAuthUserInfo, *oauth2.Token) error) (string, error) {
+	userIdFound, profile, err := getProfileById(c, id)
+	if err != nil {
+		return "", fmt.Errorf("getProfileById() failed: %v", err)
+	}
+
+	var userId *datastore.Key
+	if userIdFound != nil {
+		// Use the found user ID,
+		// ignoring any user id from the caller.
+		userId = userIdFound
+	} else if len(strUserId) != 0 {
+		userId, err = datastore.DecodeKey(strUserId)
+		if err != nil {
+			return "", fmt.Errorf("datastore.DecodeKey() failed: %v", err)
+		}
+
+		// Try getting it via the supplied userID instead:
+		profile, err = db.getProfileFromDbByUserID(c, userId)
+		if err != nil {
+			return "", fmt.Errorf("getProfileFromDbByUserID() failed")
+		}
+	}
+
+	if profile == nil {
+		// It is not in the datastore yet, so we add it.
+		profile = new(dtouser.Profile)
+		if err := updateProfile(profile, &userInfo, token); err != nil {
+			return "", fmt.Errorf("updateProfile() failed (new profile): %v", err)
+		}
+
+		userId = datastore.IncompleteKey(DB_KIND_PROFILE, nil)
+		if userId, err = db.client.Put(c, userId, profile); err != nil {
+			return "", fmt.Errorf("datastore Put(with incomplete userId %v) failed: %v", userId, err)
+		}
+	} else if userId != nil {
+		// Update the Profile:
+		if err := updateProfile(profile, &userInfo, token); err != nil {
+			return "", fmt.Errorf("updateProfile() failed: %v", err)
+		}
+
+		if userId, err = db.client.Put(c, userId, profile); err != nil {
+			return "", fmt.Errorf("datastore Put(with userId %v) failed: %v", userId, err)
+		}
+	}
+
+	return userId.Encode(), nil
+}
+
 func (db *UserDataRepositoryImpl) getProfileFromDbByGitHubID(c context.Context, id int) (*datastore.Key, *dtouser.Profile, error) {
 	q := datastore.NewQuery(DB_KIND_PROFILE).
 		Filter("githubId =", id).
@@ -74,117 +135,11 @@ func (db *UserDataRepositoryImpl) getProfileFromDbByGitHubID(c context.Context, 
 	return db.getProfileFromDbQuery(c, q)
 }
 
-// Create, or update (if strUsedId is not empty) a user profile,
-// using the provided Google login data.
-// Returns the user ID.
-func (db *UserDataRepositoryImpl) StoreGitHubLoginInUserProfile(c context.Context, userInfo oauthparsers.GitHubUserInfo, strUserId string, token *oauth2.Token) (string, error) {
-	userIdFound, profile, err := db.getProfileFromDbByGitHubID(c, userInfo.Id)
-	if err != nil {
-		// An unexpected error.
-		return "", fmt.Errorf("getProfileFromDbByGitHubID() failed: %v", err)
-	}
-
-	var userId *datastore.Key
-	if userIdFound != nil {
-		// Use the found user ID,
-		// ignoring any user id from the caller.
-		userId = userIdFound
-	} else if len(strUserId) != 0 {
-		userId, err := datastore.DecodeKey(strUserId)
-		if err != nil {
-			return "", fmt.Errorf("datastore.DecodeKey() failed: %v", err)
-		}
-
-		// Try getting it via the supplied userID instead:
-		profile, err = db.getProfileFromDbByUserID(c, userId)
-		if err != nil {
-			return "", fmt.Errorf("getProfileFromDbByUserID() failed")
-		}
-	}
-
-	if profile == nil {
-		// It is not in the datastore yet, so we add it.
-		profile = new(dtouser.Profile)
-		if err := db.updateProfileFromGitHubUserInfo(profile, &userInfo, token); err != nil {
-			return "", fmt.Errorf("updateProfileFromGitHubUserInfo() failed (new profile): %v", err)
-		}
-
-		userId = datastore.IncompleteKey(DB_KIND_PROFILE, nil)
-		if userId, err = db.client.Put(c, userId, profile); err != nil {
-			return "", fmt.Errorf("datastore Put(with incomplete userId %v) failed: %v", userId, err)
-		}
-	} else if userId != nil {
-		// Update the Profile:
-		if err := db.updateProfileFromGitHubUserInfo(profile, &userInfo, token); err != nil {
-			return "", fmt.Errorf("updateProfileFromGitHubUserInfo() failed: %v", err)
-		}
-
-		if userId, err = db.client.Put(c, userId, profile); err != nil {
-			return "", fmt.Errorf("datastore Put(with userId %v) failed: %v", userId, err)
-		}
-	}
-
-	return userId.Encode(), nil
-}
-
 func (db *UserDataRepositoryImpl) getProfileFromDbByFacebookID(c context.Context, id string) (*datastore.Key, *dtouser.Profile, error) {
 	q := datastore.NewQuery(DB_KIND_PROFILE).
 		Filter("facebookId =", id).
 		Limit(1)
 	return db.getProfileFromDbQuery(c, q)
-}
-
-// Create, or update (if strUsedId is not empty) a user profile,
-// using the provided Facebook login data.
-// Returns the user ID.
-func (db *UserDataRepositoryImpl) StoreFacebookLoginInUserProfile(c context.Context, userInfo oauthparsers.FacebookUserInfo, strUserId string, token *oauth2.Token) (string, error) {
-	userIdFound, profile, err := db.getProfileFromDbByFacebookID(c, userInfo.Id)
-	if err != nil {
-		// An unexpected error.
-		return "", fmt.Errorf("getProfileFromDbByFacebookID() failed: %v", err)
-	}
-
-	var userId *datastore.Key
-	if userIdFound != nil {
-		// Use the found user ID,
-		// ignoring any user id from the caller.
-		userId = userIdFound
-	} else if len(strUserId) != 0 {
-		userId, err := datastore.DecodeKey(strUserId)
-		if err != nil {
-			return "", fmt.Errorf("datastore.DecodeKey() failed: %v", err)
-		}
-
-		// Try getting it via the supplied userID instead:
-		profile, err = db.getProfileFromDbByUserID(c, userId)
-		if err != nil {
-			return "", fmt.Errorf("getProfileFromDbByUserID() failed")
-		}
-	}
-
-	if profile == nil {
-		// It is not in the datastore yet, so we add it.
-		profile = new(dtouser.Profile)
-		if err := db.updateProfileFromFacebookUserInfo(profile, &userInfo, token); err != nil {
-			return "", fmt.Errorf("updateProfileFromFacebookUserInfo() failed (new profile): %v", err)
-		}
-
-		userId = datastore.IncompleteKey(DB_KIND_PROFILE, nil)
-		if userId, err = db.client.Put(c, userId, profile); err != nil {
-			return "", fmt.Errorf("datastore Put(with incomplete userId %v) failed: %v", userId, err)
-		}
-	} else if userId != nil {
-		// Update the Profile:
-		if err := db.updateProfileFromFacebookUserInfo(profile, &userInfo, token); err != nil {
-			return "", fmt.Errorf("updateProfileFromFacebookUserInfo() failed: %v", err)
-		}
-
-		if userId, err = db.client.Put(c, userId, profile); err != nil {
-			return "", fmt.Errorf("datastore Put(with userId %v) failed: %v", userId, err)
-		}
-	}
-
-	return userId.Encode(), nil
 }
 
 func (db *UserDataRepositoryImpl) getProfileFromDbByGoogleID(c context.Context, sub string) (*datastore.Key, *dtouser.Profile, error) {
@@ -203,63 +158,6 @@ func (db *UserDataRepositoryImpl) getProfileFromDbByUserID(c context.Context, us
 	}
 
 	return &profile, nil
-}
-
-// Create, or update (if strUsedId is not empty) a user profile,
-// using the provided Google login data.
-// Returns the user ID.
-//
-// TODO: Make this function generic, parameterizing on GoogleUserInfo/GithubUserInfo,
-// if Go ever has generics.
-// Get the UserProfile via the GoogleID, adding it if necessary.
-func (db *UserDataRepositoryImpl) StoreGoogleLoginInUserProfile(c context.Context, userInfo oauthparsers.GoogleUserInfo, strUserId string, token *oauth2.Token) (string, error) {
-	userIdFound, profile, err := db.getProfileFromDbByGoogleID(c, userInfo.Sub)
-	if err != nil {
-		// An unexpected error.
-		return "", fmt.Errorf("getProfileFromDbByGoogleID() failed: %v", err)
-	}
-
-	var userId *datastore.Key
-	if userIdFound != nil {
-		// Use the found user ID,
-		// ignoring any user id from the caller.
-		userId = userIdFound
-	} else if len(strUserId) != 0 {
-		// Try getting it via the supplied userID instead:
-		userId, err := datastore.DecodeKey(strUserId)
-		if err != nil {
-			return "", fmt.Errorf("datastore.DecodeKey() failed for key: %v: %v", strUserId, err)
-		}
-
-		profile, err = db.getProfileFromDbByUserID(c, userId)
-		if err != nil {
-			return "", fmt.Errorf("getProfileFromDbByUserID() failed")
-		}
-	}
-
-	if profile == nil {
-		// It is not in the datastore yet, so we add it.
-		profile = new(dtouser.Profile)
-		if err := db.updateProfileFromGoogleUserInfo(profile, &userInfo, token); err != nil {
-			return "", fmt.Errorf("updateProfileFromGoogleUserInfo() failed (new profile): %v", err)
-		}
-
-		userId = datastore.IncompleteKey(DB_KIND_PROFILE, nil)
-		if userId, err = db.client.Put(c, userId, profile); err != nil {
-			return "", fmt.Errorf("datastore. ut(with incomplete userId %v) failed: %v", userId, err)
-		}
-	} else if userId != nil {
-		// Update the Profile:
-		if err := db.updateProfileFromGoogleUserInfo(profile, &userInfo, token); err != nil {
-			return "", fmt.Errorf("updateProfileFromGoogleUserInfo() failed: %v", err)
-		}
-
-		if userId, err = db.client.Put(c, userId, profile); err != nil {
-			return "", fmt.Errorf("datastore Put(with userId %v) failed: %v", userId, err)
-		}
-	}
-
-	return userId.Encode(), nil
 }
 
 func (db *UserDataRepositoryImpl) GetUserProfileById(c context.Context, strUserId string) (*domainuser.Profile, error) {
