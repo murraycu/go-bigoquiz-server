@@ -177,6 +177,10 @@ func (s *LoginServer) HandleGoogleCallback(w http.ResponseWriter, r *http.Reques
 type CheckStateResult struct {
 	token *oauth2.Token
 	body  []byte
+
+	// For instance, this will be true if (but not only if) the token has expired.
+	// (We should expect the OAuth token to expire quickly - for instance, within 30 minutes.)
+	invalidToken bool
 }
 
 func (s *LoginServer) checkOauthResponseStateAndGetBody(w http.ResponseWriter, r *http.Request, conf *oauth2.Config, url string, c context.Context) (*CheckStateResult, error) {
@@ -195,7 +199,11 @@ func (s *LoginServer) exchangeAndGetUserBody(w http.ResponseWriter, r *http.Requ
 	}
 
 	if !token.Valid() {
-		return nil, fmt.Errorf("loginFailedUrl.Exchange() returned an invalid token")
+		return &CheckStateResult{
+			token:        nil,
+			body:         nil,
+			invalidToken: true,
+		}, fmt.Errorf("loginFailedUrl.Exchange() returned an invalid token")
 	}
 
 	client := conf.Client(c, token)
