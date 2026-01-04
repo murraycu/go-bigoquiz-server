@@ -5,7 +5,12 @@ type Profile struct {
 	Email  string
 	UserId string
 
-	GoogleProfileUrl   string
-	GitHubProfileUrl   string
+	GoogleLinked     bool
+	GoogleProfileUrl string
+
+	GitHubLinked     bool
+	GitHubProfileUrl string
+
+	FacebookLinked     bool
 	FacebookProfileUrl string
 }
