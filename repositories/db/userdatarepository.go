@@ -79,10 +79,10 @@ func (db *UserDataRepositoryImpl) StoreGoogleLoginInUserProfile(c context.Contex
 	return storeOAuthLoginInUserProfile(db, c, userInfo, userInfo.Sub, strUserId, token, db.getProfileFromDbByGoogleID, db.updateProfileFromGoogleUserInfo)
 }
 
-func storeOAuthLoginInUserProfile[OAuthUserInfo any, ID any](db *UserDataRepositoryImpl, c context.Context, userInfo OAuthUserInfo, id ID, strUserId string, token *oauth2.Token, getProfileById func(context.Context, ID) (*datastore.Key, *dtouser.Profile, error), updateProfile func(*dtouser.Profile, *OAuthUserInfo, *oauth2.Token) error) (string, error) {
-	userIdFound, profile, err := getProfileById(c, id)
+func storeOAuthLoginInUserProfile[OAuthUserInfo any, ID any](db *UserDataRepositoryImpl, c context.Context, userInfo OAuthUserInfo, id ID, strUserId string, token *oauth2.Token, getProfileByOAuthId func(context.Context, ID) (*datastore.Key, *dtouser.Profile, error), updateProfile func(*dtouser.Profile, *OAuthUserInfo, *oauth2.Token) error) (string, error) {
+	userIdFound, profile, err := getProfileByOAuthId(c, id)
 	if err != nil {
-		return "", fmt.Errorf("getProfileById() failed: %v", err)
+		return "", fmt.Errorf("getProfileByOAuthId() failed: %v", err)
 	}
 
 	var userId *datastore.Key
