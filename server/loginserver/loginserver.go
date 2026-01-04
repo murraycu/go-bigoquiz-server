@@ -13,7 +13,6 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"github.com/murraycu/go-bigoquiz-server/config"
 	"github.com/murraycu/go-bigoquiz-server/repositories/db"
-	oauthparsers2 "github.com/murraycu/go-bigoquiz-server/server/loginserver/oauthparsers"
 	"github.com/murraycu/go-bigoquiz-server/server/usersessionstore"
 	"golang.org/x/oauth2"
 )
@@ -142,15 +141,28 @@ func (s *LoginServer) checkOauthResponseStateAndGetCode(c context.Context, r *ht
 }
 
 func (s *LoginServer) HandleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	handleOAuthCallback(s, w, r, "https://www.googleapis.com/oauth2/v3/userinfo", s.confOAuthGoogle, s.userDataClient.StoreGoogleLoginInUserProfile)
+}
+
+func (s *LoginServer) HandleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	handleOAuthCallback(s, w, r, "https://api.github.com/user", s.confOAuthGitHub, s.userDataClient.StoreGitHubLoginInUserProfile)
+}
+
+func (s *LoginServer) HandleFacebookCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	handleOAuthCallback(s, w, r, "https://graph.facebook.com/me?fields=link,name,email", s.confOAuthFacebook, s.userDataClient.StoreFacebookLoginInUserProfile)
+}
+
+// handleOAuthCallback handles the OAuth callback response, interpreting it as the specific OAuthUserInfo struct type.
+func handleOAuthCallback[OAuthUserInfo any](s *LoginServer, w http.ResponseWriter, r *http.Request, userInfoUrl string, conf *oauth2.Config, storeLogin func(context.Context, OAuthUserInfo, string, *oauth2.Token) (string, error), ) {
 	c := r.Context()
 
-	checkStateResult, err := s.checkOauthResponseStateAndGetBody(w, r, s.confOAuthGoogle, "https://www.googleapis.com/oauth2/v3/userinfo", c)
+	checkStateResult, err := s.checkOauthResponseStateAndGetBody(w, r, conf, userInfoUrl, c)
 	if err != nil {
 		loginCallbackFailedErr("checkOauthResponseStateAndGetBody() failed", err, w, r)
 		return
 	}
 
-	var userinfo oauthparsers2.GoogleUserInfo
+	var userinfo OAuthUserInfo
 	err = json.Unmarshal(checkStateResult.body, &userinfo)
 	if err != nil {
 		loginCallbackFailedErr("Unmarshalling of JSON from oauth2 callback failed", err, w, r)
@@ -163,11 +175,10 @@ func (s *LoginServer) HandleGoogleCallback(w http.ResponseWriter, r *http.Reques
 		loginCallbackFailedErr("getProfileFromSession() failed", err, w, r)
 		return
 	}
-	// Store in the database,
-	// either creating a new user or updating an existing user.
-	userId, err = s.userDataClient.StoreGoogleLoginInUserProfile(c, userinfo, userId, checkStateResult.token)
+
+	userId, err = storeLogin(c, userinfo, userId, checkStateResult.token)
 	if err != nil {
-		loginCallbackFailedErr("StoreGoogleLoginInUserProfile() failed", err, w, r)
+		loginCallbackFailedErr("storeLogin() failed", err, w, r)
 		return
 	}
 
@@ -302,38 +313,6 @@ func (s *LoginServer) HandleGitHubLogin(w http.ResponseWriter, r *http.Request, 
 	http.Redirect(w, r, url, http.StatusFound)
 }
 
-func (s *LoginServer) HandleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	c := r.Context()
-
-	checkStateResult, err := s.checkOauthResponseStateAndGetBody(w, r, s.confOAuthGitHub, "https://api.github.com/user", c)
-	if err != nil {
-		loginCallbackFailedErr("checkOauthResponseStateAndGetBody() failed", err, w, r)
-		return
-	}
-
-	var userinfo oauthparsers2.GitHubUserInfo
-	err = json.Unmarshal(checkStateResult.body, &userinfo)
-	if err != nil {
-		loginCallbackFailedErr("Unmarshalling of JSON from oauth2 callback failed", err, w, r)
-		return
-	}
-
-	// Get the existing logged-in user's userId, if any, from the cookie, if any:
-	userId, _, err := s.userSessionStore.GetProfileFromSession(r)
-	if err != nil {
-		loginCallbackFailedErr("getProfileFromSession() failed", err, w, r)
-		return
-	}
-
-	userId, err = s.userDataClient.StoreGitHubLoginInUserProfile(c, userinfo, userId, checkStateResult.token)
-	if err != nil {
-		loginCallbackFailedErr("StoreGitHubLoginInUserProfile() failed", err, w, r)
-		return
-	}
-
-	s.storeCookieAndRedirect(r, w, c, userId, checkStateResult.token)
-}
-
 func (s *LoginServer) HandleFacebookLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	// Redirect the user to the Facebook login page:
 	url, err := s.generateOAuthUrl(r, s.confOAuthFacebook)
@@ -343,41 +322,6 @@ func (s *LoginServer) HandleFacebookLogin(w http.ResponseWriter, r *http.Request
 	}
 
 	http.Redirect(w, r, url, http.StatusFound)
-}
-
-func (s *LoginServer) HandleFacebookCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	c := r.Context()
-
-	checkStateResult, err := s.checkOauthResponseStateAndGetBody(w, r, s.confOAuthFacebook, "https://graph.facebook.com/me?fields=link,name,email", c)
-	if err != nil {
-		loginCallbackFailedErr("checkOauthResponseStateAndGetBody() failed", err, w, r)
-		return
-	}
-
-	var userinfo oauthparsers2.FacebookUserInfo
-	err = json.Unmarshal(checkStateResult.body, &userinfo)
-	if err != nil {
-		loginCallbackFailedErr("Unmarshalling of JSON from oauth2 callback failed", err, w, r)
-		return
-	}
-
-	// Get the existing logged-in user's userId, if any, from the cookie, if any:
-	// (This lets us associate multiple oauth2 logins with a single user ID.)
-	var userId string
-	userId, _, err = s.userSessionStore.GetProfileFromSession(r)
-	if err != nil {
-		loginCallbackFailedErr("getProfileFromSession() failed.", err, w, r)
-		return
-	}
-
-	// Store in the database:
-	userId, err = s.userDataClient.StoreFacebookLoginInUserProfile(c, userinfo, userId, checkStateResult.token)
-	if err != nil {
-		loginCallbackFailedErr("StoreFacebookLoginInUserProfile() failed.", err, w, r)
-		return
-	}
-
-	s.storeCookieAndRedirect(r, w, c, userId, checkStateResult.token)
 }
 
 func (s *LoginServer) loginFailed(message string, err error, w http.ResponseWriter, r *http.Request) {
