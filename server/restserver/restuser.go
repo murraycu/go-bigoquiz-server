@@ -2,57 +2,74 @@ package restserver
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/julienschmidt/httprouter"
 	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
 	restuser "github.com/murraycu/go-bigoquiz-server/server/restserver/user"
-	"net/http"
 )
 
 func (s *RestServer) HandleUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	loginInfo, _, err := s.getLoginInfoFromSessionAndDb(r)
+	result, err := s.getLoginInfoFromSessionAndDb(r)
 	if err != nil {
 		handleErrorAsHttpError(w, http.StatusInternalServerError, "getLoginInfoFromSessionAndDb() failed: %v", err)
 		return
 	}
 
-	marshalAndWriteOrHttpError(w, &loginInfo)
+	marshalAndWriteOrHttpError(w, result.LoginInfo)
+}
+
+type getProfileResult struct {
+	Profile *domainuser.Profile
+	UserId  string
 }
 
 // Returns the LoginInfo and the userID.
-func (s *RestServer) getProfileFromSessionAndDb(r *http.Request) (*domainuser.Profile, string, error) {
+func (s *RestServer) getProfileFromSessionAndDb(r *http.Request) (*getProfileResult, error) {
 	userId, err := s.getUserIdFromSessionAndDb(r)
 	if err != nil {
-		return nil, "", fmt.Errorf("getUserIdFromSessionAndDb() failed: %v", err)
+		return nil, fmt.Errorf("getUserIdFromSessionAndDb() failed: %v", err)
 	}
 
 	if len(userId) == 0 {
 		// Not an error.
 		// It's just not in the session cookie.
-		return nil, "", nil
+		return &getProfileResult{}, nil
 	}
 
 	c := r.Context()
 	profile, err := s.userDataClient.GetUserProfileById(c, userId)
 	if err != nil {
-		return nil, "", fmt.Errorf("GetUserProfileById() failed: %v", err)
+		return nil, fmt.Errorf("GetUserProfileById() failed: %v", err)
 	}
 
-	return profile, userId, nil
+	return &getProfileResult{
+		Profile: profile,
+		UserId:  userId,
+	}, nil
+}
+
+type getLoginInfoResult struct {
+	LoginInfo *restuser.LoginInfo
+	UserId    string
 }
 
 // Returns the LoginInfo and the userID.
-func (s *RestServer) getLoginInfoFromSessionAndDb(r *http.Request) (*restuser.LoginInfo, string, error) {
+func (s *RestServer) getLoginInfoFromSessionAndDb(r *http.Request) (*getLoginInfoResult, error) {
 	var loginInfo restuser.LoginInfo
 
-	profile, userId, err := s.getProfileFromSessionAndDb(r)
+	getProfileResult, err := s.getProfileFromSessionAndDb(r)
 	if err != nil {
 		loginInfo.LoggedIn = false
 		loginInfo.ErrorMessage = fmt.Sprintf("not logged in (%v)", err)
 	}
 
-	s.updateLoginInfoFromProfile(&loginInfo, profile)
+	s.updateLoginInfoFromProfile(&loginInfo, getProfileResult.Profile)
 
-	return &loginInfo, userId, err
+	return &getLoginInfoResult{
+		LoginInfo: &loginInfo,
+		UserId:    getProfileResult.UserId,
+	}, err
 }
 
 func (s *RestServer) updateLoginInfoFromProfile(loginInfo *restuser.LoginInfo, profile *domainuser.Profile) {
