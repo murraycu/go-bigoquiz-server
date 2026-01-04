@@ -1,8 +1,9 @@
 package db
 
 import (
-	"cloud.google.com/go/datastore"
 	"fmt"
+
+	"cloud.google.com/go/datastore"
 	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
 	dtouser "github.com/murraycu/go-bigoquiz-server/repositories/db/dtos/user"
 )
@@ -96,8 +97,11 @@ func convertDtoProfileToDomainProfile(dto *dtouser.Profile) *domainuser.Profile 
 		Name:  dto.Name,
 		Email: dto.Email,
 
+		GoogleLinked:       dto.GoogleId != "",
 		GoogleProfileUrl:   dto.GoogleProfileUrl,
+		GitHubLinked:       dto.GitHubId != 0,
 		GitHubProfileUrl:   dto.GitHubProfileUrl,
+		FacebookLinked:     dto.FacebookId != "",
 		FacebookProfileUrl: dto.FacebookProfileUrl,
 	}
 

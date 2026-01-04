@@ -63,11 +63,11 @@ func (s *RestServer) updateLoginInfoFromProfile(loginInfo *restuser.LoginInfo, p
 		loginInfo.LoggedIn = true
 		loginInfo.Nickname = profile.Name
 
-		loginInfo.GoogleLinked = len(profile.GoogleProfileUrl) != 0
+		loginInfo.GoogleLinked = profile.GoogleLinked
 		loginInfo.GoogleProfileUrl = profile.GoogleProfileUrl
-		loginInfo.GitHubLinked = len(profile.GitHubProfileUrl) != 0
+		loginInfo.GitHubLinked = profile.GitHubLinked
 		loginInfo.GitHubProfileUrl = profile.GitHubProfileUrl
-		loginInfo.FacebookLinked = len(profile.FacebookProfileUrl) != 0
+		loginInfo.FacebookLinked = profile.FacebookLinked
 		loginInfo.FacebookProfileUrl = profile.FacebookProfileUrl
 	}
 }
