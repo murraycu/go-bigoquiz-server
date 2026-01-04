@@ -144,14 +144,14 @@ func (s *LoginServer) checkStateAndGetCode(c context.Context, r *http.Request) (
 func (s *LoginServer) HandleGoogleCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	c := r.Context()
 
-	token, body, ok := s.checkStateAndGetBody(w, r, s.confOAuthGoogle, "https://www.googleapis.com/oauth2/v3/userinfo", c)
+	checkStateResult, ok := s.checkStateAndGetBody(w, r, s.confOAuthGoogle, "https://www.googleapis.com/oauth2/v3/userinfo", c)
 	if !ok {
 		// checkStateAndGetBody() already called loginFailed().
 		return
 	}
 
 	var userinfo oauthparsers2.GoogleUserInfo
-	err := json.Unmarshal(body, &userinfo)
+	err := json.Unmarshal(checkStateResult.body, &userinfo)
 	if err != nil {
 		loginCallbackFailedErr("Unmarshaling of JSON from oauth2 callback failed", err, w, r)
 		return
@@ -165,43 +165,48 @@ func (s *LoginServer) HandleGoogleCallback(w http.ResponseWriter, r *http.Reques
 	}
 	// Store in the database,
 	// either creating a new user or updating an existing user.
-	userId, err = s.userDataClient.StoreGoogleLoginInUserProfile(c, userinfo, userId, token)
+	userId, err = s.userDataClient.StoreGoogleLoginInUserProfile(c, userinfo, userId, checkStateResult.token)
 	if err != nil {
 		loginCallbackFailedErr("StoreGoogleLoginInUserProfile() failed", err, w, r)
 		return
 	}
 
-	s.storeCookieAndRedirect(r, w, c, userId, token)
+	s.storeCookieAndRedirect(r, w, c, userId, checkStateResult.token)
 }
 
-func (s *LoginServer) checkStateAndGetBody(w http.ResponseWriter, r *http.Request, conf *oauth2.Config, url string, c context.Context) (*oauth2.Token, []byte, bool) {
+type CheckStateResult struct {
+	token *oauth2.Token
+	body  []byte
+}
+
+func (s *LoginServer) checkStateAndGetBody(w http.ResponseWriter, r *http.Request, conf *oauth2.Config, url string, c context.Context) (*CheckStateResult, bool) {
 	code, err := s.checkStateAndGetCode(c, r)
 	if err != nil {
 		log.Printf("checkStateAndGetCode() failed: %v", err)
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
-		return nil, nil, false
+		return nil, false
 	}
 
 	return s.exchangeAndGetUserBody(w, r, conf, code, url, c)
 }
 
-func (s *LoginServer) exchangeAndGetUserBody(w http.ResponseWriter, r *http.Request, conf *oauth2.Config, code string, url string, c context.Context) (*oauth2.Token, []byte, bool) {
+func (s *LoginServer) exchangeAndGetUserBody(w http.ResponseWriter, r *http.Request, conf *oauth2.Config, code string, url string, c context.Context) (*CheckStateResult, bool) {
 	token, err := conf.Exchange(c, code)
 	if err != nil {
 		s.loginFailed("config.Exchange() failed", err, w, r)
-		return nil, nil, false
+		return nil, false
 	}
 
 	if !token.Valid() {
 		s.loginFailed("loginFailedUrl.Exchange() returned an invalid token", err, w, r)
-		return nil, nil, false
+		return nil, false
 	}
 
 	client := conf.Client(c, token)
 	infoResponse, err := client.Get(url)
 	if err != nil {
 		s.loginFailed("client.Get() failed", err, w, r)
-		return nil, nil, false
+		return nil, false
 	}
 
 	defer func() {
@@ -214,10 +219,13 @@ func (s *LoginServer) exchangeAndGetUserBody(w http.ResponseWriter, r *http.Requ
 	body, err := ioutil.ReadAll(infoResponse.Body)
 	if err != nil {
 		s.loginFailed("ReadAll(body) failed", err, w, r)
-		return nil, nil, false
+		return nil, false
 	}
 
-	return token, body, true
+	return &CheckStateResult{
+		token: token,
+		body:  body,
+	}, true
 }
 
 // Called after user info has been successfully stored in the database.
@@ -295,14 +303,14 @@ func (s *LoginServer) HandleGitHubLogin(w http.ResponseWriter, r *http.Request, 
 func (s *LoginServer) HandleGitHubCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	c := r.Context()
 
-	token, body, ok := s.checkStateAndGetBody(w, r, s.confOAuthGitHub, "https://api.github.com/user", c)
+	checkStateResult, ok := s.checkStateAndGetBody(w, r, s.confOAuthGitHub, "https://api.github.com/user", c)
 	if !ok {
 		// checkStateAndGetBody() already called loginFailed().
 		return
 	}
 
 	var userinfo oauthparsers2.GitHubUserInfo
-	err := json.Unmarshal(body, &userinfo)
+	err := json.Unmarshal(checkStateResult.body, &userinfo)
 	if err != nil {
 		loginCallbackFailedErr("Unmarshaling of JSON from oauth2 callback failed", err, w, r)
 		return
@@ -315,13 +323,13 @@ func (s *LoginServer) HandleGitHubCallback(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	userId, err = s.userDataClient.StoreGitHubLoginInUserProfile(c, userinfo, userId, token)
+	userId, err = s.userDataClient.StoreGitHubLoginInUserProfile(c, userinfo, userId, checkStateResult.token)
 	if err != nil {
 		loginCallbackFailedErr("StoreGitHubLoginInUserProfile() failed", err, w, r)
 		return
 	}
 
-	s.storeCookieAndRedirect(r, w, c, userId, token)
+	s.storeCookieAndRedirect(r, w, c, userId, checkStateResult.token)
 }
 
 func (s *LoginServer) HandleFacebookLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -338,14 +346,14 @@ func (s *LoginServer) HandleFacebookLogin(w http.ResponseWriter, r *http.Request
 func (s *LoginServer) HandleFacebookCallback(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	c := r.Context()
 
-	token, body, ok := s.checkStateAndGetBody(w, r, s.confOAuthFacebook, "https://graph.facebook.com/me?fields=link,name,email", c)
+	checkStateResult, ok := s.checkStateAndGetBody(w, r, s.confOAuthFacebook, "https://graph.facebook.com/me?fields=link,name,email", c)
 	if !ok {
 		// checkStateAndGetBody() already called loginFailed().
 		return
 	}
 
 	var userinfo oauthparsers2.FacebookUserInfo
-	err := json.Unmarshal(body, &userinfo)
+	err := json.Unmarshal(checkStateResult.body, &userinfo)
 	if err != nil {
 		loginCallbackFailedErr("Unmarshaling of JSON from oauth2 callback failed", err, w, r)
 		return
@@ -360,13 +368,13 @@ func (s *LoginServer) HandleFacebookCallback(w http.ResponseWriter, r *http.Requ
 	}
 
 	// Store in the database:
-	userId, err = s.userDataClient.StoreFacebookLoginInUserProfile(c, userinfo, userId, token)
+	userId, err = s.userDataClient.StoreFacebookLoginInUserProfile(c, userinfo, userId, checkStateResult.token)
 	if err != nil {
 		loginCallbackFailedErr("StoreFacebookLoginInUserProfile() failed.", err, w, r)
 		return
 	}
 
-	s.storeCookieAndRedirect(r, w, c, userId, token)
+	s.storeCookieAndRedirect(r, w, c, userId, checkStateResult.token)
 }
 
 func (s *LoginServer) loginFailed(message string, err error, w http.ResponseWriter, r *http.Request) {
