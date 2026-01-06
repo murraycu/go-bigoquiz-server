@@ -1,9 +1,10 @@
 package restserver
 
 import (
+	"net/http"
+
 	"github.com/julienschmidt/httprouter"
 	restquiz "github.com/murraycu/go-bigoquiz-server/server/restserver/quiz"
-	"net/http"
 )
 
 func (s *RestServer) HandleQuestionNext(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -35,7 +36,7 @@ func (s *RestServer) HandleQuestionNext(w http.ResponseWriter, r *http.Request, 
 		return
 	}
 
-	userId, err := s.getUserIdFromSessionAndDb(r)
+	userId, err := s.getUserIdFromSessionAndDb(w, r)
 	if err != nil {
 		handleErrorAsHttpError(w, http.StatusInternalServerError, "logged-in check failed. getUserIdFromSessionAndDb() failed: %v", err)
 		return
