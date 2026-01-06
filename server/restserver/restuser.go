@@ -10,7 +10,7 @@ import (
 )
 
 func (s *RestServer) HandleUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	result, err := s.getLoginInfoFromSessionAndDb(r)
+	result, err := s.getLoginInfoFromSessionAndDb(w, r)
 	if err != nil {
 		handleErrorAsHttpError(w, http.StatusInternalServerError, "getLoginInfoFromSessionAndDb() failed: %v", err)
 		return
@@ -25,8 +25,8 @@ type getProfileResult struct {
 }
 
 // Returns the LoginInfo and the userID.
-func (s *RestServer) getProfileFromSessionAndDb(r *http.Request) (*getProfileResult, error) {
-	userId, err := s.getUserIdFromSessionAndDb(r)
+func (s *RestServer) getProfileFromSessionAndDb(w http.ResponseWriter, r *http.Request) (*getProfileResult, error) {
+	userId, err := s.getUserIdFromSessionAndDb(w, r)
 	if err != nil {
 		return nil, fmt.Errorf("getUserIdFromSessionAndDb() failed: %v", err)
 	}
@@ -55,10 +55,10 @@ type getLoginInfoResult struct {
 }
 
 // Returns the LoginInfo and the userID.
-func (s *RestServer) getLoginInfoFromSessionAndDb(r *http.Request) (*getLoginInfoResult, error) {
+func (s *RestServer) getLoginInfoFromSessionAndDb(w http.ResponseWriter, r *http.Request) (*getLoginInfoResult, error) {
 	var loginInfo restuser.LoginInfo
 
-	getProfileResult, err := s.getProfileFromSessionAndDb(r)
+	getProfileResult, err := s.getProfileFromSessionAndDb(w, r)
 	if err != nil {
 		loginInfo.LoggedIn = false
 		loginInfo.ErrorMessage = fmt.Sprintf("not logged in (%v)", err)
@@ -102,7 +102,7 @@ func (s *RestServer) updateLoginInfoFromProfile(loginInfo *restuser.LoginInfo, p
 /** Get the user ID.
  * Returns an empty user ID, and a nil error, if the user is not logged in.
  */
-func (s *RestServer) getUserIdFromSessionAndDb(r *http.Request) (string, error) {
+func (s *RestServer) getUserIdFromSessionAndDb(w http.ResponseWriter, r *http.Request) (string, error) {
 	userIdAndToken, err := s.userSessionStore.GetUserIdAndOAuthTokenFromSession(r)
 	if err != nil {
 		return "", fmt.Errorf("GetUserIdAndOAuthTokenFromSession() failed: %v", err)
