@@ -183,7 +183,12 @@ func handleOAuthCallback[OAuthUserInfo any](o *OAuthClient, w http.ResponseWrite
 		return
 	}
 
-	o.storeCookieAndRedirect(r, w, ctx, userId, checkStateResult.token, oauthType)
+	if err := o.storeCookie(r, w, checkStateResult.token, oauthType, userId); err != nil {
+		o.loginFailed("storeCookie() failed", err, w, r)
+		return
+	}
+
+	o.redirectToInitialPage(r, w)
 }
 
 type CheckStateResult struct {
@@ -245,17 +250,22 @@ func (o *OAuthClient) exchangeAndGetUserBody(w http.ResponseWriter, r *http.Requ
 	}, nil
 }
 
+func (o *OAuthClient) redirectToInitialPage(r *http.Request, w http.ResponseWriter) {
+	// Redirect the user back to a page to show they are logged in:
+	var userProfileUrl = o.config.BaseUrl + "/user"
+	http.Redirect(w, r, userProfileUrl, http.StatusFound)
+}
+
 // Called after user info has been successfully stored in the database.
 //
 // oauthType should be one of usersessionstore.OAuthTokenTypeGoogle, usersessionstore.OAuthTokenTypeGitHub,
 // usersessionstore.OAuthTokenTypeFacebook, etc
-func (o *OAuthClient) storeCookieAndRedirect(r *http.Request, w http.ResponseWriter, ctx context.Context, strUserId string, token *oauth2.Token, oauthType string) {
+func (o *OAuthClient) storeCookie(r *http.Request, w http.ResponseWriter, token *oauth2.Token, oauthType string, strUserId string) error {
 	// Store the token in the cookie
 	// so we can retrieve it from subsequent requests from the browser.
 	session, err := o.userSessionStore.GetSession(r)
 	if err != nil {
-		o.loginFailed("Could not create new session", err, w, r)
-		return
+		return fmt.Errorf("could not create new session: %v", err)
 	}
 
 	session.Values[usersessionstore.OAuthTokenSessionKey] = token
@@ -265,13 +275,10 @@ func (o *OAuthClient) storeCookieAndRedirect(r *http.Request, w http.ResponseWri
 	session.Values[usersessionstore.UserIdSessionKey] = strUserId
 
 	if err := session.Save(r, w); err != nil {
-		o.loginFailed("Could not save session", err, w, r)
-		return
+		return fmt.Errorf("could not save session: %v", err)
 	}
 
-	// Redirect the user back to a page to show they are logged in:
-	var userProfileUrl = o.config.BaseUrl + "/user"
-	http.Redirect(w, r, userProfileUrl, http.StatusFound)
+	return nil
 }
 
 func (o *OAuthClient) loginFailed(message string, err error, w http.ResponseWriter, r *http.Request) {
