@@ -112,19 +112,12 @@ func (s *RestServer) getUserIdFromSessionAndDb(w http.ResponseWriter, r *http.Re
 		return "", fmt.Errorf("GetUserIdAndOAuthTokenFromSession() returned nil")
 	}
 
-	token := userIdAndToken.Token
-	if token == nil {
-		return "", fmt.Errorf("GetUserIdAndOAuthTokenFromSession() returned a nil token")
+	userId := userIdAndToken.UserId
+
+	err = s.oauthClient.CheckTokenValidity(r, w, userId, userIdAndToken.Token, userIdAndToken.OAuthType)
+	if err != nil {
+		return "", fmt.Errorf("CheckTokenValidity() failed: %v", err)
 	}
 
-	if !token.Valid() {
-		// TODO: Revalidate it.
-
-		// This is not an error
-		// (it is normal for a token to expire.)
-		// (the user is now not logged in.)
-		return "", nil
-	}
-
-	return userIdAndToken.UserId, nil
+	return userId, nil
 }
