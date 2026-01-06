@@ -7,8 +7,10 @@ import (
 	"net/http"
 	"sort"
 
+	"github.com/murraycu/go-bigoquiz-server/config"
 	"github.com/murraycu/go-bigoquiz-server/repositories/db"
 	"github.com/murraycu/go-bigoquiz-server/repositories/quizzes"
+	"github.com/murraycu/go-bigoquiz-server/server/loginserver"
 	restquiz "github.com/murraycu/go-bigoquiz-server/server/restserver/quiz"
 	"github.com/murraycu/go-bigoquiz-server/server/usersessionstore"
 )
@@ -38,9 +40,11 @@ type RestServer struct {
 
 	// Session cookie store.
 	userSessionStore usersessionstore.UserSessionStore
+
+	oauthClient *loginserver.OAuthClient
 }
 
-func NewRestServer(quizzesStore quizzes.QuizzesRepository, userSessionStore usersessionstore.UserSessionStore, userDataRepository db.UserDataRepository) (*RestServer, error) {
+func NewRestServer(quizzesStore quizzes.QuizzesRepository, userSessionStore usersessionstore.UserSessionStore, userDataRepository db.UserDataRepository, conf *config.Config) (*RestServer, error) {
 	result := &RestServer{}
 	result.userDataClient = userDataRepository
 
@@ -75,6 +79,8 @@ func NewRestServer(quizzesStore quizzes.QuizzesRepository, userSessionStore user
 	result.quizzesListFull = buildQuizzesFull(result.quizzes)
 
 	result.userSessionStore = userSessionStore
+
+	result.oauthClient, err = loginserver.NewOAuthClient(result.userSessionStore, result.userDataClient, conf)
 
 	return result, nil
 }

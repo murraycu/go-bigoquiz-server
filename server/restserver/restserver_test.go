@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/gorilla/sessions"
+	"github.com/murraycu/go-bigoquiz-server/config"
 	domainquiz "github.com/murraycu/go-bigoquiz-server/domain/quiz"
 	domainuser "github.com/murraycu/go-bigoquiz-server/domain/user"
 	"github.com/murraycu/go-bigoquiz-server/server/loginserver/oauthparsers"
@@ -69,6 +70,18 @@ func (m MockUserDataRepository) StoreFacebookLoginInUserProfile(c context.Contex
 	panic("Unimplemented")
 }
 
+func (m MockUserDataRepository) StoreGoogleTokenInUserProfile(c context.Context, userId string, token *oauth2.Token) error {
+	panic("Unimplemented")
+}
+
+func (m MockUserDataRepository) StoreGitHubTokenInUserProfile(c context.Context, userId string, token *oauth2.Token) error {
+	panic("Unimplemented")
+}
+
+func (m MockUserDataRepository) StoreFacebookTokenInUserProfile(c context.Context, userId string, token *oauth2.Token) error {
+	panic("Unimplemented")
+}
+
 type MockQuizzesRepository struct{}
 
 func (m MockQuizzesRepository) LoadQuizzes() (quizzes.MapQuizzes, error) {
@@ -82,8 +95,9 @@ func TestNewRestServer(t *testing.T) {
 	userSessionStore := &MockUserSessionStore{}
 	userDataRepository := &MockUserDataRepository{}
 	quizzesStore := &MockQuizzesRepository{}
+	conf := &config.Config{}
 
-	restServer, err := NewRestServer(quizzesStore, userSessionStore, userDataRepository)
+	restServer, err := NewRestServer(quizzesStore, userSessionStore, userDataRepository, conf)
 	assert.Nil(t, err)
 	assert.NotNil(t, restServer)
 }
@@ -92,8 +106,9 @@ func TestHasQuizzes(t *testing.T) {
 	userSessionStore := &MockUserSessionStore{}
 	userDataRepository := &MockUserDataRepository{}
 	quizzesStore := &MockQuizzesRepository{}
+	conf := &config.Config{}
 
-	restServer, err := NewRestServer(quizzesStore, userSessionStore, userDataRepository)
+	restServer, err := NewRestServer(quizzesStore, userSessionStore, userDataRepository, conf)
 	assert.Nil(t, err)
 
 	assert.NotEmpty(t, restServer.quizzesListSimple)
@@ -124,7 +139,9 @@ func TestNewRestServerWithDataStore(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, quizzesStore)
 
-	restServer, err := NewRestServer(quizzesStore, userSessionStore, userDataClient)
+	conf := &config.Config{}
+
+	restServer, err := NewRestServer(quizzesStore, userSessionStore, userDataClient, conf)
 	assert.Nil(t, err)
 	assert.NotNil(t, restServer)
 

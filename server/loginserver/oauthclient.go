@@ -320,3 +320,101 @@ func (o *OAuthClient) RedirectToFacebookLogin(w http.ResponseWriter, r *http.Req
 
 	http.Redirect(w, r, url, http.StatusFound)
 }
+
+func (o *OAuthClient) CheckTokenValidity(r *http.Request, w http.ResponseWriter, userId string, token *oauth2.Token, oauthType string) error {
+	if len(userId) == 0 {
+		return fmt.Errorf("userId is empty")
+	}
+	if token == nil {
+		return fmt.Errorf("token is nil")
+	}
+
+	oauthConfig, err := o.oauthConfigForOAuthType(oauthType)
+	if err != nil {
+		return fmt.Errorf("oauthConfigForOAuthType() failed: %v", err)
+	}
+
+	ctx := r.Context()
+
+	// Use TokenSource to check if the token's access token has expired, and, if necessary, get a new access token via
+	// the refresh token.
+	newToken, err := oauthConfig.TokenSource(ctx, token).Token()
+	if err != nil {
+		return fmt.Errorf("TokenSource.Token() failed: %v", err)
+	}
+
+	if !newToken.Valid() {
+		return fmt.Errorf("TokenSource returned an invalid token")
+	}
+
+	if newToken.AccessToken != token.AccessToken {
+		// The Access Token was refreshed, so store the token (store the access token and the refresh token)
+		storeFunc, err := o.storeFuncForOAuthType(oauthType)
+		if err != nil {
+			return fmt.Errorf("storeFuncForOAuthType() failed: %v", err)
+		}
+
+		if err := storeFunc(ctx, userId, newToken); err != nil {
+			return fmt.Errorf("StoreGoogleTokenInUserProfile() failed: %v", err)
+		}
+
+		if err := o.storeCookie(r, w, newToken, oauthType, userId); err != nil {
+			return fmt.Errorf("storeCookie() failed: %v", err)
+		}
+	}
+
+	return nil
+}
+
+func (o *OAuthClient) storeFuncForOAuthType(oauthType string) (func(c context.Context, userId string, token *oauth2.Token) error, error) {
+	var storeFunc func(c context.Context, userId string, token *oauth2.Token) error
+	switch oauthType {
+	case usersessionstore.OAuthTokenTypeGoogle:
+		{
+			storeFunc = o.userDataClient.StoreGoogleTokenInUserProfile
+			break
+		}
+	case usersessionstore.OAuthTokenTypeGitHub:
+		{
+			storeFunc = o.userDataClient.StoreGitHubTokenInUserProfile
+			break
+		}
+	case usersessionstore.OAuthTokenTypeFacebook:
+		{
+			storeFunc = o.userDataClient.StoreFacebookTokenInUserProfile
+			break
+		}
+	default:
+		{
+			return nil, fmt.Errorf("invalid oauthType: '%s'", oauthType)
+		}
+	}
+	return storeFunc, nil
+}
+
+func (o *OAuthClient) oauthConfigForOAuthType(oauthType string) (*oauth2.Config, error) {
+	var oauthConfig *oauth2.Config
+	switch oauthType {
+	case usersessionstore.OAuthTokenTypeGoogle:
+		{
+			oauthConfig = o.confOAuthGoogle
+			break
+		}
+	case usersessionstore.OAuthTokenTypeGitHub:
+		{
+			oauthConfig = o.confOAuthGitHub
+			break
+		}
+	case usersessionstore.OAuthTokenTypeFacebook:
+		{
+			oauthConfig = o.confOAuthFacebook
+			break
+		}
+	default:
+		{
+			return nil, fmt.Errorf("invalid oauthType: '%s'", oauthType)
+		}
+
+	}
+	return oauthConfig, nil
+}

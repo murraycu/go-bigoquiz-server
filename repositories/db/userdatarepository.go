@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"cloud.google.com/go/datastore"
@@ -26,9 +27,14 @@ type UserDataRepository interface {
 	GetUserStatsForSection(c context.Context, strUserId string, quizId string, sectionId string) (*domainuser.Stats, error)
 	StoreUserStats(c context.Context, userID string, stats *domainuser.Stats) error
 	DeleteUserStatsForQuiz(c context.Context, strUserId string, quizId string) error
+
 	StoreGoogleLoginInUserProfile(c context.Context, userInfo oauthparsers.GoogleUserInfo, strUserId string, token *oauth2.Token) (string, error)
 	StoreGitHubLoginInUserProfile(c context.Context, userInfo oauthparsers.GitHubUserInfo, strUserId string, token *oauth2.Token) (string, error)
 	StoreFacebookLoginInUserProfile(c context.Context, userInfo oauthparsers.FacebookUserInfo, strUserId string, token *oauth2.Token) (string, error)
+
+	StoreGoogleTokenInUserProfile(c context.Context, userId string, token *oauth2.Token) error
+	StoreGitHubTokenInUserProfile(c context.Context, userId string, token *oauth2.Token) error
+	StoreFacebookTokenInUserProfile(c context.Context, userId string, token *oauth2.Token) error
 }
 
 type UserDataRepositoryImpl struct {
@@ -126,6 +132,49 @@ func storeOAuthLoginInUserProfile[OAuthUserInfo any, ID any](db *UserDataReposit
 	}
 
 	return userId.Encode(), nil
+}
+
+func (db *UserDataRepositoryImpl) StoreGitHubTokenInUserProfile(c context.Context, userId string, token *oauth2.Token) error {
+	return storeOAuthTokenInUserProfile(db, c, userId, token, db.updateProfileFromGitHubOAuthToken)
+}
+
+func (db *UserDataRepositoryImpl) StoreFacebookTokenInUserProfile(c context.Context, userId string, token *oauth2.Token) error {
+	return storeOAuthTokenInUserProfile(db, c, userId, token, db.updateProfileFromFacebookOAuthToken)
+}
+
+func (db *UserDataRepositoryImpl) StoreGoogleTokenInUserProfile(c context.Context, userId string, token *oauth2.Token) error {
+	return storeOAuthTokenInUserProfile(db, c, userId, token, db.updateProfileFromGoogleOAuthToken)
+}
+
+func storeOAuthTokenInUserProfile(db *UserDataRepositoryImpl, c context.Context, strUserId string, token *oauth2.Token, updateProfileFromOAuthToken func(*dtouser.Profile, *oauth2.Token) error) error {
+	if len(strUserId) == 0 {
+		return fmt.Errorf("storeOAuthTokenInUserProfile(): strUserId is empty")
+	}
+
+	userId, err := datastore.DecodeKey(strUserId)
+	if err != nil {
+		return fmt.Errorf("datastore.DecodeKey() failed: %v", err)
+	}
+
+	if userId == nil {
+		return errors.New("userId is nil")
+	}
+
+	profile, err := db.getProfileFromDbByUserID(c, userId)
+	if err != nil {
+		return fmt.Errorf("getProfileFromDbByUserID() failed")
+	}
+
+	// Update the Profile:
+	if err := updateProfileFromOAuthToken(profile, token); err != nil {
+		return fmt.Errorf("updateProfileFromOAuthToken() failed: %v", err)
+	}
+
+	if userId, err = db.client.Put(c, userId, profile); err != nil {
+		return fmt.Errorf("datastore Put(with userId %v) failed: %v", userId, err)
+	}
+
+	return nil
 }
 
 func (db *UserDataRepositoryImpl) getProfileFromDbByGitHubID(c context.Context, id int) (*datastore.Key, *dtouser.Profile, error) {
@@ -491,6 +540,11 @@ func (db *UserDataRepositoryImpl) DeleteUserStatsForQuiz(c context.Context, strU
 
 	return nil
 }
+func (db *UserDataRepositoryImpl) updateProfileFromGoogleOAuthToken(profile *dtouser.Profile, token *oauth2.Token) error {
+	profile.GoogleAccessToken = *token
+
+	return nil
+}
 
 func (db *UserDataRepositoryImpl) updateProfileFromGoogleUserInfo(profile *dtouser.Profile, userInfo *oauthparsers.GoogleUserInfo, token *oauth2.Token) error {
 	if profile == nil {
@@ -512,8 +566,17 @@ func (db *UserDataRepositoryImpl) updateProfileFromGoogleUserInfo(profile *dtous
 		profile.Email = userInfo.Email
 	}
 
-	profile.GoogleAccessToken = *token
+	if err := db.updateProfileFromGoogleOAuthToken(profile, token); err != nil {
+		return fmt.Errorf("failed to update Google OAuth token: %v", err)
+	}
+
 	profile.GoogleProfileUrl = userInfo.ProfileUrl
+
+	return nil
+}
+
+func (db *UserDataRepositoryImpl) updateProfileFromGitHubOAuthToken(profile *dtouser.Profile, token *oauth2.Token) error {
+	profile.GitHubAccessToken = *token
 
 	return nil
 }
@@ -534,8 +597,18 @@ func (db *UserDataRepositoryImpl) updateProfileFromGitHubUserInfo(profile *dtous
 	profile.GitHubId = userInfo.Id
 	profile.Name = userInfo.Name
 	// TODO: Get a verified email address, to compare with the other account?
-	profile.GitHubAccessToken = *token
+
+	if err := db.updateProfileFromGitHubOAuthToken(profile, token); err != nil {
+		return fmt.Errorf("failed to update GitHub OAuth token: %v", err)
+	}
+
 	profile.GitHubProfileUrl = userInfo.ProfileUrl
+
+	return nil
+}
+
+func (db *UserDataRepositoryImpl) updateProfileFromFacebookOAuthToken(profile *dtouser.Profile, token *oauth2.Token) error {
+	profile.FacebookAccessToken = *token
 
 	return nil
 }
@@ -555,8 +628,11 @@ func (db *UserDataRepositoryImpl) updateProfileFromFacebookUserInfo(profile *dto
 
 	profile.FacebookId = userInfo.Id
 	profile.Name = userInfo.Name
-	// TODO: Get a verified email address, to compare with the other account?
-	profile.FacebookAccessToken = *token
+
+	if err := db.updateProfileFromFacebookOAuthToken(profile, token); err != nil {
+		return fmt.Errorf("failed to update Facebook OAuth token: %v", err)
+	}
+
 	profile.FacebookProfileUrl = userInfo.ProfileUrl
 
 	return nil
