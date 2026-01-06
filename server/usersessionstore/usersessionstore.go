@@ -22,9 +22,14 @@ const OAuthTokenTypeFacebook = "facebook"
 const DefaultSessionID = "default"
 const UserIdSessionKey = "id" // A generic user ID, not a google user ID.
 
+type UserIdAndOAuthToken struct {
+	UserId string
+	Token  *oauth2.Token
+}
+
 type UserSessionStore interface {
 	GetSession(r *http.Request) (*sessions.Session, error)
-	GetUserIdAndOAuthTokenFromSession(r *http.Request) (string, *oauth2.Token, error)
+	GetUserIdAndOAuthTokenFromSession(r *http.Request) (*UserIdAndOAuthToken, error)
 }
 
 type UserSessionStoreImpl struct {
@@ -53,26 +58,26 @@ func (s *UserSessionStoreImpl) GetSession(r *http.Request) (*sessions.Session, e
 	return result, nil
 }
 
-func (s *UserSessionStoreImpl) GetUserIdAndOAuthTokenFromSession(r *http.Request) (string, *oauth2.Token, error) {
+func (s *UserSessionStoreImpl) GetUserIdAndOAuthTokenFromSession(r *http.Request) (*UserIdAndOAuthToken, error) {
 	session, err := s.GetSession(r)
 	if err != nil {
-		return "", nil, fmt.Errorf("GetUserIdAndOAuthTokenFromSession(): store.Get() failed: %v", err)
+		return nil, fmt.Errorf("GetUserIdAndOAuthTokenFromSession(): store.Get() failed: %v", err)
 	}
 
-	// Get the oauth2 token from the cookie:
-	// (If the cookie has no token then the user is not logged in.)
+	// Get the oauth2 Token from the cookie:
+	// (If the cookie has no Token then the user is not logged in.)
 	tokenVal, ok := session.Values[OAuthTokenSessionKey]
 	if !ok {
 		// Not an error.
 		// It's just not in the cookie.
-		return "", nil, nil
+		return &UserIdAndOAuthToken{"", nil}, nil
 	}
 
 	// Try casting it to the expected type:
 	var token *oauth2.Token
 	token, ok = tokenVal.(*oauth2.Token)
 	if !ok {
-		return "", nil, fmt.Errorf("oauthTokenSessionKey is not a *Token")
+		return nil, fmt.Errorf("oauthTokenSessionKey is not a *Token")
 	}
 
 	// Get the userID from the cookie:
@@ -81,7 +86,7 @@ func (s *UserSessionStoreImpl) GetUserIdAndOAuthTokenFromSession(r *http.Request
 		// Not an error.
 		// It's just not in the cookie.
 		// (the user is not logged in.)
-		return "", nil, nil
+		return &UserIdAndOAuthToken{"", nil}, nil
 	}
 
 	// Try casting it to the expected type:
@@ -91,17 +96,20 @@ func (s *UserSessionStoreImpl) GetUserIdAndOAuthTokenFromSession(r *http.Request
 		// Not an error.
 		// It's just not (correctly) in the cookie.
 		// (We changed its format in 2019/10.)
-		return "", nil, nil
+		return &UserIdAndOAuthToken{"", nil}, nil
 	}
 
 	userId, err := datastore.DecodeKey(strUserId)
 	if err != nil {
-		return "", nil, fmt.Errorf("datastore.DecodeKey() failed: %v", err)
+		return nil, fmt.Errorf("datastore.DecodeKey() failed: %v", err)
 	}
 
 	if userId == nil {
-		return "", nil, fmt.Errorf("userId is null")
+		return nil, fmt.Errorf("userId is null")
 	}
 
-	return userId.Encode(), token, nil
+	return &UserIdAndOAuthToken{
+		UserId: userId.Encode(),
+		Token:  token,
+	}, nil
 }
