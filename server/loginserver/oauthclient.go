@@ -140,19 +140,21 @@ func (o *OAuthClient) checkOAuthResponseStateAndGetCode(ctx context.Context, r *
 }
 
 func (o *OAuthClient) HandleGoogleCallback(w http.ResponseWriter, r *http.Request) {
-	handleOAuthCallback(o, w, r, "https://www.googleapis.com/oauth2/v3/userinfo", o.confOAuthGoogle, o.userDataClient.StoreGoogleLoginInUserProfile)
+	handleOAuthCallback(o, w, r, "https://www.googleapis.com/oauth2/v3/userinfo", o.confOAuthGoogle, usersessionstore.OAuthTokenTypeGoogle, o.userDataClient.StoreGoogleLoginInUserProfile)
 }
 
 func (o *OAuthClient) HandleGitHubCallback(w http.ResponseWriter, r *http.Request) {
-	handleOAuthCallback(o, w, r, "https://api.github.com/user", o.confOAuthGitHub, o.userDataClient.StoreGitHubLoginInUserProfile)
+	handleOAuthCallback(o, w, r, "https://api.github.com/user", o.confOAuthGitHub, usersessionstore.OAuthTokenTypeGitHub, o.userDataClient.StoreGitHubLoginInUserProfile)
 }
 
 func (o *OAuthClient) HandleFacebookCallback(w http.ResponseWriter, r *http.Request) {
-	handleOAuthCallback(o, w, r, "https://graph.facebook.com/me?fields=link,name,email", o.confOAuthFacebook, o.userDataClient.StoreFacebookLoginInUserProfile)
+	handleOAuthCallback(o, w, r, "https://graph.facebook.com/me?fields=link,name,email", o.confOAuthFacebook, usersessionstore.OAuthTokenTypeFacebook, o.userDataClient.StoreFacebookLoginInUserProfile)
 }
 
 // handleOAuthCallback handles the OAuth callback response, interpreting it as the specific OAuthUserInfo struct type.
-func handleOAuthCallback[OAuthUserInfo any](o *OAuthClient, w http.ResponseWriter, r *http.Request, userInfoUrl string, conf *oauth2.Config, storeLogin func(context.Context, OAuthUserInfo, string, *oauth2.Token) (string, error)) {
+// oauthType should be one of usersessionstore.OAuthTokenTypeGoogle, usersessionstore.OAuthTokenTypeGitHub,
+// usersessionstore.OAuthTokenTypeFacebook, etc.
+func handleOAuthCallback[OAuthUserInfo any](o *OAuthClient, w http.ResponseWriter, r *http.Request, userInfoUrl string, conf *oauth2.Config, oauthType string, storeLogin func(context.Context, OAuthUserInfo, string, *oauth2.Token) (string, error)) {
 	ctx := r.Context()
 
 	checkStateResult, err := o.checkOAuthResponseStateAndGetBody(w, r, conf, userInfoUrl, ctx)
@@ -181,7 +183,7 @@ func handleOAuthCallback[OAuthUserInfo any](o *OAuthClient, w http.ResponseWrite
 		return
 	}
 
-	o.storeCookieAndRedirect(r, w, ctx, userId, checkStateResult.token)
+	o.storeCookieAndRedirect(r, w, ctx, userId, checkStateResult.token, oauthType)
 }
 
 type CheckStateResult struct {
@@ -244,7 +246,10 @@ func (o *OAuthClient) exchangeAndGetUserBody(w http.ResponseWriter, r *http.Requ
 }
 
 // Called after user info has been successfully stored in the database.
-func (o *OAuthClient) storeCookieAndRedirect(r *http.Request, w http.ResponseWriter, ctx context.Context, strUserId string, token *oauth2.Token) {
+//
+// oauthType should be one of usersessionstore.OAuthTokenTypeGoogle, usersessionstore.OAuthTokenTypeGitHub,
+// usersessionstore.OAuthTokenTypeFacebook, etc
+func (o *OAuthClient) storeCookieAndRedirect(r *http.Request, w http.ResponseWriter, ctx context.Context, strUserId string, token *oauth2.Token, oauthType string) {
 	// Store the token in the cookie
 	// so we can retrieve it from subsequent requests from the browser.
 	session, err := o.userSessionStore.GetSession(r)
@@ -254,6 +259,9 @@ func (o *OAuthClient) storeCookieAndRedirect(r *http.Request, w http.ResponseWri
 	}
 
 	session.Values[usersessionstore.OAuthTokenSessionKey] = token
+	// Used to refresh the access token when it expires.
+	session.Values[usersessionstore.OAuthTokenTypeKey] = oauthType
+
 	session.Values[usersessionstore.UserIdSessionKey] = strUserId
 
 	if err := session.Save(r, w); err != nil {

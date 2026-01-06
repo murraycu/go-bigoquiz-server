@@ -9,7 +9,16 @@ import (
 	"golang.org/x/oauth2"
 )
 
+// Values stored in the cookie. See storeCookieAndRedirect().
+
 const OAuthTokenSessionKey = "oauth_token"
+
+// OAuthTokenTypeKey should be one of OAuthTokenTypeGoogle, OAuthTokenTypeGitHub, OAuthTokenTypeFacebook
+const OAuthTokenTypeKey = "oauth_token_type" //
+const OAuthTokenTypeGoogle = "google"
+const OAuthTokenTypeGitHub = "github"
+const OAuthTokenTypeFacebook = "facebook"
+
 const DefaultSessionID = "default"
 const UserIdSessionKey = "id" // A generic user ID, not a google user ID.
 
