@@ -15,7 +15,7 @@ const UserIdSessionKey = "id" // A generic user ID, not a google user ID.
 
 type UserSessionStore interface {
 	GetSession(r *http.Request) (*sessions.Session, error)
-	GetProfileFromSession(r *http.Request) (string, *oauth2.Token, error)
+	GetUserIdAndOAuthTokenFromSession(r *http.Request) (string, *oauth2.Token, error)
 }
 
 type UserSessionStoreImpl struct {
@@ -44,10 +44,10 @@ func (s *UserSessionStoreImpl) GetSession(r *http.Request) (*sessions.Session, e
 	return result, nil
 }
 
-func (s *UserSessionStoreImpl) GetProfileFromSession(r *http.Request) (string, *oauth2.Token, error) {
+func (s *UserSessionStoreImpl) GetUserIdAndOAuthTokenFromSession(r *http.Request) (string, *oauth2.Token, error) {
 	session, err := s.GetSession(r)
 	if err != nil {
-		return "", nil, fmt.Errorf("GetProfileFromSession(): store.Get() failed: %v", err)
+		return "", nil, fmt.Errorf("GetUserIdAndOAuthTokenFromSession(): store.Get() failed: %v", err)
 	}
 
 	// Get the oauth2 token from the cookie:

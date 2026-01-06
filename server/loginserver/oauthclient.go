@@ -155,7 +155,7 @@ func handleOAuthCallback[OAuthUserInfo any](o *OAuthClient, w http.ResponseWrite
 	}
 
 	// Get the existing logged-in user's userId, if any, from the cookie, if any:
-	userId, _, err := o.userSessionStore.GetProfileFromSession(r)
+	userId, _, err := o.userSessionStore.GetUserIdAndOAuthTokenFromSession(r)
 	if err != nil {
 		o.loginFailed("getProfileFromSession() failed", err, w, r)
 		return
