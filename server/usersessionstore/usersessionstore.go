@@ -25,6 +25,9 @@ const UserIdSessionKey = "id" // A generic user ID, not a google user ID.
 type UserIdAndOAuthToken struct {
 	UserId string
 	Token  *oauth2.Token
+
+	// OAuthType should be one of OAuthTokenTypeGoogle, OAuthTokenTypeGitHub, OAuthTokenTypeFacebook, etc.
+	OAuthType string
 }
 
 type UserSessionStore interface {
@@ -64,13 +67,19 @@ func (s *UserSessionStoreImpl) GetUserIdAndOAuthTokenFromSession(r *http.Request
 		return nil, fmt.Errorf("GetUserIdAndOAuthTokenFromSession(): store.Get() failed: %v", err)
 	}
 
+	resultIfNotInCookie := &UserIdAndOAuthToken{
+		UserId:    "",
+		Token:     nil,
+		OAuthType: "",
+	}
+
 	// Get the oauth2 Token from the cookie:
 	// (If the cookie has no Token then the user is not logged in.)
 	tokenVal, ok := session.Values[OAuthTokenSessionKey]
 	if !ok {
 		// Not an error.
 		// It's just not in the cookie.
-		return &UserIdAndOAuthToken{"", nil}, nil
+		return resultIfNotInCookie, nil
 	}
 
 	// Try casting it to the expected type:
@@ -86,17 +95,16 @@ func (s *UserSessionStoreImpl) GetUserIdAndOAuthTokenFromSession(r *http.Request
 		// Not an error.
 		// It's just not in the cookie.
 		// (the user is not logged in.)
-		return &UserIdAndOAuthToken{"", nil}, nil
+		return resultIfNotInCookie, nil
 	}
 
 	// Try casting it to the expected type:
-	var strUserId string
-	strUserId, ok = userIdVal.(string)
+	strUserId, ok := userIdVal.(string)
 	if !ok {
 		// Not an error.
 		// It's just not (correctly) in the cookie.
 		// (We changed its format in 2019/10.)
-		return &UserIdAndOAuthToken{"", nil}, nil
+		return resultIfNotInCookie, nil
 	}
 
 	userId, err := datastore.DecodeKey(strUserId)
@@ -108,8 +116,24 @@ func (s *UserSessionStoreImpl) GetUserIdAndOAuthTokenFromSession(r *http.Request
 		return nil, fmt.Errorf("userId is null")
 	}
 
+	oauthTypeVal, ok := session.Values[OAuthTokenTypeKey]
+	if !ok {
+		// Not an error.
+		// It's just not in the cookie.
+		return resultIfNotInCookie, nil
+	}
+
+	strOAuthType, ok := oauthTypeVal.(string)
+	if !ok {
+		// Not an error.
+		// It's just not (correctly) in the cookie.
+		// (We changed its format in 2019/10.)
+		return resultIfNotInCookie, nil
+	}
+
 	return &UserIdAndOAuthToken{
-		UserId: userId.Encode(),
-		Token:  token,
+		UserId:    userId.Encode(),
+		Token:     token,
+		OAuthType: strOAuthType,
 	}, nil
 }
