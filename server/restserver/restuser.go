@@ -62,10 +62,20 @@ func (s *RestServer) getLoginInfoFromSessionAndDb(r *http.Request) (*getLoginInf
 	if err != nil {
 		loginInfo.LoggedIn = false
 		loginInfo.ErrorMessage = fmt.Sprintf("not logged in (%v)", err)
+		return &getLoginInfoResult{
+			LoginInfo: &loginInfo,
+		}, nil
+	}
+
+	if getProfileResult == nil {
+		loginInfo.LoggedIn = false
+		loginInfo.ErrorMessage = "not logged in (nil getProfileResult)"
+		return &getLoginInfoResult{
+			LoginInfo: &loginInfo,
+		}, nil
 	}
 
 	s.updateLoginInfoFromProfile(&loginInfo, getProfileResult.Profile)
-
 	return &getLoginInfoResult{
 		LoginInfo: &loginInfo,
 		UserId:    getProfileResult.UserId,
@@ -93,9 +103,18 @@ func (s *RestServer) updateLoginInfoFromProfile(loginInfo *restuser.LoginInfo, p
  * Returns an empty user ID, and a nil error, if the user is not logged in.
  */
 func (s *RestServer) getUserIdFromSessionAndDb(r *http.Request) (string, error) {
-	userId, token, err := s.userSessionStore.GetUserIdAndOAuthTokenFromSession(r)
+	userIdAndToken, err := s.userSessionStore.GetUserIdAndOAuthTokenFromSession(r)
 	if err != nil {
 		return "", fmt.Errorf("GetUserIdAndOAuthTokenFromSession() failed: %v", err)
+	}
+
+	if userIdAndToken == nil {
+		return "", fmt.Errorf("GetUserIdAndOAuthTokenFromSession() returned nil")
+	}
+
+	token := userIdAndToken.Token
+	if token == nil {
+		return "", fmt.Errorf("GetUserIdAndOAuthTokenFromSession() returned a nil token")
 	}
 
 	if !token.Valid() {
@@ -107,5 +126,5 @@ func (s *RestServer) getUserIdFromSessionAndDb(r *http.Request) (string, error) 
 		return "", nil
 	}
 
-	return userId, nil
+	return userIdAndToken.UserId, nil
 }

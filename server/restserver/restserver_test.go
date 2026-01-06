@@ -27,7 +27,7 @@ func (m MockUserSessionStore) GetSession(r *http.Request) (*sessions.Session, er
 	panic("Unimplemented")
 }
 
-func (m MockUserSessionStore) GetUserIdAndOAuthTokenFromSession(r *http.Request) (string, *oauth2.Token, error) {
+func (m MockUserSessionStore) GetUserIdAndOAuthTokenFromSession(r *http.Request) (*usersessionstore.UserIdAndOAuthToken, error) {
 	panic("Unimplemented")
 }
 
