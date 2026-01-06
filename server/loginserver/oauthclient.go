@@ -72,7 +72,21 @@ func (o *OAuthClient) generateOAuthUrl(r *http.Request, oauthConfig *oauth2.Conf
 		return "", fmt.Errorf("unable to generate state: %v", err)
 	}
 
-	return oauthConfig.AuthCodeURL(state), nil
+	// Use oauth2.AccessTypeOffline ("Offline Access"), instead of oauth2.AccessTyoeOnline, so we also receive an OAuth
+	// refresh token (longer lived), not just an OAuth access token (short-lived - approximately 30 minutes). We will
+	// use the refresh token to retrieve a new access token.
+	// This is appropriate because this is a "Web Server Application" (also known as a "Server-side Web App"):
+	// https://developers.google.com/identity/protocols/oauth2/web-server
+	// so it's considered safe for us to store the (longer lived) refresh token on the server.
+	//
+	// In contrast, a "Client-side Web Applications" would not be a safe place to expose the refresh token. So it would
+	// instead redirect the web page to the Google/GitHub/Facebook login page again, which would, most of the time,
+	// just quickly redirect back again without any user interaction.
+	//
+	// Use oauth2.ApprovalForce to specify the "prompt" option.
+	// (This seems to be necessary to get the RefreshToken too, though maybe only after a previous consent was already
+	// granted without the "Offline Access".
+	return oauthConfig.AuthCodeURL(state, oauth2.AccessTypeOffline, oauth2.ApprovalForce), nil
 }
 
 func (o *OAuthClient) generateOAuthState(ctx context.Context) (string, error) {
@@ -189,6 +203,9 @@ func (o *OAuthClient) checkOAuthResponseStateAndGetBody(w http.ResponseWriter, r
 }
 
 func (o *OAuthClient) exchangeAndGetUserBody(w http.ResponseWriter, r *http.Request, conf *oauth2.Config, code string, url string, ctx context.Context) (*CheckStateResult, error) {
+	// Extract the token, which will have the
+	// - OAuth access token
+	// - OAuth refresh code, because we specified oauth2.AccessTypeOffline to oauth2.Config.AuthCodeURL().
 	token, err := conf.Exchange(ctx, code)
 	if err != nil {
 		return nil, fmt.Errorf("config.Exchange() failed: %v", err)
